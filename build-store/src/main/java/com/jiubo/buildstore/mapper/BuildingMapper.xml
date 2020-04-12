@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.BuildingDao">
+
+    <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        SELECT a.B_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,
+        a.MIN_AREA,a.MAX_AREA,a.UNIT_PRICE,a.TITLE_PRICE,a.BT_ID,a.ADRESS,a.CREATE_DATE,
+        a.CHA_ID,b.BT_NAME,d.CHA_NAME
+        from building a,building_type b ,characteristic d
+        <where>
+             a.CHA_ID = d.CHA_ID and a.BT_ID = b.BT_ID
+            /*省id*/
+            <if test="buildingBean.proIdList != null and buildingBean.proIdList.size() > 0">
+                and a.PRO_ID in
+                <foreach collection="buildingBean.proIdList" open="(" close=")" separator="," item="proId">
+                    #{proId}
+                </foreach>
+            </if>
+            /*是否出售*/
+            <if test="buildingBean.isSaleList != null and buildingBean.isSaleList.size() > 0">
+                and a.IS_SALE in
+                <foreach collection="buildingBean.isSaleList" open="(" close=")" separator="," item="isSale">
+                    #{isSale}
+                </foreach>
+            </if>
+            /*区域*/
+            <if test="buildingBean.ldIdList != null and buildingBean.ldIdList.size() > 0">
+                and a.LD_ID in
+                <foreach collection="buildingBean.ldIdList" open="(" close=")" separator="," item="ldId">
+                    #{ldId}
+                </foreach>
+            </if>
+            /*开发商*/
+            <if test="buildingBean.devIdList != null and buildingBean.devIdList.size() > 0">
+                and a.DEV_ID in
+                <foreach collection="buildingBean.devIdList" open="(" close=")" separator="," item="devId">
+                    #{devId}
+                </foreach>
+            </if>
+            /*楼盘类型*/
+            <if test="buildingBean.btIdList != null and buildingBean.btIdList.size() > 0">
+                and a.BT_ID in
+                <foreach collection="buildingBean.btIdList" open="(" close=")" separator="," item="btId">
+                    #{btId}
+                </foreach>
+            </if>
+            /*楼盘户型*/
+            <if test="buildingBean.bIdList != null and buildingBean.bIdList.size() > 0">
+                and a.B_ID in
+                <foreach collection="buildingBean.bIdList" open="(" close=")" separator="," item="bId">
+                    #{bId}
+                </foreach>
+            </if>
+            /*房源特色*/
+            <if test="buildingBean.chaIdList != null and buildingBean.chaIdList.size() > 0">
+                and a.CHA_ID in
+                <foreach collection="buildingBean.chaIdList" open="(" close=")" separator="," item="chaId">
+                    #{chaId}
+                </foreach>
+            </if>
+            <if test="buildingBean.openTimeList != null and buildingBean.openTimeList.size() > 0">
+                and
+                <foreach collection="buildingBean.openTimeList" open="(" close=")" separator="or" item="item">
+                    (DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ) > DATE_FORMAT(#{item.startDate}, '%Y-%m-%d' )
+                    and DATE_FORMAT(#{item.endDate}, '%Y-%m-%d' ) >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
+                </foreach>
+            </if>
+            <if test="buildingBean.minArea != null">
+                a.MIN_AREA = #{minArea}
+            </if>
+            <if test="buildingBean.maxArea != null">
+                a.MAX_AREA = #{maxArea}
+            </if>
+            <if test="buildingBean.startUnitPrice != null">
+                a.UNIT_PRICE > #{startUnitPrice}
+            </if>
+            <if test="buildingBean.endUnitPrice != null">
+                #{endUnitPrice} >= a.UNIT_PRICE
+            </if>
+            <if test="buildingBean.startTitlePrice != null">
+                a.TITLE_PRICE > #{startTitlePrice}
+            </if>
+            <if test="buildingBean.endTitlePrice != null">
+                #{endTitlePrice} >= a.TITLE_PRICE
+            </if>
+        </where>
+    </select>
+</mapper>

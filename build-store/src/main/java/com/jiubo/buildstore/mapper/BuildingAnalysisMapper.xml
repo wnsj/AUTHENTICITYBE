@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.BuildingAnalysisDao">
+    <select id="getBidByBhtIdList" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
+        select B_ID from building_analysis where
+        BHT_ID in
+        <foreach collection="buildingAnalysisBean.bhtIdList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="getBidByBIdList" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
+        select B_ID,BHT_ID from building_analysis where
+        B_ID in
+        <foreach collection="buildingAnalysisBean.bIdList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
