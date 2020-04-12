@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -18,13 +19,17 @@ import org.springframework.stereotype.Controller;
  * @author syl
  * @since 2020-04-10
  */
-@Controller
+@RestController
 @RequestMapping("/totlePriceTypeBean")
 public class TotlePriceTypeController {
 
     @Autowired
     private TotlePriceTypeService totlePriceTypeService;
 
+    /**
+     * 总价复选
+     * @return
+     */
     @GetMapping("/getAllTotalPrice")
     public JSONObject getAllTotalPrice() {
         JSONObject jsonObject = new JSONObject();

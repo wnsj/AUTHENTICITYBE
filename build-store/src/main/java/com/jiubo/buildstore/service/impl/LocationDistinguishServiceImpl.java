@@ -5,7 +5,10 @@ import com.jiubo.buildstore.bean.LocationDistinguishBean;
 import com.jiubo.buildstore.dao.LocationDistinguishDao;
 import com.jiubo.buildstore.service.LocationDistinguishService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationDistinguishServiceImpl extends ServiceImpl<LocationDistinguishDao, LocationDistinguishBean> implements LocationDistinguishService {
 
+    @Autowired
+    private LocationDistinguishDao locationDistinguishDao;
+    @Override
+    public List<LocationDistinguishBean> getAllDistinguish(LocationDistinguishBean locationDistinguishBean) {
+        return locationDistinguishDao.getAllDistinguish(locationDistinguishBean);
+    }
 }

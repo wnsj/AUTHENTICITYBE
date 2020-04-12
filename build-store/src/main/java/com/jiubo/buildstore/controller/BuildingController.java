@@ -28,6 +28,11 @@ public class BuildingController {
     @Autowired
     private BuildingService buildingService;
 
+    /**
+     * 条件筛选查询（分页）
+     * @param buildingBean
+     * @return
+     */
     @PostMapping("/getAllBulidBypage")
     public JSONObject getAllBulidBypages(@RequestBody BuildingBean buildingBean) {
         JSONObject jsonObject = new JSONObject();

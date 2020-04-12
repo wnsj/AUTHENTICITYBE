@@ -3,6 +3,8 @@ package com.jiubo.buildstore.dao;
 import com.jiubo.buildstore.bean.ProvinceBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ProvinceDao extends BaseMapper<ProvinceBean> {
 
+    public List<ProvinceBean> getAllProvince();
 }

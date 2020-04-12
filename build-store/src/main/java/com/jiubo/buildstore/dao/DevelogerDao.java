@@ -3,6 +3,8 @@ package com.jiubo.buildstore.dao;
 import com.jiubo.buildstore.bean.DevelogerBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-04-10
  */
 public interface DevelogerDao extends BaseMapper<DevelogerBean> {
-
+    public List<DevelogerBean> getAllDev();
 }

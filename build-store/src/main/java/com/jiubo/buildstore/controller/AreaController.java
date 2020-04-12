@@ -29,6 +29,10 @@ public class AreaController {
     @Autowired
     private AreaService areaService;
 
+    /**
+     * 面积复选
+     * @return
+     */
     @GetMapping("/getAllArea")
     public JSONObject getAllArea() {
         JSONObject jsonObject = new JSONObject();

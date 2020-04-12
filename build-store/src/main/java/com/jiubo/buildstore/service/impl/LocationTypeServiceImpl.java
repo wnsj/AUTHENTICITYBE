@@ -5,7 +5,10 @@ import com.jiubo.buildstore.bean.LocationTypeBean;
 import com.jiubo.buildstore.dao.LocationTypeDao;
 import com.jiubo.buildstore.service.LocationTypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationTypeServiceImpl extends ServiceImpl<LocationTypeDao, LocationTypeBean> implements LocationTypeService {
 
+    @Autowired
+    private LocationTypeDao locationTypeDao;
+    @Override
+    public List<LocationTypeBean> getAllLocation() {
+        return locationTypeDao.getAllLocation();
+    }
 }
