@@ -65,23 +65,26 @@
                     and DATE_FORMAT(#{item.endDate}, '%Y-%m-%d' ) >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
                 </foreach>
             </if>
-            <if test="buildingBean.minArea != null">
-                a.MIN_AREA = #{minArea}
+            <if test="buildingBean.minArea != null and buildingBean.maxArea == null">
+                and  #{buildingBean.minArea} > a.MIN_AREA
             </if>
-            <if test="buildingBean.maxArea != null">
-                a.MAX_AREA = #{maxArea}
+            <if test="buildingBean.maxArea != null and buildingBean.minArea == null">
+                and  #{buildingBean.maxArea} >= a.MAX_AREA
+            </if>
+            <if test="buildingBean.maxArea != null and buildingBean.minArea != null">
+                and  (#{buildingBean.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{buildingBean.minArea} )
             </if>
             <if test="buildingBean.startUnitPrice != null">
-                a.UNIT_PRICE > #{startUnitPrice}
+                and a.UNIT_PRICE > #{buildingBean.startUnitPrice}
             </if>
             <if test="buildingBean.endUnitPrice != null">
-                #{endUnitPrice} >= a.UNIT_PRICE
+                and  #{buildingBean.endUnitPrice} >= a.UNIT_PRICE
             </if>
             <if test="buildingBean.startTitlePrice != null">
-                a.TITLE_PRICE > #{startTitlePrice}
+                and a.TITLE_PRICE > #{buildingBean.startTitlePrice}
             </if>
             <if test="buildingBean.endTitlePrice != null">
-                #{endTitlePrice} >= a.TITLE_PRICE
+                and #{buildingBean.endTitlePrice} >= a.TITLE_PRICE
             </if>
         </where>
     </select>

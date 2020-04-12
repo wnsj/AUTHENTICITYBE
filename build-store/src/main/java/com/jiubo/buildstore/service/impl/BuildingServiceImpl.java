@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 服务实现类
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-10
  */
 @Service
@@ -56,21 +56,24 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingBean.setBIdList(bIdList);
         }
 
+
         // 翻译楼盘户型
             // 获取户型分析数据
         List<BuildingHorseTypeBean> allHorseType = buildingHorseTypeService.getAllHorseType();
+
         // 户型map 通过户型分析中的户型id和楼盘id到户型表中翻译户型
         Map<Integer, List<BuildingHorseTypeBean>> integerListMap = allHorseType.stream().collect(Collectors.groupingBy(BuildingHorseTypeBean::getBhtId));
 
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
-        // 获取楼盘id
-        List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBId).collect(Collectors.toList());
-        // 根据楼盘id抓取户型分析数据
-        BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
-        buildingAnalysisBean.setBIdList(list);
-        List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
-        Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBId));
-        for (BuildingBean bean : allBulidBypage) {
+        if (null != allBulidBypage && allBulidBypage.size() > 0) {
+            // 获取楼盘id
+            List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBId).collect(Collectors.toList());
+            // 根据楼盘id抓取户型分析数据
+            BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
+            buildingAnalysisBean.setBIdList(list);
+            List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
+            Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBId));
+            for (BuildingBean bean : allBulidBypage) {
                 List<String> bhtNameList = new ArrayList<>();
                 List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBId());
                 if (null != buildingAnalysisBeans && buildingAnalysisBeans.size() > 0) {
@@ -84,7 +87,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     bean.setCaName(StringUtils.join(bhtNameList,"、"));
                 }
             }
-
+        }
         return page.setRecords(allBulidBypage);
     }
 }

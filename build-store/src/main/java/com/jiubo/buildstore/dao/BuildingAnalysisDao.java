@@ -11,7 +11,7 @@ import java.util.List;
  *  Mapper 接口
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-10
  */
 public interface BuildingAnalysisDao extends BaseMapper<BuildingAnalysisBean> {

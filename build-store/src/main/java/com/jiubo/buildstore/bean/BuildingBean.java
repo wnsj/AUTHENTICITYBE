@@ -1,6 +1,8 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -17,7 +19,7 @@ import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
  * 
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-10
  */
 @Data
@@ -30,6 +32,7 @@ public class BuildingBean implements Serializable {
     /**
      * 主键id
      */
+    @TableId(value = "B_ID", type = IdType.AUTO)
     private Integer bId;
 
     private List<Integer> bIdList;

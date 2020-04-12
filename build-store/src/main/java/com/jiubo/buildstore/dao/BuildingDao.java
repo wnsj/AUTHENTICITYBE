@@ -13,7 +13,7 @@ import java.util.Map;
  * Mapper 接口
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-10
  */
 public interface BuildingDao extends BaseMapper<BuildingBean> {
@@ -25,13 +25,4 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
      * @return
      */
     public List<BuildingBean> getAllBulidBypage(Page page, @Param("buildingBean") BuildingBean buildingBean);
-/*
-    @Param("proIdList") List<Integer> proIdList,
-                                                @Param("isSaleList") List<Integer> isSaleList,
-                                                @Param("ldIdList") List<Integer> ldIdList,
-                                                @Param("devIdList") List<Integer> devIdList,
-                                                @Param("btIdList") List<Integer> btIdList,
-                                                @Param("idList") List<Integer> idList,
-                                                @Param("chaIdList") List<Integer> chaIdList
- */
 }

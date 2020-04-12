@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-10
  */
 public interface CounselorLabelService extends IService<CounselorLabelBean> {
