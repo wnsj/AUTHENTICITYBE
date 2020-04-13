@@ -33,7 +33,7 @@ public class BuildingController {
      * @param buildingBean
      * @return
      */
-    @PostMapping("/getAllBulidBypage")
+    @PostMapping("/getAllBuildByPage")
     public JSONObject getAllBulidBypages(@RequestBody BuildingBean buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
