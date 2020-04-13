@@ -1,6 +1,8 @@
 package com.jiubo.buildstore.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.jiubo.buildstore.filter.CorsFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,4 +26,14 @@ public class SamConfig {
         return paginationInterceptor;
     }
 
+    //注册过滤器
+    @Bean
+    public FilterRegistrationBean registFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CorsFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("CorsFilter");
+        registration.setOrder(1);
+        return registration;
+    }
 }
