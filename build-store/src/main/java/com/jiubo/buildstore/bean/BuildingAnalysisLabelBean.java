@@ -27,6 +27,9 @@ public class BuildingAnalysisLabelBean implements Serializable {
     @TableId(value = "BAL_ID", type = IdType.AUTO)
     private Integer balId;
 
+    /**
+     * 标签名
+     */
     private String balContent;
 
 

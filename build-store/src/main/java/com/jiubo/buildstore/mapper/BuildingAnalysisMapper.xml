@@ -17,4 +17,32 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="getAllAnalysisByBid" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
+        SELECT
+	a.BA_ID,
+	a.B_ID,
+	a.BHT_ID,
+	a.BAL_ID,
+	a.IMG_NAME,
+	a.CREATE_DATE,
+	a.IS_SALE,
+	a.TOTLE_PRICE,
+	a.CONTENT,
+	a.DRECTION,
+	a.DOWN_PAYMENT,
+	a.HT_ID,
+	a.BUILD_AREA,
+	b.BAL_CONTENT,
+	c.CA_NAME
+FROM
+	building_analysis a,
+	BUILDING_ANALYSIS_LABEL b,
+	HORSE_TYPE c
+WHERE
+	a.HT_ID = c.HT_ID
+	AND a.BAL_ID = b.BAL_ID
+
+	and a.B_ID = #{buildingAnalysisBean.bId}
+    </select>
 </mapper>

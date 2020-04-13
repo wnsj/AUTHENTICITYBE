@@ -27,6 +27,9 @@ public class HorseTypeBean implements Serializable {
     @TableId(value = "HT_ID", type = IdType.AUTO)
     private Integer htId;
 
+    /**
+     *户型分析类型名
+     */
     private String caName;
 
 

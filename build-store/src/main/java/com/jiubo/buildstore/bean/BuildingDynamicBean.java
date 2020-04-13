@@ -39,5 +39,5 @@ public class BuildingDynamicBean implements Serializable {
 
     private LocalDateTime cerDate;
 
-
+    private Integer bId;
 }
