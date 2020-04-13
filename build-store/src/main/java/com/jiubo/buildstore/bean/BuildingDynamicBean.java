@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -40,4 +41,21 @@ public class BuildingDynamicBean implements Serializable {
     private LocalDateTime cerDate;
 
     private Integer bId;
+
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String pageNum;
+
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
+    /**
+     * 排序依据
+     */
+    @TableField(exist = false)
+    private String pageOrder;
 }
