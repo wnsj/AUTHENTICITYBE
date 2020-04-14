@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.LinkPhoneDao">
 
+    <insert id="addLinkPhone">
+        INSERT INTO link_phone(LP_NAME, B_ID, MO_ID, PHONE, CREATE_DATE)
+        VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.bId},
+        #{linkPhoneBean.moId}, #{linkPhoneBean.phone}, #{linkPhoneBean.createDate})
+    </insert>
 </mapper>

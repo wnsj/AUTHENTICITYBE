@@ -5,6 +5,7 @@ import com.jiubo.buildstore.bean.LinkPhoneBean;
 import com.jiubo.buildstore.dao.LinkPhoneDao;
 import com.jiubo.buildstore.service.LinkPhoneService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,4 +19,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBean> implements LinkPhoneService {
 
+
+    @Autowired
+    private LinkPhoneDao linkPhoneDao;
+    @Override
+    public void addLinkPhone(LinkPhoneBean linkPhoneBean) {
+        linkPhoneDao.addLinkPhone(linkPhoneBean);
+    }
 }

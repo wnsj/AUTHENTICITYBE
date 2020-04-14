@@ -2,6 +2,7 @@ package com.jiubo.buildstore.service;
 
 import com.jiubo.buildstore.bean.LinkPhoneBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LinkPhoneService extends IService<LinkPhoneBean> {
 
+    public void addLinkPhone(LinkPhoneBean linkPhoneBean);
 }

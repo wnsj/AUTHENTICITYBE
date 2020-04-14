@@ -2,6 +2,7 @@ package com.jiubo.buildstore.dao;
 
 import com.jiubo.buildstore.bean.LinkPhoneBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LinkPhoneDao extends BaseMapper<LinkPhoneBean> {
 
+    public void addLinkPhone(@Param("linkPhoneBean") LinkPhoneBean linkPhoneBean);
 }
