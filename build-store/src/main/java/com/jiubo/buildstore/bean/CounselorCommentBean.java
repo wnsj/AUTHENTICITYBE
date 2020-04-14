@@ -1,10 +1,13 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -26,17 +29,87 @@ public class CounselorCommentBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "COUC_ID", type = IdType.AUTO)
+    /**
+     * 咨询师评论ID
+     */
     private Integer coucId;
 
+    /**
+     * 评论内容
+     */
     private String comContent;
 
+    /**
+     * 咨询师ID
+     */
     private Integer cId;
 
+    /**
+     * 楼盘ID
+     */
     private Integer bId;
 
+    /**
+     * 评论时间
+     */
     private LocalDateTime comDate;
 
+    /**
+     * 点赞数
+     */
     private Integer praiseNum;
 
+    /**
+     * 评论类型
+     */
+    private Integer coucType;
 
+
+
+    /**
+     * 咨询师名字
+     */
+    private String couName;
+
+    /**
+     * 简单介绍
+     */
+    private String introduce;
+
+    /**
+     * 毕业院校
+     */
+    private String graduate;
+
+    /**
+     * 特长id
+     */
+    private Integer ccId;
+
+    /**
+     * 特长描述
+     */
+    private String ccContent;
+
+    /**
+     * 咨询师标签集合
+     */
+    private List<String> clContentList;
+
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String pageNum;
+
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
+    /**
+     * 排序依据
+     */
+    @TableField(exist = false)
+    private String pageOrder;
 }

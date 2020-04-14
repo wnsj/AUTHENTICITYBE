@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.CounselorLabelDao">
 
+    <select id="getLabelByCouId" resultType="com.jiubo.buildstore.bean.CounselorLabelBean">
+        select * from counselor_label
+        <where>
+            COU_ID in
+            <foreach collection="counselorLabelBean.couIdList" open="(" close=")" separator="," item="couId">
+                #{couId}
+            </foreach>
+        </where>
+    </select>
 </mapper>

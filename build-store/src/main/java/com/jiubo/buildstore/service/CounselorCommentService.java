@@ -1,7 +1,11 @@
 package com.jiubo.buildstore.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CounselorCommentService extends IService<CounselorCommentBean> {
 
+    public Page<CounselorCommentBean> getCounselorByBid(CounselorCommentBean counselorCommentBean);
 }

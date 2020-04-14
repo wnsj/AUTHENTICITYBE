@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.CounselorCommentDao">
-
+    
+    <select id="getCounselorByBid" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
+        SELECT a.COUC_ID,a.COM_CONTENT,a.C_ID,a.B_ID,a.COM_DATE,a.PRAISE_NUM,a.COUC_TYPE,
+        b.CC_CONTENT,d.COU_ID,d.COU_NAME,d.INTRODUCE,d.GRADUATE,d.CC_ID
+         from counselor_comment a,counselor_character b,counselor d
+         <where>
+             a.C_ID = d.COU_ID and b.CC_ID = d.CC_ID and a.B_ID = #{counselorCommentBean.bId}
+             <if test="counselorCommentBean.coucType != null">
+                 a.COUC_TYPE = #{counselorCommentBean.coucType}
+             </if>
+         </where>
+    </select>
 </mapper>

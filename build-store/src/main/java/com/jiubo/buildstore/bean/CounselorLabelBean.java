@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -29,5 +31,13 @@ public class CounselorLabelBean implements Serializable {
 
     private String clContent;
 
+    /**
+     * 咨询师id
+     */
+    private Integer couId;
 
+    /**
+     * 咨询师id集合
+     */
+    private List<Integer> couIdList;
 }

@@ -2,6 +2,9 @@ package com.jiubo.buildstore.dao;
 
 import com.jiubo.buildstore.bean.CounselorLabelBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-04-10
  */
 public interface CounselorLabelDao extends BaseMapper<CounselorLabelBean> {
-
+    public List<CounselorLabelBean> getLabelByCouId(@Param("counselorLabelBean") CounselorLabelBean counselorLabelBean);
 }
