@@ -18,4 +18,6 @@ import java.util.List;
 public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
 
     public List<CounselorCommentBean> getCounselorByBid(Page page,@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+
+    public void updateNumById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 }

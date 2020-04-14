@@ -70,4 +70,9 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         }
         return page.setRecords(counselorByBid);
     }
+
+    @Override
+    public void updateNumById(CounselorCommentBean counselorCommentBean) {
+        counselorCommentDao.updateNumById(counselorCommentBean);
+    }
 }

@@ -18,4 +18,6 @@ import java.util.List;
 public interface CounselorCommentService extends IService<CounselorCommentBean> {
 
     public Page<CounselorCommentBean> getCounselorByBid(CounselorCommentBean counselorCommentBean);
+
+    public void updateNumById(CounselorCommentBean counselorCommentBean);
 }
