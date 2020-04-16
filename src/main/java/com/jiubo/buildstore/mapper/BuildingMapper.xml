@@ -8,7 +8,7 @@
         a.CHA_ID,b.BT_NAME,d.CHA_NAME
         from building a,building_type b ,characteristic d
         <where>
-             a.CHA_ID = d.CHA_ID and a.BT_ID = b.BT_ID
+            a.CHA_ID = d.CHA_ID and a.BT_ID = b.BT_ID
             /*省id*/
             <if test="buildingBean.proIdList != null and buildingBean.proIdList.size() > 0">
                 and a.PRO_ID in
@@ -65,26 +65,45 @@
                     and DATE_FORMAT(#{item.endDate}, '%Y-%m-%d' ) >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
                 </foreach>
             </if>
-            <if test="buildingBean.minArea != null and buildingBean.maxArea == null">
-                and  #{buildingBean.minArea} > a.MIN_AREA
+            <if test="buildingBean.areaList != null and buildingBean.areaList.size() > 0">
+                <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minArea != null and item.maxArea == null">
+                        and #{item.minArea} > a.MIN_AREA
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea == null">
+                        and #{item.maxArea} >= a.MAX_AREA
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea != null">
+                        and (#{item.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{item.minArea} )
+                    </if>
+                </foreach>
             </if>
-            <if test="buildingBean.maxArea != null and buildingBean.minArea == null">
-                and  #{buildingBean.maxArea} >= a.MAX_AREA
+            <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
+                <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.startTitlePrice != null">
+                        and a.TITLE_PRICE > #{item.startTitlePrice}
+                    </if>
+                    <if test="null != item and item.endTitlePrice != null">
+                        and #{item.endTitlePrice} >= a.TITLE_PRICE
+                    </if>
+                </foreach>
             </if>
-            <if test="buildingBean.maxArea != null and buildingBean.minArea != null">
-                and  (#{buildingBean.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{buildingBean.minArea} )
+            <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
+
+                <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.startUnitPrice != null">
+                        and a.UNIT_PRICE > #{item.startUnitPrice}
+                    </if>
+                    <if test="null != item and item.endUnitPrice != null">
+                        and #{item.endUnitPrice} >= a.UNIT_PRICE
+                    </if>
+                </foreach>
             </if>
-            <if test="buildingBean.startUnitPrice != null">
-                and a.UNIT_PRICE > #{buildingBean.startUnitPrice}
+            <if test="buildingBean.startTime != null and buildingBean.startTime != ''">
+                and (DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ) > #{buildingBean.startTime}
             </if>
-            <if test="buildingBean.endUnitPrice != null">
-                and  #{buildingBean.endUnitPrice} >= a.UNIT_PRICE
-            </if>
-            <if test="buildingBean.startTitlePrice != null">
-                and a.TITLE_PRICE > #{buildingBean.startTitlePrice}
-            </if>
-            <if test="buildingBean.endTitlePrice != null">
-                and #{buildingBean.endTitlePrice} >= a.TITLE_PRICE
+            <if test="buildingBean.endTime != null and buildingBean.endTime != ''">
+                and #{buildingBean.endTime} >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
             </if>
         </where>
     </select>

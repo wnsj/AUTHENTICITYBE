@@ -95,6 +95,7 @@ public class BuildingBean implements Serializable {
      */
     private Integer maxArea;
 
+    private List<Integer> areaIdList;
     /**
      * 参考单价
      */
@@ -190,7 +191,16 @@ public class BuildingBean implements Serializable {
 
     private List<Map<String,Object>> openTimeList;
 
+    private List<Map<String,Object>> areaList;
+
+    private List<Map<String,Object>> totalPriceList;
+
+    private List<Map<String,Object>> unitPriceList;
+
     private LocalDateTime openDate;
 
     private LocalDateTime proDate;
+
+    private String startTime;
+    private String endTime;
 }

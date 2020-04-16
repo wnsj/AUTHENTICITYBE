@@ -77,14 +77,16 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<String> bhtNameList = new ArrayList<>();
                 List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBId());
                 if (null != buildingAnalysisBeans && buildingAnalysisBeans.size() > 0) {
+
                     for (BuildingAnalysisBean bean1 : buildingAnalysisBeans) {
                         List<BuildingHorseTypeBean> buildingHorseTypeBeans = integerListMap.get(bean1.getBhtId());
                         if (null != buildingHorseTypeBeans && buildingHorseTypeBeans.size() > 0) {
                             bhtNameList.add(buildingHorseTypeBeans.get(0).getBhtName());
                         }
                     }
+                    List<String> strings = bhtNameList.stream().distinct().collect(Collectors.toList());
                     // 户型名
-                    bean.setCaName(StringUtils.join(bhtNameList,"、"));
+                    bean.setCaName(StringUtils.join(strings,"、"));
                 }
             }
         }

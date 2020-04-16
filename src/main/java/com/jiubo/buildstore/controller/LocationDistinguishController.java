@@ -6,11 +6,9 @@ import com.jiubo.buildstore.bean.LocationDistinguishBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.LocationDistinguishService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -31,8 +29,8 @@ public class LocationDistinguishController {
      * 区域位置复选
      * @return
      */
-    @GetMapping("/getAllDistinguish")
-    public JSONObject getAllDistinguish(LocationDistinguishBean locationDistinguishBean) {
+    @PostMapping("/getAllDistinguish")
+    public JSONObject getAllDistinguish(@RequestBody LocationDistinguishBean locationDistinguishBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
