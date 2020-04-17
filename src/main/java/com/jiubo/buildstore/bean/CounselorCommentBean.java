@@ -49,6 +49,7 @@ public class CounselorCommentBean implements Serializable {
      */
     private Integer bId;
 
+    private List<Integer> bIdList;
     /**
      * 评论时间
      */

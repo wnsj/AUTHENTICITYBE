@@ -1,19 +1,22 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jiubo.buildstore.bean.BuildingAnalysisBean;
-import com.jiubo.buildstore.bean.BuildingBean;
+import com.jiubo.buildstore.bean.*;
 
-import com.jiubo.buildstore.bean.BuildingHorseTypeBean;
 import com.jiubo.buildstore.dao.BuildingDao;
+import com.jiubo.buildstore.dao.CounselorCommentDao;
+import com.jiubo.buildstore.dao.SaleTypeDao;
 import com.jiubo.buildstore.service.BuildingAnalysisService;
 import com.jiubo.buildstore.service.BuildingHorseTypeService;
 import com.jiubo.buildstore.service.BuildingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.service.CounselorService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +42,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private BuildingHorseTypeService buildingHorseTypeService;
+
+    @Autowired
+    private SaleTypeDao saleTypeDao;
+
+    @Autowired
+    private CounselorCommentDao counselorCommentDao;
     @Override
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
@@ -73,6 +82,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingAnalysisBean.setBIdList(list);
             List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
             Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBId));
+            // 翻译出售状态
+            List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
+
+            CounselorCommentBean commentBean = new CounselorCommentBean();
+            commentBean.setBIdList(list);
+            List<CounselorCommentBean> cidByBidList = counselorCommentDao.getCidByBidList(commentBean);
+
             for (BuildingBean bean : allBulidBypage) {
                 List<String> bhtNameList = new ArrayList<>();
                 List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBId());
@@ -87,6 +103,30 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<String> strings = bhtNameList.stream().distinct().collect(Collectors.toList());
                     // 户型名
                     bean.setCaName(StringUtils.join(strings,"、"));
+                }
+
+                if (null != bean.getOpenDate()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    bean.setOpenDateTime(sdf.format(bean.getOpenDate()));
+                }
+
+                if (null != allSaleType) {
+                    Map<Integer, List<SaleTypeBean>> map = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
+
+                    bean.setSaleLabel(map.get(bean.getIsSale()).get(0).getStName());
+                }
+
+                if (null != cidByBidList) {
+                    Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
+                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBId());
+                    if (null != commentBeans) {
+                        List<String> cNameList = new ArrayList<>();
+                        for (CounselorCommentBean counselorCommentBean : commentBeans) {
+                            cNameList.add(counselorCommentBean.getCouName());
+                        }
+                        String join = StringUtils.join(cNameList, "、");
+                        bean.setCouName(join);
+                    }
                 }
             }
         }

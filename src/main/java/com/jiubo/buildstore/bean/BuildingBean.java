@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -46,6 +48,7 @@ public class BuildingBean implements Serializable {
      */
     private Integer isSale;
 
+    private String saleLabel;
     /**
      * 是否在售集合(1在售；2已售)
      */
@@ -197,9 +200,13 @@ public class BuildingBean implements Serializable {
 
     private List<Map<String,Object>> unitPriceList;
 
-    private LocalDateTime openDate;
+    private Date openDate;
 
-    private LocalDateTime proDate;
+    private String couName;
+
+    private String openDateTime;
+
+    private Date proDate;
 
     private String startTime;
     private String endTime;

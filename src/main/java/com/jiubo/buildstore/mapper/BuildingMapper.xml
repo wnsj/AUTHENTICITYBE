@@ -66,36 +66,38 @@
                 </foreach>
             </if>
             <if test="buildingBean.areaList != null and buildingBean.areaList.size() > 0">
+            and
                 <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minArea != null and item.maxArea == null">
-                        and #{item.minArea} > a.MIN_AREA
+                        #{item.minArea} > a.MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea == null">
-                        and #{item.maxArea} >= a.MAX_AREA
+                       #{item.maxArea} >= a.MAX_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
-                        and (#{item.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{item.minArea} )
+                        #{item.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{item.minArea}
                     </if>
                 </foreach>
             </if>
             <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
+            and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.startTitlePrice != null">
-                        and a.TITLE_PRICE > #{item.startTitlePrice}
+                        a.TITLE_PRICE > #{item.startTitlePrice}
                     </if>
                     <if test="null != item and item.endTitlePrice != null">
-                        and #{item.endTitlePrice} >= a.TITLE_PRICE
+                      and  #{item.endTitlePrice} >= a.TITLE_PRICE
                     </if>
                 </foreach>
             </if>
             <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
-
+            and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.startUnitPrice != null">
-                        and a.UNIT_PRICE > #{item.startUnitPrice}
+                         a.UNIT_PRICE > #{item.startUnitPrice}
                     </if>
                     <if test="null != item and item.endUnitPrice != null">
-                        and #{item.endUnitPrice} >= a.UNIT_PRICE
+                       and #{item.endUnitPrice} >= a.UNIT_PRICE
                     </if>
                 </foreach>
             </if>
