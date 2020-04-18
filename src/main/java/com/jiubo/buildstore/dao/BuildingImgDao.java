@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Param;
 public interface BuildingImgDao extends BaseMapper<BuildingImgBean> {
 
     public void addImg(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
+
+    public void patchImgById(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
 }

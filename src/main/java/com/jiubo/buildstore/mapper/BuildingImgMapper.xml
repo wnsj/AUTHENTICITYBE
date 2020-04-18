@@ -8,4 +8,21 @@
          (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},
          #{buildingImgBean.bId})
     </insert>
+
+    <update id="patchImgById">
+        update building_img set
+        <if test="buildingImgBean.imgName != null and buildingImgBean.imgName != ''">
+            IMG_NAME = #{buildingImgBean.imgName}
+        </if>
+        <if test="buildingImgBean.createDate != null and buildingImgBean.createDate != ''">
+            CREATE_DATE = #{buildingImgBean.createDate}
+        </if>
+        <if test="buildingImgBean.itId != null and buildingImgBean.itId != ''">
+            IT_ID = #{buildingImgBean.itId}
+        </if>
+        <if test="buildingImgBean.bId != null and buildingImgBean.bId != ''">
+            B_ID = #{buildingImgBean.bId}
+        </if>
+        where IMG_ID = #{buildingImgBean.imgId}
+    </update>
 </mapper>

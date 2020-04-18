@@ -27,4 +27,6 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
     public List<BuildingBean> getAllBulidBypage(Page page, @Param("buildingBean") BuildingBean buildingBean);
 
     public int addBuilding(@Param("buildingBean") BuildingBean buildingBean);
+
+    public void patchById(@Param("buildingBean") BuildingBean buildingBean);
 }

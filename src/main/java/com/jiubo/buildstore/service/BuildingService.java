@@ -24,4 +24,9 @@ public interface BuildingService extends IService<BuildingBean> {
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg) throws Exception;
+
+    public void patchById(BuildingBean buildingBean,MultipartFile[] effectImg,
+                            MultipartFile[] enPlanImg,
+                            MultipartFile[] buildRealImg,
+                            MultipartFile[] matchingRealImg) throws Exception;
 }

@@ -162,6 +162,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
+    @Override
+    public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg, MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg) throws Exception {
+        // TODO 更新楼盘数据
+        // 更新图片 （需要前端传入图片id）
+    }
+
     //保存文件
     private void saveFile(BuildingBean buildingBean, MultipartFile[] file,String type,Integer typeId) throws Exception {
         if (file != null) {
