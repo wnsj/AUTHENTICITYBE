@@ -115,6 +115,14 @@
                 and #{buildingBean.endTime} >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
             </if>
         </where>
+        <if test="buildingBean.sortCode != null and buildingBean.sortCode != 0">
+            <if test="buildingBean.sortCode == 1">
+                order by MIN_UNIT_PRICE
+            </if>
+            <if test="buildingBean.sortCode == 2">
+                order by MIN_TITLE_PRICE
+            </if>
+        </if>
     </select>
 
     <!--添加数据-->

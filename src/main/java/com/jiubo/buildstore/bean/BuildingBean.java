@@ -144,6 +144,12 @@ public class BuildingBean implements Serializable {
      */
     @TableField(exist = false)
     private String pageOrder;
+
+    /**
+     * 排序标识(综合排序：0；单价排序：1；总价排序：2)
+     */
+    private Integer sortCode;
+
     /**
      * 楼盘类型名
      */
