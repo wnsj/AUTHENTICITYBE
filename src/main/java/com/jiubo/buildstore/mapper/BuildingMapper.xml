@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDao">
 
+    <!--条件查询-->
     <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
         SELECT a.B_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,
-        a.MIN_AREA,a.MAX_AREA,a.UNIT_PRICE,a.TITLE_PRICE,a.BT_ID,a.ADRESS,a.CREATE_DATE,
+        a.MIN_AREA,a.MAX_AREA,a.MAX_UNIT_PRICE,a.MIN_UNIT_PRICE,a.MAX_TITLE_PRICE,a.MIN_TITLE_PRICE,a.BT_ID,a.ADRESS,a.CREATE_DATE,
         a.CHA_ID,b.BT_NAME,d.CHA_NAME
         from building a,building_type b ,characteristic d
         <where>
@@ -66,13 +67,13 @@
                 </foreach>
             </if>
             <if test="buildingBean.areaList != null and buildingBean.areaList.size() > 0">
-            and
+                and
                 <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minArea != null and item.maxArea == null">
                         #{item.minArea} > a.MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea == null">
-                       #{item.maxArea} >= a.MAX_AREA
+                        #{item.maxArea} >= a.MAX_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
                         #{item.maxArea} >= a.MIN_AREA and a.MAX_AREA > #{item.minArea}
@@ -80,24 +81,30 @@
                 </foreach>
             </if>
             <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
-            and
+                and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
-                    <if test="null != item and item.startTitlePrice != null">
-                        a.TITLE_PRICE > #{item.startTitlePrice}
+                    <if test="null != item and item.minTitlePrice != null and item.maxTitlePrice == null">
+                        #{item.minTitlePrice} > a.MIN_TITLE_PRICE
                     </if>
-                    <if test="null != item and item.endTitlePrice != null">
-                      and  #{item.endTitlePrice} >= a.TITLE_PRICE
+                    <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice == null">
+                        #{item.maxTitlePrice} >= a.MAX_TITLE_PRICE
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
+                        #{item.maxTitlePrice} >= a.MIN_TITLE_PRICE and a.MAX_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
                 </foreach>
             </if>
             <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
-            and
+                and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
-                    <if test="null != item and item.startUnitPrice != null">
-                         a.UNIT_PRICE > #{item.startUnitPrice}
+                    <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
+                        #{item.minUnitPrice} > a.MIN_UNIT_PRICE
                     </if>
-                    <if test="null != item and item.endUnitPrice != null">
-                       and #{item.endUnitPrice} >= a.UNIT_PRICE
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
+                        #{item.maxUnitPrice} >= a.MAX_UNIT_PRICE
+                    </if>
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null">
+                        #{item.maxUnitPrice} >= a.MIN_UNIT_PRICE and a.MAX_UNIT_PRICE > #{item.minUnitPrice}
                     </if>
                 </foreach>
             </if>
@@ -109,4 +116,17 @@
             </if>
         </where>
     </select>
+
+    <!--添加数据-->
+    <insert id="addBuilding" useGeneratedKeys="true" keyProperty="bId">
+        insert into
+        building
+        (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,
+        MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,CHA_ID,DEV_ID,OPEN_DATE,PRO_DATE)
+        VALUES
+        (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
+        #{buildingBean.ldId},#{buildingBean.minArea},#{buildingBean.maxArea},#{buildingBean.maxUnitPrice},#{buildingBean.minUnitPrice},
+        #{buildingBean.maxTitlePrice},#{buildingBean.minTitlePrice},#{buildingBean.btId},#{buildingBean.adress},#{buildingBean.createDate},
+        #{buildingBean.chaId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.proDate})
+    </insert>
 </mapper>

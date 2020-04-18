@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
@@ -99,15 +101,6 @@ public class BuildingBean implements Serializable {
     private Integer maxArea;
 
     private List<Integer> areaIdList;
-    /**
-     * 参考单价
-     */
-    private Integer unitPrice;
-
-    /**
-     * 参考总价
-     */
-    private Integer titlePrice;
 
     /**
      * 楼盘类型ID
@@ -133,7 +126,7 @@ public class BuildingBean implements Serializable {
      */
     private List<Integer> bhtIdList;
 
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 页码
@@ -174,21 +167,21 @@ public class BuildingBean implements Serializable {
     /**
      * 开始单价
      */
-    private Integer startUnitPrice;
+    private BigDecimal minUnitPrice;
     /**
      * 结束单价
      */
-    private Integer endUnitPrice;
+    private BigDecimal maxUnitPrice;
 
     /**
      *开始总价
      */
-    private Integer startTitlePrice;
+    private BigDecimal minTitlePrice;
 
     /**
      *结束总价
      */
-    private Integer endTitlePrice;
+    private BigDecimal maxTitlePrice;
 
     private List<Integer> idList;
 

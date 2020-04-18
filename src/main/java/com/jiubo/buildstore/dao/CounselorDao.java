@@ -3,6 +3,8 @@ package com.jiubo.buildstore.dao;
 import com.jiubo.buildstore.bean.CounselorBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CounselorDao extends BaseMapper<CounselorBean> {
 
+    public List<CounselorBean> getAllCouselor();
 }

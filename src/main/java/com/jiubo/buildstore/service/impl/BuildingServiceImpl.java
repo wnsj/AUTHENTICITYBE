@@ -3,9 +3,7 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
 
-import com.jiubo.buildstore.dao.BuildingDao;
-import com.jiubo.buildstore.dao.CounselorCommentDao;
-import com.jiubo.buildstore.dao.SaleTypeDao;
+import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.BuildingAnalysisService;
 import com.jiubo.buildstore.service.BuildingHorseTypeService;
 import com.jiubo.buildstore.service.BuildingService;
@@ -13,14 +11,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiubo.buildstore.service.CounselorService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> implements BuildingService {
+
 
     @Autowired
     private BuildingDao buildingDao;
@@ -48,6 +48,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private CounselorCommentDao counselorCommentDao;
+
+    @Autowired
+    private ImgTypeDao imgTypeDao;
+
+    @Autowired
+    private BuildingImgDao buildingImgDao;
     @Override
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
@@ -131,5 +137,80 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             }
         }
         return page.setRecords(allBulidBypage);
+    }
+
+    @Override
+    public void addBuilding(BuildingBean buildingBean,MultipartFile[] effectImg, MultipartFile[] enPlanImg,
+                            MultipartFile[] buildRealImg,
+                            MultipartFile[] matchingRealImg) throws Exception {
+
+        int id = buildingDao.addBuilding(buildingBean);
+
+        List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
+
+        buildingBean.setBId(id);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        String ss = sdf.format(date);
+        if (null != imgTypeList && imgTypeList.size() > 0) {
+            Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
+
+            this.saveFile(buildingBean,effectImg,listMap.get("效果图").get(0).getItId() + "_" + ss + "_",listMap.get("效果图").get(0).getItId());
+            this.saveFile(buildingBean,enPlanImg,listMap.get("环境规划").get(0).getItId() + "_"  + ss + "_",listMap.get("环境规划").get(0).getItId());
+            this.saveFile(buildingBean,buildRealImg,listMap.get("楼盘实景").get(0).getItId() + "_"  + ss + "_",listMap.get("楼盘实景").get(0).getItId());
+            this.saveFile(buildingBean,matchingRealImg,listMap.get("配套实景").get(0).getItId() + "_"  + ss + "_",listMap.get("配套实景").get(0).getItId());
+        }
+    }
+
+    //保存文件
+    private void saveFile(BuildingBean buildingBean, MultipartFile[] file,String type,Integer typeId) throws Exception {
+        if (file != null) {
+            BuildingImgBean buildingImgBean = new BuildingImgBean();
+            for (MultipartFile multipartFile : file) {
+                //原文件名
+                String fileName = multipartFile.getOriginalFilename();
+                fileName = fileName.substring(fileName.lastIndexOf("."));
+
+                File directory = new File("");// 参数为空
+                String path = directory.getCanonicalPath();
+                System.out.println("路径a：" + path);
+                String imgName = buildingBean.getBId().toString().concat(fileName);
+                File dir = new File(path);
+                if (!dir.exists()) dir.mkdirs();
+                String buildStore = "D:\\";
+                String name = type + imgName;
+                path = buildStore.concat(name);
+
+                System.out.println("路径：" + path);
+                //读写文件
+                if (!multipartFile.isEmpty()) {
+                    InputStream is = multipartFile.getInputStream();
+                    int len = 0;
+                    byte[] by = new byte[1024];
+                    OutputStream os = new FileOutputStream(path);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    BufferedOutputStream bos = new BufferedOutputStream(os);
+                    while ((len = bis.read(by)) != -1) {
+                        bos.write(by, 0, len);
+                        bos.flush();
+                    }
+                    if (null != bos)
+                        bos.close();
+                    if (null != bis)
+                        bis.close();
+                    if (null != os)
+                        os.close();
+                    if (null != is)
+                        is.close();
+                }
+
+                buildingImgBean.setImgName(name);
+                buildingImgBean.setBId(buildingBean.getBId());
+                buildingImgBean.setCreateDate(new Date());
+                buildingImgBean.setItId(typeId);
+
+                buildingImgDao.addImg(buildingImgBean);
+            }
+        }
     }
 }

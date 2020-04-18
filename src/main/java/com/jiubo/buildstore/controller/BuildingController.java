@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class BuildingController {
 
     /**
      * 条件筛选查询（分页）
+     *
      * @param buildingBean
      * @return
      */
@@ -38,7 +40,21 @@ public class BuildingController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,buildingService.getAllBulidBypage(buildingBean));
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBulidBypage(buildingBean));
+        return jsonObject;
+    }
+
+    @PostMapping("/addBuilding")
+    public JSONObject addBuilding(String addParam, @RequestParam("effectImg") MultipartFile[] effectImg,
+                                  @RequestParam("enPlanImg") MultipartFile[] enPlanImg,
+                                  @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
+                                  @RequestParam("matchingRealImg") MultipartFile[] matchingRealImg) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+
+        BuildingBean buildingBean = JSONObject.parseObject(addParam,BuildingBean.class);
+        buildingService.addBuilding(buildingBean, effectImg,enPlanImg,buildRealImg,matchingRealImg);
         return jsonObject;
     }
 }

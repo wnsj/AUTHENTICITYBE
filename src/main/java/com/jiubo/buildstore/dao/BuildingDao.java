@@ -25,4 +25,6 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
      * @return
      */
     public List<BuildingBean> getAllBulidBypage(Page page, @Param("buildingBean") BuildingBean buildingBean);
+
+    public int addBuilding(@Param("buildingBean") BuildingBean buildingBean);
 }

@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.BuildingImgDao">
 
+    <insert id="addImg">
+        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,B_ID)
+         values
+         (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},
+         #{buildingImgBean.bId})
+    </insert>
 </mapper>

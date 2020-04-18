@@ -3,6 +3,9 @@ package com.jiubo.buildstore.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,4 +19,9 @@ import java.util.List;
  */
 public interface BuildingService extends IService<BuildingBean> {
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean);
+
+    public void addBuilding(BuildingBean buildingBean,MultipartFile[] effectImg,
+                            MultipartFile[] enPlanImg,
+                            MultipartFile[] buildRealImg,
+                            MultipartFile[] matchingRealImg) throws Exception;
 }

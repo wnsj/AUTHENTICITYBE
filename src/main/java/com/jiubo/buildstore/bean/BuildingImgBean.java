@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,11 +32,9 @@ public class BuildingImgBean implements Serializable {
 
     private String imgName;
 
-    private LocalDateTime createDate;
+    private Date createDate;
 
     private Integer itId;
 
     private Integer bId;
-
-
 }
