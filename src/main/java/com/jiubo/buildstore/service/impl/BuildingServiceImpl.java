@@ -59,7 +59,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
         Page<BuildingBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingBean.getPageNum()) ? 1L : Long.parseLong(buildingBean.getPageNum()));
+        page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
         // 获取户型id集合
         List<Integer> bhtIdList = buildingBean.getBhtIdList();
