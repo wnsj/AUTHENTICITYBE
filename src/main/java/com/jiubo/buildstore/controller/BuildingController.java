@@ -52,7 +52,7 @@ public class BuildingController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-
+        System.out.println("effectImg：" + effectImg);
         BuildingBean buildingBean = JSONObject.parseObject(addParam,BuildingBean.class);
         buildingService.addBuilding(buildingBean, effectImg,enPlanImg,buildRealImg,matchingRealImg);
         return jsonObject;

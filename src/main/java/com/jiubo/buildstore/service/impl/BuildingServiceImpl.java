@@ -54,6 +54,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private BuildingImgDao buildingImgDao;
+
     @Override
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
@@ -62,7 +63,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
         // 获取户型id集合
         List<Integer> bhtIdList = buildingBean.getBhtIdList();
-        if (null != bhtIdList && bhtIdList.size()>0) {
+        if (null != bhtIdList && bhtIdList.size() > 0) {
             BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
             buildingAnalysisBean.setBhtIdList(bhtIdList);
             // 获取户型分析表中楼盘ID
@@ -73,7 +74,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
 
         // 翻译楼盘户型
-            // 获取户型分析数据
+        // 获取户型分析数据
         List<BuildingHorseTypeBean> allHorseType = buildingHorseTypeService.getAllHorseType();
 
         // 户型map 通过户型分析中的户型id和楼盘id到户型表中翻译户型
@@ -108,7 +109,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                     List<String> strings = bhtNameList.stream().distinct().collect(Collectors.toList());
                     // 户型名
-                    bean.setCaName(StringUtils.join(strings,"、"));
+                    bean.setCaName(StringUtils.join(strings, "、"));
                 }
 
                 if (null != bean.getOpenDate()) {
@@ -140,14 +141,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     @Override
-    public void addBuilding(BuildingBean buildingBean,MultipartFile[] effectImg, MultipartFile[] enPlanImg,
+    public void addBuilding(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg) throws Exception {
+
 
         int id = buildingDao.addBuilding(buildingBean);
 
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
-
+//        System.out.println("effectImg：" + enPlanImg);
         buildingBean.setBId(id);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
@@ -155,36 +157,43 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null != imgTypeList && imgTypeList.size() > 0) {
             Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
 
-            this.saveFile(buildingBean,effectImg,listMap.get("效果图").get(0).getItId() + "_" + ss + "_",listMap.get("效果图").get(0).getItId());
-            this.saveFile(buildingBean,enPlanImg,listMap.get("环境规划").get(0).getItId() + "_"  + ss + "_",listMap.get("环境规划").get(0).getItId());
-            this.saveFile(buildingBean,buildRealImg,listMap.get("楼盘实景").get(0).getItId() + "_"  + ss + "_",listMap.get("楼盘实景").get(0).getItId());
-            this.saveFile(buildingBean,matchingRealImg,listMap.get("配套实景").get(0).getItId() + "_"  + ss + "_",listMap.get("配套实景").get(0).getItId());
+
+                this.saveFile(buildingBean, effectImg, listMap.get("效果图").get(0).getItId() + "_" + ss + "_", listMap.get("效果图").get(0).getItId());
+
+
+            this.saveFile(buildingBean, enPlanImg, listMap.get("环境规划").get(0).getItId() + "_" + ss + "_", listMap.get("环境规划").get(0).getItId());
+            this.saveFile(buildingBean, buildRealImg, listMap.get("楼盘实景").get(0).getItId() + "_" + ss + "_", listMap.get("楼盘实景").get(0).getItId());
+            this.saveFile(buildingBean, matchingRealImg, listMap.get("配套实景").get(0).getItId() + "_" + ss + "_", listMap.get("配套实景").get(0).getItId());
         }
     }
 
     @Override
     public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg, MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg) throws Exception {
-        // TODO 更新楼盘数据
-        // 更新图片 （需要前端传入图片id）
+        // 更新楼盘数据
+        buildingDao.patchById(buildingBean);
+        // 更新图片
+
     }
 
     //保存文件
-    private void saveFile(BuildingBean buildingBean, MultipartFile[] file,String type,Integer typeId) throws Exception {
+    private void saveFile(BuildingBean buildingBean, MultipartFile[] file, String type, Integer typeId) throws Exception {
         if (file != null) {
-            BuildingImgBean buildingImgBean = new BuildingImgBean();
+
             for (MultipartFile multipartFile : file) {
+                BuildingImgBean buildingImgBean = new BuildingImgBean();
                 //原文件名
                 String fileName = multipartFile.getOriginalFilename();
-                fileName = fileName.substring(fileName.lastIndexOf("."));
+
 
                 File directory = new File("");// 参数为空
                 String path = directory.getCanonicalPath();
                 System.out.println("路径a：" + path);
-                String imgName = buildingBean.getBId().toString().concat(fileName);
+                String imgName = buildingBean.getBId().toString().concat("_").concat(fileName);
                 File dir = new File(path);
                 if (!dir.exists()) dir.mkdirs();
                 String buildStore = "D:\\";
                 String name = type + imgName;
+
                 path = buildStore.concat(name);
 
                 System.out.println("路径：" + path);
