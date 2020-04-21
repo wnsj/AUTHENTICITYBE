@@ -29,4 +29,6 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
     public int addBuilding(@Param("buildingBean") BuildingBean buildingBean);
 
     public void patchById(@Param("buildingBean") BuildingBean buildingBean);
+
+    public BuildingBean getAllByHtName(@Param("buildingBean") BuildingBean buildingBean);
 }

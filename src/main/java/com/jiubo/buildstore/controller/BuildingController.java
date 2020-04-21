@@ -44,6 +44,17 @@ public class BuildingController {
         return jsonObject;
     }
 
+
+    /**
+     * 新增楼盘
+     * @param addParam
+     * @param effectImg
+     * @param enPlanImg
+     * @param buildRealImg
+     * @param matchingRealImg
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/addBuilding")
     public JSONObject addBuilding(String addParam, @RequestParam("effectImg") MultipartFile[] effectImg,
                                   @RequestParam("enPlanImg") MultipartFile[] enPlanImg,
@@ -52,9 +63,34 @@ public class BuildingController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        System.out.println("effectImg：" + effectImg);
         BuildingBean buildingBean = JSONObject.parseObject(addParam,BuildingBean.class);
         buildingService.addBuilding(buildingBean, effectImg,enPlanImg,buildRealImg,matchingRealImg);
+        return jsonObject;
+    }
+
+
+    /**
+     * 更新楼盘
+     * @param addParam
+     * @param effectImg
+     * @param enPlanImg
+     * @param buildRealImg
+     * @param matchingRealImg
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/patchById")
+    public JSONObject patchById(String addParam, @RequestParam("effectImg") MultipartFile[] effectImg,
+                                @RequestParam("enPlanImg") MultipartFile[] enPlanImg,
+                                @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
+                                @RequestParam("matchingRealImg") MultipartFile[] matchingRealImg) throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+
+        BuildingBean buildingBean = JSONObject.parseObject(addParam,BuildingBean.class);
+        buildingService.patchById(buildingBean, effectImg,enPlanImg,buildRealImg,matchingRealImg);
+
         return jsonObject;
     }
 }

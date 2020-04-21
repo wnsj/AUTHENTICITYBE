@@ -25,4 +25,28 @@
         </if>
         where IMG_ID = #{buildingImgBean.imgId}
     </update>
+
+    <select id="getAllByBid" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
+        select * from building_img
+        <where>
+            <if test="buildingImgBean.itId != null">
+                and IT_ID = #{buildingImgBean.itId}
+            </if>
+            <if test="buildingImgBean.bId != null">
+                and B_ID = #{buildingImgBean.bId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByImgName">
+        delete from building_img
+        <where>
+            <if test="buildingImgBean.itId != null">
+                and IT_ID = #{buildingImgBean.itId}
+            </if>
+            <if test="buildingImgBean.bId != null">
+                and B_ID = #{buildingImgBean.bId}
+            </if>
+        </where>
+    </delete>
 </mapper>

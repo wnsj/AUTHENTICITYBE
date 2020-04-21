@@ -4,6 +4,8 @@ import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -17,4 +19,8 @@ public interface BuildingImgDao extends BaseMapper<BuildingImgBean> {
     public void addImg(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
 
     public void patchImgById(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
+
+    public List<BuildingImgBean> getAllByBid(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
+
+    public void deleteByImgName(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
 }

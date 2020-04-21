@@ -140,61 +140,67 @@
 
     <!--更新数据-->
     <update id="patchById">
-        update building set
-        <if test="null != buildingBean.htName and buildingBean.htName != ''">
-            HT_NAME = #{buildingBean.htName}
-        </if>
-        <if test="null != buildingBean.isSale and buildingBean.isSale != ''">
-            IS_SALE = #{buildingBean.isSale}
-        </if>
-        <if test="null != buildingBean.alias and buildingBean.alias != ''">
-            ALIAS = #{buildingBean.alias}
-        </if>
-        <if test="null != buildingBean.proId and buildingBean.proId != ''">
-            PRO_ID = #{buildingBean.proId}
-        </if>
-        <if test="null != buildingBean.ldId and buildingBean.ldId != ''">
-            LD_ID = #{buildingBean.ldId}
-        </if>
-        <if test="null != buildingBean.minArea and buildingBean.minArea != ''">
-            MIN_AREA = #{buildingBean.minArea}
-        </if>
-        <if test="null != buildingBean.maxArea and buildingBean.maxArea != ''">
-            MAX_AREA = #{buildingBean.maxArea}
-        </if>
-        <if test="null != buildingBean.maxUnitPrice and buildingBean.maxUnitPrice != ''">
-            MAX_UNIT_PRICE = #{buildingBean.maxUnitPrice}
-        </if>
-        <if test="null != buildingBean.minUnitPrice and buildingBean.minUnitPrice != ''">
-            MIN_UNIT_PRICE = #{buildingBean.minUnitPrice}
-        </if>
-        <if test="null != buildingBean.maxTitlePrice and buildingBean.maxTitlePrice != ''">
-            MAX_TITLE_PRICE = #{buildingBean.maxTitlePrice}
-        </if>
-        <if test="null != buildingBean.minTitlePrice and buildingBean.minTitlePrice != ''">
-            MIN_TITLE_PRICE = #{buildingBean.minTitlePrice}
-        </if>
-        <if test="null != buildingBean.btId and buildingBean.btId != ''">
-            BT_ID = #{buildingBean.btId}
-        </if>
-        <if test="null != buildingBean.adress and buildingBean.adress != ''">
-            ADRESS = #{buildingBean.adress}
-        </if>
-        <if test="null != buildingBean.createDate and buildingBean.createDate != ''">
-            CREATE_DATE = #{buildingBean.createDate}
-        </if>
-        <if test="null != buildingBean.chaId and buildingBean.chaId != ''">
-            CHA_ID = #{buildingBean.chaId}
-        </if>
-        <if test="null != buildingBean.devId and buildingBean.devId != ''">
-            DEV_ID = #{buildingBean.devId}
-        </if>
-        <if test="null != buildingBean.openDate and buildingBean.openDate != ''">
-            OPEN_DATE = #{buildingBean.openDate}
-        </if>
-        <if test="null != buildingBean.proDate and buildingBean.proDate != ''">
-            PRO_DATE = #{buildingBean.proDate}
-        </if>
+        update building
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null != buildingBean.htName and buildingBean.htName != ''">
+                HT_NAME = #{buildingBean.htName},
+            </if>
+            <if test="null != buildingBean.isSale and buildingBean.isSale != ''">
+                IS_SALE = #{buildingBean.isSale},
+            </if>
+            <if test="null != buildingBean.alias and buildingBean.alias != ''">
+                ALIAS = #{buildingBean.alias},
+            </if>
+            <if test="null != buildingBean.proId and buildingBean.proId != ''">
+                PRO_ID = #{buildingBean.proId},
+            </if>
+            <if test="null != buildingBean.ldId and buildingBean.ldId != ''">
+                LD_ID = #{buildingBean.ldId},
+            </if>
+            <if test="null != buildingBean.minArea and buildingBean.minArea != ''">
+                MIN_AREA = #{buildingBean.minArea},
+            </if>
+            <if test="null != buildingBean.maxArea and buildingBean.maxArea != ''">
+                MAX_AREA = #{buildingBean.maxArea},
+            </if>
+            <if test="null != buildingBean.maxUnitPrice and buildingBean.maxUnitPrice != ''">
+                MAX_UNIT_PRICE = #{buildingBean.maxUnitPrice},
+            </if>
+            <if test="null != buildingBean.minUnitPrice and buildingBean.minUnitPrice != ''">
+                MIN_UNIT_PRICE = #{buildingBean.minUnitPrice},
+            </if>
+            <if test="null != buildingBean.maxTitlePrice and buildingBean.maxTitlePrice != ''">
+                MAX_TITLE_PRICE = #{buildingBean.maxTitlePrice},
+            </if>
+            <if test="null != buildingBean.minTitlePrice and buildingBean.minTitlePrice != ''">
+                MIN_TITLE_PRICE = #{buildingBean.minTitlePrice},
+            </if>
+            <if test="null != buildingBean.btId and buildingBean.btId != ''">
+                BT_ID = #{buildingBean.btId},
+            </if>
+            <if test="null != buildingBean.adress and buildingBean.adress != ''">
+                ADRESS = #{buildingBean.adress},
+            </if>
+            <if test="null != buildingBean.createDate">
+                CREATE_DATE = #{buildingBean.createDate},
+            </if>
+            <if test="null != buildingBean.chaId and buildingBean.chaId != ''">
+                CHA_ID = #{buildingBean.chaId},
+            </if>
+            <if test="null != buildingBean.devId and buildingBean.devId != ''">
+                DEV_ID = #{buildingBean.devId},
+            </if>
+            <if test="null != buildingBean.openDate">
+                OPEN_DATE = #{buildingBean.openDate},
+            </if>
+            <if test="null != buildingBean.proDate">
+                PRO_DATE = #{buildingBean.proDate}
+            </if>
+        </trim>
         where B_ID = #{buildingBean.bId}
     </update>
+
+    <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building where  HT_NAME = #{buildingBean.htName}
+    </select>
 </mapper>
