@@ -56,6 +56,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private BuildingImgDao buildingImgDao;
 
+    @Autowired
+    private BuildingAnalysisDao buildingAnalysisDao;
+
     @Override
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
@@ -151,7 +154,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         int id;
         if (!StringUtils.isBlank(buildName)) {
             // 若不存在 创建
-            id = buildingDao.addBuilding(buildingBean);
+            buildingDao.addBuilding(buildingBean);
+
         } else {
             // 存在 则更新
             BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
@@ -163,7 +167,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
 //        System.out.println("effectImg：" + enPlanImg);
-        buildingBean.setBId(id);
+        buildingBean.setBId(buildingBean.getBId());
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         String ss = sdf.format(date);
@@ -191,39 +195,45 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     private void updatePicture(BuildingBean buildingBean, MultipartFile[] img, List<ImgTypeBean> imgTypeList, Integer type) throws Exception {
-        if (null != img) {
-            if (null != imgTypeList) {
-                Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-                BuildingImgBean buildingImgBean = new BuildingImgBean();
-                buildingImgBean.setBId(buildingBean.getBId());
-                buildingImgBean.setItId(listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
 
-                // 删除图片 以及图片表中的数据
-                List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
-                if (null != allByBid) {
-                    for (BuildingImgBean bean : allByBid) {
-                        delFile("D:\\" + bean.getImgName());
-                    }
-                }
-                buildingImgDao.deleteByImgName(buildingImgBean);
+        Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
+        BuildingImgBean buildingImgBean = new BuildingImgBean();
+        buildingImgBean.setBId(buildingBean.getBId());
 
-                // 重新插入图片名 并存储图片
-                Date date = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-                String ss = sdf.format(date);
-                if (type == 1) {
-                    this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.effectImg).get(0).getItId() + "_" + ss + "_",
-                            listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
-                } else if (type == 2) {
-                    this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
-
-                } else if (type == 3) {
-                    this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
-
-                } else {
-                    this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+        if (null != img && img.length > 0) {
+            // 删除图片 以及图片表中的数据
+            List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
+            if (null != allByBid) {
+                for (BuildingImgBean bean : allByBid) {
+                    delFile("D:\\" + bean.getImgName());
+                    System.out.println("===========" + "D:\\" + bean.getImgName());
                 }
             }
+
+            // 重新插入图片名 并存储图片
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+            String ss = sdf.format(date);
+            if (type == 1) {
+                buildingImgBean.setItId(listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
+                buildingImgDao.deleteByImgName(buildingImgBean);
+                this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.effectImg).get(0).getItId() + "_" + ss + "_",
+                        listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
+            } else if (type == 2) {
+                buildingImgBean.setItId(listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
+                buildingImgDao.deleteByImgName(buildingImgBean);
+                this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
+            } else if (type == 3) {
+                buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+                buildingImgDao.deleteByImgName(buildingImgBean);
+                this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+            } else {
+                buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+                buildingImgDao.deleteByImgName(buildingImgBean);
+                this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+            }
+        } else {
+            buildingImgDao.deleteByImgName(buildingImgBean);
         }
     }
 
