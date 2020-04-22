@@ -4,7 +4,10 @@ import com.jiubo.buildstore.bean.BuildingAnalysisLabelBean;
 import com.jiubo.buildstore.dao.BuildingAnalysisLabelDao;
 import com.jiubo.buildstore.service.BuildingAnalysisLabelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BuildingAnalysisLabelServiceImpl extends ServiceImpl<BuildingAnalysisLabelDao, BuildingAnalysisLabelBean> implements BuildingAnalysisLabelService {
 
+
+    @Autowired
+    private BuildingAnalysisLabelDao buildingAnalysisLabelDao;
+    @Override
+    public List<BuildingAnalysisLabelBean> getALabel() {
+        return buildingAnalysisLabelDao.getALabel();
+    }
 }

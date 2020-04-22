@@ -4,16 +4,22 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingAnalysisBean;
 
 import com.jiubo.buildstore.bean.BuildingBean;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.SaleTypeBean;
 import com.jiubo.buildstore.dao.BuildingAnalysisDao;
 import com.jiubo.buildstore.dao.BuildingDao;
+import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.SaleTypeDao;
 import com.jiubo.buildstore.service.BuildingAnalysisService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.service.BuildingService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,6 +43,9 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
     @Autowired
     private SaleTypeDao saleTypeDao;
+
+    @Autowired
+    private BuildingImgDao buildingImgDao;
     @Override
     public List<BuildingAnalysisBean> getBidByBhtIdList(BuildingAnalysisBean buildingAnalysisBean) {
         return buildingAnalysisDao.getBidByBhtIdList(buildingAnalysisBean);
@@ -84,6 +93,67 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             }
         }
         return page.setRecords(buildAnalysisList);
+    }
+
+    @Override
+    public void insertByBid(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception {
+        buildingAnalysisDao.insertByBid(buildingAnalysisBean);
+
+        this.saveFile(buildingAnalysisBean,horseTypeImg,"horseType",5);
+    }
+
+    //保存文件
+    private void saveFile(BuildingAnalysisBean buildingBean, MultipartFile[] file, String type, Integer typeId) throws Exception {
+        if (file != null) {
+
+            for (MultipartFile multipartFile : file) {
+                BuildingImgBean buildingImgBean = new BuildingImgBean();
+                //原文件名
+                String fileName = multipartFile.getOriginalFilename();
+
+
+                File directory = new File("");// 参数为空
+                String path = directory.getCanonicalPath();
+//                System.out.println("路径a：" + path);
+                String imgName = buildingBean.getBuildId().toString().concat("_").concat(fileName);
+                File dir = new File(path);
+                if (!dir.exists()) dir.mkdirs();
+                String buildStore = "D:\\";
+                String name = type + imgName;
+
+                path = buildStore.concat(name);
+
+//                System.out.println("路径：" + path);
+                //读写文件
+                if (!multipartFile.isEmpty()) {
+                    InputStream is = multipartFile.getInputStream();
+                    int len = 0;
+                    byte[] by = new byte[1024];
+                    OutputStream os = new FileOutputStream(path);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    BufferedOutputStream bos = new BufferedOutputStream(os);
+                    while ((len = bis.read(by)) != -1) {
+                        bos.write(by, 0, len);
+                        bos.flush();
+                    }
+                    if (null != bos)
+                        bos.close();
+                    if (null != bis)
+                        bis.close();
+                    if (null != os)
+                        os.close();
+                    if (null != is)
+                        is.close();
+                }
+
+                buildingImgBean.setImgName(name);
+                buildingImgBean.setBId(buildingBean.getBuildId());
+                buildingImgBean.setCreateDate(new Date());
+                buildingImgBean.setItId(typeId);
+
+                buildingImgDao.addImg(buildingImgBean);
+            }
+        }
     }
 }
 

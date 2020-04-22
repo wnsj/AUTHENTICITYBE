@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -55,7 +56,7 @@ public class BuildingAnalysisBean implements Serializable {
     /**
      * 上传时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 在售情况
