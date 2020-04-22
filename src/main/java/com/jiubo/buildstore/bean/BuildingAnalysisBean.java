@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.List;
@@ -35,8 +36,9 @@ public class BuildingAnalysisBean implements Serializable {
     /**
      * 楼盘id
      */
-    private Integer bId;
+    private Integer buildId;
 
+    private String htName;
     /**
      * 户型ID
      */
@@ -60,10 +62,11 @@ public class BuildingAnalysisBean implements Serializable {
      */
     private Integer isSale;
 
+    private String saleLabel;
     /**
      * 总价
      */
-    private Integer totlePrice;
+    private BigDecimal totlePrice;
 
     /**
      * 标签id
@@ -84,6 +87,7 @@ public class BuildingAnalysisBean implements Serializable {
      */
     private Integer drection;
 
+    private String drectionLabel;
     /**
      * 类型
      */
@@ -92,7 +96,7 @@ public class BuildingAnalysisBean implements Serializable {
     /**
      * 首付金
      */
-    private Integer downPayment;
+    private BigDecimal downPayment;
 
     /**
      * 楼盘id集合
@@ -117,7 +121,7 @@ public class BuildingAnalysisBean implements Serializable {
      * 页码
      */
     @TableField(exist = false)
-    private String pageNum;
+    private String current;
 
     /**
      * 每页尺寸

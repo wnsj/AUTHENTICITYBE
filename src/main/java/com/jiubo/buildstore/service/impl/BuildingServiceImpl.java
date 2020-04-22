@@ -72,7 +72,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingAnalysisBean.setBhtIdList(bhtIdList);
             // 获取户型分析表中楼盘ID
             List<BuildingAnalysisBean> bidByBhtIdList = buildingAnalysisService.getBidByBhtIdList(buildingAnalysisBean);
-            List<Integer> bIdList = bidByBhtIdList.stream().map(BuildingAnalysisBean::getBId).collect(toList());
+            List<Integer> bIdList = bidByBhtIdList.stream().map(BuildingAnalysisBean::getBuildId).collect(toList());
             buildingBean.setBIdList(bIdList);
         }
 
@@ -92,7 +92,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
             buildingAnalysisBean.setBIdList(list);
             List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
-            Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBId));
+            Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBuildId));
             // 翻译出售状态
             List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
 
@@ -192,6 +192,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         updatePicture(buildingBean, enPlanImg, imgTypeList, 2);
         updatePicture(buildingBean, buildRealImg, imgTypeList, 3);
         updatePicture(buildingBean, matchingRealImg, imgTypeList, 4);
+    }
+
+    @Override
+    public List<BuildingBean> getAllBuild() {
+        return buildingDao.getAllBuild();
     }
 
     private void updatePicture(BuildingBean buildingBean, MultipartFile[] img, List<ImgTypeBean> imgTypeList, Integer type) throws Exception {

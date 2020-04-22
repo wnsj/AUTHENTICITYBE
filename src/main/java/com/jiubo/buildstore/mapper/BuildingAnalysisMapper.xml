@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.BuildingAnalysisDao">
     <select id="getBidByBhtIdList" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
-        select B_ID from building_analysis where
+        select BUILD_ID from building_analysis where
         BHT_ID in
         <foreach collection="buildingAnalysisBean.bhtIdList" open="(" close=")" separator="," item="item">
             #{item}
@@ -11,8 +11,8 @@
 
 
     <select id="getBidByBIdList" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
-        select B_ID,BHT_ID from building_analysis where
-        B_ID in
+        select BUILD_ID,BHT_ID from building_analysis where
+		BUILD_ID in
         <foreach collection="buildingAnalysisBean.bIdList" open="(" close=")" separator="," item="item">
             #{item}
         </foreach>
@@ -21,7 +21,7 @@
     <select id="getAllAnalysisByBid" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
         SELECT
 	a.BA_ID,
-	a.B_ID,
+	a.BUILD_ID,
 	a.BHT_ID,
 	a.BAL_ID,
 	a.IMG_NAME,
@@ -39,24 +39,32 @@ FROM
 	building_analysis a,
 	BUILDING_ANALYSIS_LABEL b,
 	HORSE_TYPE c
-WHERE
-	a.HT_ID = c.HT_ID
-	AND a.BAL_ID = b.BAL_ID
-
-	and a.B_ID = #{buildingAnalysisBean.bId}
+	<where>
+		a.HT_ID = c.HT_ID
+		AND a.BAL_ID = b.BAL_ID
+		<if test="null != buildingAnalysisBean.buildId">
+			and a.BUILD_ID = #{buildingAnalysisBean.buildId}
+		</if>
+		<if test="null != buildingAnalysisBean.isSale">
+			and a.IS_SALE = #{buildingAnalysisBean.isSale}
+		</if>
+		<if test="null != buildingAnalysisBean.bhtId">
+			and a.BHT_ID = #{buildingAnalysisBean.bhtId}
+		</if>
+	</where>
     </select>
 
 	<delete id="deleteByBid">
-		delete from building_analysis where B_ID = #{buildingAnalysisBean.bId}
+		delete from building_analysis where BUILD_ID = #{buildingAnalysisBean.buildId}
 	</delete>
 
 	<insert id="insertByBid">
 		insert into building_analysis
-		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,BAL_ID,CONTENT,DRECTION,HT_ID,DOWN_PAYMENT,B_ID,BUILD_AREA)
+		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,BAL_ID,CONTENT,DRECTION,HT_ID,DOWN_PAYMENT,BUILD_ID,BUILD_AREA)
 		VALUES
 		({buildingAnalysisBean.bhtId},{buildingAnalysisBean.imgName},{buildingAnalysisBean.createDate},{buildingAnalysisBean.isSale},
 		{buildingAnalysisBean.totlePrice},{buildingAnalysisBean.balId},{buildingAnalysisBean.content},
 		{buildingAnalysisBean.drection},{buildingAnalysisBean.htId},{buildingAnalysisBean.downPayment},
-		{buildingAnalysisBean.bId},{buildingAnalysisBean.buildArea},)
+		{buildingAnalysisBean.buildId},{buildingAnalysisBean.buildArea},)
 	</insert>
 </mapper>
