@@ -221,4 +221,11 @@
     <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select BUILD_ID,HT_NAME from building
     </select>
+
+    <select id="getAllByBuildName" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building
+        <where>
+            HT_NAME = #{buildingBean.htName}
+        </where>
+    </select>
 </mapper>

@@ -290,7 +290,7 @@ public class BuildingBean implements Serializable {
     private Long discount;
 
     /**
-     * 热销（1：热销；2：不热销）
+     * 热销（1：热销；2：人气；3：热搜）
      */
     private Long sellWell;
 
@@ -308,4 +308,13 @@ public class BuildingBean implements Serializable {
     private String startTime;
     private String endTime;
 
+    /**
+     *出售类型（1：推荐户型；2：品质楼盘；3：优选新房）
+     */
+    private Long salesType;
+
+    /**
+     * 修改时间
+     */
+    private Date modifyTime;
 }

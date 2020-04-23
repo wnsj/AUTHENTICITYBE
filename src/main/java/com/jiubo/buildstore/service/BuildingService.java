@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.bean.BuildMainBean;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,7 @@ public interface BuildingService extends IService<BuildingBean> {
                             MultipartFile[] matchingRealImg) throws Exception;
 
     public List<BuildingBean> getAllBuild();
+
+
+    public BuildMainBean getAllByBuildName(BuildingBean buildingBean);
 }

@@ -150,16 +150,16 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                             MultipartFile[] matchingRealImg) throws Exception {
 
 
-        String buildName = buildingBean.getHtName();
-        int id;
-        if (!StringUtils.isBlank(buildName)) {
+
+        BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
+
+        if (null == byHtName) {
             // 若不存在 创建
             buildingDao.addBuilding(buildingBean);
 
         } else {
             // 存在 则更新
-            BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
-            id = byHtName.getBuildId();
+            int id = byHtName.getBuildId();
             buildingBean.setBuildId(id);
             buildingDao.patchById(buildingBean);
         }
@@ -197,6 +197,49 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public List<BuildingBean> getAllBuild() {
         return buildingDao.getAllBuild();
+    }
+
+
+    @Override
+    public BuildMainBean getAllByBuildName(BuildingBean buildingBean) {
+        List<BuildingBean> buildList = buildingDao.getAllByBuildName(buildingBean);
+
+        BuildMainBean buildMainBean = new BuildMainBean();
+        if (null != buildList && buildList.size() > 0) {
+            Map<Long, List<BuildingBean>> collect = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getSalesType));
+            // 推荐类型楼盘
+            List<BuildingBean> commendList = collect.get(1);
+            if (null != commendList) {
+                buildMainBean.setCommendList(commendList.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(4).collect(Collectors.toList()));
+            }
+
+            // 品质楼盘
+            List<BuildingBean> list = collect.get(2);
+            if (null != list) {
+                buildMainBean.setQualityList(list.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+            }
+
+            // 优选新房
+            List<BuildingBean> newBeans = collect.get(3);
+
+            if (null != newBeans) {
+                Map<Long, List<BuildingBean>> listMap = newBeans.stream().collect(Collectors.groupingBy(BuildingBean::getSellWell));
+                List<BuildingBean> beans = listMap.get(1);
+                if (null != beans) {
+                    buildMainBean.setNewPopularityList(beans.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                }
+                List<BuildingBean> beans1 = listMap.get(2);
+                if (null != beans1) {
+                    buildMainBean.setNewHotSearchList(beans1.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                }
+                List<BuildingBean> beans2 = listMap.get(3);
+                if (null != beans2) {
+                    buildMainBean.setNewSellWellList(beans2.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                }
+
+            }
+        }
+        return buildMainBean;
     }
 
     private void updatePicture(BuildingBean buildingBean, MultipartFile[] img, List<ImgTypeBean> imgTypeList, Integer type) throws Exception {
@@ -308,4 +351,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             }
         }
     }
+
+
+
 }
