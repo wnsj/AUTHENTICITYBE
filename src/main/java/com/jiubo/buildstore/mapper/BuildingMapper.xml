@@ -4,9 +4,11 @@
 
     <!--条件查询-->
     <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        SELECT a.B_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,
+        SELECT a.BUILD_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,
         a.MIN_AREA,a.MAX_AREA,a.MAX_UNIT_PRICE,a.MIN_UNIT_PRICE,a.MAX_TITLE_PRICE,a.MIN_TITLE_PRICE,a.BT_ID,a.ADRESS,a.CREATE_DATE,
-        a.CHA_ID,b.BT_NAME,d.CHA_NAME
+        a.OWNERSHIP_YEAR,a.PROPERTY_TYPE,a.PLOT_RATIO,a.GREENING_RATE,a.SALES_ADDRESS,a.PROPERTY_ADDRESS,DECORATION,a.COVERED_AREA,a.FLOORAGE,
+        a.HOUSEHOLDS,a.ARCHITECTURAL_STYLE,a.ITERATION,a.PROPERTY_COMPANY,a.PROPERTY_FEE,a.PARKING_SPACE,a.PROJECT_INTRODUCTION,
+        a.DISCOUNT,a.SELL_WELL,a.BUILD_OPEN,a.CHA_ID,b.BT_NAME,d.CHA_NAME
         from building a,building_type b ,characteristic d
         <where>
             a.CHA_ID = d.CHA_ID and a.BT_ID = b.BT_ID
@@ -46,10 +48,10 @@
                 </foreach>
             </if>
             /*楼盘户型*/
-            <if test="buildingBean.bIdList != null and buildingBean.bIdList.size() > 0">
-                and a.B_ID in
-                <foreach collection="buildingBean.bIdList" open="(" close=")" separator="," item="bId">
-                    #{bId}
+            <if test="buildingBean.buildIdList != null and buildingBean.buildIdList.size() > 0">
+                and a.BUILD_ID in
+                <foreach collection="buildingBean.buildIdList" open="(" close=")" separator="," item="buildId">
+                    #{buildId}
                 </foreach>
             </if>
             /*房源特色*/
@@ -114,6 +116,15 @@
             <if test="buildingBean.endTime != null and buildingBean.endTime != ''">
                 and #{buildingBean.endTime} >= DATE_FORMAT(a.OPEN_DATE, '%Y-%m-%d' ))
             </if>
+            <if test="buildingBean.discount != null">
+                and #{buildingBean.discount} = a.DISCOUNT
+            </if>
+            <if test="buildingBean.sellWell != null">
+                and #{buildingBean.sellWell} = a.SELL_WELL
+            </if>
+            <if test="buildingBean.buildOpen != null">
+                and #{buildingBean.buildOpen} = a.BUILD_OPEN
+            </if>
         </where>
         <if test="buildingBean.sortCode != null and buildingBean.sortCode != 0">
             <if test="buildingBean.sortCode == 1">
@@ -121,6 +132,9 @@
             </if>
             <if test="buildingBean.sortCode == 2">
                 order by MIN_TITLE_PRICE
+            </if>
+            <if test="buildingBean.sortCode == 3">
+                order by a.OPEN_DATE
             </if>
         </if>
     </select>
@@ -197,7 +211,7 @@
                 PRO_DATE = #{buildingBean.proDate}
             </if>
         </trim>
-        where B_ID = #{buildingBean.bId}
+        where BUILD_ID = #{buildingBean.bId}
     </update>
 
     <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildingBean">
@@ -205,6 +219,6 @@
     </select>
 
     <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        select B_ID,HT_NAME from building
+        select BUILD_ID,HT_NAME from building
     </select>
 </mapper>

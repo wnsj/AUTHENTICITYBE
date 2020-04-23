@@ -71,7 +71,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             for (BuildingAnalysisBean bean : buildAnalysisList) {
 
                 if (null != allBuild && allBuild.size() > 0) {
-                    Map<Integer, List<BuildingBean>> buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBId));
+                    Map<Integer, List<BuildingBean>> buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
                     bean.setHtName(buildMap.get(bean.getBuildId()).get(0).getHtName());
                 }
 

@@ -72,8 +72,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingAnalysisBean.setBhtIdList(bhtIdList);
             // 获取户型分析表中楼盘ID
             List<BuildingAnalysisBean> bidByBhtIdList = buildingAnalysisService.getBidByBhtIdList(buildingAnalysisBean);
-            List<Integer> bIdList = bidByBhtIdList.stream().map(BuildingAnalysisBean::getBuildId).collect(toList());
-            buildingBean.setBIdList(bIdList);
+            List<Integer> buildIdList = bidByBhtIdList.stream().map(BuildingAnalysisBean::getBuildId).collect(toList());
+            buildingBean.setBuildIdList(buildIdList);
         }
 
 
@@ -87,7 +87,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
         if (null != allBulidBypage && allBulidBypage.size() > 0) {
             // 获取楼盘id
-            List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBId).collect(toList());
+            List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBuildId).collect(toList());
             // 根据楼盘id抓取户型分析数据
             BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
             buildingAnalysisBean.setBIdList(list);
@@ -102,7 +102,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
             for (BuildingBean bean : allBulidBypage) {
                 List<String> bhtNameList = new ArrayList<>();
-                List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBId());
+                List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBuildId());
                 if (null != buildingAnalysisBeans && buildingAnalysisBeans.size() > 0) {
 
                     for (BuildingAnalysisBean bean1 : buildingAnalysisBeans) {
@@ -129,7 +129,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 if (null != cidByBidList) {
                     Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
-                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBId());
+                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
                     if (null != commentBeans) {
                         List<String> cNameList = new ArrayList<>();
                         for (CounselorCommentBean counselorCommentBean : commentBeans) {
@@ -159,15 +159,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         } else {
             // 存在 则更新
             BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
-            id = byHtName.getBId();
-            buildingBean.setBId(id);
+            id = byHtName.getBuildId();
+            buildingBean.setBuildId(id);
             buildingDao.patchById(buildingBean);
         }
 
 
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
 //        System.out.println("effectImg：" + enPlanImg);
-        buildingBean.setBId(buildingBean.getBId());
+        buildingBean.setBuildId(buildingBean.getBuildId());
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         String ss = sdf.format(date);
@@ -203,7 +203,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
         BuildingImgBean buildingImgBean = new BuildingImgBean();
-        buildingImgBean.setBId(buildingBean.getBId());
+        buildingImgBean.setBId(buildingBean.getBuildId());
 
         if (null != img && img.length > 0) {
             // 删除图片 以及图片表中的数据
@@ -268,7 +268,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 File directory = new File("");// 参数为空
                 String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
-                String imgName = buildingBean.getBId().toString().concat("_").concat(fileName);
+                String imgName = buildingBean.getBuildId().toString().concat("_").concat(fileName);
                 File dir = new File(path);
                 if (!dir.exists()) dir.mkdirs();
                 String buildStore = "D:\\";
@@ -300,7 +300,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 buildingImgBean.setImgName(name);
-                buildingImgBean.setBId(buildingBean.getBId());
+                buildingImgBean.setBId(buildingBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setItId(typeId);
 
