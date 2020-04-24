@@ -24,12 +24,14 @@ public interface BuildingService extends IService<BuildingBean> {
     public void addBuilding(BuildingBean buildingBean,MultipartFile[] effectImg,
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
-                            MultipartFile[] matchingRealImg) throws Exception;
+                            MultipartFile[] matchingRealImg,
+                            MultipartFile[] headImg) throws Exception;
 
     public void patchById(BuildingBean buildingBean,MultipartFile[] effectImg,
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
-                            MultipartFile[] matchingRealImg) throws Exception;
+                            MultipartFile[] matchingRealImg,
+                            MultipartFile[] headImg) throws Exception;
 
     public List<BuildingBean> getAllBuild();
 

@@ -23,4 +23,6 @@ public interface BuildingImgDao extends BaseMapper<BuildingImgBean> {
     public List<BuildingImgBean> getAllByBid(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
 
     public void deleteByImgName(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
+
+    public List<BuildingImgBean> getHeadImgByBuildId(@Param("buildingImgBean") BuildingImgBean buildingImgBean);
 }

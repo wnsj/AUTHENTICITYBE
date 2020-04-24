@@ -35,5 +35,5 @@ public class CounselorBean implements Serializable {
 
     private Integer ccId;
 
-
+    private String tel;
 }

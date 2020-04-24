@@ -65,7 +65,10 @@ public class CounselorCommentBean implements Serializable {
      */
     private Integer coucType;
 
-
+    /**
+     * 联系方式
+     */
+    private String tel;
 
     /**
      * 咨询师名字

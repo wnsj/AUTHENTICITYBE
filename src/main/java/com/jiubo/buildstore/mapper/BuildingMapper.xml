@@ -140,7 +140,7 @@
     </select>
 
     <!--添加数据-->
-    <insert id="addBuilding" useGeneratedKeys="true" keyProperty="bId">
+    <insert id="addBuilding" useGeneratedKeys="true" keyProperty="buildId">
         insert into
         building
         (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,
@@ -211,7 +211,7 @@
                 PRO_DATE = #{buildingBean.proDate}
             </if>
         </trim>
-        where BUILD_ID = #{buildingBean.bId}
+        where BUILD_ID = #{buildingBean.buildId}
     </update>
 
     <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildingBean">
@@ -225,7 +225,9 @@
     <select id="getAllByBuildName" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building
         <where>
+        <if test="null != buildingBean.htName and buildingBean.htName != ''">
             HT_NAME = #{buildingBean.htName}
+        </if>
         </where>
     </select>
 </mapper>

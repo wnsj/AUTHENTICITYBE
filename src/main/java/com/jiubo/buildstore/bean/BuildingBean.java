@@ -82,12 +82,12 @@ public class BuildingBean implements Serializable {
     /**
      * 最小面积
      */
-    private Integer minArea;
+    private BigDecimal minArea;
 
     /**
      * 最大面积
      */
-    private Integer maxArea;
+    private BigDecimal maxArea;
 
     private List<Integer> areaIdList;
     /**
@@ -300,7 +300,15 @@ public class BuildingBean implements Serializable {
     private Long buildOpen;
 
 
-    private String couName;
+    /**
+     * 咨询师名字
+     */
+    private List<CounselorBean> couName;
+
+    /**
+     * 联系方式
+     */
+    private String tel;
 
     private String openDateTime;
 
@@ -317,4 +325,8 @@ public class BuildingBean implements Serializable {
      * 修改时间
      */
     private Date modifyTime;
+
+    private String imgName;
+
+    private String imgPath;
 }

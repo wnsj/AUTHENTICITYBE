@@ -38,4 +38,8 @@ public class BuildingImgBean implements Serializable {
     private Integer itId;
 
     private Integer bId;
+
+    private String imgPath;
+
+    private List<Integer> bIdList;
 }

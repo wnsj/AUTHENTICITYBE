@@ -23,7 +23,7 @@
     </update>
 
     <select id="getCidByBidList" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
-        select a.C_ID,a.B_ID,b.COU_NAME from counselor_comment a,counselor b
+        select a.C_ID,a.B_ID,b.COU_NAME,b.TEL from counselor_comment a,counselor b
         <where>
             a.C_ID = b.COU_ID and
             a.B_ID in

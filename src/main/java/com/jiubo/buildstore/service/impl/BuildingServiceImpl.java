@@ -84,25 +84,37 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 户型map 通过户型分析中的户型id和楼盘id到户型表中翻译户型
         Map<Integer, List<BuildingHorseTypeBean>> integerListMap = allHorseType.stream().collect(Collectors.groupingBy(BuildingHorseTypeBean::getBhtId));
 
+        // 楼盘数据
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
+
         if (null != allBulidBypage && allBulidBypage.size() > 0) {
+
             // 获取楼盘id
             List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBuildId).collect(toList());
+
             // 根据楼盘id抓取户型分析数据
             BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
             buildingAnalysisBean.setBIdList(list);
             List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
             Map<Integer, List<BuildingAnalysisBean>> listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBuildId));
+
             // 翻译出售状态
             List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
 
+            // 获取咨询师名字 联系方式
             CounselorCommentBean commentBean = new CounselorCommentBean();
             commentBean.setBIdList(list);
             List<CounselorCommentBean> cidByBidList = counselorCommentDao.getCidByBidList(commentBean);
 
+            // 获取头图
+            BuildingImgBean buildingImgBean = new BuildingImgBean();
+            buildingImgBean.setBIdList(list);
+            List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             for (BuildingBean bean : allBulidBypage) {
                 List<String> bhtNameList = new ArrayList<>();
                 List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBuildId());
+
+                // 拼接户型
                 if (null != buildingAnalysisBeans && buildingAnalysisBeans.size() > 0) {
 
                     for (BuildingAnalysisBean bean1 : buildingAnalysisBeans) {
@@ -116,27 +128,44 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     bean.setCaName(StringUtils.join(strings, "、"));
                 }
 
+
+                 // 开盘时间
                 if (null != bean.getOpenDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     bean.setOpenDateTime(sdf.format(bean.getOpenDate()));
                 }
 
+                // 出售情况
                 if (null != allSaleType) {
                     Map<Integer, List<SaleTypeBean>> map = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
 
                     bean.setSaleLabel(map.get(bean.getIsSale()).get(0).getStName());
                 }
 
+                // 获取咨询师名字 联系方式
                 if (null != cidByBidList) {
                     Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
                     List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
                     if (null != commentBeans) {
-                        List<String> cNameList = new ArrayList<>();
+                        List<CounselorBean> cNameList = new ArrayList<>();
+                        CounselorBean counselorBean = new CounselorBean();
                         for (CounselorCommentBean counselorCommentBean : commentBeans) {
-                            cNameList.add(counselorCommentBean.getCouName());
+                            counselorBean.setCouName(counselorCommentBean.getCouName());
+                            counselorBean.setTel(counselorCommentBean.getTel());
+                            cNameList.add(counselorBean);
                         }
-                        String join = StringUtils.join(cNameList, "、");
-                        bean.setCouName(join);
+//                        String join = StringUtils.join(cNameList, "、");
+                        bean.setCouName(cNameList);
+                    }
+                }
+
+                // 头图名字 路径
+                if (null != byBuildId) {
+                    Map<Integer, List<BuildingImgBean>> map = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                    List<BuildingImgBean> buildingImgBeans = map.get(bean.getBuildId());
+                    if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
+                        bean.setImgName(buildingImgBeans.get(0).getImgName());
+                        bean.setImgPath(buildingImgBeans.get(0).getImgPath());
                     }
                 }
             }
@@ -147,8 +176,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public void addBuilding(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
-                            MultipartFile[] matchingRealImg) throws Exception {
-
+                            MultipartFile[] matchingRealImg,
+                            MultipartFile[] headImg) throws Exception {
 
 
         BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
@@ -174,15 +203,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null != imgTypeList && imgTypeList.size() > 0) {
             Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
 
-            this.saveFile(buildingBean, effectImg, listMap.get(ImgTypeConstant.effectImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
-            this.saveFile(buildingBean, enPlanImg, listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
-            this.saveFile(buildingBean, buildRealImg, listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
-            this.saveFile(buildingBean, matchingRealImg, listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+            this.saveFile(buildingBean, effectImg, "effectImg", listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
+            this.saveFile(buildingBean, enPlanImg, "enPlanImg", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
+            this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+            this.saveFile(buildingBean, matchingRealImg, "matchingRealImg", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+            this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
         }
     }
 
     @Override
-    public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg, MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg) throws Exception {
+    public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
+                          MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg,MultipartFile[] headImg) throws Exception {
         // 更新楼盘数据
         buildingDao.patchById(buildingBean);
         // 获取图片类型
@@ -192,6 +223,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         updatePicture(buildingBean, enPlanImg, imgTypeList, 2);
         updatePicture(buildingBean, buildRealImg, imgTypeList, 3);
         updatePicture(buildingBean, matchingRealImg, imgTypeList, 4);
+        updatePicture(buildingBean, headImg, imgTypeList, 5);
     }
 
     @Override
@@ -200,6 +232,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
 
+    /**
+     * 首页查询
+     * @param buildingBean
+     * @return
+     */
     @Override
     public BuildMainBean getAllByBuildName(BuildingBean buildingBean) {
         List<BuildingBean> buildList = buildingDao.getAllByBuildName(buildingBean);
@@ -208,38 +245,72 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null != buildList && buildList.size() > 0) {
             Map<Long, List<BuildingBean>> collect = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getSalesType));
             // 推荐类型楼盘
-            List<BuildingBean> commendList = collect.get(1);
+            List<BuildingBean> commendList = collect.get(1L);
             if (null != commendList) {
-                buildMainBean.setCommendList(commendList.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(4).collect(Collectors.toList()));
+                List<BuildingBean> beans = commendList.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(4).collect(toList());
+                // 获取头图
+                getHeadImg(beans);
+
+                buildMainBean.setCommendList(beans);
             }
 
             // 品质楼盘
-            List<BuildingBean> list = collect.get(2);
+            List<BuildingBean> list = collect.get(2L);
             if (null != list) {
-                buildMainBean.setQualityList(list.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                List<BuildingBean> beans = list.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
+                // 获取头图
+                getHeadImg(beans);
+                buildMainBean.setQualityList(beans);
             }
 
             // 优选新房
-            List<BuildingBean> newBeans = collect.get(3);
+            List<BuildingBean> newBeans = collect.get(3L);
 
             if (null != newBeans) {
                 Map<Long, List<BuildingBean>> listMap = newBeans.stream().collect(Collectors.groupingBy(BuildingBean::getSellWell));
-                List<BuildingBean> beans = listMap.get(1);
+                List<BuildingBean> beans = listMap.get(1L);
                 if (null != beans) {
-                    buildMainBean.setNewPopularityList(beans.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                    List<BuildingBean> beanList = beans.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
+                    // 获取头图
+                    getHeadImg(beanList);
+                    buildMainBean.setNewPopularityList(beanList);
                 }
-                List<BuildingBean> beans1 = listMap.get(2);
+                List<BuildingBean> beans1 = listMap.get(2L);
                 if (null != beans1) {
-                    buildMainBean.setNewHotSearchList(beans1.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                    List<BuildingBean> beanList1 = beans1.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
+                    // 获取头图
+                    getHeadImg(beanList1);
+                    buildMainBean.setNewHotSearchList(beanList1);
                 }
-                List<BuildingBean> beans2 = listMap.get(3);
+                List<BuildingBean> beans2 = listMap.get(3L);
                 if (null != beans2) {
-                    buildMainBean.setNewSellWellList(beans2.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList()));
+                    List<BuildingBean> beanList = beans2.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
+                    // 获取头图
+                    getHeadImg(beanList);
+                    buildMainBean.setNewSellWellList(beanList);
                 }
 
             }
         }
         return buildMainBean;
+    }
+
+    private void getHeadImg(List<BuildingBean> beans) {
+        List<Integer> list = beans.stream().map(BuildingBean::getBuildId).collect(toList());
+        // 获取头图
+        BuildingImgBean buildingImgBean = new BuildingImgBean();
+        buildingImgBean.setBIdList(list);
+        List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+        if(null != byBuildId) {
+            Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+            for (BuildingBean buildingBean1 : beans) {
+                List<BuildingImgBean> imgBeans = listMap.get(buildingBean1.getBuildId());
+                if (null != imgBeans) {
+                    buildingBean1.setImgName(imgBeans.get(0).getImgName());
+                    buildingBean1.setImgPath(imgBeans.get(0).getImgPath());
+                }
+            }
+        }
     }
 
     private void updatePicture(BuildingBean buildingBean, MultipartFile[] img, List<ImgTypeBean> imgTypeList, Integer type) throws Exception {
@@ -275,10 +346,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
                 buildingImgDao.deleteByImgName(buildingImgBean);
                 this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
-            } else {
+            } else if (type == 4){
                 buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
                 buildingImgDao.deleteByImgName(buildingImgBean);
                 this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+            } else {
+                buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+                buildingImgDao.deleteByImgName(buildingImgBean);
+                this.saveFile(buildingBean, img, listMap.get(ImgTypeConstant.headImg).get(0).getItId() + "_" + ss + "_", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
             }
         } else {
             buildingImgDao.deleteByImgName(buildingImgBean);
@@ -302,22 +377,27 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private void saveFile(BuildingBean buildingBean, MultipartFile[] file, String type, Integer typeId) throws Exception {
         if (file != null) {
 
+            int i = 1;
             for (MultipartFile multipartFile : file) {
                 BuildingImgBean buildingImgBean = new BuildingImgBean();
                 //原文件名
                 String fileName = multipartFile.getOriginalFilename();
+                fileName = fileName.substring(fileName.lastIndexOf("."));
 
-
-                File directory = new File("");// 参数为空
-                String path = directory.getCanonicalPath();
+//                File directory = new File("");// 参数为空
+//                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
-                String imgName = buildingBean.getBuildId().toString().concat("_").concat(fileName);
-                File dir = new File(path);
-                if (!dir.exists()) dir.mkdirs();
-                String buildStore = "D:\\";
-                String name = type + imgName;
+                String imgName = buildingBean.getBuildId().toString().concat(fileName);
+                File dir = new File("D:\\" + buildingBean.getHtName() + "\\" + type);
+//                System.out.println("dir:" + dir.getPath());
+                if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                path = buildStore.concat(name);
+                String name = type + i + "_" + imgName;
+//                System.out.println("name:" + name);
+
+                i++;
+                String path = dir.getPath() + "\\" + name;
+                System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);
                 //读写文件
@@ -346,12 +426,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 buildingImgBean.setBId(buildingBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setItId(typeId);
-
+                buildingImgBean.setImgPath(path);
                 buildingImgDao.addImg(buildingImgBean);
             }
         }
     }
-
 
 
 }
