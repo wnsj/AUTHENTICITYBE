@@ -356,4 +356,9 @@ public class BuildingBean implements Serializable {
     private String imgName;
 
     private String imgPath;
+
+    private List<String> effectList;
+    private List<String> enPlanList;
+    private List<String> buildReaList;
+    private List<String> matchingRealList;
 }

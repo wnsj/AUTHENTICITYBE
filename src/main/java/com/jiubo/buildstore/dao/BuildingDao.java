@@ -51,4 +51,6 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
      * @return
      */
     public List<BuildingBean> getQuality();
+
+    public BuildingBean getBuildById(@Param("buildingBean") BuildingBean buildingBean);
 }

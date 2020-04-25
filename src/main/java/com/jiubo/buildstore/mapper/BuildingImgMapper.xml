@@ -62,4 +62,13 @@
             and IT_ID = 6
         </where>
     </select>
+
+    <select id="getAllImgByBuildId" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
+        select * from building_img
+        <where>
+            <if test="buildingImgBean.bId != null">
+                B_ID = #{buildingImgBean.bId}
+            </if>
+        </where>
+    </select>
 </mapper>

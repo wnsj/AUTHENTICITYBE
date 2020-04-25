@@ -235,4 +235,8 @@
     <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
     </select>
+
+    <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building where BUILD_ID = #{buildingBean.buildId}
+    </select>
 </mapper>

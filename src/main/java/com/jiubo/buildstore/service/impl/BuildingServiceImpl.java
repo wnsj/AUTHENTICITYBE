@@ -18,6 +18,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.jiubo.buildstore.common.ImgTypeConstant.*;
 
@@ -270,6 +271,42 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildMainBean.setNewPopularityList(beans2);
         }
         return buildMainBean;
+    }
+
+    @Override
+    public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
+        BuildingBean build = buildingDao.getBuildById(buildingBean);
+
+        List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
+        if (null != imgByBuildId) {
+            Map<Integer, List<BuildingImgBean>> map = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
+            // 效果图实体
+            List<BuildingImgBean> imgBeans = map.get(1);
+            if (null != imgBeans) {
+                build.setEffectList(imgBeans.stream().map(BuildingImgBean::getImgName).collect(toList()));
+            }
+            // 环境规划图
+            List<BuildingImgBean> imgBeans1 = map.get(2);
+            if (null != imgBeans1) {
+                build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
+            }
+            // 楼盘实景
+            List<BuildingImgBean> imgBeans2 = map.get(3);
+            if (null != imgBeans2) {
+                build.setBuildReaList(imgBeans2.stream().map(BuildingImgBean::getImgName).collect(toList()));
+            }
+            // 配套实景
+            List<BuildingImgBean> imgBeans3 = map.get(4);
+            if (null != imgBeans3) {
+                build.setMatchingRealList(imgBeans3.stream().map(BuildingImgBean::getImgName).collect(toList()));
+            }
+            // 头图
+            List<BuildingImgBean> imgBeans4 = map.get(6);
+            if (null != imgBeans4) {
+                build.setImgName(imgBeans4.get(0).getImgName());
+            }
+        }
+        return build;
     }
 
     private void getHeadImg(List<BuildingBean> beans) {

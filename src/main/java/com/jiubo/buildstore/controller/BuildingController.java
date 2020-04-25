@@ -127,4 +127,19 @@ public class BuildingController {
 
         return jsonObject;
     }
+
+    /**
+     * 详情页（楼盘信息）
+     * @param buildingBean
+     * @return
+     */
+    @PostMapping("/getBuildByBuildId")
+    public JSONObject getBuildByBuildId(@RequestBody BuildingBean buildingBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getBuildByBuildId(buildingBean));
+
+        return jsonObject;
+    }
 }
