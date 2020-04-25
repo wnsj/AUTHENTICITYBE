@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Controller;
  * @author dx
  * @since 2020-04-25
  */
-@Controller
+@RestController
 @RequestMapping("/recruitLabelBean")
 public class RecruitLabelController {
 

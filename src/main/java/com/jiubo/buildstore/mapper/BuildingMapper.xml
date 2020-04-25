@@ -4,7 +4,7 @@
 
     <!--条件查询-->
     <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        SELECT a.BUILD_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,
+        SELECT a.BUILD_ID,a.HT_NAME,a.IS_SALE,a.ALIAS,a.PRO_ID,a.LD_ID,a.DEV_ID,a.OPEN_DATE,a.TEL,
         a.MIN_AREA,a.MAX_AREA,a.MAX_UNIT_PRICE,a.MIN_UNIT_PRICE,a.MAX_TITLE_PRICE,a.MIN_TITLE_PRICE,a.BT_ID,a.ADRESS,a.CREATE_DATE,
         a.OWNERSHIP_YEAR,a.PROPERTY_TYPE,a.PLOT_RATIO,a.GREENING_RATE,a.SALES_ADDRESS,a.PROPERTY_ADDRESS,DECORATION,a.COVERED_AREA,a.FLOORAGE,
         a.HOUSEHOLDS,a.ARCHITECTURAL_STYLE,a.ITERATION,a.PROPERTY_COMPANY,a.PROPERTY_FEE,a.PARKING_SPACE,a.PROJECT_INTRODUCTION,
@@ -143,14 +143,23 @@
     <insert id="addBuilding" useGeneratedKeys="true" keyProperty="buildId">
         insert into
         building
-        (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,
-        MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,CHA_ID,DEV_ID,OPEN_DATE,PRO_DATE,OWNERSHIP_YEAR,PROPERTY_TYPE,
-        PLOT_RATIO,GREENING_RATE,SALES_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,HOUSEHOLDS,ARCHITECTURAL_STYLE)
+        (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,DEV_ID,OPEN_DATE,TEL,
+        MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,
+        OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALES_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
+        HOUSEHOLDS,ARCHITECTURAL_STYLE,ITERATION,PROPERTY_COMPANY,PROPERTY_FEE,PARKING_SPACE,PROJECT_INTRODUCTION,
+        DISCOUNT,SELL_WELL,POPULARITY,HOT_SEARCH,SPECIAL_OFFER,RECOMMEND,OPTIMIZATION,QUALITY,BUILD_OPEN,CHA_ID,PRO_DATE)
         VALUES
         (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
-        #{buildingBean.ldId},#{buildingBean.minArea},#{buildingBean.maxArea},#{buildingBean.maxUnitPrice},#{buildingBean.minUnitPrice},
+        #{buildingBean.ldId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.tel},#{buildingBean.minArea},
+        #{buildingBean.maxArea},#{buildingBean.maxUnitPrice},#{buildingBean.minUnitPrice},
         #{buildingBean.maxTitlePrice},#{buildingBean.minTitlePrice},#{buildingBean.btId},#{buildingBean.adress},#{buildingBean.createDate},
-        #{buildingBean.chaId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.proDate})
+        #{buildingBean.ownershipYear},#{buildingBean.propertyType},#{buildingBean.plotRatio},#{buildingBean.greeningRate},
+        #{buildingBean.saleAddress},#{buildingBean.propertyAddress},#{buildingBean.decoration},#{buildingBean.coveredArea},
+        #{buildingBean.floorage},#{buildingBean.households},#{buildingBean.architecturalStyle},#{buildingBean.iteration},
+        #{buildingBean.propertyCompany},#{buildingBean.propertyFee},#{buildingBean.parkingSpace},
+        #{buildingBean.projectIntroduction},#{buildingBean.discount},#{buildingBean.sellWell},#{buildingBean.popularity},
+        #{buildingBean.hotSearch},#{buildingBean.specialOffer},#{buildingBean.recommend},#{buildingBean.optimization},
+        #{buildingBean.quality},#{buildingBean.buildOpen},#{buildingBean.chaId},#{buildingBean.proDate})
     </insert>
 
 

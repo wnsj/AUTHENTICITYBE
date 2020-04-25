@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.ArticleDao">
+    <select id="getArticleByType" resultType="com.jiubo.buildstore.bean.ArticleBean">
+        select * from article
+        <where>
+            <if test="articleBean.articleType != null">
+                ARTICLE_TYPE = #{articleBean.articleType}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -103,9 +103,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
 
             // 获取咨询师名字 联系方式
-            CounselorCommentBean commentBean = new CounselorCommentBean();
-            commentBean.setBIdList(list);
-            List<CounselorCommentBean> cidByBidList = counselorCommentDao.getCidByBidList(commentBean);
+//            CounselorCommentBean commentBean = new CounselorCommentBean();
+//            commentBean.setBIdList(list);
+//            List<CounselorCommentBean> cidByBidList = counselorCommentDao.getCidByBidList(commentBean);
 
             // 获取头图
             BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -144,17 +144,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 // 获取咨询师名字 联系方式
-                if (null != cidByBidList) {
-                    Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
-                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
-                    if (null != commentBeans) {
-//                        List<CounselorBean> cNameList = new ArrayList<>();
-//                        CounselorBean counselorBean = new CounselorBean();
-//                        String join = StringUtils.join(cNameList, "、");
-                        bean.setCouName(commentBeans.get(0).getCouName());
-                        bean.setTel(commentBeans.get(0).getTel());
-                    }
-                }
+//                if (null != cidByBidList) {
+//                    Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
+//                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
+//                    if (null != commentBeans) {
+////                        List<CounselorBean> cNameList = new ArrayList<>();
+////                        CounselorBean counselorBean = new CounselorBean();
+////                        String join = StringUtils.join(cNameList, "、");
+//                        bean.setCouName(commentBeans.get(0).getCouName());
+//                        bean.setTel(commentBeans.get(0).getTel());
+//                    }
+//                }
 
                 // 头图名字 路径
                 if (null != byBuildId) {

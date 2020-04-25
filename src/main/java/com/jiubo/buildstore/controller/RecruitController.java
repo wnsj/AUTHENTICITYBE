@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Controller;
  * @author dx
  * @since 2020-04-25
  */
-@Controller
+@RestController
 @RequestMapping("/recruitBean")
 public class RecruitController {
 
@@ -33,6 +34,15 @@ public class RecruitController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         jsonObject.put(Constant.Result.RETDATA, recruitService.getEasyInfo(recruitBean));
+        return jsonObject;
+    }
+
+    @PostMapping("/getDetails")
+    public JSONObject getDetails(@RequestBody RecruitBean recruitBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, recruitService.getDetails(recruitBean));
         return jsonObject;
     }
 }
