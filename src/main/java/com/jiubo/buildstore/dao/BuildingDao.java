@@ -34,5 +34,21 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
 
     public List<BuildingBean> getAllBuild();
 
-    public List<BuildingBean> getAllByBuildName(@Param("buildingBean") BuildingBean buildingBean);
+    /**
+     * 推荐楼盘（根据人气热搜排序）
+     * @return
+     */
+    public List<BuildingBean> getRecommend();
+
+    /**
+     * 优选楼盘
+     * @return
+     */
+    public List<BuildingBean> getOptimization();
+
+    /**
+     * 品质楼盘（根据热销值排序）
+     * @return
+     */
+    public List<BuildingBean> getQuality();
 }

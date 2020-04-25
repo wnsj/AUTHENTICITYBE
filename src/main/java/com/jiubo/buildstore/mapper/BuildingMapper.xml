@@ -144,13 +144,15 @@
         insert into
         building
         (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,
-        MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,CHA_ID,DEV_ID,OPEN_DATE,PRO_DATE)
+        MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,CHA_ID,DEV_ID,OPEN_DATE,PRO_DATE,OWNERSHIP_YEAR,PROPERTY_TYPE,
+        PLOT_RATIO,GREENING_RATE,SALES_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,HOUSEHOLDS,ARCHITECTURAL_STYLE)
         VALUES
         (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
         #{buildingBean.ldId},#{buildingBean.minArea},#{buildingBean.maxArea},#{buildingBean.maxUnitPrice},#{buildingBean.minUnitPrice},
         #{buildingBean.maxTitlePrice},#{buildingBean.minTitlePrice},#{buildingBean.btId},#{buildingBean.adress},#{buildingBean.createDate},
         #{buildingBean.chaId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.proDate})
     </insert>
+
 
     <!--更新数据-->
     <update id="patchById">
@@ -222,12 +224,15 @@
         select BUILD_ID,HT_NAME from building
     </select>
 
-    <select id="getAllByBuildName" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        select * from building
-        <where>
-        <if test="null != buildingBean.htName and buildingBean.htName != ''">
-            HT_NAME = #{buildingBean.htName}
-        </if>
-        </where>
+    <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building where RECOMMEND = 1 order by POPULARITY,HOT_SEARCH desc limit 4
+    </select>
+
+    <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building where OPTIMIZATION = 1
+    </select>
+
+    <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
     </select>
 </mapper>

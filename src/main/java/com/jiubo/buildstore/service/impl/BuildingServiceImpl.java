@@ -147,15 +147,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
                     List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
                     if (null != commentBeans) {
-                        List<CounselorBean> cNameList = new ArrayList<>();
-                        CounselorBean counselorBean = new CounselorBean();
-                        for (CounselorCommentBean counselorCommentBean : commentBeans) {
-                            counselorBean.setCouName(counselorCommentBean.getCouName());
-                            counselorBean.setTel(counselorCommentBean.getTel());
-                            cNameList.add(counselorBean);
-                        }
+//                        List<CounselorBean> cNameList = new ArrayList<>();
+//                        CounselorBean counselorBean = new CounselorBean();
 //                        String join = StringUtils.join(cNameList, "、");
-                        bean.setCouName(cNameList);
+                        bean.setCouName(commentBeans.get(0).getCouName());
+                        bean.setTel(commentBeans.get(0).getTel());
                     }
                 }
 
@@ -239,58 +235,39 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
      */
     @Override
     public BuildMainBean getAllByBuildName(BuildingBean buildingBean) {
-        List<BuildingBean> buildList = buildingDao.getAllByBuildName(buildingBean);
+
 
         BuildMainBean buildMainBean = new BuildMainBean();
-        if (null != buildList && buildList.size() > 0) {
-            Map<Long, List<BuildingBean>> collect = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getSalesType));
-            // 推荐类型楼盘
-            List<BuildingBean> commendList = collect.get(1L);
-            if (null != commendList) {
-                List<BuildingBean> beans = commendList.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(4).collect(toList());
-                // 获取头图
-                getHeadImg(beans);
 
-                buildMainBean.setCommendList(beans);
-            }
+        // 推荐楼盘
+        List<BuildingBean> recommendList = buildingDao.getRecommend();
+        //头图
+        getHeadImg(recommendList);
+        buildMainBean.setCommendList(recommendList);
+        // 品质楼盘
+        List<BuildingBean> qualityList = buildingDao.getQuality();
+        //头图
+        getHeadImg(qualityList);
+        buildMainBean.setQualityList(qualityList);
+        // 优选楼盘
+        List<BuildingBean> optimizationList = buildingDao.getOptimization();
+        if (null != optimizationList) {
+            // 热销
+            List<BuildingBean> beans = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getSellWell).reversed()).limit(3).collect(toList());
+            //头图
+            getHeadImg(beans);
+            // 热搜
+            List<BuildingBean> beans1 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getHotSearch).reversed()).limit(3).collect(toList());
+            //头图
+            getHeadImg(beans1);
+            // 人气
+            List<BuildingBean> beans2 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getPopularity).reversed()).limit(3).collect(toList());
+            //头图
+            getHeadImg(beans2);
 
-            // 品质楼盘
-            List<BuildingBean> list = collect.get(2L);
-            if (null != list) {
-                List<BuildingBean> beans = list.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
-                // 获取头图
-                getHeadImg(beans);
-                buildMainBean.setQualityList(beans);
-            }
-
-            // 优选新房
-            List<BuildingBean> newBeans = collect.get(3L);
-
-            if (null != newBeans) {
-                Map<Long, List<BuildingBean>> listMap = newBeans.stream().collect(Collectors.groupingBy(BuildingBean::getSellWell));
-                List<BuildingBean> beans = listMap.get(1L);
-                if (null != beans) {
-                    List<BuildingBean> beanList = beans.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
-                    // 获取头图
-                    getHeadImg(beanList);
-                    buildMainBean.setNewPopularityList(beanList);
-                }
-                List<BuildingBean> beans1 = listMap.get(2L);
-                if (null != beans1) {
-                    List<BuildingBean> beanList1 = beans1.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
-                    // 获取头图
-                    getHeadImg(beanList1);
-                    buildMainBean.setNewHotSearchList(beanList1);
-                }
-                List<BuildingBean> beans2 = listMap.get(3L);
-                if (null != beans2) {
-                    List<BuildingBean> beanList = beans2.stream().sorted(Comparator.comparing(BuildingBean::getModifyTime).reversed()).limit(3).collect(toList());
-                    // 获取头图
-                    getHeadImg(beanList);
-                    buildMainBean.setNewSellWellList(beanList);
-                }
-
-            }
+            buildMainBean.setNewSellWellList(beans);
+            buildMainBean.setNewHotSearchList(beans1);
+            buildMainBean.setNewPopularityList(beans2);
         }
         return buildMainBean;
     }

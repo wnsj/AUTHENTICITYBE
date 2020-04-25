@@ -1,11 +1,15 @@
 package com.jiubo.buildstore.bean;
 
 import java.math.BigDecimal;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +21,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author dx
@@ -202,7 +206,7 @@ public class BuildingBean implements Serializable {
     /**
      * 物业类型
      */
-    private Integer propertyType;
+    private String propertyType;
 
     /**
      * 容积率
@@ -231,7 +235,7 @@ public class BuildingBean implements Serializable {
     /**
      * 装修情况
      */
-    private Integer decoration;
+    private String decoration;
 
     /**
      * 占地面积
@@ -261,14 +265,14 @@ public class BuildingBean implements Serializable {
     /**
      * 物业公司
      */
-    private Integer propertyCompany;
-    private List<Map<String,Object>> openTimeList;
+    private String propertyCompany;
+    private List<Map<String, Object>> openTimeList;
 
-    private List<Map<String,Object>> areaList;
+    private List<Map<String, Object>> areaList;
 
-    private List<Map<String,Object>> totalPriceList;
+    private List<Map<String, Object>> totalPriceList;
 
-    private List<Map<String,Object>> unitPriceList;
+    private List<Map<String, Object>> unitPriceList;
     /**
      * 物业费
      */
@@ -290,9 +294,23 @@ public class BuildingBean implements Serializable {
     private Long discount;
 
     /**
-     * 热销（1：热销；2：人气；3：热搜）
+     * 热销值
      */
-    private Long sellWell;
+    private Integer sellWell;
+
+    /**
+     * 人气值
+     */
+    private Integer popularity;
+    /**
+     * 热搜值
+     */
+    private Integer hotSearch;
+
+    /**
+     * 特价值
+     */
+    private Integer specialOffer;
 
     /**
      * (1:近期开盘;2:不是近期开盘)
@@ -303,7 +321,7 @@ public class BuildingBean implements Serializable {
     /**
      * 咨询师名字
      */
-    private List<CounselorBean> couName;
+    private String couName;
 
     /**
      * 联系方式
@@ -317,10 +335,19 @@ public class BuildingBean implements Serializable {
     private String endTime;
 
     /**
-     *出售类型（1：推荐户型；2：品质楼盘；3：优选新房）
+     * 是否推荐户型（1：是；2：否）
      */
-    private Long salesType;
+    private Long recommend;
 
+    /**
+     * 是否是优选楼盘（1：是；2：否）
+     */
+    private Long optimization;
+
+    /**
+     * 是否是品质楼盘（1：是；2：否）
+     */
+    private Long quality;
     /**
      * 修改时间
      */
