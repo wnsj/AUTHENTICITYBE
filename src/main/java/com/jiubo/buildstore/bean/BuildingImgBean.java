@@ -31,15 +31,38 @@ public class BuildingImgBean implements Serializable {
     @TableId(value = "IMG_ID", type = IdType.AUTO)
     private Integer imgId;
 
+    /**
+     * 图片名称
+     */
     private String imgName;
 
+    /**
+     * 上传时间
+     */
     private Date createDate;
 
+    /**
+     * 图片类型id
+     */
     private Integer itId;
 
+    /**
+     * 楼盘id
+     */
     private Integer bId;
 
+    /**
+     * 图片路径
+     */
     private String imgPath;
 
+    /**
+     * 楼盘id集合
+     */
     private List<Integer> bIdList;
+
+    /**
+     * 户型分析id
+     */
+    private Integer baId;
 }

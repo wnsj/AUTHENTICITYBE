@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author syl
@@ -46,6 +46,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
     @Autowired
     private BuildingImgDao buildingImgDao;
+
     @Override
     public List<BuildingAnalysisBean> getBidByBhtIdList(BuildingAnalysisBean buildingAnalysisBean) {
         return buildingAnalysisDao.getBidByBhtIdList(buildingAnalysisBean);
@@ -56,6 +57,12 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         return buildingAnalysisDao.getBidByBIdList(buildingAnalysisBean);
     }
 
+    /**
+     * 楼盘详情 户型分析分页查询
+     *
+     * @param buildingAnalysisBean
+     * @return
+     */
     @Override
     public Page<BuildingAnalysisBean> getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean) {
         Page<BuildingAnalysisBean> page = new Page<>();
@@ -64,23 +71,35 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         List<BuildingBean> allBuild = buildingDao.getAllBuild();
         List<BuildingAnalysisBean> buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
 
-        // 翻译出售状态
+        // 所有出售状态
         List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
         if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
 
+            // 获取所有楼盘id
+            List<Integer> list = buildAnalysisList.stream().map(BuildingAnalysisBean::getBuildId).collect(Collectors.toList());
+
+            // 图片名称
+            List<BuildingImgBean> imgList = buildingImgDao.getHeadImgByBuildId(new BuildingImgBean().setBIdList(list));
+            Map<Integer, List<BuildingImgBean>> collect = null;
+            if (null != imgList) {
+                collect = imgList.stream().collect(Collectors.groupingBy(BuildingImgBean::getBaId));
+            }
             for (BuildingAnalysisBean bean : buildAnalysisList) {
 
+                // 楼盘名称
                 if (null != allBuild && allBuild.size() > 0) {
                     Map<Integer, List<BuildingBean>> buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
                     bean.setHtName(buildMap.get(bean.getBuildId()).get(0).getHtName());
                 }
 
+                // 翻译出售状态
                 if (null != allSaleType) {
                     Map<Integer, List<SaleTypeBean>> saleMap = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
 
                     bean.setSaleLabel(saleMap.get(bean.getIsSale()).get(0).getStName());
                 }
 
+                // 翻译朝向
                 if (bean.getDrection() == 1) {
                     bean.setDrectionLabel("东");
                 } else if (bean.getDrection() == 2) {
@@ -89,6 +108,11 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     bean.setDrectionLabel("西");
                 } else if (bean.getDrection() == 4) {
                     bean.setDrectionLabel("北");
+                }
+
+                // 图片绑定实体
+                if (null != collect) {
+                    bean.setHorseImgName(collect.get(bean.getBaId()).get(0).getImgName());
                 }
             }
         }
@@ -99,7 +123,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
     public void insertByBid(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception {
         buildingAnalysisDao.insertByBid(buildingAnalysisBean);
 
-        this.saveFile(buildingAnalysisBean,horseTypeImg,"horseType",5);
+        this.saveFile(buildingAnalysisBean, horseTypeImg, "horseType", 5);
     }
 
     //保存文件

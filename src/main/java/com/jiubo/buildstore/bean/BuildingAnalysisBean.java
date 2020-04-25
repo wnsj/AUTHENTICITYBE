@@ -39,6 +39,9 @@ public class BuildingAnalysisBean implements Serializable {
      */
     private Integer buildId;
 
+    /**
+     * 楼盘名称
+     */
     private String htName;
     /**
      * 户型ID
@@ -134,4 +137,6 @@ public class BuildingAnalysisBean implements Serializable {
      */
     @TableField(exist = false)
     private String pageOrder;
+
+    private String horseImgName;
 }

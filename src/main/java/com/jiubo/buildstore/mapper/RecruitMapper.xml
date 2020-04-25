@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.RecruitDao">
+
+    <select id="getEasyInfo" resultType="com.jiubo.buildstore.bean.RecruitBean">
+        select ID,POSITION,POSITION_TYPE,RECRUITS_NUM,WORKPLACE,CREATE_TIME from recruit
+        <where>
+            <if test="recruitBean.recruitmentType != null">
+              and RECRUITMENT_TYPE = #{recruitmentType}
+            </if>
+            <if test="recruitBean.positionType != null">
+                and POSITION_TYPE = #{recruitBean.positionType}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getDetails" resultType="com.jiubo.buildstore.bean.RecruitBean">
+        select * from recruit where ID = #{recruitBean.id}
+    </select>
+</mapper>

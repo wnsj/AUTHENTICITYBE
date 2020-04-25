@@ -273,6 +273,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return buildMainBean;
     }
 
+    /**
+     * 楼盘详情
+     * @param buildingBean
+     * @return
+     */
     @Override
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
