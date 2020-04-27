@@ -40,4 +40,6 @@ public interface BuildingAnalysisService extends IService<BuildingAnalysisBean> 
     public Page<BuildingAnalysisBean> getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean);
 
     public void insertByBid(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception;
+
+    public void patchBuildAnalysisById(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception ;
 }

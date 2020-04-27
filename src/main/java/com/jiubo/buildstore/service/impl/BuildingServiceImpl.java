@@ -134,6 +134,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 获取头图
             BuildingImgBean buildingImgBean = new BuildingImgBean();
             buildingImgBean.setBIdList(list);
+            buildingImgBean.setItId(6);
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> headImgMap = null;
             if (null != byBuildId && byBuildId.size() > 0) {
@@ -161,7 +162,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         bean.setCaName(StringUtils.join(strings, "、"));
                     }
                 }
-
 
 
 
@@ -366,6 +366,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 获取头图
         BuildingImgBean buildingImgBean = new BuildingImgBean();
         buildingImgBean.setBIdList(list);
+        buildingImgBean.setItId(6);
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
         if (null != byBuildId) {
             Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));

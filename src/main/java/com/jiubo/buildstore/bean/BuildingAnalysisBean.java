@@ -35,6 +35,10 @@ public class BuildingAnalysisBean implements Serializable {
     private Integer baId;
 
     /**
+     * 标签id集合
+     */
+    private List<Integer> balIdList;
+    /**
      * 楼盘id
      */
     private Integer buildId;
@@ -72,10 +76,6 @@ public class BuildingAnalysisBean implements Serializable {
      */
     private BigDecimal totlePrice;
 
-    /**
-     * 标签id
-     */
-    private Integer balId;
 
     /**
      * 分析内容
@@ -112,6 +112,9 @@ public class BuildingAnalysisBean implements Serializable {
      */
     private String balContent;
 
+    private List<String> balContentList;
+
+    private String balContentLabel;
     /**
      * 户型分析类型名（例：平层）
      */
@@ -121,6 +124,11 @@ public class BuildingAnalysisBean implements Serializable {
      * 建筑面积
      */
     private Integer buildArea;
+
+    /**
+     * 居室
+     */
+    private String house;
     /**
      * 页码
      */

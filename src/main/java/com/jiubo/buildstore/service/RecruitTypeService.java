@@ -10,7 +10,7 @@ import java.util.List;
  *  服务类
  * </p>
  *
- * @author dx
+ * @author syl
  * @since 2020-04-25
  */
 public interface RecruitTypeService extends IService<RecruitTypeBean> {

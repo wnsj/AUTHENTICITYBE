@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,13 +16,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author syl
- * @since 2020-04-25
+ * @since 2020-04-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("recruit_type")
-public class RecruitTypeBean implements Serializable {
+@TableName("bal_ref")
+public class BalRefBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,9 +33,19 @@ public class RecruitTypeBean implements Serializable {
     private Integer id;
 
     /**
-     * 类型名
+     * 标签id
      */
-    private String typeName;
+    private Integer balId;
 
+    private List<Integer> balIdList;
+
+    /**
+     * 户型分析id
+     */
+    private Integer baId;
+    /**
+     * 户型分析id集合
+     */
+    private List<Integer> baIdList;
 
 }

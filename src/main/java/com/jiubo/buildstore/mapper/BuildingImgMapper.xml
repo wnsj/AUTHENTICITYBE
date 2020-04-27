@@ -3,10 +3,10 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingImgDao">
 
     <insert id="addImg">
-        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,B_ID,IMG_PATH)
+        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,B_ID,IMG_PATH,BA_ID)
          values
          (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},
-         #{buildingImgBean.bId},#{buildingImgBean.imgPath})
+         #{buildingImgBean.bId},#{buildingImgBean.imgPath},#{buildingImgBean.baId})
     </insert>
 
     <update id="patchImgById">
@@ -59,7 +59,9 @@
                 #{item}
             </foreach>
         </if>
-            and IT_ID = 6
+        <if test="buildingImgBean.itId != null">
+            and IT_ID = #{buildingImgBean.itId}
+        </if>
         </where>
     </select>
 

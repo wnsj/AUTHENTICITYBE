@@ -23,7 +23,6 @@
 	a.BA_ID,
 	a.BUILD_ID,
 	a.BHT_ID,
-	a.BAL_ID,
 	a.IMG_NAME,
 	a.CREATE_DATE,
 	a.IS_SALE,
@@ -32,16 +31,12 @@
 	a.DRECTION,
 	a.DOWN_PAYMENT,
 	a.HT_ID,
-	a.BUILD_AREA,
-	b.BAL_CONTENT,
-	c.CA_NAME
+	a.BUILD_AREA
 FROM
 	building_analysis a,
-	BUILDING_ANALYSIS_LABEL b,
 	HORSE_TYPE c
 	<where>
-		a.HT_ID = c.HT_ID
-		AND a.BAL_ID = b.BAL_ID
+		1=1
 		<if test="null != buildingAnalysisBean.buildId">
 			and a.BUILD_ID = #{buildingAnalysisBean.buildId}
 		</if>
@@ -58,13 +53,56 @@ FROM
 		delete from building_analysis where BUILD_ID = #{buildingAnalysisBean.buildId}
 	</delete>
 
-	<insert id="insertByBid">
+	<insert id="insertByBid" useGeneratedKeys="true" keyProperty="baId">
 		insert into building_analysis
-		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,BAL_ID,CONTENT,DRECTION,HT_ID,DOWN_PAYMENT,BUILD_ID,BUILD_AREA)
+		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,CONTENT,DRECTION,HT_ID,DOWN_PAYMENT,BUILD_ID,BUILD_AREA,HOUSE)
 		VALUES
 		(#{buildingAnalysisBean.bhtId},#{buildingAnalysisBean.imgName},#{buildingAnalysisBean.createDate},#{buildingAnalysisBean.isSale},
-		#{buildingAnalysisBean.totlePrice},#{buildingAnalysisBean.balId},#{buildingAnalysisBean.content},
+		#{buildingAnalysisBean.totlePrice},#{buildingAnalysisBean.content},
 		#{buildingAnalysisBean.drection},#{buildingAnalysisBean.htId},#{buildingAnalysisBean.downPayment},
-		#{buildingAnalysisBean.buildId},#{buildingAnalysisBean.buildArea})
+		#{buildingAnalysisBean.buildId},#{buildingAnalysisBean.buildArea},#{buildingAnalysisBean.house})
 	</insert>
+
+	<update id="patchBuildAnalysisById">
+		update building_analysis
+		<trim prefix="set" suffixOverrides=",">
+			<if test="buildingAnalysisBean.bhtId != null">
+				BHT_ID = #{buildingAnalysisBean.bhtId},
+			</if>
+			<if test="buildingAnalysisBean.imgName != null and buildingAnalysisBean.imgName != ''">
+				IMG_NAME = #{buildingAnalysisBean.imgName},
+			</if>
+			<if test="buildingAnalysisBean.createDate != null">
+				CREATE_DATE = #{buildingAnalysisBean.createDate},
+			</if>
+			<if test="buildingAnalysisBean.isSale != null">
+				IS_SALE = #{buildingAnalysisBean.isSale},
+			</if>
+			<if test="buildingAnalysisBean.totlePrice != null">
+				TOTLE_PRICE = #{buildingAnalysisBean.totlePrice},
+			</if>
+			<if test="buildingAnalysisBean.content != null and buildingAnalysisBean.content != ''">
+				CONTENT = #{buildingAnalysisBean.content},
+			</if>
+			<if test="buildingAnalysisBean.drection != null">
+				DRECTION = #{buildingAnalysisBean.drection},
+			</if>
+			<if test="buildingAnalysisBean.htId != null">
+				HT_ID = #{buildingAnalysisBean.htId},
+			</if>
+
+			<if test="buildingAnalysisBean.downPayment != null">
+				DOWN_PAYMENT = #{buildingAnalysisBean.downPayment},
+			</if>
+			<if test="buildingAnalysisBean.buildId != null">
+				BUILD_ID = #{buildingAnalysisBean.buildId},
+			</if>
+			<if test="buildingAnalysisBean.buildArea != null">
+				BUILD_AREA = #{buildingAnalysisBean.buildArea},
+			</if>
+			<if test="buildingAnalysisBean.house != null">
+				HOUSE = #{buildingAnalysisBean.house}
+			</if>
+		</trim>
+	</update>
 </mapper>

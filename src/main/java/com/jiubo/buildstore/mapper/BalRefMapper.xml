@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.BalRefDao">
+
+    <select id="getRefByBaIdList" resultType="com.jiubo.buildstore.bean.BalRefBean">
+        select * from bal_ref
+        <where>
+            <if test="balRefBean.baIdList != null and balRefBean.baIdList.size > 0">
+                BA_ID in
+                <foreach collection="balRefBean.baIdList" open="(" close=")" separator="," item="baId">
+                    #{baId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertBatch">
+        insert into bal_ref (BAL_ID,BA_ID) values
+        <foreach collection="balRefBean.balIdList" separator="," item="balId">
+            (#{balId},#{balRefBean.baId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRefByBaId">
+        delete from bal_ref where BA_ID = #{balRefBean.baId}
+    </delete>
+</mapper>
