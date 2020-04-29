@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -272,11 +273,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     /**
      * 首页查询
      *
-     * @param buildingBean
+     * @param
      * @return
      */
     @Override
-    public BuildMainBean getAllByBuildName(BuildingBean buildingBean) {
+    public BuildMainBean getAllByBuildName() {
 
 
         BuildMainBean buildMainBean = new BuildMainBean();
@@ -376,6 +377,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
                     buildingBean1.setImgPath(imgBeans.get(0).getImgPath());
                 }
+                BigDecimal total = buildingBean1.getMinUnitPrice().add(buildingBean1.getMaxUnitPrice());
+                BigDecimal average = total.divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
+                buildingBean1.setAveragePrice(average);
             }
         }
     }

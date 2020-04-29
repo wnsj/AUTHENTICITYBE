@@ -357,6 +357,7 @@ public class BuildingBean implements Serializable {
 
     private String imgPath;
 
+    private BigDecimal averagePrice;
     private List<String> effectList;
     private List<String> enPlanList;
     private List<String> buildReaList;

@@ -36,7 +36,7 @@ public interface BuildingService extends IService<BuildingBean> {
     public List<BuildingBean> getAllBuild();
 
 
-    public BuildMainBean getAllByBuildName(BuildingBean buildingBean);
+    public BuildMainBean getAllByBuildName();
 
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean);
 }

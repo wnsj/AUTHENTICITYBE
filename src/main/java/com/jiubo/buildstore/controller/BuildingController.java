@@ -117,15 +117,15 @@ public class BuildingController {
 
     /**
      * 首页获取楼盘信息
-     * @param buildingBean
+     * @param
      * @return
      */
     @PostMapping("/getAllByBuildName")
-    public JSONObject getAllByBuildName(@RequestBody BuildingBean buildingBean) {
+    public JSONObject getAllByBuildName() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllByBuildName(buildingBean));
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllByBuildName());
 
         return jsonObject;
     }
