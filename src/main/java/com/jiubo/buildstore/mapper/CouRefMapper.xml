@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.CouRefDao">
+
+    <select id="getRefByCouIdList" resultType="com.jiubo.buildstore.bean.CouRefBean">
+        select * from cou_ref
+        <where>
+        <if test="couRefBean.couIdList != null and couRefBean.couIdList.size > 0">
+            COU_ID in
+            <foreach collection="couRefBean.couIdList" open="(" close=")" separator="," item="couId">
+                #{couId}
+            </foreach>
+        </if>
+        </where>
+    </select>
+
+    <insert id="insertCouRefBatch" parameterType="java.util.List">
+        insert into cou_ref (COU_LABEL_ID,COU_ID,COU_LABEL) values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.couLabelId},#{item.couId},#{item.couLabel})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRefByCouId">
+        delete from cou_ref where COU_ID = #{couId}
+    </delete>
+</mapper>

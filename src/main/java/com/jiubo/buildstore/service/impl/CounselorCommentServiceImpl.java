@@ -2,9 +2,11 @@ package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
+import com.jiubo.buildstore.bean.CouRefBean;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 
 import com.jiubo.buildstore.bean.CounselorLabelBean;
+import com.jiubo.buildstore.dao.CouRefDao;
 import com.jiubo.buildstore.dao.CounselorCommentDao;
 import com.jiubo.buildstore.dao.CounselorLabelDao;
 import com.jiubo.buildstore.service.CounselorCommentService;
@@ -31,9 +33,9 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
     @Autowired
     private CounselorCommentDao counselorCommentDao;
 
-    @Autowired
-    private CounselorLabelDao counselorLabelDao;
 
+    @Autowired
+    private CouRefDao couRefDao;
     @Override
     public Page<CounselorCommentBean> getCounselorByBid(CounselorCommentBean counselorCommentBean) {
         Page<CounselorCommentBean> page = new Page<>();
@@ -46,28 +48,24 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             // 咨询师id集合
             List<Integer> collect = counselorByBid.stream().map(CounselorCommentBean::getCId).collect(Collectors.toList());
 
-            // 设置标签查询条件
-            CounselorLabelBean counselorLabelBean = new CounselorLabelBean();
-            counselorLabelBean.setCouIdList(collect);
-
             // 通过咨询师id集合查找其标签
-            List<CounselorLabelBean> labelByCouId = counselorLabelDao.getLabelByCouId(counselorLabelBean);
-
-
-            if (null != labelByCouId && labelByCouId.size() > 0) {
-                // 将标签集合按照咨询师id分组
-                Map<Integer, List<CounselorLabelBean>> map = labelByCouId.stream().collect(Collectors.groupingBy(CounselorLabelBean::getCouId));
+            List<CouRefBean> couRefList = couRefDao.getRefByCouIdList(new CouRefBean().setCouIdList(collect));
+            Map<Integer, List<CouRefBean>> refMap = null;
+            if (null != couRefList && couRefList.size() > 0){
+                refMap = couRefList.stream().collect(Collectors.groupingBy(CouRefBean::getCouId));
+            }
 
                 //将标签数据放进咨询师评论分页数据中
                 for (CounselorCommentBean commentBean : counselorByBid) {
-                    List<CounselorLabelBean> counselorLabelBeans = map.get(commentBean.getCId());
+                    if (null != refMap) {
+                        List<CouRefBean> counselorLabelBeans = refMap.get(commentBean.getCId());
 
-                    List<String> collect1 = counselorLabelBeans.stream().map(CounselorLabelBean::getClContent).collect(Collectors.toList());
+                        List<String> collect1 = counselorLabelBeans.stream().map(CouRefBean::getCouLabel).collect(Collectors.toList());
 
-                    commentBean.setClContentList(collect1);
+                        commentBean.setClContentList(collect1);
+                    }
                 }
             }
-        }
         return page.setRecords(counselorByBid);
     }
 

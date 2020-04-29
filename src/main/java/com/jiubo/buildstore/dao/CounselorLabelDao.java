@@ -15,5 +15,7 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface CounselorLabelDao extends BaseMapper<CounselorLabelBean> {
-    public List<CounselorLabelBean> getLabelByCouId(@Param("counselorLabelBean") CounselorLabelBean counselorLabelBean);
+    public List<CounselorLabelBean> getAllCouLabel();
+
+    public List<CounselorLabelBean> getAllByIdList(@Param("counselorLabelBean") CounselorLabelBean counselorLabelBean);
 }

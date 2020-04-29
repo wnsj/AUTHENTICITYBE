@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.CounselorLabelDao">
+    <select id="getAllCouLabel" resultType="com.jiubo.buildstore.bean.CounselorLabelBean">
+        select * from counselor_label
+    </select>
 
-    <select id="getLabelByCouId" resultType="com.jiubo.buildstore.bean.CounselorLabelBean">
+    <select id="getAllByIdList" resultType="com.jiubo.buildstore.bean.CounselorLabelBean">
         select * from counselor_label
         <where>
-            COU_ID in
-            <foreach collection="counselorLabelBean.couIdList" open="(" close=")" separator="," item="couId">
-                #{couId}
-            </foreach>
+            <if test="counselorLabelBean.idList != null and counselorLabelBean.idList.size >0 ">
+                CL_ID in
+                <foreach collection="counselorLabelBean.idList" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>

@@ -4,4 +4,58 @@
     <select id="getAllCouselor" resultType="com.jiubo.buildstore.bean.CounselorBean">
         select * from counselor
     </select>
+
+
+    <select id="getAllCouselorByPage" resultType="com.jiubo.buildstore.bean.CounselorBean">
+        select * from counselor
+        <where>
+            1=1
+            <if test="counselorBean.couName != null and counselorBean.couName != ''">
+               and COU_NAME = #{counselorBean.couName}
+            </if>
+            <if test="counselorBean.couId != null">
+                and COU_ID = #{counselorBean.couId}
+            </if>
+            <if test="counselorBean.ccId != null">
+                and  CC_ID = #{counselorBean.ccId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCou"  useGeneratedKeys="true" keyProperty="couId">
+        insert into counselor (COU_NAME,INTRODUCE,GRADUATE,CC_ID,TEL,PICTURE_NAME,PICTURE_PATH) values
+         (#{counselorBean.couName},#{counselorBean.introduce},#{counselorBean.graduate},
+         #{counselorBean.ccId},#{counselorBean.tel},#{counselorBean.pictureName},#{counselorBean.picturePath})
+    </insert>
+
+    <select id="getCouById" resultType="com.jiubo.buildstore.bean.CounselorBean">
+        select * from counselor where COU_ID = #{couId}
+    </select>
+
+    <update id="patchCouById">
+        update counselor
+        <trim prefix="set" suffixOverrides=",">
+            <if test="counselorBean.couName != null and counselorBean.couName != ''">
+                COU_NAME = #{counselorBean.couName},
+            </if>
+            <if test="counselorBean.introduce != null and counselorBean.introduce != ''">
+                INTRODUCE = #{counselorBean.introduce},
+            </if>
+            <if test="counselorBean.graduate != null and counselorBean.graduate != ''">
+                GRADUATE = #{counselorBean.graduate},
+            </if>
+            <if test="counselorBean.ccId != null">
+                CC_ID = #{counselorBean.ccId},
+            </if>
+            <if test="counselorBean.tel != null and counselorBean.tel != ''">
+                TEL = #{counselorBean.tel},
+            </if>
+            <if test="counselorBean.pictureName != null and counselorBean.pictureName != ''">
+                PICTURE_NAME = #{counselorBean.pictureName},
+            </if>
+            <if test="counselorBean.picturePath != null and counselorBean.picturePath != ''">
+                PICTURE_PATH = #{counselorBean.picturePath}
+            </if>
+        </trim>
+    </update>
 </mapper>

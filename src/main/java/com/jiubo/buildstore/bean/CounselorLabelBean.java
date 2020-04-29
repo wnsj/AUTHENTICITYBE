@@ -30,14 +30,5 @@ public class CounselorLabelBean implements Serializable {
     private Integer clId;
 
     private String clContent;
-
-    /**
-     * 咨询师id
-     */
-    private Integer couId;
-
-    /**
-     * 咨询师id集合
-     */
-    private List<Integer> couIdList;
+    private List<Integer> idList;
 }

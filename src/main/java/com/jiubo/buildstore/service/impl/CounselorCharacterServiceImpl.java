@@ -5,7 +5,10 @@ import com.jiubo.buildstore.bean.CounselorCharacterBean;
 import com.jiubo.buildstore.dao.CounselorCharacterDao;
 import com.jiubo.buildstore.service.CounselorCharacterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CounselorCharacterServiceImpl extends ServiceImpl<CounselorCharacterDao, CounselorCharacterBean> implements CounselorCharacterService {
 
+    @Autowired
+    private CounselorCharacterDao counselorCharacterDao;
+    @Override
+    public List<CounselorCharacterBean> getAllCouChara() {
+        return counselorCharacterDao.getAllCouChara();
+    }
 }

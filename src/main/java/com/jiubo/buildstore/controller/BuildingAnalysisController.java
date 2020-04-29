@@ -42,11 +42,11 @@ public class BuildingAnalysisController {
     }
 
     @PostMapping("/insertByBid")
-    public JSONObject insertByBid(String addParam, @RequestParam("horseTypeImg") MultipartFile[] horseTypeImg) throws Exception {
+    public JSONObject insertByBid(String param, @RequestParam("horseTypeImg") MultipartFile[] horseTypeImg) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        BuildingAnalysisBean buildingAnalysisBean = JSONObject.parseObject(addParam, BuildingAnalysisBean.class);
+        BuildingAnalysisBean buildingAnalysisBean = JSONObject.parseObject(param, BuildingAnalysisBean.class);
         buildingAnalysisBean.setCreateDate(new Date());
         buildingAnalysisService.insertByBid(buildingAnalysisBean,horseTypeImg);
         return jsonObject;

@@ -30,7 +30,7 @@
 	a.CONTENT,
 	a.DRECTION,
 	a.DOWN_PAYMENT,
-	a.HT_ID,
+	a.CA_NAME,
 	a.BUILD_AREA
 FROM
 	building_analysis a,
@@ -55,11 +55,11 @@ FROM
 
 	<insert id="insertByBid" useGeneratedKeys="true" keyProperty="baId">
 		insert into building_analysis
-		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,CONTENT,DRECTION,HT_ID,DOWN_PAYMENT,BUILD_ID,BUILD_AREA,HOUSE)
+		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,CONTENT,DRECTION,CA_NAME,DOWN_PAYMENT,BUILD_ID,BUILD_AREA,HOUSE)
 		VALUES
 		(#{buildingAnalysisBean.bhtId},#{buildingAnalysisBean.imgName},#{buildingAnalysisBean.createDate},#{buildingAnalysisBean.isSale},
 		#{buildingAnalysisBean.totlePrice},#{buildingAnalysisBean.content},
-		#{buildingAnalysisBean.drection},#{buildingAnalysisBean.htId},#{buildingAnalysisBean.downPayment},
+		#{buildingAnalysisBean.drection},#{buildingAnalysisBean.caName},#{buildingAnalysisBean.downPayment},
 		#{buildingAnalysisBean.buildId},#{buildingAnalysisBean.buildArea},#{buildingAnalysisBean.house})
 	</insert>
 
@@ -87,8 +87,8 @@ FROM
 			<if test="buildingAnalysisBean.drection != null">
 				DRECTION = #{buildingAnalysisBean.drection},
 			</if>
-			<if test="buildingAnalysisBean.htId != null">
-				HT_ID = #{buildingAnalysisBean.htId},
+			<if test="buildingAnalysisBean.caName != null and buildingAnalysisBean.caName != ''">
+				CA_NAME = #{buildingAnalysisBean.caName},
 			</if>
 
 			<if test="buildingAnalysisBean.downPayment != null">
@@ -104,5 +104,6 @@ FROM
 				HOUSE = #{buildingAnalysisBean.house}
 			</if>
 		</trim>
+		where BA_ID = #{buildingAnalysisBean.baId}
 	</update>
 </mapper>
