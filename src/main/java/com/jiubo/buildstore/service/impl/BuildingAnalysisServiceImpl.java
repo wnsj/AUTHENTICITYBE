@@ -132,10 +132,13 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     List<BalRefBean> refBeans = refMap.get(bean.getBaId());
                     if (null != refBeans && refBeans.size()>0){
                         List<String> labelList = new ArrayList<>();
+                        List<Integer> labelIdList = new ArrayList<>();
                         for (BalRefBean balRefBean : refBeans) {
                             labelList.add(balMap.get(balRefBean.getBalId()).get(0).getBalContent());
+                            labelIdList.add(balRefBean.getBalId());
                         }
                         bean.setBalContentList(labelList);
+                        bean.setBalIdList(labelIdList);
                         bean.setBalContentLabel(StringUtils.join(labelList,"、"));
                     }
                 }

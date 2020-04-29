@@ -40,13 +40,13 @@ public class BuildingDynamicBean implements Serializable {
 
     private LocalDateTime cerDate;
 
-    private Integer bId;
+    private Integer buildId;
 
     /**
      * 页码
      */
     @TableField(exist = false)
-    private String pageNum;
+    private String current;
 
     /**
      * 每页尺寸

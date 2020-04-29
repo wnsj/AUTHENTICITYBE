@@ -285,28 +285,28 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 推荐楼盘
         List<BuildingBean> recommendList = buildingDao.getRecommend();
         //头图
-        getHeadImg(recommendList);
+        getHeadImg(recommendList,1);
         buildMainBean.setCommendList(recommendList);
         // 品质楼盘
         List<BuildingBean> qualityList = buildingDao.getQuality();
         //头图
-        getHeadImg(qualityList);
+        getHeadImg(qualityList,2);
         buildMainBean.setQualityList(qualityList);
         // 优选楼盘
         List<BuildingBean> optimizationList = buildingDao.getOptimization();
         if (null != optimizationList) {
             // 热销
-            List<BuildingBean> beans = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getSellWell).reversed()).limit(3).collect(toList());
+            List<BuildingBean> beans = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getSellWell).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans);
+            getHeadImg(beans,3);
             // 热搜
-            List<BuildingBean> beans1 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getHotSearch).reversed()).limit(3).collect(toList());
+            List<BuildingBean> beans1 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getHotSearch).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans1);
+            getHeadImg(beans1,3);
             // 人气
-            List<BuildingBean> beans2 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getPopularity).reversed()).limit(3).collect(toList());
+            List<BuildingBean> beans2 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getPopularity).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans2);
+            getHeadImg(beans2,3);
 
             buildMainBean.setNewSellWellList(beans);
             buildMainBean.setNewHotSearchList(beans1);
@@ -356,13 +356,18 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 视频
             List<BuildingImgBean> imgBeans5 = map.get(7);
             if (null != imgBeans5) {
-                build.setImgName(imgBeans5.get(0).getImgName());
+                build.setVideoName(imgBeans5.get(0).getImgName());
             }
         }
         return build;
     }
 
-    private void getHeadImg(List<BuildingBean> beans) {
+    @Override
+    public List<BuildingBean> getSellWell() {
+        return buildingDao.getSellWell();
+    }
+
+    private void getHeadImg(List<BuildingBean> beans,Integer type) {
         List<Integer> list = beans.stream().map(BuildingBean::getBuildId).collect(toList());
         // 获取头图
         BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -371,15 +376,35 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
         if (null != byBuildId) {
             Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+
             for (BuildingBean buildingBean1 : beans) {
+                List<String> labelList = new ArrayList<>();
                 List<BuildingImgBean> imgBeans = listMap.get(buildingBean1.getBuildId());
+               // 设置头图名字、路径
                 if (null != imgBeans) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
                     buildingBean1.setImgPath(imgBeans.get(0).getImgPath());
                 }
+
+                // 均价
                 BigDecimal total = buildingBean1.getMinUnitPrice().add(buildingBean1.getMaxUnitPrice());
                 BigDecimal average = total.divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
                 buildingBean1.setAveragePrice(average);
+
+                // 人气 热搜 热销 判断
+                if (type == 1) {
+                    if (buildingBean1.getHotSearch() != null) {
+                        labelList.add("热搜");
+                        buildingBean1.setLabel("热搜");
+                    }
+                    if (buildingBean1.getPopularity() != null) {
+                        labelList.add("人气");
+                        buildingBean1.setLabel("人气");
+                    }
+                    buildingBean1.setLabelList(labelList);
+                }
+
+
             }
         }
     }

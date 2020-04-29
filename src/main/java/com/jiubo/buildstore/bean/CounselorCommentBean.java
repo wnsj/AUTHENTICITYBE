@@ -47,7 +47,7 @@ public class CounselorCommentBean implements Serializable {
     /**
      * 楼盘ID
      */
-    private Integer bId;
+    private Integer buildId;
 
     private List<Integer> bIdList;
     /**

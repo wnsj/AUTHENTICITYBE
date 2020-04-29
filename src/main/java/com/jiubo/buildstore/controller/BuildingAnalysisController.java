@@ -32,6 +32,11 @@ public class BuildingAnalysisController {
     @Autowired
     private BuildingAnalysisService buildingAnalysisService;
 
+    /**
+     * 详情户型分析
+     * @param buildingAnalysisBean
+     * @return
+     */
     @PostMapping("/getAllAnalysisByBid")
     public JSONObject getAllAnalysisByBid(@RequestBody BuildingAnalysisBean buildingAnalysisBean){
         JSONObject jsonObject = new JSONObject();

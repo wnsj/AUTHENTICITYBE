@@ -42,6 +42,11 @@ public class ArticleBean implements Serializable {
     private String articleContent;
 
     /**
+     * 文章标题
+     */
+    private String title;
+
+    /**
      * (奖项、发展历程等时间)
      */
     private LocalDateTime aboutTime;

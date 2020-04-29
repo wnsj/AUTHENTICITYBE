@@ -126,7 +126,6 @@ public class BuildingBean implements Serializable {
      * 楼盘地址
      */
     private String adress;
-
     /**
      * 楼盘户型ID
      */
@@ -348,18 +347,54 @@ public class BuildingBean implements Serializable {
      * 是否是品质楼盘（1：是；2：否）
      */
     private Long quality;
+
+    /**
+     * 纬度
+     */
+    private String latitude;
+    /**
+     * 经度
+     */
+    private String longitude;
     /**
      * 修改时间
      */
     private Date modifyTime;
 
+    /**
+     * 头图名
+     */
     private String imgName;
 
+    /**
+     * 头图路径
+     */
     private String imgPath;
 
+    /**
+     * 视频名
+     */
+    private String videoName;
+    /**
+     * 均价
+     */
     private BigDecimal averagePrice;
     private List<String> effectList;
     private List<String> enPlanList;
     private List<String> buildReaList;
     private List<String> matchingRealList;
+
+    /**
+     * 标签名（随意选的）
+     */
+    private String label;
+    /**
+     * 标签集合
+     */
+    private List<String> labelList;
+
+    /**
+     * 楼盘特点描述
+     */
+    private String buildDescription;
 }

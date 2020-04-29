@@ -6,12 +6,9 @@ import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.CounselorCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -29,8 +26,8 @@ public class CounselorCommentController {
     private CounselorCommentService counselorCommentService;
 
 
-    @GetMapping("/getCounselorByBid")
-    public JSONObject getCounselorByBid(CounselorCommentBean counselorCommentBean) {
+    @PostMapping("/getCounselorByBid")
+    public JSONObject getCounselorByBid(@RequestBody CounselorCommentBean counselorCommentBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -42,8 +39,8 @@ public class CounselorCommentController {
      * 点赞接口
      * @return
      */
-    @PutMapping("/updateNumById")
-    public JSONObject updateNumById(CounselorCommentBean counselorCommentBean) {
+    @PostMapping("/updateNumById")
+    public JSONObject updateNumById( @RequestBody CounselorCommentBean counselorCommentBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

@@ -28,7 +28,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     public Page<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
 
         Page<BuildingDynamicBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getPageNum()) ? 1L : Long.parseLong(buildingDynamicBean.getPageNum()));
+        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 3L : Long.parseLong(buildingDynamicBean.getPageSize()));
         return page.setRecords(buildingDynamicDao.getDynamicByBid(page,buildingDynamicBean));
     }

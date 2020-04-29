@@ -4,11 +4,7 @@
 
     <!--条件查询-->
     <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        SELECT BUILD_ID,HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,DEV_ID,OPEN_DATE,TEL,
-        MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,
-        OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALES_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
-        HOUSEHOLDS,ARCHITECTURAL_STYLE,ITERATION,PROPERTY_COMPANY,PROPERTY_FEE,PARKING_SPACE,PROJECT_INTRODUCTION,
-        DISCOUNT,SELL_WELL,BUILD_OPEN,CHA_ID
+        SELECT *
         from building
 
             <where>
@@ -147,9 +143,9 @@
         building
         (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,DEV_ID,OPEN_DATE,TEL,
         MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,
-        OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALES_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
+        OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALE_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
         HOUSEHOLDS,ARCHITECTURAL_STYLE,ITERATION,PROPERTY_COMPANY,PROPERTY_FEE,PARKING_SPACE,PROJECT_INTRODUCTION,
-        DISCOUNT,SELL_WELL,POPULARITY,HOT_SEARCH,SPECIAL_OFFER,RECOMMEND,OPTIMIZATION,QUALITY,BUILD_OPEN,CHA_ID,PRO_DATE)
+        DISCOUNT,SELL_WELL,POPULARITY,HOT_SEARCH,SPECIAL_OFFER,RECOMMEND,OPTIMIZATION,QUALITY,BUILD_OPEN,CHA_ID,PRO_DATE,LONGITUDE,LATITUDE)
         VALUES
         (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
         #{buildingBean.ldId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.tel},#{buildingBean.minArea},
@@ -161,7 +157,7 @@
         #{buildingBean.propertyCompany},#{buildingBean.propertyFee},#{buildingBean.parkingSpace},
         #{buildingBean.projectIntroduction},#{buildingBean.discount},#{buildingBean.sellWell},#{buildingBean.popularity},
         #{buildingBean.hotSearch},#{buildingBean.specialOffer},#{buildingBean.recommend},#{buildingBean.optimization},
-        #{buildingBean.quality},#{buildingBean.buildOpen},#{buildingBean.chaId},#{buildingBean.proDate})
+        #{buildingBean.quality},#{buildingBean.buildOpen},#{buildingBean.chaId},#{buildingBean.proDate},#{buildingBean.longitude},#{buildingBean.latitude})
     </insert>
 
 
@@ -236,7 +232,7 @@
                 GREENING_RATE = #{buildingBean.greeningRate},
             </if>
             <if test="null != buildingBean.saleAddress and buildingBean.saleAddress != ''">
-                SALES_ADDRESS = #{buildingBean.saleAddress},
+                SALE_ADDRESS = #{buildingBean.saleAddress},
             </if>
             <if test="null != buildingBean.propertyAddress and buildingBean.propertyAddress != ''">
                 PROPERTY_ADDRESS = #{buildingBean.propertyAddress},
@@ -302,7 +298,14 @@
                 OPTIMIZATION = #{buildingBean.optimization},
             </if>
             <if test="null != buildingBean.quality">
-                QUALITY = #{buildingBean.quality}
+                QUALITY = #{buildingBean.quality},
+            </if>
+
+            <if test="null != buildingBean.longitude">
+                LONGITUDE = #{buildingBean.longitude},
+            </if>
+            <if test="null != buildingBean.quality">
+                LATITUDE = #{buildingBean.latitude}
             </if>
         </trim>
         where BUILD_ID = #{buildingBean.buildId}
@@ -326,6 +329,10 @@
 
     <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
+    </select>
+
+    <select id="getSellWell" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building order by SELL_WELL desc limit 3
     </select>
 
     <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildingBean">
