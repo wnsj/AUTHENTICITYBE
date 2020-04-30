@@ -39,6 +39,7 @@ public class ArticleBean implements Serializable {
      */
     private Integer articleType;
 
+    @TableField(exist = false)
     private String articleTypeLabel;
     /**
      * 文章内容
@@ -70,6 +71,8 @@ public class ArticleBean implements Serializable {
      */
     private Date createTime;
 
+    @TableField(exist = false)
+    private String createDate;
     /**
      * 页码
      */

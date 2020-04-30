@@ -11,7 +11,7 @@
     </select>
 
     <select id="getArticleByPage" resultType="com.jiubo.buildstore.bean.ArticleBean">
-        select ID,ARTICLE_TYPE,TITLE,CREATE_TIME from article
+        select * from article
         <where>
             <if test="articleBean.articleType != null">
                 ARTICLE_TYPE = #{articleBean.articleType}

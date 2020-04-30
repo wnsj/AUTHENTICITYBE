@@ -1,17 +1,23 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.ArticleBean;
 import com.jiubo.buildstore.bean.BuildingBean;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.dao.ArticleDao;
 import com.jiubo.buildstore.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import com.jiubo.buildstore.util.DateUtils.*;
 /**
  * <p>
  *  服务实现类
@@ -23,12 +29,22 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> implements ArticleService {
 
+
     @Autowired
     private ArticleDao articleDao;
 
     @Override
     public List<ArticleBean> getArticleByType(ArticleBean articleBean) {
-        return articleDao.getArticleByType(articleBean);
+        List<ArticleBean> article = articleDao.getArticleByType(articleBean);
+        if (null != article && article.size() > 0) {
+            for (ArticleBean articleBean1 : article) {
+                if (null != articleBean1.getCreateTime()) {
+                    String formatDate = DateUtils.formatDate(articleBean1.getCreateTime(), "yyyy-MM-dd");
+                    articleBean1.setCreateDate(formatDate);
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -51,9 +67,75 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
                 } else {
                     bean.setArticleTypeLabel("企业文化");
                 }
+
+                if (null != bean.getCreateTime()) {
+                    String formatDate = DateUtils.formatDate(bean.getCreateTime(), "yyyy-MM-dd");
+                    bean.setCreateDate(formatDate);
+                }
             }
         }
         page.setRecords(articleByPage);
         return page;
     }
+
+
+
+    @Override
+    public List<Map<String, Object>> uploadFile(MultipartFile[] file) throws Exception {
+        if (file == null || file.length <= 0) throw new MessageException("未接收到文件!");
+        List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+        for (MultipartFile multipartFile : file) {
+            //原文件名
+            String fileName = multipartFile.getOriginalFilename();
+            String srcName = fileName;
+            //生成文件名
+            fileName = fileName.substring(fileName.lastIndexOf("."));
+            String path = "D:/";
+            File dir = new File(path);
+            if (!dir.exists()) dir.mkdirs();
+            path = path.concat(UUID.randomUUID().toString().replace("-", "")).concat(fileName);
+            Map<String, Object> map = new HashMap<>();
+            map.put("srcName", srcName);
+            map.put("fileUrl", "/fileController/getFile?type=IMG&path=".concat(path));
+            mapList.add(map);
+            generateFile(multipartFile, path);
+        }
+        return mapList;
+    }
+
+    @Override
+    public void insertArticle(ArticleBean articleBean){
+        articleBean.setCreateTime(new Date());
+        articleDao.insert(articleBean);
+    }
+
+    @Override
+    public void updateArticle(ArticleBean articleBean) {
+        articleDao.updateById(articleBean);
+    }
+
+    private void generateFile(MultipartFile multipartFile, String path) throws Exception {
+        //读写文件
+        if (!multipartFile.isEmpty()) {
+            InputStream is = multipartFile.getInputStream();
+            int len = 0;
+            byte[] by = new byte[1024];
+            OutputStream os = new FileOutputStream(path);
+            BufferedInputStream bis = new BufferedInputStream(is);
+            BufferedOutputStream bos = new BufferedOutputStream(os);
+            while ((len = bis.read(by)) != -1) {
+                bos.write(by, 0, len);
+                bos.flush();
+            }
+            if (bos != null)
+                bos.close();
+            if (bis != null)
+                bis.close();
+            if (os != null)
+                os.close();
+            if (is != null)
+                is.close();
+        }
+    }
+
 }

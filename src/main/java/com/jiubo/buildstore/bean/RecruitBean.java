@@ -146,4 +146,6 @@ public class RecruitBean implements Serializable {
      */
     @TableField(exist = false)
     private String pageSize;
+
+
 }

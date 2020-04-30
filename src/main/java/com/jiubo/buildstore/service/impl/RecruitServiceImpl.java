@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,12 +52,19 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
                 if (null != map) {
                     recruitBean1.setPositionTypeLabel(map.get(recruitBean1.getPositionType()).get(0).getTypeName());
                 }
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String s = simpleDateFormat.format(recruitBean1.getCreateTime());
+                String s = getDateToString(recruitBean1.getCreateTime());
                 recruitBean1.setCreateDate(s);
             }
         }
         return page.setRecords(easyInfoList);
+    }
+
+    private String getDateToString(Date date) {
+        if (null != date) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return simpleDateFormat.format(date);
+        }
+        return null;
     }
 
     @Override
@@ -76,6 +84,8 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
                 if (recruitBean1.getWeekend() == 1) {
                     recruitBean1.setWeekendLabel("双休");
                 }
+                String s = getDateToString(recruitBean1.getCreateTime());
+                recruitBean1.setCreateDate(s);
             }
         }
         return recruitBeanList;
