@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.CharaRefDao">
+
+    <insert id="insertChaRefBatch" parameterType="java.util.List">
+        insert into chara_ref (BUILD_ID,HOUSE_ID,HOUSE_NAME) values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.buildId},#{item.houseId},#{item.houseName})
+        </foreach>
+    </insert>
+
+    <select id="getChaRefByBidList" resultType="com.jiubo.buildstore.bean.CharaRefBean">
+        select * from chara_ref
+        <where>
+            <if test="charaRefBean.buildIdList != null and charaRefBean.buildIdList.size >0">
+                BUILD_ID in
+                <foreach collection="charaRefBean.buildIdList" open="(" close=")" separator="," item="buildId">
+                    #{buildId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteCharaRefByBid">
+        delete from chara_ref where BUILD_ID = #{buildId}
+    </delete>
+</mapper>

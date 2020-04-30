@@ -5,8 +5,15 @@
     <select id="getLabelByType" resultType="com.jiubo.buildstore.bean.RecruitLabelBean">
         select * from recruit_label
         <where>
+        1=1
             <if test="recruitLabelBean.typeId != null">
                 TYPE_ID = #{recruitLabelBean.typeId}
+            </if>
+            <if test="recruitLabelBean.hotJob != null">
+               and HOT_JOB = #{recruitLabelBean.hotJob}
+            </if>
+            <if test="recruitLabelBean.typeId != null">
+                and LONG_RECRUIT = #{recruitLabelBean.longRecruit}
             </if>
         </where>
     </select>

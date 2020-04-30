@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,7 +33,7 @@ public class LinkPhoneBean implements Serializable {
 
     private String lpName;
 
-    private Integer bId;
+    private Integer buildId;
 
     /**
      * 1:详情--参考单价
@@ -55,4 +56,7 @@ public class LinkPhoneBean implements Serializable {
      * 前台传入的日期
      */
     private Date writeTime;
+
+    @TableField(exist = false)
+    private String writeDate;
 }

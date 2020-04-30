@@ -160,7 +160,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         }
                         List<String> strings = bhtNameList.stream().distinct().collect(toList());
                         // 户型名
-                        bean.setCaName(StringUtils.join(strings, "、"));
+                        bean.setCaName(StringUtils.join(strings, "/"));
                     }
                 }
 
@@ -168,7 +168,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 // 开盘时间
                 if (null != bean.getOpenDate()) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
                     bean.setOpenDateTime(sdf.format(bean.getOpenDate()));
                 }
 
@@ -208,9 +208,34 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         bean.setImgPath(buildingImgBeans.get(0).getImgPath());
                     }
                 }
+
+                // 设置均值
+                bean.setAveragePrice(getAverage(bean));
+
+                // 标签
+                if (bean.getSellWell() != null) {
+                    bean.setSellWellLabel(1);
+                } else {
+                    bean.setSellWellLabel(2);
+                }
             }
         }
         return page.setRecords(allBulidBypage);
+    }
+
+    private BigDecimal getAverage(BuildingBean bean) {
+        BigDecimal average;
+        if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() != null) {
+            BigDecimal decimal = bean.getMinUnitPrice().add(bean.getMaxUnitPrice());
+            average = decimal.divide(new BigDecimal(2));
+        } else if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() == null){
+            average = bean.getMinUnitPrice().divide(new BigDecimal(2));
+        } else if (bean.getMinUnitPrice() == null && bean.getMaxUnitPrice() != null){
+            average = bean.getMaxUnitPrice().divide(new BigDecimal(2));
+        } else {
+            average = new BigDecimal(0);
+        }
+        return average;
     }
 
     @Override
@@ -387,9 +412,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 // 均价
-                BigDecimal total = buildingBean1.getMinUnitPrice().add(buildingBean1.getMaxUnitPrice());
-                BigDecimal average = total.divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
-                buildingBean1.setAveragePrice(average);
+                buildingBean1.setAveragePrice(getAverage(buildingBean1));
 
                 // 人气 热搜 热销 判断
                 if (type == 1) {

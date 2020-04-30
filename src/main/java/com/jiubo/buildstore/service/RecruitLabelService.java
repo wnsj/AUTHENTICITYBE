@@ -2,6 +2,7 @@ package com.jiubo.buildstore.service;
 
 import com.jiubo.buildstore.bean.RecruitLabelBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiubo.buildstore.bean.RecruitLabelListBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,6 @@ import java.util.List;
 public interface RecruitLabelService extends IService<RecruitLabelBean> {
 
     public List<RecruitLabelBean> getLabelByType(RecruitLabelBean recruitLabelBean);
+
+    public RecruitLabelListBean getLabelByCondition();
 }

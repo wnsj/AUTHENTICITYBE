@@ -297,6 +297,7 @@ public class BuildingBean implements Serializable {
      */
     private Integer sellWell;
 
+    private Integer sellWellLabel;
     /**
      * 人气值
      */
@@ -379,6 +380,7 @@ public class BuildingBean implements Serializable {
      * 均价
      */
     private BigDecimal averagePrice;
+
     private List<String> effectList;
     private List<String> enPlanList;
     private List<String> buildReaList;

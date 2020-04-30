@@ -2,6 +2,7 @@ package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.RecruitLabelBean;
 
+import com.jiubo.buildstore.bean.RecruitLabelListBean;
 import com.jiubo.buildstore.dao.RecruitLabelDao;
 import com.jiubo.buildstore.service.RecruitLabelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,5 +30,13 @@ public class RecruitLabelServiceImpl extends ServiceImpl<RecruitLabelDao, Recrui
     @Override
     public List<RecruitLabelBean> getLabelByType(RecruitLabelBean recruitLabelBean) {
         return recruitLabelDao.getLabelByType(recruitLabelBean);
+    }
+
+    @Override
+    public RecruitLabelListBean getLabelByCondition() {
+        RecruitLabelListBean recruitLabelListBean = new RecruitLabelListBean();
+        recruitLabelListBean.setHotList(recruitLabelDao.getLabelByType(new RecruitLabelBean().setHotJob(1)));
+        recruitLabelListBean.setLongList(recruitLabelDao.getLabelByType(new RecruitLabelBean().setLongRecruit(1)));
+        return recruitLabelListBean;
     }
 }

@@ -130,6 +130,7 @@ public class RecruitBean implements Serializable {
 
     private String createDate;
 
+
     /**
      * 修改时间
      */

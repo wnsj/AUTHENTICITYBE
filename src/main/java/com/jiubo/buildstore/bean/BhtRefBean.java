@@ -1,9 +1,12 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,14 +16,14 @@ import lombok.experimental.Accessors;
  * 
  * </p>
  *
- * @author syl
- * @since 2020-04-25
+ * @author dx
+ * @since 2020-04-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("recruit_label")
-public class RecruitLabelBean implements Serializable {
+@TableName("bht_ref")
+public class BhtRefBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,22 +34,24 @@ public class RecruitLabelBean implements Serializable {
     private Integer id;
 
     /**
-     * 职位名
+     * 户型类型id
      */
-    private String recruitName;
+    private Integer bhtId;
 
     /**
-     * 职位类型id
+     * 楼盘id
      */
-    private Integer typeId;
+    private Integer buildId;
+    /**
+     * 楼盘id集合
+     */
+    @TableField(exist = false)
+    private List<Integer> buildIdList;
 
     /**
-     *是否热招（1：是；2：否）
+     * 楼盘名
      */
-    private Integer hotJob;
+    private String bhtName;
 
-    /**
-     * 是否长招（1：是；2：否）
-     */
-    private Integer longRecruit;
+
 }

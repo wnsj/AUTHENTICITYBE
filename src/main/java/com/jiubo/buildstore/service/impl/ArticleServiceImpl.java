@@ -44,7 +44,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
                 }
             }
         }
-        return null;
+        return article;
     }
 
     @Override
@@ -64,8 +64,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
                     bean.setArticleTypeLabel("公司荣誉");
                 }else if (4==bean.getArticleType()) {
                     bean.setArticleTypeLabel("企业团队");
-                } else {
+                } else if(5==bean.getArticleType()){
                     bean.setArticleTypeLabel("企业文化");
+                } else if (6==bean.getArticleType()) {
+                    bean.setArticleTypeLabel("联系我们");
+                } else if (7==bean.getArticleType()) {
+                    bean.setArticleTypeLabel("服务声明");
+                } else {
+                    bean.setArticleTypeLabel("楼盘合作");
                 }
 
                 if (null != bean.getCreateTime()) {

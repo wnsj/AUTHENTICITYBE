@@ -3,8 +3,8 @@
 <mapper namespace="com.jiubo.buildstore.dao.LinkPhoneDao">
 
     <insert id="addLinkPhone">
-        INSERT INTO link_phone(LP_NAME, B_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE)
-        VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.bId},
+        INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE)
+        VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.buildId},
         #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate})
     </insert>
 </mapper>

@@ -36,4 +36,13 @@ public class RecruitLabelController {
         jsonObject.put(Constant.Result.RETDATA, recruitLabelService.getLabelByType(recruitLabelBean));
         return jsonObject;
     }
+
+    @PostMapping("/getLabelByCondition")
+    public JSONObject getLabelByCondition() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, recruitLabelService.getLabelByCondition());
+        return jsonObject;
+    }
 }
