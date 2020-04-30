@@ -6,6 +6,7 @@ import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.RecruitTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class RecruitTypeController {
     @Autowired
     private RecruitTypeService recruitTypeService;
 
-    @GetMapping("/getAllRecruitType")
+    @PostMapping("/getAllRecruitType")
     public JSONObject getAllRecruitType() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

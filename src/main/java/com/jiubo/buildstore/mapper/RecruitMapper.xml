@@ -6,7 +6,7 @@
         select ID,POSITION,POSITION_TYPE,RECRUITS_NUM,WORKPLACE,CREATE_TIME from recruit
         <where>
             <if test="recruitBean.recruitmentType != null">
-              and RECRUITMENT_TYPE = #{recruitmentType}
+              and RECRUITMENT_TYPE = #{recruitBean.recruitmentType}
             </if>
             <if test="recruitBean.positionType != null">
                 and POSITION_TYPE = #{recruitBean.positionType}

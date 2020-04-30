@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +51,9 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
                 if (null != map) {
                     recruitBean1.setPositionTypeLabel(map.get(recruitBean1.getPositionType()).get(0).getTypeName());
                 }
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String s = simpleDateFormat.format(recruitBean1.getCreateTime());
+                recruitBean1.setCreateDate(s);
             }
         }
         return page.setRecords(easyInfoList);

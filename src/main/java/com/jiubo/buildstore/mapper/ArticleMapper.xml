@@ -9,4 +9,13 @@
             </if>
         </where>
     </select>
+
+    <select id="getArticleByPage" resultType="com.jiubo.buildstore.bean.ArticleBean">
+        select ID,ARTICLE_TYPE,TITLE,CREATE_TIME from article
+        <where>
+            <if test="articleBean.articleType != null">
+                ARTICLE_TYPE = #{articleBean.articleType}
+            </if>
+        </where>
+    </select>
 </mapper>

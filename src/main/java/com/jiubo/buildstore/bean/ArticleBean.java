@@ -1,10 +1,13 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -36,6 +39,7 @@ public class ArticleBean implements Serializable {
      */
     private Integer articleType;
 
+    private String articleTypeLabel;
     /**
      * 文章内容
      */
@@ -49,7 +53,7 @@ public class ArticleBean implements Serializable {
     /**
      * (奖项、发展历程等时间)
      */
-    private LocalDateTime aboutTime;
+    private Date aboutTime;
 
     /**
      * 图片路径
@@ -64,8 +68,19 @@ public class ArticleBean implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String current;
+
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
     /**
      * 修改时间
      */
