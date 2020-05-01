@@ -41,4 +41,6 @@ public interface BuildingService extends IService<BuildingBean> {
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean);
 
     public List<BuildingBean> getSellWell();
+
+    public BuildMainBean getHot();
 }

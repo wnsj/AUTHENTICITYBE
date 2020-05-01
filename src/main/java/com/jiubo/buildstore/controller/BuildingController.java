@@ -158,4 +158,16 @@ public class BuildingController {
 
         return jsonObject;
     }
+    /**
+     * 获取热门楼盘
+     */
+    @GetMapping("/getHot")
+    public JSONObject getHot() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getHot());
+
+        return jsonObject;
+    }
 }

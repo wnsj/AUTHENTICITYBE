@@ -135,6 +135,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
             }
 
+            buildingImgBean.setItId(7);
+            List<BuildingImgBean> video = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+            Map<Integer, List<BuildingImgBean>> videoMap = null;
+            if (null != video && video.size() > 0) {
+                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+            }
             // 遍历实体 翻译各个类型字段
             for (BuildingBean bean : allBulidBypage) {
 
@@ -201,10 +207,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                 }
 
+                if (null != videoMap) {
+                    List<BuildingImgBean> imgBeans = videoMap.get(bean.getBuildId());
+                    if (null != imgBeans && imgBeans.size()>0){
+                        bean.setVideoName(imgBeans.get(0).getImgName());
+                        bean.setVideoPath(imgBeans.get(0).getImgPath());
+                    }
+                }
                 // 设置均值
                 bean.setAveragePrice(getAverage(bean));
 
-                // 标签
+                // 是否是热销标签
                 if (bean.getSellWell() != null) {
                     bean.setSellWellLabel(1);
                 } else {
@@ -452,6 +465,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 HouseTypeNum houseTypeNum = new HouseTypeNum();
                 List<BhtRefBean> beans = bhtRefMap.get(bhtId);
                 houseTypeNum.setHouseName(beans.get(0).getBhtName());
+                houseTypeNum.setHouseId(beans.get(0).getBhtId());
                 houseTypeNum.setHouseNum(beans.size());
                 houseTypeNumList.add(houseTypeNum);
             }
@@ -471,6 +485,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public List<BuildingBean> getSellWell() {
         return buildingDao.getSellWell();
+    }
+
+    @Override
+    public BuildMainBean getHot() {
+        BuildMainBean buildMainBean = new BuildMainBean();
+        buildMainBean.setNewHotSearchList(buildingDao.getHotSBuild());
+        buildMainBean.setNewPopularityList(buildingDao.getPHotBuild());
+        buildMainBean.setNewSellWellList(buildingDao.getSWBuild());
+        return buildMainBean;
     }
 
     private void getHeadImg(List<BuildingBean> beans, Integer type) {
@@ -641,5 +664,5 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
-
+    // 热门楼盘查询
 }

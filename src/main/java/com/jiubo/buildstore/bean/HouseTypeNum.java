@@ -17,4 +17,6 @@ public class HouseTypeNum {
      * 居室数量
      */
     private Integer houseNum;
+
+    private Integer houseId;
 }

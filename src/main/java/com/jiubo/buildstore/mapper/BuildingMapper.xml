@@ -343,4 +343,14 @@
     <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where BUILD_ID = #{buildingBean.buildId}
     </select>
+
+    <select id="getPHotBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building order by POPULARITY limit 3
+    </select>
+    <select id="getSWBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building order by SELL_WELL limit 3
+    </select>
+    <select id="getHotSBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        select * from building order by HOT_SEARCH limit 3
+    </select>
 </mapper>

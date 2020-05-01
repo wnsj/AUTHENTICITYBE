@@ -55,4 +55,22 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
     public BuildingBean getBuildById(@Param("buildingBean") BuildingBean buildingBean);
 
     public List<BuildingBean> getSellWell();
+
+    /**
+     * 人气
+     * @return
+     */
+    public List<BuildingBean> getPHotBuild();
+
+    /**
+     * 热销
+     * @return
+     */
+    public List<BuildingBean> getSWBuild();
+
+    /**
+     * 热搜
+     * @return
+     */
+    public List<BuildingBean> getHotSBuild();
 }

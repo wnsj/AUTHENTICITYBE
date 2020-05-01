@@ -7,12 +7,12 @@
         <where>
         1=1
             <if test="recruitLabelBean.typeId != null">
-                TYPE_ID = #{recruitLabelBean.typeId}
+              AND  TYPE_ID = #{recruitLabelBean.typeId}
             </if>
             <if test="recruitLabelBean.hotJob != null">
                and HOT_JOB = #{recruitLabelBean.hotJob}
             </if>
-            <if test="recruitLabelBean.typeId != null">
+            <if test="recruitLabelBean.longRecruit != null">
                 and LONG_RECRUIT = #{recruitLabelBean.longRecruit}
             </if>
         </where>

@@ -378,6 +378,10 @@ public class BuildingBean implements Serializable {
      */
     private String videoName;
     /**
+     * 视频路径
+     */
+    private String videoPath;
+    /**
      * 均价
      */
     private BigDecimal averagePrice;
