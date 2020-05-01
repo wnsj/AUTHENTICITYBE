@@ -155,9 +155,16 @@ public class BuildingBean implements Serializable {
     private String pageOrder;
 
     /**
-     * 排序标识(综合排序：0；单价排序：1；总价排序：2)
+     * 时间排序(1:升序；2降序)
      */
-    private Integer sortCode;
+    @TableField(exist = false)
+    private Integer dateSort;
+
+    /**
+     * 价格排序(1:升序；2降序)
+     */
+    @TableField(exist = false)
+    private Integer priceSort;
 
     /**
      * 楼盘类型名
@@ -405,5 +412,13 @@ public class BuildingBean implements Serializable {
      */
     private String buildDescription;
 
+    /**
+     * 楼盘居室信息
+     */
     private List<HouseTypeNum> htnNumList;
+
+    /**
+     * 区域id
+     */
+    private Integer regionId;
 }

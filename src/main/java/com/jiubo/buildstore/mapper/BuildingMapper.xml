@@ -122,19 +122,26 @@
                 <if test="buildingBean.buildOpen != null">
                     and #{buildingBean.buildOpen} = BUILD_OPEN
                 </if>
+                <if test="buildingBean.regionId != null">
+                    and #{buildingBean.regionId} = REGION_ID
+                </if>
             </where>
-            <if test="buildingBean.sortCode != null and buildingBean.sortCode != 0">
-                <if test="buildingBean.sortCode == 1">
-                    order by MIN_UNIT_PRICE
+            <if test="buildingBean.dateSort != null and buildingBean.dateSort != 0">
+                <if test="buildingBean.dateSort == 1">
+                    order by OPEN_DATE asc
                 </if>
-                <if test="buildingBean.sortCode == 2">
-                    order by MIN_TITLE_PRICE
-                </if>
-                <if test="buildingBean.sortCode == 3">
-                    order by OPEN_DATE
+                <if test="buildingBean.dateSort == 2">
+                    order by OPEN_DATE desc
                 </if>
             </if>
-
+        <if test="buildingBean.priceSort != null and buildingBean.priceSort != 0">
+            <if test="buildingBean.priceSort == 1">
+                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2  asc
+            </if>
+            <if test="buildingBean.priceSort == 2">
+                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2  desc
+            </if>
+        </if>
     </select>
 
     <!--添加数据-->
@@ -146,7 +153,7 @@
         OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALE_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
         HOUSEHOLDS,ARCHITECTURAL_STYLE,ITERATION,PROPERTY_COMPANY,PROPERTY_FEE,PARKING_SPACE,PROJECT_INTRODUCTION,
         DISCOUNT,SELL_WELL,POPULARITY,HOT_SEARCH,SPECIAL_OFFER,RECOMMEND,OPTIMIZATION,QUALITY,BUILD_OPEN,CHA_ID,PRO_DATE,LONGITUDE,
-        LATITUDE,BUILD_DESCRIPTION)
+        LATITUDE,BUILD_DESCRIPTION,REGION_ID)
         VALUES
         (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
         #{buildingBean.ldId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.tel},#{buildingBean.minArea},
@@ -159,7 +166,7 @@
         #{buildingBean.projectIntroduction},#{buildingBean.discount},#{buildingBean.sellWell},#{buildingBean.popularity},
         #{buildingBean.hotSearch},#{buildingBean.specialOffer},#{buildingBean.recommend},#{buildingBean.optimization},
         #{buildingBean.quality},#{buildingBean.buildOpen},#{buildingBean.chaId},#{buildingBean.proDate},
-        #{buildingBean.longitude},#{buildingBean.latitude},#{buildingBean.buildDescription})
+        #{buildingBean.longitude},#{buildingBean.latitude},#{buildingBean.buildDescription},#{buildingBean.regionId})
     </insert>
 
 
@@ -310,10 +317,13 @@
                 LATITUDE = #{buildingBean.latitude},
             </if>
             <if test="null != buildingBean.buildDescription and buildingBean.buildDescription != ''">
-                LATITUDE = #{buildingBean.buildDescription}
+                LATITUDE = #{buildingBean.buildDescription},
+            </if>
+            <if test="null != buildingBean.regionId">
+                REGION_ID = #{buildingBean.regionId}
             </if>
         </trim>
-        where BUILD_DESCRIPTION = #{buildingBean.buildId}
+        where BUILD_ID = #{buildingBean.buildId}
     </update>
 
     <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildingBean">
