@@ -400,4 +400,6 @@ public class BuildingBean implements Serializable {
      * 楼盘特点描述
      */
     private String buildDescription;
+
+    private List<HouseTypeNum> htnNumList;
 }

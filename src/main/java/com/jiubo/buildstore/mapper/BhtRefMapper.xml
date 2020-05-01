@@ -20,6 +20,17 @@
         </where>
     </select>
 
+
+    <select id="getAllBhtRefByBuildId" resultType="com.jiubo.buildstore.bean.BhtRefBean">
+        select * from bht_ref
+        <where>
+            <if test="buildId != null">
+                BUILD_ID = #{buildId}
+            </if>
+        </where>
+    </select>
+
+
     <select id="getAllBhtRefByBhtIds" resultType="com.jiubo.buildstore.bean.BhtRefBean">
         select * from bht_ref
         <where>

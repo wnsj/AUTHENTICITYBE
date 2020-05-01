@@ -21,6 +21,14 @@
         </where>
     </select>
 
+    <select id="getCharaByBuildId" resultType="com.jiubo.buildstore.bean.CharaRefBean">
+        select * from chara_ref
+        <where>
+            <if test="buildId != null">
+                BUILD_ID = #{buildId}
+            </if>
+        </where>
+    </select>
     <delete id="deleteCharaRefByBid">
         delete from chara_ref where BUILD_ID = #{buildId}
     </delete>

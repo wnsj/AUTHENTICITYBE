@@ -22,4 +22,6 @@ public interface BhtRefDao extends BaseMapper<BhtRefBean> {
     public List<BhtRefBean>getAllBhtRefByBhtIds(@Param("bhtRefBean") BhtRefBean bhtRefBean);
 
     public void deleteBhtRefByBid(@Param("buildId") Integer buildId);
+
+    public List<BhtRefBean> getAllBhtRefByBuildId(@Param("buildId") Integer buildId);
 }
