@@ -44,12 +44,12 @@ public class CharaRefBean implements Serializable {
     @TableField(exist = false)
     private List<Integer> buildIdList;
     /**
-     * 户型id
+     * 特色id
      */
     private Integer houseId;
 
     /**
-     * 户型名
+     * 特色名
      */
     private String houseName;
 

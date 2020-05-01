@@ -20,6 +20,18 @@
         </where>
     </select>
 
+    <select id="getAllBhtRefByBhtIds" resultType="com.jiubo.buildstore.bean.BhtRefBean">
+        select * from bht_ref
+        <where>
+            <if test="bhtRefBean.bhtIdList != null and bhtRefBean.bhtIdList.size >0">
+                BHT_ID in
+                <foreach collection="bhtRefBean.bhtIdList" open="(" close=")" separator="," item="bhtId">
+                    #{bhtId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteBhtRefByBid">
         delete from bht_ref where BUILD_ID = #{buildId}
     </delete>

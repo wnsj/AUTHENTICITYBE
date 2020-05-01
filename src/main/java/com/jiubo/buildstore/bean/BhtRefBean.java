@@ -39,6 +39,12 @@ public class BhtRefBean implements Serializable {
     private Integer bhtId;
 
     /**
+     * 户型类型id集合
+     */
+    @TableField(exist = false)
+    private List<Integer> bhtIdList;
+
+    /**
      * 楼盘id
      */
     private Integer buildId;
@@ -49,7 +55,7 @@ public class BhtRefBean implements Serializable {
     private List<Integer> buildIdList;
 
     /**
-     * 楼盘名
+     * 户型名
      */
     private String bhtName;
 

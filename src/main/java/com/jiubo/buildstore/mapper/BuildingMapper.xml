@@ -307,7 +307,7 @@
                 LONGITUDE = #{buildingBean.longitude},
             </if>
             <if test="null != buildingBean.quality and buildingBean.quality != ''">
-                LATITUDE = #{buildingBean.latitude}
+                LATITUDE = #{buildingBean.latitude},
             </if>
             <if test="null != buildingBean.buildDescription and buildingBean.buildDescription != ''">
                 LATITUDE = #{buildingBean.buildDescription}

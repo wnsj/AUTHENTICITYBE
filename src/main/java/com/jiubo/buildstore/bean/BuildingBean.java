@@ -177,6 +177,7 @@ public class BuildingBean implements Serializable {
      */
     private String chaName;
 
+    private List<String> charaNameList;
     /**
      * 房源特色id
      */

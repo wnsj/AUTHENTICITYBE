@@ -41,16 +41,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private BuildingDao buildingDao;
 
     @Autowired
-    private BuildingAnalysisService buildingAnalysisService;
+    private CharacteristicDao characteristicDao;
 
     @Autowired
-    private BuildingHorseTypeService buildingHorseTypeService;
+    private BuildingHorseTypeDao buildingHorseTypeDao;
 
     @Autowired
     private SaleTypeDao saleTypeDao;
 
     @Autowired
-    private CounselorCommentDao counselorCommentDao;
+    private CharaRefDao charaRefDao;
+
+    @Autowired
+    private BhtRefDao bhtRefDao;
 
     @Autowired
     private ImgTypeDao imgTypeDao;
@@ -61,8 +64,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private BuildingTypeDao buildingTypeDao;
 
-    @Autowired
-    private CharacteristicDao characteristicDao;
 
     @Override
 
@@ -71,10 +72,26 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
 
+        // 设置楼盘查询条件---通过传入的户型条件筛选楼盘
+        // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
+        List<Integer> bhtIdList = buildingBean.getBhtIdList();
+
+        if (null != bhtIdList && bhtIdList.size() > 0) {
+            List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
+            if (null != bhtRefByBhtIds && bhtRefByBhtIds.size()>0) {
+                List<Integer> buildIdList = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
+                buildingBean.setBuildIdList(buildIdList);
+            } else {
+                return page;
+            }
+        }
+
         // 楼盘数据
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
 
         if (null != allBulidBypage && allBulidBypage.size() > 0) {
+            // 获取楼盘id
+            List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBuildId).collect(toList());
 
             // 获取所有类型
             List<BuildingTypeBean> buildTypeList = buildingTypeDao.getAllBuildingType();
@@ -82,43 +99,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             if (null != buildTypeList && buildTypeList.size() > 0) {
                 btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
             }
+
             //获取所有特色
-            List<CharacteristicBean> charaList = characteristicDao.getAllChara();
-            Map<Integer, List<CharacteristicBean>> charaMap = null;
-            if (null != charaList && charaList.size() > 0) {
-                charaMap = charaList.stream().collect(Collectors.groupingBy(CharacteristicBean::getChaId));
+            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
+            Map<Integer, List<CharaRefBean>> charaRefMap = null;
+            if (null != chaRefByBidList && chaRefByBidList.size()>0){
+                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
             }
-
-            // 获取户型id集合
-            List<Integer> bhtIdList = buildingBean.getBhtIdList();
-
-            if (null != bhtIdList && bhtIdList.size() > 0) {
-                BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
-                buildingAnalysisBean.setBhtIdList(bhtIdList);
-                // 获取户型分析表中楼盘ID
-                List<BuildingAnalysisBean> bidByBhtIdList = buildingAnalysisService.getBidByBhtIdList(buildingAnalysisBean);
-                List<Integer> buildIdList = bidByBhtIdList.stream().map(BuildingAnalysisBean::getBuildId).collect(toList());
-                buildingBean.setBuildIdList(buildIdList);
-            }
-
 
             // 翻译楼盘户型
-            // 获取户型分析数据
-            List<BuildingHorseTypeBean> allHorseType = buildingHorseTypeService.getAllHorseType();
-
-            // 户型map 通过户型分析中的户型id和楼盘id到户型表中翻译户型
-            Map<Integer, List<BuildingHorseTypeBean>> integerListMap = allHorseType.stream().collect(Collectors.groupingBy(BuildingHorseTypeBean::getBhtId));
-
-            // 获取楼盘id
-            List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBuildId).collect(toList());
-
-            // 根据楼盘id抓取户型分析数据
-            BuildingAnalysisBean buildingAnalysisBean = new BuildingAnalysisBean();
-            buildingAnalysisBean.setBIdList(list);
-            List<BuildingAnalysisBean> bidByBIdList = buildingAnalysisService.getBidByBIdList(buildingAnalysisBean);
-            Map<Integer, List<BuildingAnalysisBean>> listMap = null;
-            if (null != bidByBIdList && bidByBIdList.size() > 0) {
-                listMap = bidByBIdList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBuildId));
+            List<BhtRefBean> bhtRefBeanList = bhtRefDao.getAllBhtRefByBIds(new BhtRefBean().setBuildIdList(list));
+            Map<Integer, List<BhtRefBean>> bhtRefMap = null;
+            if (null != bhtRefBeanList && bhtRefBeanList.size() > 0) {
+                bhtRefMap = bhtRefBeanList.stream().collect(Collectors.groupingBy(BhtRefBean::getBuildId));
             }
 
             // 翻译出售状态
@@ -142,28 +135,20 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
             }
 
-           // 遍历实体 翻译各个类型字段
+            // 遍历实体 翻译各个类型字段
             for (BuildingBean bean : allBulidBypage) {
 
                 // 户型
-                if (null != listMap) {
-                    List<String> bhtNameList = new ArrayList<>();
-                    List<BuildingAnalysisBean> buildingAnalysisBeans = listMap.get(bean.getBuildId());
-                    // 拼接户型
-                    if (null != buildingAnalysisBeans && buildingAnalysisBeans.size() > 0) {
-
-                        for (BuildingAnalysisBean bean1 : buildingAnalysisBeans) {
-                            List<BuildingHorseTypeBean> buildingHorseTypeBeans = integerListMap.get(bean1.getBhtId());
-                            if (null != buildingHorseTypeBeans && buildingHorseTypeBeans.size() > 0) {
-                                bhtNameList.add(buildingHorseTypeBeans.get(0).getBhtName());
-                            }
+                if (null != bhtRefMap) {
+                    List<BhtRefBean> bhtRefBeans = bhtRefMap.get(bean.getBuildId());
+                    if (null != bhtRefBeans && bhtRefBeans.size() > 0) {
+                        List<String> bhtNameList = bhtRefBeans.stream().map(BhtRefBean::getBhtName).collect(toList());
+                        if (null != bhtNameList && bhtNameList.size() > 0) {
+                            bean.setCaName(StringUtils.join(bhtNameList,"/"));
+                            bean.setBhtIdList(bhtRefBeans.stream().map(BhtRefBean::getBhtId).collect(toList()));
                         }
-                        List<String> strings = bhtNameList.stream().distinct().collect(toList());
-                        // 户型名
-                        bean.setCaName(StringUtils.join(strings, "/"));
                     }
                 }
-
 
 
                 // 开盘时间
@@ -183,9 +168,16 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 // 特色
-                if (null != charaMap && bean.getChaId() != null) {
-                    bean.setChaName(charaMap.get(bean.getChaId()).get(0).getChaName());
+                if (null != charaRefMap) {
+
+                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+                    if (null != charaRefBeanList && charaRefBeanList.size()> 0){
+                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+                        bean.setCharaNameList(charaRefList);
+                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                    }
                 }
+
                 // 获取咨询师名字 联系方式
 //                if (null != cidByBidList) {
 //                    Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
@@ -228,9 +220,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() != null) {
             BigDecimal decimal = bean.getMinUnitPrice().add(bean.getMaxUnitPrice());
             average = decimal.divide(new BigDecimal(2));
-        } else if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() == null){
+        } else if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() == null) {
             average = bean.getMinUnitPrice().divide(new BigDecimal(2));
-        } else if (bean.getMinUnitPrice() == null && bean.getMaxUnitPrice() != null){
+        } else if (bean.getMinUnitPrice() == null && bean.getMaxUnitPrice() != null) {
             average = bean.getMaxUnitPrice().divide(new BigDecimal(2));
         } else {
             average = new BigDecimal(0);
@@ -251,20 +243,37 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 若不存在 创建
             buildingDao.addBuilding(buildingBean);
 
+            // 绑定楼盘和户型关系
+            bindBhtRef(buildingBean);
+
+            // 绑定楼盘特色关系
+            bindCharaRef(buildingBean);
+
         } else {
             // 存在 则更新
             int id = byHtName.getBuildId();
             buildingBean.setBuildId(id);
             buildingDao.patchById(buildingBean);
+
+            // 更新楼盘户型关系
+            List<Integer> bhtIdList = buildingBean.getBhtIdList();
+            if (null != bhtIdList && bhtIdList.size()>0) {
+                bhtRefDao.deleteBhtRefByBid(id);
+                bindBhtRef(buildingBean);
+            }
+            // 更新楼盘特色关系
+            List<Integer> chaIdList = buildingBean.getChaIdList();
+            if (null != chaIdList && chaIdList.size()>0) {
+                charaRefDao.deleteCharaRefByBid(id);
+                bindCharaRef(buildingBean);
+            }
         }
 
 
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
 //        System.out.println("effectImg：" + enPlanImg);
         buildingBean.setBuildId(buildingBean.getBuildId());
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-        String ss = sdf.format(date);
+       
         if (null != imgTypeList && imgTypeList.size() > 0) {
             Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
 
@@ -277,11 +286,58 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
+    private void bindCharaRef(BuildingBean buildingBean) {
+        List<Integer> chaIdList = buildingBean.getChaIdList();
+        if (null != chaIdList && chaIdList.size()>0) {
+            List<CharacteristicBean> characteristicBeanList = characteristicDao.selectBatchIds(chaIdList);
+            List<CharaRefBean> charaRefBeanList = new ArrayList<>();
+            for (CharacteristicBean characteristicBean : characteristicBeanList) {
+                CharaRefBean charaRefBean = new CharaRefBean();
+                charaRefBean.setBuildId(buildingBean.getBuildId());
+                charaRefBean.setHouseId(characteristicBean.getChaId());
+                charaRefBean.setHouseName(characteristicBean.getChaName());
+                charaRefBeanList.add(charaRefBean);
+            }
+            charaRefDao.insertChaRefBatch(charaRefBeanList);
+        }
+    }
+
+    private void bindBhtRef(BuildingBean buildingBean) {
+        List<Integer> bhtIdList = buildingBean.getBhtIdList();
+
+        if (null != bhtIdList && bhtIdList.size()>0) {
+            List<BuildingHorseTypeBean> horseTypeBeans = buildingHorseTypeDao.selectBatchIds(bhtIdList);
+           List<BhtRefBean> bhtRefBeans = new ArrayList<>();
+            for (BuildingHorseTypeBean horseTypeBean : horseTypeBeans) {
+                BhtRefBean bhtRefBean = new BhtRefBean();
+                bhtRefBean.setBuildId(buildingBean.getBuildId());
+                bhtRefBean.setBhtId(horseTypeBean.getBhtId());
+                bhtRefBean.setBhtName(horseTypeBean.getBhtName());
+                bhtRefBeans.add(bhtRefBean);
+            }
+            bhtRefDao.insertBhtRefBatch(bhtRefBeans);
+         }
+    }
+
     @Override
     public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                           MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] video) throws Exception {
         // 更新楼盘数据
         buildingDao.patchById(buildingBean);
+
+        // 更新楼盘户型关系
+        List<Integer> bhtIdList = buildingBean.getBhtIdList();
+        if (null != bhtIdList && bhtIdList.size()>0) {
+            bhtRefDao.deleteBhtRefByBid(buildingBean.getBuildId());
+            bindBhtRef(buildingBean);
+        }
+        // 更新楼盘特色关系
+        List<Integer> chaIdList = buildingBean.getChaIdList();
+        if (null != chaIdList && chaIdList.size()>0) {
+            charaRefDao.deleteCharaRefByBid(buildingBean.getBuildId());
+            bindCharaRef(buildingBean);
+        }
+
         // 获取图片类型
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
         // 更新图片
@@ -310,12 +366,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 推荐楼盘
         List<BuildingBean> recommendList = buildingDao.getRecommend();
         //头图
-        getHeadImg(recommendList,1);
+        getHeadImg(recommendList, 1);
         buildMainBean.setCommendList(recommendList);
         // 品质楼盘
         List<BuildingBean> qualityList = buildingDao.getQuality();
         //头图
-        getHeadImg(qualityList,2);
+        getHeadImg(qualityList, 2);
         buildMainBean.setQualityList(qualityList);
         // 优选楼盘
         List<BuildingBean> optimizationList = buildingDao.getOptimization();
@@ -323,15 +379,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 热销
             List<BuildingBean> beans = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getSellWell).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans,3);
+            getHeadImg(beans, 3);
             // 热搜
             List<BuildingBean> beans1 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getHotSearch).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans1,3);
+            getHeadImg(beans1, 3);
             // 人气
             List<BuildingBean> beans2 = optimizationList.stream().sorted(Comparator.comparing(BuildingBean::getPopularity).reversed()).limit(4).collect(toList());
             //头图
-            getHeadImg(beans2,3);
+            getHeadImg(beans2, 3);
 
             buildMainBean.setNewSellWellList(beans);
             buildMainBean.setNewHotSearchList(beans1);
@@ -350,38 +406,40 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
 
-        List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
-        if (null != imgByBuildId) {
-            Map<Integer, List<BuildingImgBean>> map = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
-            // 效果图实体
-            List<BuildingImgBean> imgBeans = map.get(1);
-            if (null != imgBeans) {
-                build.setEffectList(imgBeans.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            }
-            // 环境规划图
-            List<BuildingImgBean> imgBeans1 = map.get(2);
-            if (null != imgBeans1) {
-                build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            }
-            // 楼盘实景
-            List<BuildingImgBean> imgBeans2 = map.get(3);
-            if (null != imgBeans2) {
-                build.setBuildReaList(imgBeans2.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            }
-            // 配套实景
-            List<BuildingImgBean> imgBeans3 = map.get(4);
-            if (null != imgBeans3) {
-                build.setMatchingRealList(imgBeans3.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            }
-            // 头图
-            List<BuildingImgBean> imgBeans4 = map.get(6);
-            if (null != imgBeans4) {
-                build.setImgName(imgBeans4.get(0).getImgName());
-            }
-            // 视频
-            List<BuildingImgBean> imgBeans5 = map.get(7);
-            if (null != imgBeans5) {
-                build.setVideoName(imgBeans5.get(0).getImgName());
+        if (null != build) {
+            List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
+            if (null != imgByBuildId) {
+                Map<Integer, List<BuildingImgBean>> map = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
+                // 效果图实体
+                List<BuildingImgBean> imgBeans = map.get(1);
+                if (null != imgBeans) {
+                    build.setEffectList(imgBeans.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                }
+                // 环境规划图
+                List<BuildingImgBean> imgBeans1 = map.get(2);
+                if (null != imgBeans1) {
+                    build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                }
+                // 楼盘实景
+                List<BuildingImgBean> imgBeans2 = map.get(3);
+                if (null != imgBeans2) {
+                    build.setBuildReaList(imgBeans2.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                }
+                // 配套实景
+                List<BuildingImgBean> imgBeans3 = map.get(4);
+                if (null != imgBeans3) {
+                    build.setMatchingRealList(imgBeans3.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                }
+                // 头图
+                List<BuildingImgBean> imgBeans4 = map.get(6);
+                if (null != imgBeans4) {
+                    build.setImgName(imgBeans4.get(0).getImgName());
+                }
+                // 视频
+                List<BuildingImgBean> imgBeans5 = map.get(7);
+                if (null != imgBeans5) {
+                    build.setVideoName(imgBeans5.get(0).getImgName());
+                }
             }
         }
         return build;
@@ -392,7 +450,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return buildingDao.getSellWell();
     }
 
-    private void getHeadImg(List<BuildingBean> beans,Integer type) {
+    private void getHeadImg(List<BuildingBean> beans, Integer type) {
         List<Integer> list = beans.stream().map(BuildingBean::getBuildId).collect(toList());
         // 获取头图
         BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -405,7 +463,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             for (BuildingBean buildingBean1 : beans) {
                 List<String> labelList = new ArrayList<>();
                 List<BuildingImgBean> imgBeans = listMap.get(buildingBean1.getBuildId());
-               // 设置头图名字、路径
+                // 设置头图名字、路径
                 if (null != imgBeans) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
                     buildingBean1.setImgPath(imgBeans.get(0).getImgPath());
