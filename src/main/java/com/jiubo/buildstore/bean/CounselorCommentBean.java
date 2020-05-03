@@ -100,6 +100,10 @@ public class CounselorCommentBean implements Serializable {
      */
     private List<String> clContentList;
 
+    private String pictureName;
+
+    private String picturePath;
+
     /**
      * 页码
      */

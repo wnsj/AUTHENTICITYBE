@@ -421,4 +421,9 @@ public class BuildingBean implements Serializable {
      * 区域id
      */
     private Integer regionId;
+
+    /**
+     * 模糊查询字段
+     */
+    private String special;
 }

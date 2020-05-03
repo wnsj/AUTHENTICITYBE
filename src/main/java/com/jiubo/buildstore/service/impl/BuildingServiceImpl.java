@@ -508,6 +508,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return beanList;
     }
 
+    @Override
+    public Page<BuildingBean> getBuildLikePage(BuildingBean buildingBean) {
+        Page<BuildingBean> page = new Page<>();
+        page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
+        page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
+        return page.setRecords(buildingDao.getBuildLikePage(page,buildingBean));
+    }
+
     private void getHeadImg(List<BuildingBean> beans, Integer type) {
         List<Integer> list = beans.stream().map(BuildingBean::getBuildId).collect(toList());
         // 获取头图

@@ -185,4 +185,15 @@ public class BuildingController {
 
         return jsonObject;
     }
+
+
+    @PostMapping("/getBuildLikePage")
+    public JSONObject getBuildLikePage(@RequestBody BuildingBean buildingBean){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getBuildLikePage(buildingBean));
+
+        return jsonObject;
+    }
 }

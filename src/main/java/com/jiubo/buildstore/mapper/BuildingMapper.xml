@@ -7,139 +7,139 @@
         SELECT *
         from building
 
-            <where>
+        <where>
             1=1
-                /*省id*/
-                <if test="buildingBean.proIdList != null and buildingBean.proIdList.size() > 0">
-                    and PRO_ID in
-                    <foreach collection="buildingBean.proIdList" open="(" close=")" separator="," item="proId">
-                        #{proId}
-                    </foreach>
-                </if>
-                /*是否出售*/
-                <if test="buildingBean.isSaleList != null and buildingBean.isSaleList.size() > 0">
-                    and IS_SALE in
-                    <foreach collection="buildingBean.isSaleList" open="(" close=")" separator="," item="isSale">
-                        #{isSale}
-                    </foreach>
-                </if>
-                /*区域*/
-                <if test="buildingBean.ldIdList != null and buildingBean.ldIdList.size() > 0">
-                    and LD_ID in
-                    <foreach collection="buildingBean.ldIdList" open="(" close=")" separator="," item="ldId">
-                        #{ldId}
-                    </foreach>
-                </if>
-                /*开发商*/
-                <if test="buildingBean.devIdList != null and buildingBean.devIdList.size() > 0">
-                    and DEV_ID in
-                    <foreach collection="buildingBean.devIdList" open="(" close=")" separator="," item="devId">
-                        #{devId}
-                    </foreach>
-                </if>
-                /*楼盘类型*/
-                <if test="buildingBean.btIdList != null and buildingBean.btIdList.size() > 0">
-                    and BT_ID in
-                    <foreach collection="buildingBean.btIdList" open="(" close=")" separator="," item="btId">
-                        #{btId}
-                    </foreach>
-                </if>
-                /*楼盘户型*/
-                <if test="buildingBean.buildIdList != null and buildingBean.buildIdList.size() > 0">
-                    and BUILD_ID in
-                    <foreach collection="buildingBean.buildIdList" open="(" close=")" separator="," item="buildId">
-                        #{buildId}
-                    </foreach>
-                </if>
-                /*房源特色*/
-                <if test="buildingBean.chaIdList != null and buildingBean.chaIdList.size() > 0">
-                    and CHA_ID in
-                    <foreach collection="buildingBean.chaIdList" open="(" close=")" separator="," item="chaId">
-                        #{chaId}
-                    </foreach>
-                </if>
-                <if test="buildingBean.openTimeList != null and buildingBean.openTimeList.size() > 0">
-                    and
-                    <foreach collection="buildingBean.openTimeList" open="(" close=")" separator="or" item="item">
-                        (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > DATE_FORMAT(#{item.startDate}, '%Y-%m-%d' )
-                        and DATE_FORMAT(#{item.endDate}, '%Y-%m-%d' ) >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
-                    </foreach>
-                </if>
-                <if test="buildingBean.areaList != null and buildingBean.areaList.size() > 0">
-                    and
-                    <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
-                        <if test="null != item and item.minArea != null and item.maxArea == null">
-                            #{item.minArea} > MIN_AREA
-                        </if>
-                        <if test="null != item and item.maxArea != null and item.minArea == null">
-                            #{item.maxArea} >= MAX_AREA
-                        </if>
-                        <if test="null != item and item.maxArea != null and item.minArea != null">
-                            #{item.maxArea} >= MIN_AREA and MAX_AREA > #{item.minArea}
-                        </if>
-                    </foreach>
-                </if>
-                <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
-                    and
-                    <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
-                        <if test="null != item and item.minTitlePrice != null and item.maxTitlePrice == null">
-                            #{item.minTitlePrice} > MIN_TITLE_PRICE
-                        </if>
-                        <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice == null">
-                            #{item.maxTitlePrice} >= MAX_TITLE_PRICE
-                        </if>
-                        <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
-                            #{item.maxTitlePrice} >= MIN_TITLE_PRICE and MAX_TITLE_PRICE > #{item.minTitlePrice}
-                        </if>
-                    </foreach>
-                </if>
-                <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
-                    and
-                    <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
-                        <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
-                            #{item.minUnitPrice} > MIN_UNIT_PRICE
-                        </if>
-                        <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
-                            #{item.maxUnitPrice} >= MAX_UNIT_PRICE
-                        </if>
-                        <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null">
-                            #{item.maxUnitPrice} >= MIN_UNIT_PRICE and MAX_UNIT_PRICE > #{item.minUnitPrice}
-                        </if>
-                    </foreach>
-                </if>
-                <if test="buildingBean.startTime != null and buildingBean.startTime != ''">
-                    and (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > #{buildingBean.startTime}
-                </if>
-                <if test="buildingBean.endTime != null and buildingBean.endTime != ''">
-                    and #{buildingBean.endTime} >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
-                </if>
-                <if test="buildingBean.discount != null">
-                    and #{buildingBean.discount} = DISCOUNT
-                </if>
-                <if test="buildingBean.sellWell != null">
-                    and #{buildingBean.sellWell} = SELL_WELL
-                </if>
-                <if test="buildingBean.buildOpen != null">
-                    and #{buildingBean.buildOpen} = BUILD_OPEN
-                </if>
-                <if test="buildingBean.regionId != null">
-                    and #{buildingBean.regionId} = REGION_ID
-                </if>
-            </where>
-            <if test="buildingBean.dateSort != null and buildingBean.dateSort != 0">
-                <if test="buildingBean.dateSort == 1">
-                    order by OPEN_DATE asc
-                </if>
-                <if test="buildingBean.dateSort == 2">
-                    order by OPEN_DATE desc
-                </if>
+            /*省id*/
+            <if test="buildingBean.proIdList != null and buildingBean.proIdList.size() > 0">
+                and PRO_ID in
+                <foreach collection="buildingBean.proIdList" open="(" close=")" separator="," item="proId">
+                    #{proId}
+                </foreach>
             </if>
+            /*是否出售*/
+            <if test="buildingBean.isSaleList != null and buildingBean.isSaleList.size() > 0">
+                and IS_SALE in
+                <foreach collection="buildingBean.isSaleList" open="(" close=")" separator="," item="isSale">
+                    #{isSale}
+                </foreach>
+            </if>
+            /*区域*/
+            <if test="buildingBean.ldIdList != null and buildingBean.ldIdList.size() > 0">
+                and LD_ID in
+                <foreach collection="buildingBean.ldIdList" open="(" close=")" separator="," item="ldId">
+                    #{ldId}
+                </foreach>
+            </if>
+            /*开发商*/
+            <if test="buildingBean.devIdList != null and buildingBean.devIdList.size() > 0">
+                and DEV_ID in
+                <foreach collection="buildingBean.devIdList" open="(" close=")" separator="," item="devId">
+                    #{devId}
+                </foreach>
+            </if>
+            /*楼盘类型*/
+            <if test="buildingBean.btIdList != null and buildingBean.btIdList.size() > 0">
+                and BT_ID in
+                <foreach collection="buildingBean.btIdList" open="(" close=")" separator="," item="btId">
+                    #{btId}
+                </foreach>
+            </if>
+            /*楼盘户型*/
+            <if test="buildingBean.buildIdList != null and buildingBean.buildIdList.size() > 0">
+                and BUILD_ID in
+                <foreach collection="buildingBean.buildIdList" open="(" close=")" separator="," item="buildId">
+                    #{buildId}
+                </foreach>
+            </if>
+            /*房源特色*/
+            <if test="buildingBean.chaIdList != null and buildingBean.chaIdList.size() > 0">
+                and CHA_ID in
+                <foreach collection="buildingBean.chaIdList" open="(" close=")" separator="," item="chaId">
+                    #{chaId}
+                </foreach>
+            </if>
+            <if test="buildingBean.openTimeList != null and buildingBean.openTimeList.size() > 0">
+                and
+                <foreach collection="buildingBean.openTimeList" open="(" close=")" separator="or" item="item">
+                    (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > DATE_FORMAT(#{item.startDate}, '%Y-%m-%d' )
+                    and DATE_FORMAT(#{item.endDate}, '%Y-%m-%d' ) >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
+                </foreach>
+            </if>
+            <if test="buildingBean.areaList != null and buildingBean.areaList.size() > 0">
+                and
+                <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minArea != null and item.maxArea == null">
+                        #{item.minArea} > MIN_AREA
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea == null">
+                        #{item.maxArea} >= MAX_AREA
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea != null">
+                        #{item.maxArea} >= MIN_AREA and MAX_AREA > #{item.minArea}
+                    </if>
+                </foreach>
+            </if>
+            <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
+                and
+                <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minTitlePrice != null and item.maxTitlePrice == null">
+                        #{item.minTitlePrice} > MIN_TITLE_PRICE
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice == null">
+                        #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
+                        #{item.maxTitlePrice} >= MIN_TITLE_PRICE and MAX_TITLE_PRICE > #{item.minTitlePrice}
+                    </if>
+                </foreach>
+            </if>
+            <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
+                and
+                <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
+                        #{item.minUnitPrice} > MIN_UNIT_PRICE
+                    </if>
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
+                        #{item.maxUnitPrice} >= MAX_UNIT_PRICE
+                    </if>
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null">
+                        #{item.maxUnitPrice} >= MIN_UNIT_PRICE and MAX_UNIT_PRICE > #{item.minUnitPrice}
+                    </if>
+                </foreach>
+            </if>
+            <if test="buildingBean.startTime != null and buildingBean.startTime != ''">
+                and (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > #{buildingBean.startTime}
+            </if>
+            <if test="buildingBean.endTime != null and buildingBean.endTime != ''">
+                and #{buildingBean.endTime} >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
+            </if>
+            <if test="buildingBean.discount != null">
+                and #{buildingBean.discount} = DISCOUNT
+            </if>
+            <if test="buildingBean.sellWell != null">
+                and #{buildingBean.sellWell} = SELL_WELL
+            </if>
+            <if test="buildingBean.buildOpen != null">
+                and #{buildingBean.buildOpen} = BUILD_OPEN
+            </if>
+            <if test="buildingBean.regionId != null">
+                and #{buildingBean.regionId} = REGION_ID
+            </if>
+        </where>
+        <if test="buildingBean.dateSort != null and buildingBean.dateSort != 0">
+            <if test="buildingBean.dateSort == 1">
+                order by OPEN_DATE asc
+            </if>
+            <if test="buildingBean.dateSort == 2">
+                order by OPEN_DATE desc
+            </if>
+        </if>
         <if test="buildingBean.priceSort != null and buildingBean.priceSort != 0">
             <if test="buildingBean.priceSort == 1">
-                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2  asc
+                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2 asc
             </if>
             <if test="buildingBean.priceSort == 2">
-                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2  desc
+                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2 desc
             </if>
         </if>
     </select>
@@ -285,7 +285,7 @@
             </if>
 
             <if test="null != buildingBean.sellWell">
-                SELL_WELL =  #{buildingBean.sellWell},
+                SELL_WELL = #{buildingBean.sellWell},
             </if>
             <if test="null != buildingBean.popularity">
                 POPULARITY = #{buildingBean.popularity},
@@ -364,11 +364,38 @@
         select * from building order by HOT_SEARCH limit 3
     </select>
 
-    <!--<select id="getBuildLikePage" resultType="com.jiubo.buildstore.bean.BuildingBean">
-
+    <select id="getBuildLikePage" resultType="com.jiubo.buildstore.bean.BuildingBean">
+        SELECT DISTINCT
+        a.*
+        FROM
+        building a,
+        location_distinguish b,
+        building_type c,
+        bht_ref d,
+        sale_type e,
+        develoger f,
+        chara_ref g,
+        region k
         <where>
-            <if test="universal != null">
+            a.LD_ID = b.LD_ID
+            AND a.BT_ID = c.BT_ID
+            AND a.BUILD_ID = d.BUILD_ID
+            AND a.IS_SALE = e.ST_ID
+            AND a.DEV_ID = f.DEV_ID
+            AND a.BUILD_ID = g.BUILD_ID
+            AND a.REGION_ID = k.ID
+            <if test="null != buildingBean.special">
+                and (b.LD_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or c.BT_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or d.BHT_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or e.ST_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or f.DEV_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or f.DEVS_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or g.HOUSE_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or k.REGION_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or a.ALIAS like CONCAT('%',#{buildingBean.special},'%')
+                 or a.ADRESS like CONCAT('%',#{buildingBean.special},'%'))
             </if>
         </where>
-    </select>-->
+    </select>
 </mapper>

@@ -49,4 +49,12 @@ public interface BuildingService extends IService<BuildingBean> {
      * @return
      */
     public List<BuildingBean> getRecommend();
+
+
+    /**
+     * 模糊查询
+     * @param buildingBean
+     * @return
+     */
+    public Page<BuildingBean> getBuildLikePage(BuildingBean buildingBean);
 }

@@ -36,7 +36,7 @@ public class SendMessageController {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("appid","49267");
         paramMap.put("to",phone);
-        paramMap.put("content","【寄居找房】您的短信验证码："+ result +",请在10分钟内输入,如非本人操作,请忽略本短信");
+        paramMap.put("content","【寄居找房】您的短信验证码："+ result +",如非本人操作,请忽略本短信");
         paramMap.put("signature","a825cf5d6d76d51013d1839aebb09989");
         String requestString = JSONObject.toJSONString(paramMap);
 
