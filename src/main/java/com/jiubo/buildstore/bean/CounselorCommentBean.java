@@ -104,7 +104,7 @@ public class CounselorCommentBean implements Serializable {
      * 页码
      */
     @TableField(exist = false)
-    private String pageNum;
+    private String current;
 
     /**
      * 每页尺寸

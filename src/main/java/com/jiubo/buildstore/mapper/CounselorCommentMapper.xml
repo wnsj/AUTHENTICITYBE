@@ -8,7 +8,7 @@
         from counselor_comment a,counselor_character b,counselor d
         <where>
             a.C_ID = d.COU_ID and b.CC_ID = d.CC_ID and a.BUILD_ID = #{counselorCommentBean.buildId}
-            <if test="counselorCommentBean.coucType != null">
+            <if test="counselorCommentBean.coucType != null and counselorCommentBean.coucType != 999">
                 a.COUC_TYPE = #{counselorCommentBean.coucType}
             </if>
         </where>
