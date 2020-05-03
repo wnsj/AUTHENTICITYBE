@@ -71,6 +71,17 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
     public List<RecruitBean> getDetails(RecruitBean recruitBean) {
 
         List<RecruitBean> recruitBeanList = recruitDao.getDetails(recruitBean);
+        toLabel(recruitBeanList);
+        return recruitBeanList;
+    }
+
+    private void toLabel(List<RecruitBean> recruitBeanList) {
+        // 翻译职位类型
+        List<RecruitTypeBean> recruitTypeList = recruitTypeDao.getAllRecruitType();
+        Map<Integer, List<RecruitTypeBean>> map = null;
+        if (null != recruitTypeList) {
+            map = recruitTypeList.stream().collect(Collectors.groupingBy(RecruitTypeBean::getId));
+        }
         if (null != recruitBeanList) {
             for (RecruitBean recruitBean1 : recruitBeanList) {
                 if (recruitBean1.getFiveRisksFund() == 1) {
@@ -86,13 +97,31 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
                 }
                 String s = getDateToString(recruitBean1.getCreateTime());
                 recruitBean1.setCreateDate(s);
+
+                if (null != map) {
+                    recruitBean1.setPositionTypeLabel(map.get(recruitBean1.getPositionType()).get(0).getTypeName());
+                }
             }
         }
-        return recruitBeanList;
+    }
+
+    @Override
+    public Page<RecruitBean> getRecruitByPage(RecruitBean recruitBean) {
+        Page<RecruitBean> page = new Page<>();
+        page.setCurrent(StringUtils.isBlank(recruitBean.getCurrent()) ? 1L : Long.parseLong(recruitBean.getCurrent()));
+        page.setSize(StringUtils.isBlank(recruitBean.getPageSize()) ? 10L : Long.parseLong(recruitBean.getPageSize()));
+        List<RecruitBean> byPage = recruitDao.getRecruitByPage(page, recruitBean);
+        toLabel(byPage);
+        return page.setRecords(byPage);
     }
 
     @Override
     public void addRecruit(RecruitBean recruitBean) {
         recruitDao.insertRecruit(recruitBean);
+    }
+
+    @Override
+    public void patchRecruitById(RecruitBean recruitBean) {
+        recruitDao.patchRecruitById(recruitBean);
     }
 }

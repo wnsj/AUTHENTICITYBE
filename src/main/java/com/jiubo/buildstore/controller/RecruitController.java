@@ -53,4 +53,24 @@ public class RecruitController {
         recruitService.addRecruit(recruitBean);
         return jsonObject;
     }
+
+    @PostMapping("/getRecruitByPage")
+    public JSONObject getRecruitByPage(@RequestBody RecruitBean recruitBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        RecruitBean recruitBean = JSONObject.parseObject(param, RecruitBean.class);
+        jsonObject.put(Constant.Result.RETDATA, recruitService.getRecruitByPage(recruitBean));
+        return jsonObject;
+    }
+
+    @PostMapping("/patchRecruitById")
+    public JSONObject patchRecruitById(@RequestBody RecruitBean recruitBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        RecruitBean recruitBean = JSONObject.parseObject(param, RecruitBean.class);
+        recruitService.patchRecruitById(recruitBean);
+        return jsonObject;
+    }
 }

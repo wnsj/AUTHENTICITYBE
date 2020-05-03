@@ -15,7 +15,12 @@
     </select>
     
     <select id="getDetails" resultType="com.jiubo.buildstore.bean.RecruitBean">
-        select * from recruit where ID = #{recruitBean.id}
+        select * from recruit
+         <where>
+             <if test="recruitBean.id != null">
+                 ID = #{recruitBean.id}
+             </if>
+         </where>
     </select>
 
     <insert id="insertRecruit">
@@ -26,4 +31,71 @@
          #{recruitBean.minWorkingYears},#{recruitBean.maxWorkingYears},#{recruitBean.education},#{recruitBean.fiveRisksFund},#{recruitBean.foodShelter},#{recruitBean.weekend},
          #{recruitBean.responsibilities},#{recruitBean.recruitmentType},#{recruitBean.requirements},#{recruitBean.createTime})
     </insert>
+
+    <select id="getRecruitByPage" resultType="com.jiubo.buildstore.bean.RecruitBean">
+        select * from recruit
+        <where>
+            <if test="recruitBean.recruitmentType != null">
+                and RECRUITMENT_TYPE = #{recruitBean.recruitmentType}
+            </if>
+            <if test="recruitBean.positionType != null">
+                and POSITION_TYPE = #{recruitBean.positionType}
+            </if>
+            <if test="recruitBean.position != null and recruitBean.position != ''">
+                and POSITION = #{recruitBean.position}
+            </if>
+        </where>
+    </select>
+
+    <update id="patchRecruitById">
+        update recruit
+        <trim prefix="set" suffixOverrides=",">
+            <if test="recruitBean.position != null">
+                POSITION = #{recruitBean.position},
+            </if>
+            <if test="recruitBean.positionType != null">
+                POSITION_TYPE = #{recruitBean.positionType},
+            </if>
+            <if test="recruitBean.recruitsNum != null">
+                RECRUITS_NUM = #{recruitBean.recruitsNum},
+            </if>
+            <if test="recruitBean.workplace != null">
+                WORKPLACE = #{recruitBean.workplace},
+            </if>
+            <if test="recruitBean.minPay != null">
+                MIN_PAY = #{recruitBean.minPay},
+            </if>
+            <if test="recruitBean.maxPay != null">
+                MAX_PAY = #{recruitBean.maxPay},
+            </if>
+            <if test="recruitBean.minWorkingYears != null">
+                MIN_WORKING_YEARS = #{recruitBean.minWorkingYears},
+            </if>
+            <if test="recruitBean.maxWorkingYears != null">
+                MAX_WORKING_YEARS =#{recruitBean.maxWorkingYears},
+            </if>
+            <if test="recruitBean.education != null">
+                EDUCATION = #{recruitBean.education},
+            </if>
+            <if test="recruitBean.fiveRisksFund != null">
+                FIVE_RISKS_FUND = #{recruitBean.fiveRisksFund},
+            </if>
+            <if test="recruitBean.foodShelter != null">
+                FOOD_SHELTER = #{recruitBean.foodShelter},
+            </if>
+            <if test="recruitBean.weekend != null">
+                WEEKEND = #{recruitBean.weekend},
+            </if>
+            <if test="recruitBean.responsibilities != null">
+                RESPONSIBILITIES = #{recruitBean.responsibilities},
+            </if>
+            <if test="recruitBean.requirements != null">
+                REQUIREMENTS = #{recruitBean.requirements},
+            </if>
+            <if test="recruitBean.recruitmentType != null">
+                RECRUITMENT_TYPE = #{recruitBean.recruitmentType}
+            </if>
+        </trim>
+        where ID = #{recruitBean.id}
+    </update>
 </mapper>
