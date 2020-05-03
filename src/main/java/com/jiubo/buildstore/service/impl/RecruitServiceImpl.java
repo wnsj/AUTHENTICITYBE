@@ -90,4 +90,9 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
         }
         return recruitBeanList;
     }
+
+    @Override
+    public void addRecruit(RecruitBean recruitBean) {
+        recruitDao.insertRecruit(recruitBean);
+    }
 }

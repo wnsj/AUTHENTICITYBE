@@ -33,8 +33,7 @@
 	a.CA_NAME,
 	a.BUILD_AREA
 FROM
-	building_analysis a,
-	HORSE_TYPE c
+	building_analysis a
 	<where>
 		1=1
 		<if test="null != buildingAnalysisBean.buildId">
@@ -43,7 +42,7 @@ FROM
 		<if test="null != buildingAnalysisBean.isSale">
 			and a.IS_SALE = #{buildingAnalysisBean.isSale}
 		</if>
-		<if test="null != buildingAnalysisBean.bhtId">
+		<if test="null != buildingAnalysisBean.bhtId and buildingAnalysisBean.bhtId != 8">
 			and a.BHT_ID = #{buildingAnalysisBean.bhtId}
 		</if>
 	</where>
@@ -55,12 +54,12 @@ FROM
 
 	<insert id="insertByBid" useGeneratedKeys="true" keyProperty="baId">
 		insert into building_analysis
-		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,CONTENT,DRECTION,CA_NAME,DOWN_PAYMENT,BUILD_ID,BUILD_AREA,HOUSE)
+		(BHT_ID,IMG_NAME,CREATE_DATE,IS_SALE,TOTLE_PRICE,CONTENT,DRECTION,CA_NAME,DOWN_PAYMENT,BUILD_ID,BUILD_AREA,HOUSE,FLOOR)
 		VALUES
 		(#{buildingAnalysisBean.bhtId},#{buildingAnalysisBean.imgName},#{buildingAnalysisBean.createDate},#{buildingAnalysisBean.isSale},
 		#{buildingAnalysisBean.totlePrice},#{buildingAnalysisBean.content},
 		#{buildingAnalysisBean.drection},#{buildingAnalysisBean.caName},#{buildingAnalysisBean.downPayment},
-		#{buildingAnalysisBean.buildId},#{buildingAnalysisBean.buildArea},#{buildingAnalysisBean.house})
+		#{buildingAnalysisBean.buildId},#{buildingAnalysisBean.buildArea},#{buildingAnalysisBean.house},#{buildingAnalysisBean.floor})
 	</insert>
 
 	<update id="patchBuildAnalysisById">
@@ -102,6 +101,9 @@ FROM
 			</if>
 			<if test="buildingAnalysisBean.house != null">
 				HOUSE = #{buildingAnalysisBean.house}
+			</if>
+			<if test="buildingAnalysisBean.floor != null and buildingAnalysisBean.floor != ''">
+				FLOOR = #{buildingAnalysisBean.floor}
 			</if>
 		</trim>
 		where BA_ID = #{buildingAnalysisBean.baId}

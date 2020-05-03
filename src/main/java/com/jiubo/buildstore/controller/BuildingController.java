@@ -170,4 +170,19 @@ public class BuildingController {
 
         return jsonObject;
     }
+
+    /**
+     * 优质楼盘
+     * @param
+     * @return
+     */
+    @PostMapping("/getRecommend")
+    public JSONObject getRecommend() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getRecommend());
+
+        return jsonObject;
+    }
 }

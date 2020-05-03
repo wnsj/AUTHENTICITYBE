@@ -187,9 +187,12 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         buildingAnalysisDao.insertByBid(buildingAnalysisBean);
         // 绑定户型分析和标签关系
         BalRefBean balRefBean = new BalRefBean();
-        balRefBean.setBaId(buildingAnalysisBean.getBaId());
-        balRefBean.setBalIdList(buildingAnalysisBean.getBalIdList());
-        balRefDao.insertBatch(balRefBean);
+        if (buildingAnalysisBean.getBalIdList() != null && buildingAnalysisBean.getBalIdList().size()>0){
+            balRefBean.setBaId(buildingAnalysisBean.getBaId());
+            balRefBean.setBalIdList(buildingAnalysisBean.getBalIdList());
+            balRefDao.insertBatch(balRefBean);
+        }
+
         // 保存文件
         this.saveFile(buildingAnalysisBean, horseTypeImg, "horseType", 5);
     }

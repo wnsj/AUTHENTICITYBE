@@ -45,6 +45,7 @@ public class RecruitBean implements Serializable {
     /**
      * 职位类型描述
      */
+    @TableField(exist = false)
     private String positionTypeLabel;
     /**
      * 招收人数
@@ -88,6 +89,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1:有五险一金；2：没有五险一金 描述
      */
+    @TableField(exist = false)
     private String fiveRisksFundLabel;
     /**
      * 1:包吃住；2：否
@@ -97,6 +99,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1:包吃住；2：否 描述
      */
+    @TableField(exist = false)
     private String foodShelterLabel;
     /**
      * 1：双休；2：没有双休
@@ -106,6 +109,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1：双休；2：没有双休 描述
      */
+    @TableField(exist = false)
     private String weekendLabel;
     /**
      * 岗位职责

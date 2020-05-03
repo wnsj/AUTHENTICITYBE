@@ -496,6 +496,18 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return buildMainBean;
     }
 
+    @Override
+    public List<BuildingBean> getRecommend() {
+        List<BuildingBean> beanList = buildingDao.getRecommend();
+        if (null != beanList && beanList.size()>0) {
+            for (BuildingBean buildingBean : beanList) {
+                // 均价
+                buildingBean.setAveragePrice(getAverage(buildingBean));
+            }
+        }
+        return beanList;
+    }
+
     private void getHeadImg(List<BuildingBean> beans, Integer type) {
         List<Integer> list = beans.stream().map(BuildingBean::getBuildId).collect(toList());
         // 获取头图

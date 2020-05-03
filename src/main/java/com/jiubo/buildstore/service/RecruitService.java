@@ -19,4 +19,6 @@ public interface RecruitService extends IService<RecruitBean> {
     public Page<RecruitBean> getEasyInfo(RecruitBean recruitBean);
 
     public List<RecruitBean> getDetails(RecruitBean recruitBean);
+
+    public void addRecruit(RecruitBean recruitBean);
 }

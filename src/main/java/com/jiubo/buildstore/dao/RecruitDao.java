@@ -19,4 +19,6 @@ public interface RecruitDao extends BaseMapper<RecruitBean> {
     public List<RecruitBean> getEasyInfo(Page page, @Param("recruitBean") RecruitBean recruitBean);
 
     public List<RecruitBean> getDetails(@Param("recruitBean") RecruitBean recruitBean);
+
+    public void insertRecruit(@Param("recruitBean") RecruitBean recruitBean);
 }

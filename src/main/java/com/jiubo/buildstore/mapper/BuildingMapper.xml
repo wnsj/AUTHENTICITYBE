@@ -363,4 +363,12 @@
     <select id="getHotSBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building order by HOT_SEARCH limit 3
     </select>
+
+    <!--<select id="getBuildLikePage" resultType="com.jiubo.buildstore.bean.BuildingBean">
+
+        <where>
+            <if test="universal != null">
+            </if>
+        </where>
+    </select>-->
 </mapper>

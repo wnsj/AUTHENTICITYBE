@@ -17,4 +17,13 @@
     <select id="getDetails" resultType="com.jiubo.buildstore.bean.RecruitBean">
         select * from recruit where ID = #{recruitBean.id}
     </select>
+
+    <insert id="insertRecruit">
+        insert into recruit (POSITION,POSITION_TYPE,RECRUITS_NUM,WORKPLACE,MIN_PAY,MAX_PAY,MIN_WORKING_YEARS,
+        MAX_WORKING_YEARS,EDUCATION,
+        FIVE_RISKS_FUND,FOOD_SHELTER,WEEKEND,RESPONSIBILITIES,RECRUITMENT_TYPE,REQUIREMENTS,CREATE_TIME) values
+         (#{recruitBean.position},#{recruitBean.positionType},#{recruitBean.recruitsNum},#{recruitBean.workplace},#{recruitBean.minPay},#{recruitBean.maxPay},
+         #{recruitBean.minWorkingYears},#{recruitBean.maxWorkingYears},#{recruitBean.education},#{recruitBean.fiveRisksFund},#{recruitBean.foodShelter},#{recruitBean.weekend},
+         #{recruitBean.responsibilities},#{recruitBean.recruitmentType},#{recruitBean.requirements},#{recruitBean.createTime})
+    </insert>
 </mapper>

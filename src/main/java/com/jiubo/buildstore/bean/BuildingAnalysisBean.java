@@ -147,4 +147,6 @@ public class BuildingAnalysisBean implements Serializable {
     private String pageOrder;
 
     private String horseImgName;
+
+    private String floor;
 }

@@ -43,4 +43,10 @@ public interface BuildingService extends IService<BuildingBean> {
     public List<BuildingBean> getSellWell();
 
     public BuildMainBean getHot();
+
+    /**
+     * 推荐楼盘（根据人气热搜排序）
+     * @return
+     */
+    public List<BuildingBean> getRecommend();
 }
