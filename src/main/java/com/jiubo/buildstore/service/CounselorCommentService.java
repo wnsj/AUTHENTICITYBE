@@ -67,4 +67,6 @@ public interface CounselorCommentService extends IService<CounselorCommentBean> 
         }
         return null;
     }
+
+    public Page<CounselorCommentBean> getCounselorByPage(CounselorCommentBean counselorCommentBean);
 }

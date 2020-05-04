@@ -487,31 +487,33 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     build.setVideoName(imgBeans5.get(0).getImgName());
                 }
             }
+
+            // 户型
+            List<BhtRefBean> bhtRefBeans = bhtRefDao.getAllBhtRefByBuildId(build.getBuildId());
+            if (null != bhtRefBeans && bhtRefBeans.size()>0) {
+                Map<Integer, List<BhtRefBean>> bhtRefMap = bhtRefBeans.stream().collect(Collectors.groupingBy(BhtRefBean::getBhtId));
+                List<HouseTypeNum> houseTypeNumList = new ArrayList<>();
+                for (Integer bhtId : bhtRefMap.keySet()) {
+                    HouseTypeNum houseTypeNum = new HouseTypeNum();
+                    List<BhtRefBean> beans = bhtRefMap.get(bhtId);
+                    houseTypeNum.setHouseName(beans.get(0).getBhtName());
+                    houseTypeNum.setHouseId(beans.get(0).getBhtId());
+                    houseTypeNum.setHouseNum(beans.size());
+                    houseTypeNumList.add(houseTypeNum);
+                }
+                build.setHtnNumList(houseTypeNumList);
+            }
+            // 特色标签
+            List<CharaRefBean> charaByBuildId = charaRefDao.getCharaByBuildId(build.getBuildId());
+            if (null != charaByBuildId && charaByBuildId.size()>0) {
+                List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
+                build.setCharaNameList(collect);
+            }
+            BigDecimal average = getAverage(build);
+            build.setAveragePrice(average);
         }
 
-        // 户型
-        List<BhtRefBean> bhtRefBeans = bhtRefDao.getAllBhtRefByBuildId(build.getBuildId());
-        if (null != bhtRefBeans && bhtRefBeans.size()>0) {
-            Map<Integer, List<BhtRefBean>> bhtRefMap = bhtRefBeans.stream().collect(Collectors.groupingBy(BhtRefBean::getBhtId));
-            List<HouseTypeNum> houseTypeNumList = new ArrayList<>();
-            for (Integer bhtId : bhtRefMap.keySet()) {
-                HouseTypeNum houseTypeNum = new HouseTypeNum();
-                List<BhtRefBean> beans = bhtRefMap.get(bhtId);
-                houseTypeNum.setHouseName(beans.get(0).getBhtName());
-                houseTypeNum.setHouseId(beans.get(0).getBhtId());
-                houseTypeNum.setHouseNum(beans.size());
-                houseTypeNumList.add(houseTypeNum);
-            }
-            build.setHtnNumList(houseTypeNumList);
-        }
-        // 特色标签
-        List<CharaRefBean> charaByBuildId = charaRefDao.getCharaByBuildId(build.getBuildId());
-        if (null != charaByBuildId && charaByBuildId.size()>0) {
-            List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
-            build.setCharaNameList(collect);
-        }
-        BigDecimal average = getAverage(build);
-        build.setAveragePrice(average);
+
         return build;
     }
 

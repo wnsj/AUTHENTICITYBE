@@ -32,4 +32,20 @@
             </foreach>
         </where>
     </select>
+
+    <select id="getComByPage" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
+        select * from counselor_comment
+        <where>
+            1=1
+            <if test="counselorCommentBean.buildId != null">
+                and BUILD_ID = #{counselorCommentBean.buildId}
+            </if>
+            <if test="counselorCommentBean.cId != null">
+                and C_ID = #{counselorCommentBean.cId}
+            </if>
+            <if test="counselorCommentBean.coucType != null">
+                and COUC_TYPE = #{counselorCommentBean.coucType}
+            </if>
+        </where>
+    </select>
 </mapper>

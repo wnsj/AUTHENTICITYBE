@@ -34,6 +34,14 @@ public class CounselorCommentController {
         jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByBid(counselorCommentBean));
         return jsonObject;
     }
+    @PostMapping("/getCounselorByPage")
+    public JSONObject getCounselorByPage(@RequestBody CounselorCommentBean counselorCommentBean){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByPage(counselorCommentBean));
+        return jsonObject;
+    }
 
     /**
      * 点赞接口

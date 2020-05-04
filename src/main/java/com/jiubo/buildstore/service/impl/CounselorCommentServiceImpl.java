@@ -3,12 +3,10 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
 
-import com.jiubo.buildstore.dao.CouRefDao;
-import com.jiubo.buildstore.dao.CouTypeDao;
-import com.jiubo.buildstore.dao.CounselorCommentDao;
-import com.jiubo.buildstore.dao.CounselorLabelDao;
+import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.CounselorCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +41,17 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 
     @Autowired
     private CouRefDao couRefDao;
+
+    @Autowired
+    private BuildingDao buildingDao;
+
+    @Autowired
+    private CounselorDao counselorDao;
     @Override
+
+    /**
+     * 前端查询评论
+     */
     public CouBean getCounselorByBid(CounselorCommentBean counselorCommentBean) {
         CouBean couBean = new CouBean();
         Page<CounselorCommentBean> page = new Page<>();
@@ -101,5 +109,54 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
     public void updateNumById(CounselorCommentBean counselorCommentBean) {
         counselorCommentDao.updateNumById(counselorCommentBean);
     }
+
+    @Override
+    public Page<CounselorCommentBean> getCounselorByPage(CounselorCommentBean counselorCommentBean) {
+        Page<CounselorCommentBean> page = new Page<>();
+        page.setCurrent(StringUtils.isBlank(counselorCommentBean.getCurrent()) ? 1L : Long.parseLong(counselorCommentBean.getCurrent()));
+        page.setSize(StringUtils.isBlank(counselorCommentBean.getPageSize()) ? 10L : Long.parseLong(counselorCommentBean.getPageSize()));
+        List<CounselorCommentBean> comByPageList = counselorCommentDao.getComByPage(page, counselorCommentBean);
+        if (null != comByPageList && comByPageList.size()>0){
+            // 获取楼盘名
+            List<BuildingBean> allBuildList = buildingDao.getAllBuild();
+            Map<Integer, List<BuildingBean>> map = null;
+            if (null != allBuildList && allBuildList.size()>0) {
+                map = allBuildList.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
+            }
+            // 获取咨询师名
+            List<CounselorBean> allCouselorList = counselorDao.getAllCouselor();
+            Map<Integer, List<CounselorBean>> listMap = null;
+            if (null != allCouselorList && allCouselorList.size()>0){
+                listMap = allCouselorList.stream().collect(Collectors.groupingBy(CounselorBean::getCouId));
+            }
+            // 获取类型
+            List<CouTypeBean> typeBeans = couTypeDao.getAllCouType();
+            Map<Integer, List<CouTypeBean>> collect = null;
+            if (null != typeBeans && typeBeans.size()>0){
+                collect = typeBeans.stream().collect(Collectors.groupingBy(CouTypeBean::getId));
+            }
+            for (CounselorCommentBean commentBean : comByPageList) {
+                // 翻译楼盘名
+                if (null != map) {
+                    commentBean.setHtName(map.get(commentBean.getBuildId()).get(0).getHtName());
+                }
+                //翻译咨询师名字
+                if (null != listMap) {
+                    commentBean.setCouName(listMap.get(commentBean.getCId()).get(0).getCouName());
+                }
+                // 翻译类型
+                if (null != collect) {
+                    commentBean.setCouTypeName(collect.get(commentBean.getCoucType()).get(0).getCouTypeName());
+                }
+
+                if (commentBean.getComDate() != null) {
+                    String formatDate = DateUtils.formatDate(commentBean.getComDate(), "yyyy-MM-dd");
+                    commentBean.setComTime(formatDate);
+                }
+            }
+        }
+        return page.setRecords(comByPageList);
+    }
+
 
 }

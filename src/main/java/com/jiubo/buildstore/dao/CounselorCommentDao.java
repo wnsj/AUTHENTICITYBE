@@ -22,4 +22,6 @@ public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
     public void updateNumById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
     public List<CounselorCommentBean> getCidByBidList(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+
+    public List<CounselorCommentBean> getComByPage(Page page,@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 }

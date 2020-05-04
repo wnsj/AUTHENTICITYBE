@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -53,8 +54,9 @@ public class CounselorCommentBean implements Serializable {
     /**
      * 评论时间
      */
-    private LocalDateTime comDate;
+    private Date comDate;
 
+    private String comTime;
     /**
      * 点赞数
      */
@@ -104,6 +106,9 @@ public class CounselorCommentBean implements Serializable {
 
     private String picturePath;
 
+    private String htName;
+
+    private String couTypeName;
     /**
      * 页码
      */
