@@ -2,6 +2,7 @@ package com.jiubo.buildstore.dao;
 
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ import java.util.List;
  */
 public interface UnitPriceTypeDao extends BaseMapper<UnitPriceTypeBean> {
     public List<UnitPriceTypeBean> getAllUnitPrice();
+
+    public List<UnitPriceTypeBean> getUnitPriceByIdList(@Param("unitPriceTypeBean") UnitPriceTypeBean unitPriceTypeBean);
 }

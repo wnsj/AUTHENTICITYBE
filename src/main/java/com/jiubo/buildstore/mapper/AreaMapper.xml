@@ -4,4 +4,16 @@
     <select id="getAllArea" resultType="com.jiubo.buildstore.bean.AreaBean">
         select * from AREA
     </select>
+
+    <select id="getAreaByIdList" resultType="com.jiubo.buildstore.bean.AreaBean">
+        select * from AREA
+        <where>
+            <if test="areaBean.idList != null and areaBean.idList.size >0">
+                AR_ID in
+                <foreach collection="areaBean.idList" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

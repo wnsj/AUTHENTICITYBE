@@ -4,4 +4,17 @@
     <select id="getAllUnitPrice" resultType="com.jiubo.buildstore.bean.UnitPriceTypeBean">
         select * from UNIT_PRICE_TYPE
     </select>
+
+
+    <select id="getUnitPriceByIdList" resultType="com.jiubo.buildstore.bean.UnitPriceTypeBean">
+        select * from UNIT_PRICE_TYPE
+        <where>
+            <if test="unitPriceTypeBean.idList != null and unitPriceTypeBean.idList.size >0">
+                UP_ID in
+                <foreach collection="unitPriceTypeBean.idList" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

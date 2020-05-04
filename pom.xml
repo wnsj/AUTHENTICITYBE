@@ -11,6 +11,7 @@
     <groupId>com.jiubo</groupId>
     <artifactId>build-store</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>build-store</name>
     <description>Demo project for Spring Boot</description>
 
@@ -104,6 +105,8 @@
     </dependencies>
 
     <build>
+        <!--指定打包后的文件名-->
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

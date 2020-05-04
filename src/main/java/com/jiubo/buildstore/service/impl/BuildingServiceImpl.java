@@ -64,6 +64,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private BuildingTypeDao buildingTypeDao;
 
+    @Autowired
+    private AreaDao areaDao;
+
+    @Autowired
+    private UnitPriceTypeDao unitPriceTypeDao;
 
     @Override
 
@@ -71,6 +76,34 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         Page<BuildingBean> page = new Page<>();
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
+
+        // 获取面积集合
+        List<Integer> areaIdList = buildingBean.getAreaIdList();
+        if (null != areaIdList && areaIdList.size()>0) {
+            List<AreaBean> areaByIdList = areaDao.getAreaByIdList(new AreaBean().setIdList(areaIdList));
+           List<Map<String,Object>> areaList = new ArrayList<>();
+            for (AreaBean areaBean : areaByIdList) {
+               Map<String,Object> map = new HashMap<>();
+               map.put("minArea",areaBean.getBegArea());
+               map.put("maxArea",areaBean.getEndArea());
+                areaList.add(map);
+           }
+            buildingBean.setAreaList(areaList);
+        }
+
+        // 获取均价集合
+        List<Integer> unitPriceIdList = buildingBean.getUnitPriceIdList();
+        if (null != unitPriceIdList && unitPriceIdList.size() > 0 ) {
+            List<UnitPriceTypeBean> priceByIdList = unitPriceTypeDao.getUnitPriceByIdList(new UnitPriceTypeBean().setIdList(unitPriceIdList));
+            List<Map<String,Object>> unitPriceList = new ArrayList<>();
+            for (UnitPriceTypeBean unitPriceTypeBean : priceByIdList) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("minUnitPrice",unitPriceTypeBean.getBegPrice());
+                map.put("maxUnitPrice",unitPriceTypeBean.getEndPrice());
+                unitPriceList.add(map);
+            }
+            buildingBean.setUnitPriceList(unitPriceList);
+        }
 
         // 设置楼盘查询条件---通过传入的户型条件筛选楼盘
         // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）

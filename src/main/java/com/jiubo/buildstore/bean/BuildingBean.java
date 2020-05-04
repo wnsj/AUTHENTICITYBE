@@ -93,6 +93,9 @@ public class BuildingBean implements Serializable {
      */
     private BigDecimal maxArea;
 
+    /**
+     * 面积id集合
+     */
     private List<Integer> areaIdList;
     /**
      * 最大单价
@@ -104,6 +107,10 @@ public class BuildingBean implements Serializable {
      */
     private BigDecimal minUnitPrice;
 
+    /**
+     * 均价id集合
+     */
+    private List<Integer> unitPriceIdList;
     /**
      * 最大总价
      */
