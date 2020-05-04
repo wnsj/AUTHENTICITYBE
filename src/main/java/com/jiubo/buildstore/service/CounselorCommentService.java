@@ -69,4 +69,8 @@ public interface CounselorCommentService extends IService<CounselorCommentBean> 
     }
 
     public Page<CounselorCommentBean> getCounselorByPage(CounselorCommentBean counselorCommentBean);
+
+    public void updateComById(CounselorCommentBean counselorCommentBean);
+
+    public void addCom(CounselorCommentBean counselorCommentBean);
 }

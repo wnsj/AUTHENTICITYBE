@@ -17,11 +17,35 @@ import java.util.List;
  */
 public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
 
+    /**
+     * 前端楼盘详情
+     * @param page
+     * @param counselorCommentBean
+     * @return
+     */
     public List<CounselorCommentBean> getCounselorByBid(Page page,@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
+    /**
+     * 点赞
+     * @param counselorCommentBean
+     */
     public void updateNumById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
     public List<CounselorCommentBean> getCidByBidList(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
+    /**
+     * 后台管理
+     * @param page
+     * @param counselorCommentBean
+     * @return
+     */
     public List<CounselorCommentBean> getComByPage(Page page,@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+
+    /**
+     * 后台管理更新
+     * @param counselorCommentBean
+     */
+    public void updateComById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+
+    public void addCom(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 }

@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.CounselorCommentService;
@@ -48,11 +49,37 @@ public class CounselorCommentController {
      * @return
      */
     @PostMapping("/updateNumById")
-    public JSONObject updateNumById( @RequestBody CounselorCommentBean counselorCommentBean) {
+    public JSONObject updateNumById(@RequestBody CounselorCommentBean counselorCommentBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         counselorCommentService.updateNumById(counselorCommentBean);
+        return jsonObject;
+    }
+
+
+    /**
+     * 修改评论
+     * @param
+     * @return
+     */
+    @PostMapping("/updateComById")
+    public JSONObject updateComById(String param){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
+        counselorCommentService.updateComById(counselorCommentBean);
+        return jsonObject;
+    }
+
+    @PostMapping("/addCom")
+    public JSONObject addCom(String param) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
+        counselorCommentService.addCom(counselorCommentBean);
         return jsonObject;
     }
 }

@@ -48,4 +48,33 @@
             </if>
         </where>
     </select>
+
+    <update id="updateComById">
+        update counselor_comment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="counselorCommentBean.comContent != null and counselorCommentBean.comContent != ''">
+                COM_CONTENT = #{counselorCommentBean.comContent},
+            </if>
+            <if test="counselorCommentBean.cId != null">
+                C_ID = #{counselorCommentBean.cId},
+            </if>
+            <if test="counselorCommentBean.buildId != null">
+                BUILD_ID = #{counselorCommentBean.buildId},
+            </if>
+            <if test="counselorCommentBean.comDate != null">
+                COM_DATE = #{counselorCommentBean.comDate},
+            </if>
+            <if test="counselorCommentBean.coucType != null">
+                COUC_TYPE = #{counselorCommentBean.coucType}
+            </if>
+        </trim>
+        where COUC_ID = #{counselorCommentBean.coucId}
+    </update>
+
+    <insert id="addCom">
+        insert into counselor_comment (COM_CONTENT,C_ID,COM_DATE,COUC_TYPE,BUILD_ID)
+        values (#{counselorCommentBean.comContent},#{counselorCommentBean.cId},
+        #{counselorCommentBean.comDate},
+        #{counselorCommentBean.coucType},#{counselorCommentBean.buildId})
+    </insert>
 </mapper>

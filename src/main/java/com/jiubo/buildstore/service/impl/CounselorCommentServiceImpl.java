@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -156,6 +157,17 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             }
         }
         return page.setRecords(comByPageList);
+    }
+
+    @Override
+    public void updateComById(CounselorCommentBean counselorCommentBean) {
+        counselorCommentDao.updateComById(counselorCommentBean);
+    }
+
+    @Override
+    public void addCom(CounselorCommentBean counselorCommentBean) {
+        counselorCommentBean.setComDate(new Date());
+        counselorCommentDao.addCom(counselorCommentBean);
     }
 
 
