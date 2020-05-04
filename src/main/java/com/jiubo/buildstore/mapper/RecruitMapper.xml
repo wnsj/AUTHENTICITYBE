@@ -99,7 +99,15 @@
         where ID = #{recruitBean.id}
     </update>
 
-<!--    <select id="getHotRe" resultType="com.jiubo.buildstore.bean.RecruitBean">-->
-<!--        select  * from recruit where-->
-<!--    </select>-->
+    <select id="getHotRe" resultType="com.jiubo.buildstore.bean.RecruitBean">
+        select  * from recruit
+        <where>
+            <if test="recruitBean.hotJob != null">
+                HOT_JOB = #{recruitBean.hotJob}
+            </if>
+            <if test="recruitBean.longRecruit != null">
+                LONG_RECRUIT = #{recruitBean.longRecruit}
+            </if>
+        </where>
+    </select>
 </mapper>

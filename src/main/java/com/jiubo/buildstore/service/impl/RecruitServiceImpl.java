@@ -124,4 +124,12 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
     public void patchRecruitById(RecruitBean recruitBean) {
         recruitDao.patchRecruitById(recruitBean);
     }
+
+    @Override
+    public List<RecruitBean> getHotRe() {
+
+        List<RecruitBean> beans = recruitDao.getHotRe(new RecruitBean().setLongRecruit(1));
+        beans.addAll(recruitDao.getHotRe(new RecruitBean().setHotJob(1)));
+        return beans;
+    }
 }

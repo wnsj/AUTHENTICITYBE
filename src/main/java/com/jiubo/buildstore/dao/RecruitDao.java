@@ -26,4 +26,6 @@ public interface RecruitDao extends BaseMapper<RecruitBean> {
     public void insertRecruit(@Param("recruitBean") RecruitBean recruitBean);
 
     public void patchRecruitById(@Param("recruitBean") RecruitBean recruitBean);
+
+    public List<RecruitBean> getHotRe(@Param("recruitBean") RecruitBean recruitBean);
 }
