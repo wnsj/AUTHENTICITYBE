@@ -6,4 +6,38 @@
          from building_dynamic a,building b
          where a.BUILD_ID = b.BUILD_ID and a.BUILD_ID = #{buildingDynamicBean.buildId}
     </select>
+
+    <select id="getDynamicByPage" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
+        select * from building_dynamic
+        <where>
+        <if test="buildingDynamicBean.buildId != null">
+            BUILD_ID = #{buildingDynamicBean.buildId}
+        </if>
+        </where>
+    </select>
+
+    <update id="patchDyById">
+        update building_dynamic
+        <trim prefix="set" suffixOverrides=",">
+            <if test="buildingDynamicBean.bdName != null and buildingDynamicBean.bdName != ''">
+                #{buildingDynamicBean.bdName},
+            </if>
+            <if test="buildingDynamicBean.bdContent != null">
+                #{buildingDynamicBean.bdContent},
+            </if>
+            <if test="buildingDynamicBean.createDate != null">
+                #{buildingDynamicBean.createDate},
+            </if>
+            <if test="buildingDynamicBean.buildId != null">
+                #{buildingDynamicBean.buildId}
+            </if>
+        </trim>
+        where BD_ID = #{bdId}
+    </update>
+
+    <insert id="addDynamic">
+        insert into building_dynamic (BD_NAME,BD_CONTENT,CREATE_DATE,BUILD_ID)
+        values (#{buildingDynamicBean.bdName},#{buildingDynamicBean.bdContent},
+        #{buildingDynamicBean.createDate},#{buildingDynamicBean.buildId})
+    </insert>
 </mapper>

@@ -11,6 +11,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CouBean {
-    private Page<CounselorCommentBean> couPage;
+    private List<CounselorCommentBean> couPage;
     private List<CouTypeBean> couTypeBeanList;
+    private Integer couNum;
 }

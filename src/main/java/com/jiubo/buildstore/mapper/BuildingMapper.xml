@@ -368,22 +368,16 @@
         SELECT DISTINCT
         a.*
         FROM
-        building a,
-        location_distinguish b,
-        building_type c,
-        bht_ref d,
-        sale_type e,
-        develoger f,
-        chara_ref g,
-        region k
+        building a
+        left join location_distinguish b on a.LD_ID = b.LD_ID
+        left join building_type c on a.BT_ID = c.BT_ID
+        left join bht_ref d on a.BUILD_ID = d.BUILD_ID
+        left join sale_type e on a.IS_SALE = e.ST_ID
+        left join develoger f on a.DEV_ID = f.DEV_ID
+        left join chara_ref g on a.BUILD_ID = g.BUILD_ID
+        left join  region k on a.REGION_ID = k.ID
         <where>
-            a.LD_ID = b.LD_ID
-            AND a.BT_ID = c.BT_ID
-            AND a.BUILD_ID = d.BUILD_ID
-            AND a.IS_SALE = e.ST_ID
-            AND a.DEV_ID = f.DEV_ID
-            AND a.BUILD_ID = g.BUILD_ID
-            AND a.REGION_ID = k.ID
+        1=1
             <if test="null != buildingBean.special">
                 and (b.LD_NAME like CONCAT('%',#{buildingBean.special},'%')
                 or c.BT_NAME like CONCAT('%',#{buildingBean.special},'%')

@@ -36,7 +36,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getAllBuildByPage")
-    public JSONObject getAllBulidBypages(BuildingBean buildingBean) {
+    public JSONObject getAllBulidBypages(@RequestBody BuildingBean buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -202,7 +202,7 @@ public class BuildingController {
 
 
     @PostMapping("/getBuildLikePage")
-    public JSONObject getBuildLikePage(BuildingBean buildingBean){
+    public JSONObject getBuildLikePage(@RequestBody BuildingBean buildingBean){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

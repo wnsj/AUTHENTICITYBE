@@ -55,12 +55,12 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
      */
     public CouBean getCounselorByBid(CounselorCommentBean counselorCommentBean) {
         CouBean couBean = new CouBean();
-        Page<CounselorCommentBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(counselorCommentBean.getCurrent()) ? 1L : Long.parseLong(counselorCommentBean.getCurrent()));
-        page.setSize(StringUtils.isBlank(counselorCommentBean.getPageSize()) ? 10L : Long.parseLong(counselorCommentBean.getPageSize()));
+//        Page<CounselorCommentBean> page = new Page<>();
+//        page.setCurrent(StringUtils.isBlank(counselorCommentBean.getCurrent()) ? 1L : Long.parseLong(counselorCommentBean.getCurrent()));
+//        page.setSize(StringUtils.isBlank(counselorCommentBean.getPageSize()) ? 10L : Long.parseLong(counselorCommentBean.getPageSize()));
 
         // 咨询师评论数据
-        List<CounselorCommentBean> counselorByBid = counselorCommentDao.getCounselorByBid(page, counselorCommentBean);
+        List<CounselorCommentBean> counselorByBid = counselorCommentDao.getCounselorByBid(counselorCommentBean);
         if (null != counselorByBid && counselorByBid.size() > 0) {
 
             Map<Integer, List<CounselorCommentBean>> map = counselorByBid.stream().collect(Collectors.groupingBy(CounselorCommentBean::getCoucType));
@@ -101,8 +101,9 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     }
                 }
             }
-        page.setRecords(counselorByBid);
-        couBean.setCouPage(page);
+
+        couBean.setCouPage(counselorByBid);
+        couBean.setCouNum(counselorByBid.size());
         return couBean;
     }
 

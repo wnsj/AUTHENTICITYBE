@@ -9,12 +9,6 @@
             <if test="recruitLabelBean.typeId != null">
               AND  TYPE_ID = #{recruitLabelBean.typeId}
             </if>
-            <if test="recruitLabelBean.hotJob != null">
-               and HOT_JOB = #{recruitLabelBean.hotJob}
-            </if>
-            <if test="recruitLabelBean.longRecruit != null">
-                and LONG_RECRUIT = #{recruitLabelBean.longRecruit}
-            </if>
         </where>
     </select>
 </mapper>

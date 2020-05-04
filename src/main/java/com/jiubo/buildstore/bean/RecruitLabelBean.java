@@ -40,13 +40,5 @@ public class RecruitLabelBean implements Serializable {
      */
     private Integer typeId;
 
-    /**
-     *是否热招（1：是；2：否）
-     */
-    private Integer hotJob;
 
-    /**
-     * 是否长招（1：是；2：否）
-     */
-    private Integer longRecruit;
 }

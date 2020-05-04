@@ -35,7 +35,7 @@
     <select id="getRecruitByPage" resultType="com.jiubo.buildstore.bean.RecruitBean">
         select * from recruit
         <where>
-            <if test="recruitBean.recruitmentType != null">
+            <if test="recruitBean.recruitmentType != null and recruitBean.recruitmentType != 0">
                 and RECRUITMENT_TYPE = #{recruitBean.recruitmentType}
             </if>
             <if test="recruitBean.positionType != null">
@@ -98,4 +98,8 @@
         </trim>
         where ID = #{recruitBean.id}
     </update>
+
+<!--    <select id="getHotRe" resultType="com.jiubo.buildstore.bean.RecruitBean">-->
+<!--        select  * from recruit where-->
+<!--    </select>-->
 </mapper>

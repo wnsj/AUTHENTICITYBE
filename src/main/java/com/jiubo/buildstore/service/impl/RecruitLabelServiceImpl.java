@@ -31,12 +31,4 @@ public class RecruitLabelServiceImpl extends ServiceImpl<RecruitLabelDao, Recrui
     public List<RecruitLabelBean> getLabelByType(RecruitLabelBean recruitLabelBean) {
         return recruitLabelDao.getLabelByType(recruitLabelBean);
     }
-
-    @Override
-    public RecruitLabelListBean getLabelByCondition() {
-        RecruitLabelListBean recruitLabelListBean = new RecruitLabelListBean();
-        recruitLabelListBean.setHotList(recruitLabelDao.getLabelByType(new RecruitLabelBean().setHotJob(1)));
-        recruitLabelListBean.setLongList(recruitLabelDao.getLabelByType(new RecruitLabelBean().setLongRecruit(1)));
-        return recruitLabelListBean;
-    }
 }

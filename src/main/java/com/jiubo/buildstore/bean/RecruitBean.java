@@ -124,7 +124,7 @@ public class RecruitBean implements Serializable {
     /**
      * 招聘类型
      */
-    private Long recruitmentType;
+    private Integer recruitmentType;
 
     /**
      * 创建时间
@@ -151,5 +151,13 @@ public class RecruitBean implements Serializable {
     @TableField(exist = false)
     private String pageSize;
 
+    /**
+     *是否热招（1：是；2：否）
+     */
+    private Integer hotJob;
 
+    /**
+     * 是否长招（1：是；2：否）
+     */
+    private Integer longRecruit;
 }

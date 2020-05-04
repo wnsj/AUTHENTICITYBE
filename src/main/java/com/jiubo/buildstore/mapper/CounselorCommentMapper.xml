@@ -7,7 +7,12 @@
         b.CC_CONTENT,d.COU_ID,d.COU_NAME,d.INTRODUCE,d.GRADUATE,d.CC_ID,d.PICTURE_NAME,PICTURE_PATH
         from counselor_comment a,counselor_character b,counselor d
         <where>
-            a.C_ID = d.COU_ID and b.CC_ID = d.CC_ID and a.BUILD_ID = #{counselorCommentBean.buildId}
+            a.C_ID = d.COU_ID and b.CC_ID = d.CC_ID
+
+             <if test="counselorCommentBean.buildId != null">
+                 and a.BUILD_ID = #{counselorCommentBean.buildId}
+             </if>
+
             <if test="counselorCommentBean.coucType != null and counselorCommentBean.coucType != 999">
                and a.COUC_TYPE = #{counselorCommentBean.coucType}
             </if>

@@ -19,11 +19,11 @@ public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
 
     /**
      * 前端楼盘详情
-     * @param page
+     * @param
      * @param counselorCommentBean
      * @return
      */
-    public List<CounselorCommentBean> getCounselorByBid(Page page,@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+    public List<CounselorCommentBean> getCounselorByBid(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
     /**
      * 点赞
