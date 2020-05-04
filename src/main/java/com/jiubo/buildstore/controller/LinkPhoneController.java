@@ -29,7 +29,7 @@ public class LinkPhoneController {
     private LinkPhoneService linkPhoneService;
 
     @PostMapping("/addLinkPhone")
-    public JSONObject addLinkPhone(@RequestBody LinkPhoneBean linkPhoneBean) {
+    public JSONObject addLinkPhone(LinkPhoneBean linkPhoneBean) {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

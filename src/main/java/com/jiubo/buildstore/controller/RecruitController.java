@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 /**
  * <p>
  * 前端控制器
@@ -27,16 +29,21 @@ public class RecruitController {
     private RecruitService recruitService;
 
     @PostMapping("/getEasyInfo")
-    public JSONObject getEasyInfo(@RequestBody RecruitBean recruitBean) {
+    public JSONObject getEasyInfo(RecruitBean recruitBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+
+//        RecruitBean recruitBean = new RecruitBean();
+//        recruitBean.setPositionType(positionType);
+//        recruitBean.setRecruitmentType(recruitmentType);
+
         jsonObject.put(Constant.Result.RETDATA, recruitService.getEasyInfo(recruitBean));
         return jsonObject;
     }
 
     @PostMapping("/getDetails")
-    public JSONObject getDetails(@RequestBody RecruitBean recruitBean) {
+    public JSONObject getDetails(RecruitBean recruitBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

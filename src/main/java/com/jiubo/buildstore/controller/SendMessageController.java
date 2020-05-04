@@ -23,7 +23,7 @@ import java.util.Random;
 public class SendMessageController {
 
     @PostMapping("/sendMessage")
-    public JSONObject sendMessage(@RequestBody String phone) {
+    public JSONObject sendMessage(String phone) {
 
         Random random = new Random();
         String result="";

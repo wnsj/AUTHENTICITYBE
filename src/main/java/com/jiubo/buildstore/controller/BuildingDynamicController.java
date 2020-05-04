@@ -27,7 +27,7 @@ public class BuildingDynamicController {
 
 
     @PostMapping("/getDynamicByBid")
-    public JSONObject getDynamicByBid(@RequestBody BuildingDynamicBean buildingDynamicBean) {
+    public JSONObject getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

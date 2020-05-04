@@ -40,7 +40,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("/getArticleByType")
-    public JSONObject getArticleByType(@RequestBody ArticleBean articleBean) {
+    public JSONObject getArticleByType(ArticleBean articleBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

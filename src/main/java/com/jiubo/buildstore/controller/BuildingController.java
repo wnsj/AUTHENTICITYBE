@@ -36,7 +36,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getAllBuildByPage")
-    public JSONObject getAllBulidBypages(@RequestBody BuildingBean buildingBean) {
+    public JSONObject getAllBulidBypages(BuildingBean buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -44,6 +44,20 @@ public class BuildingController {
         return jsonObject;
     }
 
+    /**
+     * 条件筛选查询（分页）
+     *后台管理
+     * @param buildingBean
+     * @return
+     */
+    @PostMapping("/getAllBulidBypages")
+    public JSONObject getAllBuildByPage(@RequestBody BuildingBean buildingBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBulidBypage(buildingBean));
+        return jsonObject;
+    }
 
     /**
      * 新增楼盘

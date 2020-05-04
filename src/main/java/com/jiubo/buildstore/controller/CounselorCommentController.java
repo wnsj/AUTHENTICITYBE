@@ -27,7 +27,7 @@ public class CounselorCommentController {
 
 
     @PostMapping("/getCounselorByBid")
-    public JSONObject getCounselorByBid(@RequestBody CounselorCommentBean counselorCommentBean) {
+    public JSONObject getCounselorByBid(CounselorCommentBean counselorCommentBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

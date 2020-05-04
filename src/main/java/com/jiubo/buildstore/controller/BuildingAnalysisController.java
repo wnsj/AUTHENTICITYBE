@@ -38,7 +38,7 @@ public class BuildingAnalysisController {
      * @return
      */
     @PostMapping("/getAllAnalysisByBid")
-    public JSONObject getAllAnalysisByBid(@RequestBody BuildingAnalysisBean buildingAnalysisBean){
+    public JSONObject getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
