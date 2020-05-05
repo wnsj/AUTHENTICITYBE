@@ -76,48 +76,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         Page<BuildingBean> page = new Page<>();
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
-
-        // 获取面积集合
-        List<Integer> areaIdList = buildingBean.getAreaIdList();
-        if (null != areaIdList && areaIdList.size()>0) {
-            List<AreaBean> areaByIdList = areaDao.getAreaByIdList(new AreaBean().setIdList(areaIdList));
-           List<Map<String,Object>> areaList = new ArrayList<>();
-            for (AreaBean areaBean : areaByIdList) {
-               Map<String,Object> map = new HashMap<>();
-               map.put("minArea",areaBean.getBegArea());
-               map.put("maxArea",areaBean.getEndArea());
-                areaList.add(map);
-           }
-            buildingBean.setAreaList(areaList);
-        }
-
-        // 获取均价集合
-        List<Integer> unitPriceIdList = buildingBean.getUnitPriceIdList();
-        if (null != unitPriceIdList && unitPriceIdList.size() > 0 ) {
-            List<UnitPriceTypeBean> priceByIdList = unitPriceTypeDao.getUnitPriceByIdList(new UnitPriceTypeBean().setIdList(unitPriceIdList));
-            List<Map<String,Object>> unitPriceList = new ArrayList<>();
-            for (UnitPriceTypeBean unitPriceTypeBean : priceByIdList) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("minUnitPrice",unitPriceTypeBean.getBegPrice());
-                map.put("maxUnitPrice",unitPriceTypeBean.getEndPrice());
-                unitPriceList.add(map);
-            }
-            buildingBean.setUnitPriceList(unitPriceList);
-        }
-
-        // 设置楼盘查询条件---通过传入的户型条件筛选楼盘
-        // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
-        List<Integer> bhtIdList = buildingBean.getBhtIdList();
-
-        if (null != bhtIdList && bhtIdList.size() > 0) {
-            List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
-            if (null != bhtRefByBhtIds && bhtRefByBhtIds.size()>0) {
-                List<Integer> buildIdList = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
-                buildingBean.setBuildIdList(buildIdList);
-            } else {
-                return page;
-            }
-        }
+        if (setCondition(buildingBean, page)) return page;
 
         // 楼盘数据
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
@@ -259,6 +218,51 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             }
         }
         return page.setRecords(allBulidBypage);
+    }
+
+    private boolean setCondition(BuildingBean buildingBean, Page<BuildingBean> page) {
+        // 获取面积集合
+        List<Integer> areaIdList = buildingBean.getAreaIdList();
+        if (null != areaIdList && areaIdList.size()>0) {
+            List<AreaBean> areaByIdList = areaDao.getAreaByIdList(new AreaBean().setIdList(areaIdList));
+           List<Map<String,Object>> areaList = new ArrayList<>();
+            for (AreaBean areaBean : areaByIdList) {
+               Map<String,Object> map = new HashMap<>();
+               map.put("minArea",areaBean.getBegArea());
+               map.put("maxArea",areaBean.getEndArea());
+                areaList.add(map);
+           }
+            buildingBean.setAreaList(areaList);
+        }
+
+        // 获取均价集合
+        List<Integer> unitPriceIdList = buildingBean.getUnitPriceIdList();
+        if (null != unitPriceIdList && unitPriceIdList.size() > 0 ) {
+            List<UnitPriceTypeBean> priceByIdList = unitPriceTypeDao.getUnitPriceByIdList(new UnitPriceTypeBean().setIdList(unitPriceIdList));
+            List<Map<String,Object>> unitPriceList = new ArrayList<>();
+            for (UnitPriceTypeBean unitPriceTypeBean : priceByIdList) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("minUnitPrice",unitPriceTypeBean.getBegPrice());
+                map.put("maxUnitPrice",unitPriceTypeBean.getEndPrice());
+                unitPriceList.add(map);
+            }
+            buildingBean.setUnitPriceList(unitPriceList);
+        }
+
+        // 设置楼盘查询条件---通过传入的户型条件筛选楼盘
+        // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
+        List<Integer> bhtIdList = buildingBean.getBhtIdList();
+
+        if (null != bhtIdList && bhtIdList.size() > 0) {
+            List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
+            if (null != bhtRefByBhtIds && bhtRefByBhtIds.size()>0) {
+                List<Integer> buildIdList = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
+                buildingBean.setBuildIdList(buildIdList);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     private BigDecimal getAverage(BuildingBean bean) {
@@ -548,7 +552,145 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         Page<BuildingBean> page = new Page<>();
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
-        return page.setRecords(buildingDao.getBuildLikePage(page,buildingBean));
+
+
+        List<BuildingBean> beanPageList = buildingDao.getBuildLikePage(page, buildingBean);
+        if (null != beanPageList && beanPageList.size()>0){
+            // 获取楼盘id
+            List<Integer> list = beanPageList.stream().map(BuildingBean::getBuildId).collect(toList());
+
+            // 获取所有类型
+            List<BuildingTypeBean> buildTypeList = buildingTypeDao.getAllBuildingType();
+            Map<Integer, List<BuildingTypeBean>> btMap = null;
+            if (null != buildTypeList && buildTypeList.size() > 0) {
+                btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
+            }
+
+            //获取所有特色
+            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
+            Map<Integer, List<CharaRefBean>> charaRefMap = null;
+            if (null != chaRefByBidList && chaRefByBidList.size()>0){
+                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
+            }
+
+            // 翻译楼盘户型
+            List<BhtRefBean> bhtRefBeanList = bhtRefDao.getAllBhtRefByBIds(new BhtRefBean().setBuildIdList(list));
+            Map<Integer, List<BhtRefBean>> bhtRefMap = null;
+            if (null != bhtRefBeanList && bhtRefBeanList.size() > 0) {
+                bhtRefMap = bhtRefBeanList.stream().collect(Collectors.groupingBy(BhtRefBean::getBuildId));
+            }
+
+            // 翻译出售状态
+            List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
+            Map<Integer, List<SaleTypeBean>> saleMap = null;
+            if (null != allSaleType && allSaleType.size() > 0) {
+                saleMap = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
+            }
+            // 获取咨询师名字 联系方式
+//            CounselorCommentBean commentBean = new CounselorCommentBean();
+//            commentBean.setBIdList(list);
+//            List<CounselorCommentBean> cidByBidList = counselorCommentDao.getCidByBidList(commentBean);
+
+            // 获取头图
+            BuildingImgBean buildingImgBean = new BuildingImgBean();
+            buildingImgBean.setBIdList(list);
+            buildingImgBean.setItId(6);
+            List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+            Map<Integer, List<BuildingImgBean>> headImgMap = null;
+            if (null != byBuildId && byBuildId.size() > 0) {
+                headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+            }
+
+            buildingImgBean.setItId(7);
+            List<BuildingImgBean> video = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+            Map<Integer, List<BuildingImgBean>> videoMap = null;
+            if (null != video && video.size() > 0) {
+                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+            }
+
+            for (BuildingBean bean : beanPageList){
+                // 户型
+                if (null != bhtRefMap) {
+                    List<BhtRefBean> bhtRefBeans = bhtRefMap.get(bean.getBuildId());
+                    if (null != bhtRefBeans && bhtRefBeans.size() > 0) {
+                        List<String> bhtNameList = bhtRefBeans.stream().map(BhtRefBean::getBhtName).collect(toList());
+                        if (null != bhtNameList && bhtNameList.size() > 0) {
+                            bean.setCaName(StringUtils.join(bhtNameList,"/"));
+                            bean.setBhtIdList(bhtRefBeans.stream().map(BhtRefBean::getBhtId).collect(toList()));
+                        }
+                    }
+                }
+
+
+                // 开盘时间
+                if (null != bean.getOpenDate()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+                    bean.setOpenDateTime(sdf.format(bean.getOpenDate()));
+                }
+
+                // 出售情况
+                if (null != allSaleType && bean.getIsSale() != null) {
+                    bean.setSaleLabel(saleMap.get(bean.getIsSale()).get(0).getStName());
+                }
+
+                // 类型
+                if (null != btMap && bean.getBtId() != null) {
+                    bean.setBtName(btMap.get(bean.getBtId()).get(0).getBtName());
+                }
+
+                // 特色
+                if (null != charaRefMap) {
+
+                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+                    if (null != charaRefBeanList && charaRefBeanList.size()> 0){
+                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+                        bean.setCharaNameList(charaRefList);
+                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                    }
+                }
+
+                // 获取咨询师名字 联系方式
+//                if (null != cidByBidList) {
+//                    Map<Integer, List<CounselorCommentBean>> collect = cidByBidList.stream().collect(Collectors.groupingBy(CounselorCommentBean::getBId));
+//                    List<CounselorCommentBean> commentBeans = collect.get(bean.getBuildId());
+//                    if (null != commentBeans) {
+////                        List<CounselorBean> cNameList = new ArrayList<>();
+////                        CounselorBean counselorBean = new CounselorBean();
+////                        String join = StringUtils.join(cNameList, "、");
+//                        bean.setCouName(commentBeans.get(0).getCouName());
+//                        bean.setTel(commentBeans.get(0).getTel());
+//                    }
+//                }
+
+                // 头图名字 路径
+                if (null != headImgMap && null != bean.getBuildId()) {
+
+                    List<BuildingImgBean> buildingImgBeans = headImgMap.get(bean.getBuildId());
+                    if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
+                        bean.setImgName(buildingImgBeans.get(0).getImgName());
+                        bean.setImgPath(buildingImgBeans.get(0).getImgPath());
+                    }
+                }
+
+                if (null != videoMap) {
+                    List<BuildingImgBean> imgBeans = videoMap.get(bean.getBuildId());
+                    if (null != imgBeans && imgBeans.size()>0){
+                        bean.setVideoName(imgBeans.get(0).getImgName());
+                        bean.setVideoPath(imgBeans.get(0).getImgPath());
+                    }
+                }
+                // 设置均值
+                bean.setAveragePrice(getAverage(bean));
+
+                // 是否是热销标签
+                if (bean.getSellWell() != null) {
+                    bean.setSellWellLabel(1);
+                } else {
+                    bean.setSellWellLabel(2);
+                }
+            }
+        }
+        return page.setRecords(beanPageList);
     }
 
     private void getHeadImg(List<BuildingBean> beans, Integer type) {

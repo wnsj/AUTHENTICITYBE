@@ -31,5 +31,5 @@ public class BuildingHorseTypeBean implements Serializable {
 
     private String bhtName;
 
-
+    private Integer bhtNum;
 }

@@ -8,10 +8,12 @@ import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingDynamicDao;
 import com.jiubo.buildstore.service.BuildingDynamicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,6 +56,10 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
             }
             for (BuildingDynamicBean dynamicBean : dynamicBeans) {
                 dynamicBean.setHtName(collect.get(dynamicBean.getBuildId()).get(0).getHtName());
+                Date date = dynamicBean.getCreateDate();
+                if (null != date) {
+                    dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
+                }
             }
         }
         return page.setRecords(dynamicBeans);
@@ -66,6 +72,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 
     @Override
     public void addDynamic(BuildingDynamicBean buildingDynamicBean) {
+        buildingDynamicBean.setCreateDate(new Date());
         buildingDynamicDao.addDynamic(buildingDynamicBean);
     }
 }

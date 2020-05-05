@@ -127,14 +127,21 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
             List<BuildingHorseTypeBean> buildingHorseTypeBeanList = new ArrayList<>();
 
-            for (BuildingAnalysisBean bean : buildAnalysisList) {
-                BuildingHorseTypeBean buildingHorseTypeBean = new BuildingHorseTypeBean();
-                // 添加户型及户型id
-                buildingHorseTypeBean.setBhtId(bean.getBhtId());
-                buildingHorseTypeBean.setBhtName(bean.getImgName());
-                if (!buildingHorseTypeBeanList.contains(buildingHorseTypeBean)){
+            Map<Integer, List<BuildingAnalysisBean>> map = buildAnalysisList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBhtId));
+            for (Integer bhtId:map.keySet()) {
+                List<BuildingAnalysisBean> analysisBeans = map.get(bhtId);
+                if (null != analysisBeans && analysisBeans.size()>0){
+                    BuildingHorseTypeBean buildingHorseTypeBean = new BuildingHorseTypeBean();
+                    // 添加户型及户型id
+                    buildingHorseTypeBean.setBhtId(analysisBeans.get(0).getBhtId());
+                    buildingHorseTypeBean.setBhtName(analysisBeans.get(0).getImgName());
+                    buildingHorseTypeBean.setBhtNum(analysisBeans.size());
                     buildingHorseTypeBeanList.add(buildingHorseTypeBean);
                 }
+            }
+
+            for (BuildingAnalysisBean bean : buildAnalysisList) {
+
 
 
                 // 添加标签

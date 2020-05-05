@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.BuildingDynamicService;
@@ -45,19 +46,21 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/patchDyById")
-    public JSONObject patchDyById(@RequestBody BuildingDynamicBean buildingDynamicBean) {
+    public JSONObject patchDyById(String param) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.patchDyById(buildingDynamicBean);
         return jsonObject;
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(@RequestBody BuildingDynamicBean buildingDynamicBean) {
+    public JSONObject addDynamic(String param) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.addDynamic(buildingDynamicBean);
         return jsonObject;
     }

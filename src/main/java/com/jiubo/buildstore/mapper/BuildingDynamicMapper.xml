@@ -20,19 +20,16 @@
         update building_dynamic
         <trim prefix="set" suffixOverrides=",">
             <if test="buildingDynamicBean.bdName != null and buildingDynamicBean.bdName != ''">
-                #{buildingDynamicBean.bdName},
+                BD_NAME = #{buildingDynamicBean.bdName},
             </if>
-            <if test="buildingDynamicBean.bdContent != null">
-                #{buildingDynamicBean.bdContent},
-            </if>
-            <if test="buildingDynamicBean.createDate != null">
-                #{buildingDynamicBean.createDate},
+            <if test="buildingDynamicBean.bdContent != null and buildingDynamicBean.bdContent != ''">
+                BD_CONTENT =  #{buildingDynamicBean.bdContent},
             </if>
             <if test="buildingDynamicBean.buildId != null">
-                #{buildingDynamicBean.buildId}
+                BUILD_ID = #{buildingDynamicBean.buildId}
             </if>
         </trim>
-        where BD_ID = #{bdId}
+        where BD_ID = #{buildingDynamicBean.bdId}
     </update>
 
     <insert id="addDynamic">
