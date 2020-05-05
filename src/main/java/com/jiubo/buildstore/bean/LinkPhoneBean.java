@@ -79,4 +79,6 @@ public class LinkPhoneBean implements Serializable {
     private Integer remarks;
 
     private String remarksLabel;
+
+    private String form;
 }

@@ -34,12 +34,20 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     @Autowired
     private BuildingDao buildingDao;
     @Override
-    public Page<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+    public List<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
 
-        Page<BuildingDynamicBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
-        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 3L : Long.parseLong(buildingDynamicBean.getPageSize()));
-        return page.setRecords(buildingDynamicDao.getDynamicByBid(page,buildingDynamicBean));
+//        Page<BuildingDynamicBean> page = new Page<>();
+//        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
+//        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 3L : Long.parseLong(buildingDynamicBean.getPageSize()));
+        List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
+        if (null != dynamicByBidList && dynamicByBidList.size()>0) {
+            for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
+                if (dynamicBean.getCreateDate() != null) {
+                    dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(),"yyyy-MM-dd"));
+                }
+            }
+        }
+        return dynamicByBidList;
     }
 
     @Override

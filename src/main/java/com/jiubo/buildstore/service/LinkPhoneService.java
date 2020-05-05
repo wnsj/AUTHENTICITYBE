@@ -22,4 +22,6 @@ public interface LinkPhoneService extends IService<LinkPhoneBean> {
     public void addLinkPhone(LinkPhoneBean linkPhoneBean);
 
     public void patchLinkById(LinkPhoneBean linkPhoneBean);
+
+    public void patchFormById(LinkPhoneBean linkPhoneBean);
 }

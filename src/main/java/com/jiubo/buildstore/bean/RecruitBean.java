@@ -85,7 +85,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1:有五险一金；2：没有五险一金
      */
-    private Long fiveRisksFund;
+    private Integer fiveRisksFund;
     /**
      * 1:有五险一金；2：没有五险一金 描述
      */
@@ -94,7 +94,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1:包吃住；2：否
      */
-    private Long foodShelter;
+    private Integer foodShelter;
 
     /**
      * 1:包吃住；2：否 描述
@@ -104,7 +104,7 @@ public class RecruitBean implements Serializable {
     /**
      * 1：双休；2：没有双休
      */
-    private Long weekend;
+    private Integer weekend;
 
     /**
      * 1：双休；2：没有双休 描述

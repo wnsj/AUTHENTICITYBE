@@ -195,7 +195,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> buildingImgBeans = headImgMap.get(bean.getBuildId());
                     if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
                         bean.setImgName(buildingImgBeans.get(0).getImgName());
-                        bean.setImgPath(buildingImgBeans.get(0).getImgPath());
+                        bean.setImgPath("/fileController/getFile?type=IMG&path=".concat(buildingImgBeans.get(0).getImgPath()));
                     }
                 }
 
@@ -203,7 +203,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> imgBeans = videoMap.get(bean.getBuildId());
                     if (null != imgBeans && imgBeans.size()>0){
                         bean.setVideoName(imgBeans.get(0).getImgName());
-                        bean.setVideoPath(imgBeans.get(0).getImgPath());
+                        bean.setVideoPath("/fileController/getFile?type=IMG&path=".concat(imgBeans.get(0).getImgPath()));
                     }
                 }
                 // 设置均值
@@ -464,31 +464,45 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<BuildingImgBean> imgBeans = map.get(1);
                 if (null != imgBeans) {
                     build.setEffectList(imgBeans.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                    List<String> effectList = imgBeans.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    List<String> pathList = getStrings(effectList);
+                    build.setEffectPathList(pathList);
                 }
                 // 环境规划图
                 List<BuildingImgBean> imgBeans1 = map.get(2);
                 if (null != imgBeans1) {
                     build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                    List<String> enList = imgBeans1.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    List<String> pathList = getStrings(enList);
+                    build.setEnPlanList(pathList);
                 }
                 // 楼盘实景
                 List<BuildingImgBean> imgBeans2 = map.get(3);
                 if (null != imgBeans2) {
                     build.setBuildReaList(imgBeans2.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                    List<String> bmList = imgBeans2.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    List<String> pathList = getStrings(bmList);
+                    build.setBuildReaPathList(pathList);
                 }
                 // 配套实景
                 List<BuildingImgBean> imgBeans3 = map.get(4);
                 if (null != imgBeans3) {
                     build.setMatchingRealList(imgBeans3.stream().map(BuildingImgBean::getImgName).collect(toList()));
+                    List<String> bmList = imgBeans3.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    List<String> pathList = getStrings(bmList);
+                    build.setMatchingRealPathList(pathList);
                 }
                 // 头图
                 List<BuildingImgBean> imgBeans4 = map.get(6);
                 if (null != imgBeans4) {
                     build.setImgName(imgBeans4.get(0).getImgName());
+                    build.setImgPath("/fileController/getFile?path=".concat(imgBeans4.get(0).getImgPath()));
                 }
                 // 视频
                 List<BuildingImgBean> imgBeans5 = map.get(7);
                 if (null != imgBeans5) {
                     build.setVideoName(imgBeans5.get(0).getImgName());
+                    build.setVideoPath("/fileController/getFile?path=".concat(imgBeans5.get(0).getImgPath()));
                 }
             }
 
@@ -513,12 +527,30 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
                 build.setCharaNameList(collect);
             }
+            // 均价
             BigDecimal average = getAverage(build);
             build.setAveragePrice(average);
+
+            // 翻译出售状态
+            List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
+
+            if (null != allSaleType && allSaleType.size() > 0) {
+                Map<Integer, List<SaleTypeBean>> saleMap  = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
+                List<SaleTypeBean> saleTypeBeans = saleMap.get(build.getIsSale());
+                if (null != saleTypeBeans && saleTypeBeans.size()>0){
+                    build.setSaleLabel(saleTypeBeans.get(0).getStName());
+                }
+            }
         }
-
-
         return build;
+    }
+
+    private List<String> getStrings(List<String> effectList) {
+        List<String> pathList = new ArrayList<>();
+        for (String e : effectList) {
+            pathList.add("/fileController/getFile?path=".concat(e));
+        }
+        return pathList;
     }
 
     @Override
@@ -715,7 +747,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 设置头图名字、路径
                 if (null != imgBeans) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
-                    buildingBean1.setImgPath(imgBeans.get(0).getImgPath());
+                    buildingBean1.setImgPath("/fileController/getFile?path=".concat(imgBeans.get(0).getImgPath()));
                 }
 
                 // 均价
@@ -823,7 +855,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                 String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                File dir = new File("D:\\" + buildingBean.getBuildId() + "\\" + type);
+                File dir = new File("D:/" + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -831,7 +863,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                System.out.println("name:" + name);
 
                 i++;
-                String path = dir.getPath() + "\\" + name;
+                System.out.println("路径" + dir.getPath());
+                String replace = dir.getPath().replace("\\", "/");
+                String path = replace + "/" + name;
+
                 System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);

@@ -21,4 +21,8 @@
         update link_phone set REMARKS = 1 where LP_ID = #{linkPhoneBean.lpId}
     </update>
 
+
+    <update id="patchFormById">
+        update link_phone set FORM = #{linkPhoneBean.form} where LP_ID = #{linkPhoneBean.lpId}
+    </update>
 </mapper>
