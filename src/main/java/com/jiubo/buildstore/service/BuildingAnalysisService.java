@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingAnalysisBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiubo.buildstore.bean.BuildingAnalysisPageBean;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +38,7 @@ public interface BuildingAnalysisService extends IService<BuildingAnalysisBean> 
      * @param buildingAnalysisBean
      * @return
      */
-    public Page<BuildingAnalysisBean> getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean);
+    public BuildingAnalysisPageBean getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean);
 
     public void insertByBid(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception;
 

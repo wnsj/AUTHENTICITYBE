@@ -25,11 +25,11 @@
 
     <insert id="insertRecruit">
         insert into recruit (POSITION,POSITION_TYPE,RECRUITS_NUM,WORKPLACE,MIN_PAY,MAX_PAY,MIN_WORKING_YEARS,
-        MAX_WORKING_YEARS,EDUCATION,
-        FIVE_RISKS_FUND,FOOD_SHELTER,WEEKEND,RESPONSIBILITIES,RECRUITMENT_TYPE,REQUIREMENTS,CREATE_TIME) values
+        MAX_WORKING_YEARS,EDUCATION,FIVE_RISKS_FUND,FOOD_SHELTER,WEEKEND,RESPONSIBILITIES,RECRUITMENT_TYPE,
+        REQUIREMENTS,CREATE_TIME,LONG_RECRUIT,HOT_JOB) values
          (#{recruitBean.position},#{recruitBean.positionType},#{recruitBean.recruitsNum},#{recruitBean.workplace},#{recruitBean.minPay},#{recruitBean.maxPay},
          #{recruitBean.minWorkingYears},#{recruitBean.maxWorkingYears},#{recruitBean.education},#{recruitBean.fiveRisksFund},#{recruitBean.foodShelter},#{recruitBean.weekend},
-         #{recruitBean.responsibilities},#{recruitBean.recruitmentType},#{recruitBean.requirements},#{recruitBean.createTime})
+         #{recruitBean.responsibilities},#{recruitBean.recruitmentType},#{recruitBean.requirements},#{recruitBean.createTime},#{recruitBean.longRecruit},#{recruitBean.hotJob})
     </insert>
 
     <select id="getRecruitByPage" resultType="com.jiubo.buildstore.bean.RecruitBean">
@@ -93,7 +93,13 @@
                 REQUIREMENTS = #{recruitBean.requirements},
             </if>
             <if test="recruitBean.recruitmentType != null">
-                RECRUITMENT_TYPE = #{recruitBean.recruitmentType}
+                RECRUITMENT_TYPE = #{recruitBean.recruitmentType},
+            </if>
+            <if test="recruitBean.hotJob != null">
+                HOT_JOB = #{recruitBean.hotJob},
+            </if>
+            <if test="recruitBean.longRecruit != null">
+                LONG_RECRUIT = #{recruitBean.longRecruit}
             </if>
         </trim>
         where ID = #{recruitBean.id}

@@ -148,5 +148,6 @@ public class BuildingAnalysisBean implements Serializable {
 
     private String horseImgName;
 
+    private List<BuildingHorseTypeBean> buildingHorseTypeBeanList;
     private String floor;
 }

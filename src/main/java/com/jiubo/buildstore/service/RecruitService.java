@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.RecruitBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiubo.buildstore.bean.RecruitLabelListBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,5 +26,5 @@ public interface RecruitService extends IService<RecruitBean> {
     public void addRecruit(RecruitBean recruitBean);
 
     public void patchRecruitById(RecruitBean recruitBean);
-    public List<RecruitBean> getHotRe();
+    public RecruitLabelListBean getHotRe();
 }

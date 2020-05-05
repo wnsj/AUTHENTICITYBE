@@ -9,6 +9,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class RecruitLabelListBean {
-    private List<RecruitLabelBean> hotList;
-    private List<RecruitLabelBean> longList;
+    private List<RecruitBean> hotList;
+    private List<RecruitBean> longList;
 }

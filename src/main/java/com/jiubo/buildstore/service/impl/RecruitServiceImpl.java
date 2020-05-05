@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.RecruitBean;
+import com.jiubo.buildstore.bean.RecruitLabelListBean;
 import com.jiubo.buildstore.bean.RecruitTypeBean;
 import com.jiubo.buildstore.dao.RecruitDao;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -126,10 +127,12 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
     }
 
     @Override
-    public List<RecruitBean> getHotRe() {
+    public RecruitLabelListBean getHotRe() {
 
-        List<RecruitBean> beans = recruitDao.getHotRe(new RecruitBean().setLongRecruit(1));
-        beans.addAll(recruitDao.getHotRe(new RecruitBean().setHotJob(1)));
-        return beans;
+        RecruitLabelListBean recruitLabelListBean = new RecruitLabelListBean();
+        recruitLabelListBean.setHotList(recruitDao.getHotRe(new RecruitBean().setHotJob(1)));
+        recruitLabelListBean.setLongList(recruitDao.getHotRe(new RecruitBean().setLongRecruit(1)));
+
+        return recruitLabelListBean;
     }
 }

@@ -68,7 +68,8 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
      * @return
      */
     @Override
-    public Page<BuildingAnalysisBean> getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean) {
+    public BuildingAnalysisPageBean getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean) {
+        BuildingAnalysisPageBean buildingAnalysisPageBean = new BuildingAnalysisPageBean();
         Page<BuildingAnalysisBean> page = new Page<>();
         page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 10L : Long.parseLong(buildingAnalysisBean.getPageSize()));
@@ -124,8 +125,17 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             }
 
 
+            List<BuildingHorseTypeBean> buildingHorseTypeBeanList = new ArrayList<>();
 
             for (BuildingAnalysisBean bean : buildAnalysisList) {
+                BuildingHorseTypeBean buildingHorseTypeBean = new BuildingHorseTypeBean();
+                // 添加户型及户型id
+                buildingHorseTypeBean.setBhtId(bean.getBhtId());
+                buildingHorseTypeBean.setBhtName(bean.getImgName());
+                if (!buildingHorseTypeBeanList.contains(buildingHorseTypeBean)){
+                    buildingHorseTypeBeanList.add(buildingHorseTypeBean);
+                }
+
 
                 // 添加标签
                 if (null != refMap && null != balMap) {
@@ -177,8 +187,11 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
                 }
             }
+            buildingAnalysisPageBean.setBuildingHorseTypeBeanList(buildingHorseTypeBeanList);
         }
-        return page.setRecords(buildAnalysisList);
+        buildingAnalysisPageBean.setBuildingAnalysisBeans(page.setRecords(buildAnalysisList));
+
+        return buildingAnalysisPageBean;
     }
 
     @Override
