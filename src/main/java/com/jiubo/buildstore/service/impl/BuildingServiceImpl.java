@@ -496,13 +496,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<BuildingImgBean> imgBeans4 = map.get(6);
                 if (null != imgBeans4) {
                     build.setImgName(imgBeans4.get(0).getImgName());
-                    build.setImgPath("/fileController/getFile?type=IMG&path=".concat(imgBeans4.get(0).getImgPath()));
+                    build.setImgPath("/fileController/getFile?path=".concat(imgBeans4.get(0).getImgPath()));
                 }
                 // 视频
                 List<BuildingImgBean> imgBeans5 = map.get(7);
                 if (null != imgBeans5) {
                     build.setVideoName(imgBeans5.get(0).getImgName());
-                    build.setVideoPath("/fileController/getFile?type=IMG&path=".concat(imgBeans5.get(0).getImgPath()));
+                    build.setVideoPath("/fileController/getFile?path=".concat(imgBeans5.get(0).getImgPath()));
                 }
             }
 
@@ -548,7 +548,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private List<String> getStrings(List<String> effectList) {
         List<String> pathList = new ArrayList<>();
         for (String e : effectList) {
-            pathList.add("/fileController/getFile?type=IMG&path=".concat(e));
+            pathList.add("/fileController/getFile?path=".concat(e));
         }
         return pathList;
     }
@@ -747,7 +747,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 设置头图名字、路径
                 if (null != imgBeans) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
-                    buildingBean1.setImgPath("/fileController/getFile?type=IMG&path=".concat(imgBeans.get(0).getImgPath()));
+                    buildingBean1.setImgPath("/fileController/getFile?path=".concat(imgBeans.get(0).getImgPath()));
                 }
 
                 // 均价
@@ -855,7 +855,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                 String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                File dir = new File("D:\\" + buildingBean.getBuildId() + "\\" + type);
+                File dir = new File("D:/" + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -863,7 +863,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                System.out.println("name:" + name);
 
                 i++;
-                String path = dir.getPath() + "\\" + name;
+                String path = dir.getPath() + "/" + name;
                 System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);

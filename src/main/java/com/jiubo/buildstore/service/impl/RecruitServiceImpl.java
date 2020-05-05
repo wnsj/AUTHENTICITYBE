@@ -85,23 +85,27 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
         }
         if (null != recruitBeanList) {
             for (RecruitBean recruitBean1 : recruitBeanList) {
-                if (recruitBean1.getFiveRisksFund() == 1) {
-                    recruitBean1.setFiveRisksFundLabel("五险一金");
+
+                if (null != recruitBean1) {
+                    if (null != recruitBean1.getFiveRisksFund() && "1".equals(recruitBean1.getFiveRisksFund().toString())) {
+                        recruitBean1.setFiveRisksFundLabel("五险一金");
+                    }
+
+                    if (null != recruitBean1.getFoodShelter() && "1".equals(recruitBean1.getFoodShelter().toString())) {
+                        recruitBean1.setFoodShelterLabel("包吃包住");
+                    }
+
+                    if (null != recruitBean1.getFoodShelter() && "1".equals(recruitBean1.getWeekend().toString())) {
+                        recruitBean1.setWeekendLabel("双休");
+                    }
+                    String s = getDateToString(recruitBean1.getCreateTime());
+                    recruitBean1.setCreateDate(s);
+
+                    if (null != map && null != recruitBean1.getPositionType()) {
+                        recruitBean1.setPositionTypeLabel(map.get(recruitBean1.getPositionType()).get(0).getTypeName());
+                    }
                 }
 
-                if (recruitBean1.getFoodShelter() == 1) {
-                    recruitBean1.setFoodShelterLabel("包吃包住");
-                }
-
-                if (recruitBean1.getWeekend() == 1) {
-                    recruitBean1.setWeekendLabel("双休");
-                }
-                String s = getDateToString(recruitBean1.getCreateTime());
-                recruitBean1.setCreateDate(s);
-
-                if (null != map) {
-                    recruitBean1.setPositionTypeLabel(map.get(recruitBean1.getPositionType()).get(0).getTypeName());
-                }
             }
         }
     }
