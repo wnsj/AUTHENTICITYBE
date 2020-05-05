@@ -60,4 +60,14 @@ public class LinkPhoneController {
         linkPhoneService.patchLinkById(linkPhoneBean);
         return jsonObject;
     }
+
+    @PostMapping("/patchFormById")
+    public JSONObject patchFormById(@RequestBody LinkPhoneBean linkPhoneBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        LinkPhoneBean linkPhoneBean = JSONObject.parseObject(param, LinkPhoneBean.class);
+        linkPhoneService.patchFormById(linkPhoneBean);
+        return jsonObject;
+    }
 }

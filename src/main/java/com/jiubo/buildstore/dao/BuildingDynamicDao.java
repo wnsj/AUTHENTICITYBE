@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface BuildingDynamicDao extends BaseMapper<BuildingDynamicBean> {
-    public List<BuildingDynamicBean> getDynamicByBid(Page page, @Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
+    public List<BuildingDynamicBean> getDynamicByBid( @Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
     public List<BuildingDynamicBean> getDynamicByPage(Page page, @Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
     public void patchDyById(@Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
     public void addDynamic(@Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);

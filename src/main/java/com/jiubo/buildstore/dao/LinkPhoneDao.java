@@ -22,4 +22,6 @@ public interface LinkPhoneDao extends BaseMapper<LinkPhoneBean> {
     public void addLinkPhone(@Param("linkPhoneBean") LinkPhoneBean linkPhoneBean);
 
     public void patchLinkById(@Param("linkPhoneBean") LinkPhoneBean linkPhoneBean);
+
+    public void patchFormById(@Param("linkPhoneBean") LinkPhoneBean linkPhoneBean);
 }

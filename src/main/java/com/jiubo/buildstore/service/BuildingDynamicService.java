@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
-    public Page<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean);
+    public List<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean);
 
     public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean);
 

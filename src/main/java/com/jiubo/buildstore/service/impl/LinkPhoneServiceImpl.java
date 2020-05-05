@@ -78,4 +78,9 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
     public void patchLinkById(LinkPhoneBean linkPhoneBean) {
         linkPhoneDao.patchLinkById(linkPhoneBean);
     }
+
+    @Override
+    public void patchFormById(LinkPhoneBean linkPhoneBean) {
+        linkPhoneDao.patchFormById(linkPhoneBean);
+    }
 }
