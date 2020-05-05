@@ -863,7 +863,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                System.out.println("name:" + name);
 
                 i++;
-                String path = dir.getPath() + "/" + name;
+                System.out.println("路径" + dir.getPath());
+                String replace = dir.getPath().replace("\\", "/");
+                String path = replace + "/" + name;
+
                 System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);
