@@ -47,5 +47,5 @@ public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
      */
     public void updateComById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
-    public void addCom(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+    public int addCom(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 }

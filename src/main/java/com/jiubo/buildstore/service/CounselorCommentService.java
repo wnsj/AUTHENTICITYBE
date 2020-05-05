@@ -5,6 +5,7 @@ import com.jiubo.buildstore.bean.CouBean;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public interface CounselorCommentService extends IService<CounselorCommentBean> 
 
     public Page<CounselorCommentBean> getCounselorByPage(CounselorCommentBean counselorCommentBean);
 
-    public void updateComById(CounselorCommentBean counselorCommentBean);
+    public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] picImg);
 
-    public void addCom(CounselorCommentBean counselorCommentBean);
+    public void addCom(CounselorCommentBean counselorCommentBean, MultipartFile[] picImg) throws Exception;
 }

@@ -76,7 +76,7 @@
         where COUC_ID = #{counselorCommentBean.coucId}
     </update>
 
-    <insert id="addCom">
+    <insert id="addCom" useGeneratedKeys="true" keyProperty="coucId">
         insert into counselor_comment (COM_CONTENT,C_ID,COM_DATE,COUC_TYPE,BUILD_ID)
         values (#{counselorCommentBean.comContent},#{counselorCommentBean.cId},
         #{counselorCommentBean.comDate},
