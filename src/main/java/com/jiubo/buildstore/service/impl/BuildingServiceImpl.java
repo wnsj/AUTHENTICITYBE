@@ -70,6 +70,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private UnitPriceTypeDao unitPriceTypeDao;
 
+    @Autowired
+    private LocationDistinguishDao locationDistinguishDao;
     @Override
 
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
@@ -455,7 +457,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
-
+        List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish(new LocationDistinguishBean().setLtId(1));
+        Map<Integer, List<LocationDistinguishBean>> listMap = null;
+        if (null != allDistinguishList && allDistinguishList.size()>0) {
+            listMap = allDistinguishList.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
+        }
         if (null != build) {
             List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
             if (null != imgByBuildId) {
@@ -504,6 +510,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     build.setVideoName(imgBeans5.get(0).getImgName());
                     build.setVideoPath("/fileController/getFile?path=".concat(imgBeans5.get(0).getImgPath()));
                 }
+
+                if (null !=listMap &&build.getLdId() != null) {
+                    build.setLdName(listMap.get(build.getLdId()).get(0).getLdName());
+                }
+
             }
 
             // 户型

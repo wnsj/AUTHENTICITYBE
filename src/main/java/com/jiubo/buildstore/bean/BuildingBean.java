@@ -437,4 +437,6 @@ public class BuildingBean implements Serializable {
      * 模糊查询字段
      */
     private String special;
+
+    private String ldName;
 }
