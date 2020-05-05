@@ -61,15 +61,17 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
 
     @Override
     public void addLinkPhone(LinkPhoneBean linkPhoneBean) {
-        String writeDate = linkPhoneBean.getWriteDate();
-        Date write = null;
-        try{
-            write = DateUtils.parseDate(writeDate);
-        }catch (Exception e) {
-            log.error("日期转换异常" + e);
+        if (null != linkPhoneBean) {
+            String writeDate = linkPhoneBean.getWriteDate();
+            Date write = null;
+            try{
+                write = DateUtils.parseDate(writeDate);
+            }catch (Exception e) {
+                log.error("日期转换异常" + e);
+            }
+            linkPhoneBean.setWriteTime(write);
+            linkPhoneDao.addLinkPhone(linkPhoneBean);
         }
-        linkPhoneBean.setWriteTime(write);
-        linkPhoneDao.addLinkPhone(linkPhoneBean);
     }
 
     @Override

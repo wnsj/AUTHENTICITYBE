@@ -41,12 +41,12 @@ public class LinkPhoneController {
 
 
     @PostMapping("/addLinkPhone")
-    public JSONObject addLinkPhone(String param) {
+    public JSONObject addLinkPhone(LinkPhoneBean linkPhoneBean) {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        LinkPhoneBean linkPhoneBean = JSONObject.parseObject(param, LinkPhoneBean.class);
+//        LinkPhoneBean linkPhoneBean = JSONObject.parseObject(param, LinkPhoneBean.class);
         linkPhoneService.addLinkPhone(linkPhoneBean);
         return jsonObject;
     }
