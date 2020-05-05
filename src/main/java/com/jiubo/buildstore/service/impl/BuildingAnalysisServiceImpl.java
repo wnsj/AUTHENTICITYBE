@@ -51,6 +51,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
     @Autowired
     private ImgTypeDao imgTypeDao;
+
     @Override
     public List<BuildingAnalysisBean> getBidByBhtIdList(BuildingAnalysisBean buildingAnalysisBean) {
         return buildingAnalysisDao.getBidByBhtIdList(buildingAnalysisBean);
@@ -99,7 +100,6 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             }
 
 
-
             // 获取所有居室
             List<Integer> baIdList = buildAnalysisList.stream().map(BuildingAnalysisBean::getBaId).collect(Collectors.toList());
             // 获取标签关联
@@ -114,7 +114,6 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             if (null != byBaIdList && byBaIdList.size() > 0) {
                 refMap = byBaIdList.stream().collect(Collectors.groupingBy(BalRefBean::getBaId));
             }
-
 
 
             // 获取所有楼盘id
@@ -133,9 +132,9 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             List<BuildingHorseTypeBean> buildingHorseTypeBeanList = new ArrayList<>();
 
             Map<Integer, List<BuildingAnalysisBean>> map = buildAnalysisList.stream().collect(Collectors.groupingBy(BuildingAnalysisBean::getBhtId));
-            for (Integer bhtId:map.keySet()) {
+            for (Integer bhtId : map.keySet()) {
                 List<BuildingAnalysisBean> analysisBeans = map.get(bhtId);
-                if (null != analysisBeans && analysisBeans.size()>0){
+                if (null != analysisBeans && analysisBeans.size() > 0) {
                     BuildingHorseTypeBean buildingHorseTypeBean = new BuildingHorseTypeBean();
                     // 添加户型及户型id
                     buildingHorseTypeBean.setBhtId(analysisBeans.get(0).getBhtId());
@@ -148,11 +147,10 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             for (BuildingAnalysisBean bean : buildAnalysisList) {
 
 
-
                 // 添加标签
                 if (null != refMap && null != balMap) {
                     List<BalRefBean> refBeans = refMap.get(bean.getBaId());
-                    if (null != refBeans && refBeans.size()>0){
+                    if (null != refBeans && refBeans.size() > 0) {
                         List<String> labelList = new ArrayList<>();
                         List<Integer> labelIdList = new ArrayList<>();
                         for (BalRefBean balRefBean : refBeans) {
@@ -161,7 +159,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                         }
                         bean.setBalContentList(labelList);
                         bean.setBalIdList(labelIdList);
-                        bean.setBalContentLabel(StringUtils.join(labelList,"、"));
+                        bean.setBalContentLabel(StringUtils.join(labelList, "、"));
                     }
                 }
 
@@ -206,13 +204,129 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         return buildingAnalysisPageBean;
     }
 
+
+    public Page<BuildingAnalysisBean> getAllAnalysisByPage(BuildingAnalysisBean buildingAnalysisBean) {
+
+        Page<BuildingAnalysisBean> page = new Page<>();
+
+        page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
+        page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 10L : Long.parseLong(buildingAnalysisBean.getPageSize()));
+        List<BuildingAnalysisBean> buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
+
+        if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
+            // 楼盘
+            List<BuildingBean> allBuild = buildingDao.getAllBuild();
+            Map<Integer, List<BuildingBean>> buildMap = null;
+            if (null != allBuild && allBuild.size() > 0) {
+                buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
+            }
+
+
+            // 所有出售状态
+            List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
+            Map<Integer, List<SaleTypeBean>> saleMap = null;
+            if (null != allSaleType && allSaleType.size() > 0) {
+                saleMap = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
+            }
+
+
+            // 获取所有居室
+            List<Integer> baIdList = buildAnalysisList.stream().map(BuildingAnalysisBean::getBaId).collect(Collectors.toList());
+            // 获取标签关联
+            List<BalRefBean> byBaIdList = balRefDao.getRefByBaIdList(new BalRefBean().setBaIdList(baIdList));
+            // 获取标签
+            List<BuildingAnalysisLabelBean> aLabelList = buildingAnalysisLabelDao.getALabel();
+            Map<Integer, List<BuildingAnalysisLabelBean>> balMap = null;
+            if (aLabelList != null && aLabelList.size() > 0) {
+                balMap = aLabelList.stream().collect(Collectors.groupingBy(BuildingAnalysisLabelBean::getBalId));
+            }
+            Map<Integer, List<BalRefBean>> refMap = null;
+            if (null != byBaIdList && byBaIdList.size() > 0) {
+                refMap = byBaIdList.stream().collect(Collectors.groupingBy(BalRefBean::getBaId));
+            }
+
+
+            // 获取所有楼盘id
+            List<Integer> list = buildAnalysisList.stream().map(BuildingAnalysisBean::getBuildId).collect(Collectors.toList());
+            // 图片名称
+            BuildingImgBean buildingImgBean = new BuildingImgBean();
+            buildingImgBean.setBIdList(list);
+            buildingImgBean.setItId(5);
+            List<BuildingImgBean> imgList = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+            Map<Integer, List<BuildingImgBean>> collect = null;
+            if (null != imgList) {
+                collect = imgList.stream().collect(Collectors.groupingBy(BuildingImgBean::getBaId));
+            }
+
+
+            for (BuildingAnalysisBean bean : buildAnalysisList) {
+
+
+                // 添加标签
+                if (null != refMap && null != balMap) {
+                    List<BalRefBean> refBeans = refMap.get(bean.getBaId());
+                    if (null != refBeans && refBeans.size() > 0) {
+                        List<String> labelList = new ArrayList<>();
+                        List<Integer> labelIdList = new ArrayList<>();
+                        for (BalRefBean balRefBean : refBeans) {
+                            labelList.add(balMap.get(balRefBean.getBalId()).get(0).getBalContent());
+                            labelIdList.add(balRefBean.getBalId());
+                        }
+                        bean.setBalContentList(labelList);
+                        bean.setBalIdList(labelIdList);
+                        bean.setBalContentLabel(StringUtils.join(labelList, "、"));
+                    }
+                }
+
+
+                // 楼盘名称
+                if (null != buildMap && bean.getBuildId() != null) {
+                    List<BuildingBean> beanList = buildMap.get(bean.getBuildId());
+                    if (null != beanList) {
+                        bean.setHtName(beanList.get(0).getHtName());
+                    }
+                }
+
+                // 翻译出售状态
+                if (null != saleMap && null != bean.getIsSale()) {
+                    bean.setSaleLabel(saleMap.get(bean.getIsSale()).get(0).getStName());
+                }
+
+                // 翻译朝向
+                if (bean.getDrection() == 1) {
+                    bean.setDrectionLabel("东");
+                } else if (bean.getDrection() == 2) {
+                    bean.setDrectionLabel("南");
+                } else if (bean.getDrection() == 3) {
+                    bean.setDrectionLabel("西");
+                } else if (bean.getDrection() == 4) {
+                    bean.setDrectionLabel("北");
+                }
+
+                // 图片绑定实体
+                if (null != collect) {
+                    List<BuildingImgBean> buildingImgBeans = collect.get(bean.getBaId());
+                    if (null != buildingImgBeans) {
+                        bean.setHorseImgName(buildingImgBeans.get(0).getImgName());
+                    }
+
+                }
+            }
+
+        }
+
+
+        return page.setRecords(buildAnalysisList);
+    }
+
+
     @Override
     public void insertByBid(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception {
         // 插入户型分析数据
         buildingAnalysisDao.insertByBid(buildingAnalysisBean);
         // 绑定户型分析和标签关系
         BalRefBean balRefBean = new BalRefBean();
-        if (buildingAnalysisBean.getBalIdList() != null && buildingAnalysisBean.getBalIdList().size()>0){
+        if (buildingAnalysisBean.getBalIdList() != null && buildingAnalysisBean.getBalIdList().size() > 0) {
             balRefBean.setBaId(buildingAnalysisBean.getBaId());
             balRefBean.setBalIdList(buildingAnalysisBean.getBalIdList());
             balRefDao.insertBatch(balRefBean);
@@ -223,7 +337,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
     }
 
     @Override
-    public void patchBuildAnalysisById(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg)  throws Exception {
+    public void patchBuildAnalysisById(BuildingAnalysisBean buildingAnalysisBean, MultipartFile[] horseTypeImg) throws Exception {
         // 更新户型分析
         buildingAnalysisDao.patchBuildAnalysisById(buildingAnalysisBean);
         List<Integer> beanBalIdList = buildingAnalysisBean.getBalIdList();
@@ -235,7 +349,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             balRefDao.insertBatch(balRefBean);
         }
 
-        if (null != horseTypeImg && horseTypeImg.length>0) {
+        if (null != horseTypeImg && horseTypeImg.length > 0) {
             // 更新图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
             buildingImgBean.setBId(buildingAnalysisBean.getBuildId());
@@ -249,7 +363,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                 buildingImgBean.setItId(listMap.get(ImgTypeConstant.horseType).get(0).getItId());
                 buildingImgDao.deleteByImgName(buildingImgBean);
             }
-            this.saveFile(buildingAnalysisBean,horseTypeImg,"horseType",5);
+            this.saveFile(buildingAnalysisBean, horseTypeImg, "horseType", 5);
         }
     }
 
@@ -316,6 +430,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
             }
         }
     }
+
     private void deleteImg(BuildingImgBean buildingImgBean) {
         // 删除图片 以及图片表中的数据
         List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
