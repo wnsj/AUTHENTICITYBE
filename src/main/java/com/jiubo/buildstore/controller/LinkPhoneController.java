@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.LinkPhoneBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.LinkPhoneService;
@@ -28,13 +29,35 @@ public class LinkPhoneController {
     @Autowired
     private LinkPhoneService linkPhoneService;
 
+
+    @PostMapping("/getPhone")
+    public JSONObject getPhone(@RequestBody LinkPhoneBean linkPhoneBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,linkPhoneService.getPhone(linkPhoneBean));
+        return jsonObject;
+    }
+
+
     @PostMapping("/addLinkPhone")
-    public JSONObject addLinkPhone(LinkPhoneBean linkPhoneBean) {
+    public JSONObject addLinkPhone(String param) {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        LinkPhoneBean linkPhoneBean = JSONObject.parseObject(param, LinkPhoneBean.class);
         linkPhoneService.addLinkPhone(linkPhoneBean);
+        return jsonObject;
+    }
+
+    @PostMapping("/patchLinkById")
+    public JSONObject patchLinkById(@RequestBody LinkPhoneBean linkPhoneBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        LinkPhoneBean linkPhoneBean = JSONObject.parseObject(param, LinkPhoneBean.class);
+        linkPhoneService.patchLinkById(linkPhoneBean);
         return jsonObject;
     }
 }

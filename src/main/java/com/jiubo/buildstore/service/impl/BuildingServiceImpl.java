@@ -529,9 +529,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public BuildMainBean getHot() {
         BuildMainBean buildMainBean = new BuildMainBean();
-        buildMainBean.setNewHotSearchList(buildingDao.getHotSBuild());
-        buildMainBean.setNewPopularityList(buildingDao.getPHotBuild());
-        buildMainBean.setNewSellWellList(buildingDao.getSWBuild());
+        List<BuildingBean> hotSBuild = buildingDao.getHotSBuild();
+        getHeadImg(hotSBuild,2);
+        buildMainBean.setNewHotSearchList(hotSBuild);
+        List<BuildingBean> pHotBuild = buildingDao.getPHotBuild();
+        getHeadImg(pHotBuild,2);
+        buildMainBean.setNewPopularityList(pHotBuild);
+        List<BuildingBean> swBuild = buildingDao.getSWBuild();
+        getHeadImg(swBuild,2);
+        buildMainBean.setNewSellWellList(swBuild);
         return buildMainBean;
     }
 

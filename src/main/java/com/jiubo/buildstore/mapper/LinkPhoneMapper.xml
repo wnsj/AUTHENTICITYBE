@@ -10,5 +10,15 @@
 
     <select id="getPhone" resultType="com.jiubo.buildstore.bean.LinkPhoneBean">
         select * from link_phone
+        <where>
+            <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
+                LP_NAME like CONCAT('%',#{linkPhoneBean.lpName},'%')
+            </if>
+        </where>
     </select>
+
+    <update id="patchLinkById">
+        update link_phone set REMARKS = 1 where LP_ID = #{linkPhoneBean.lpId}
+    </update>
+
 </mapper>

@@ -52,6 +52,7 @@ public class LinkPhoneBean implements Serializable {
 
     private Date createDate;
 
+    private String createTime;
     /**
      * 前台传入的日期
      */
@@ -59,4 +60,23 @@ public class LinkPhoneBean implements Serializable {
 
     @TableField(exist = false)
     private String writeDate;
+
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String current;
+
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
+
+    /**
+     * 回拨电话标识（1：已回拨；2：未回拨）
+     */
+    private Integer remarks;
+
+    private String remarksLabel;
 }
