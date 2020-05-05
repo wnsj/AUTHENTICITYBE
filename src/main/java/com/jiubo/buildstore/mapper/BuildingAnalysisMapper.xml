@@ -36,10 +36,10 @@ FROM
 	building_analysis a
 	<where>
 		1=1
-		<if test="null != buildingAnalysisBean.buildId">
+		<if test="null != buildingAnalysisBean.buildId and buildingAnalysisBean.buildId != 0">
 			and a.BUILD_ID = #{buildingAnalysisBean.buildId}
 		</if>
-		<if test="null != buildingAnalysisBean.isSale">
+		<if test="null != buildingAnalysisBean.isSale and buildingAnalysisBean.isSale != 0">
 			and a.IS_SALE = #{buildingAnalysisBean.isSale}
 		</if>
 		<if test="null != buildingAnalysisBean.bhtId and buildingAnalysisBean.bhtId != 8">

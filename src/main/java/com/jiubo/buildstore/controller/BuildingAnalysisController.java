@@ -46,6 +46,21 @@ public class BuildingAnalysisController {
         return jsonObject;
     }
 
+
+    /**
+     * 后台管理 户型分析
+     * @param buildingAnalysisBean
+     * @return
+     */
+    @PostMapping("/getAllAnalysisByPage")
+    public JSONObject getAllAnalysisByPage(@RequestBody BuildingAnalysisBean buildingAnalysisBean){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingAnalysisService.getAllAnalysisByBid(buildingAnalysisBean));
+        return jsonObject;
+    }
+
     @PostMapping("/insertByBid")
     public JSONObject insertByBid(String param, @RequestParam("horseTypeImg") MultipartFile[] horseTypeImg) throws Exception {
         JSONObject jsonObject = new JSONObject();
