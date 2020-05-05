@@ -21,6 +21,7 @@ public interface BuildingAnalysisDao extends BaseMapper<BuildingAnalysisBean> {
     public List<BuildingAnalysisBean> getBidByBIdList(@Param("buildingAnalysisBean") BuildingAnalysisBean buildingAnalysisBean);
 
     public List<BuildingAnalysisBean> getAllAnalysisByBid(Page page,@Param("buildingAnalysisBean") BuildingAnalysisBean buildingAnalysisBean);
+    public List<BuildingAnalysisBean> getAllAnalysisByBid(@Param("buildingAnalysisBean") BuildingAnalysisBean buildingAnalysisBean);
 
     public void insertByBid(@Param("buildingAnalysisBean") BuildingAnalysisBean buildingAnalysisBean);
 

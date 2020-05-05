@@ -150,4 +150,5 @@ public class BuildingAnalysisBean implements Serializable {
 
     private List<BuildingHorseTypeBean> buildingHorseTypeBeanList;
     private String floor;
+    private Integer code;
 }

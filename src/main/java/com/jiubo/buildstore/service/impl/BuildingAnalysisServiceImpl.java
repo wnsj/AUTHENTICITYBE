@@ -70,14 +70,19 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
     @Override
     public BuildingAnalysisPageBean getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean) {
         BuildingAnalysisPageBean buildingAnalysisPageBean = new BuildingAnalysisPageBean();
+        List<BuildingAnalysisBean> buildAnalysisList;
         Page<BuildingAnalysisBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
-        page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 10L : Long.parseLong(buildingAnalysisBean.getPageSize()));
+        if (null != buildingAnalysisBean && buildingAnalysisBean.getCode() == 1) {
+            page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
+            page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 3L : Long.parseLong(buildingAnalysisBean.getPageSize()));
+            buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
+        } else {
+            buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(buildingAnalysisBean);
+            page.setTotal(buildAnalysisList.size());
+        }
 
-        List<BuildingAnalysisBean> buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
 
         if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
-
             // 楼盘
             List<BuildingBean> allBuild = buildingDao.getAllBuild();
             Map<Integer, List<BuildingBean>> buildMap = null;
