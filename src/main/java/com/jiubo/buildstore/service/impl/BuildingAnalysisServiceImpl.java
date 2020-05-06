@@ -397,7 +397,8 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 //                System.out.println("name:" + name);
 
                     i++;
-                    String path = dir.getPath() + "/" + name;
+                    String replace = dir.getPath().replace("\\", "/");
+                    String path = replace + "/" + name;
                     System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);
