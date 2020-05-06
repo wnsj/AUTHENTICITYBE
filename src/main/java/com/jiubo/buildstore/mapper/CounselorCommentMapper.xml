@@ -7,7 +7,7 @@
         b.CC_CONTENT,d.COU_ID,d.COU_NAME,d.INTRODUCE,d.GRADUATE,d.CC_ID,d.PICTURE_NAME,PICTURE_PATH
         from counselor_comment a,counselor_character b,counselor d
         <where>
-            a.C_ID = d.COU_ID and b.CC_ID = d.CC_ID
+            a.COU_ID = d.COU_ID and b.CC_ID = d.CC_ID
 
              <if test="counselorCommentBean.buildId != null">
                  and a.BUILD_ID = #{counselorCommentBean.buildId}
@@ -29,7 +29,7 @@
     </update>
 
     <select id="getCidByBidList" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
-        select a.C_ID,a.BUILD_ID,b.COU_NAME,b.TEL from counselor_comment a,counselor b
+        select a.COU_ID,a.BUILD_ID,b.COU_NAME,b.TEL from counselor_comment a,counselor b
         <where>
             a.C_ID = b.COU_ID and
             a.BUILD_ID in
@@ -46,8 +46,8 @@
             <if test="counselorCommentBean.buildId != null">
                 and BUILD_ID = #{counselorCommentBean.buildId}
             </if>
-            <if test="counselorCommentBean.cId != null">
-                and C_ID = #{counselorCommentBean.cId}
+            <if test="counselorCommentBean.couId != null">
+                and COU_ID = #{counselorCommentBean.couId}
             </if>
             <if test="counselorCommentBean.coucType != null">
                 and COUC_TYPE = #{counselorCommentBean.coucType}
@@ -61,8 +61,8 @@
             <if test="counselorCommentBean.comContent != null and counselorCommentBean.comContent != ''">
                 COM_CONTENT = #{counselorCommentBean.comContent},
             </if>
-            <if test="counselorCommentBean.cId != null">
-                C_ID = #{counselorCommentBean.cId},
+            <if test="counselorCommentBean.couId != null">
+                COU_ID = #{counselorCommentBean.couId},
             </if>
             <if test="counselorCommentBean.buildId != null">
                 BUILD_ID = #{counselorCommentBean.buildId},
@@ -78,8 +78,8 @@
     </update>
 
     <insert id="addCom" useGeneratedKeys="true" keyProperty="coucId">
-        insert into counselor_comment (COM_CONTENT,C_ID,COM_DATE,COUC_TYPE,BUILD_ID)
-        values (#{counselorCommentBean.comContent},#{counselorCommentBean.cId},
+        insert into counselor_comment (COM_CONTENT,COU_ID,COM_DATE,COUC_TYPE,BUILD_ID)
+        values (#{counselorCommentBean.comContent},#{counselorCommentBean.couId},
         #{counselorCommentBean.comDate},
         #{counselorCommentBean.coucType},#{counselorCommentBean.buildId})
     </insert>

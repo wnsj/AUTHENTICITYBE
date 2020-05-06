@@ -100,7 +100,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             }
             couBean.setCouTypeBeanList(couTypeBeanList);
             // 咨询师id集合
-            List<Integer> collect = counselorByBid.stream().map(CounselorCommentBean::getCId).collect(Collectors.toList());
+            List<Integer> collect = counselorByBid.stream().map(CounselorCommentBean::getCouId).collect(Collectors.toList());
 
             // 通过咨询师id集合查找其标签
             List<CouRefBean> couRefList = couRefDao.getRefByCouIdList(new CouRefBean().setCouIdList(collect));
@@ -119,7 +119,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             //将标签数据放进咨询师评论分页数据中
             for (CounselorCommentBean commentBean : counselorByBid) {
                 if (null != refMap) {
-                    List<CouRefBean> counselorLabelBeans = refMap.get(commentBean.getCId());
+                    List<CouRefBean> counselorLabelBeans = refMap.get(commentBean.getCouId());
 
                     List<String> collect1 = counselorLabelBeans.stream().map(CouRefBean::getCouLabel).collect(Collectors.toList());
 
@@ -132,8 +132,8 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 }
 
                 // 咨询师头像
-                if (null != listMap && commentBean.getCId() != null) {
-                    List<CounselorBean> beanList1 = listMap.get(commentBean.getCId());
+                if (null != listMap && commentBean.getCouId() != null) {
+                    List<CounselorBean> beanList1 = listMap.get(commentBean.getCouId());
                     if (null != beanList1) {
                         CounselorBean bean = beanList1.get(0);
                         commentBean.setCounselorBean(bean);
@@ -202,8 +202,8 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     }
                 }
                 //翻译咨询师名字
-                if (null != listMap && commentBean.getCId() != null) {
-                    List<CounselorBean> counselorBeans = listMap.get(commentBean.getCId());
+                if (null != listMap && commentBean.getCouId() != null) {
+                    List<CounselorBean> counselorBeans = listMap.get(commentBean.getCouId());
                     if (null != counselorBeans) {
                         commentBean.setCouName(counselorBeans.get(0).getCouName());
                     }
