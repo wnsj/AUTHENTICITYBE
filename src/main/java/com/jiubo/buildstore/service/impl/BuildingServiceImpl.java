@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import ch.qos.logback.core.util.TimeUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
 
@@ -455,6 +456,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
+
+        // 开盘时间
+        if (null != build.getOpenDate()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+            build.setOpenDateTime(sdf.format(build.getOpenDate()));
+        }
 
         if (null != build) {
             List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
