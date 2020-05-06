@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.*;
 
 import com.jiubo.buildstore.common.ImgPathConstant;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.rmi.MarshalException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -161,8 +163,11 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
     }
 
     @Override
-    public void updateNumById(CounselorCommentBean counselorCommentBean) {
-        counselorCommentDao.updateNumById(counselorCommentBean);
+    public CounselorCommentBean updateNumById(CounselorCommentBean counselorCommentBean) throws MessageException {
+        if (counselorCommentDao.updateNumById(counselorCommentBean)<=0) throw new MessageException("没有要更新的信息");
+        CounselorCommentBean counselorCommentBean1 = new CounselorCommentBean();
+        counselorCommentBean1.setCoucId(counselorCommentBean.getCoucId());
+        return counselorCommentDao.queryCounselorComment(counselorCommentBean1);
     }
 
     @Override
@@ -236,7 +241,6 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         if (null != allByBid) {
             this.delFile(allByBid.get(0).getImgPath());
         }
-
         counselorCommentDao.updateComById(counselorCommentBean);
     }
 

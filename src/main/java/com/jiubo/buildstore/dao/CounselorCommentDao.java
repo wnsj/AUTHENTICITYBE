@@ -29,7 +29,7 @@ public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
      * 点赞
      * @param counselorCommentBean
      */
-    public void updateNumById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+    public int updateNumById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
     public List<CounselorCommentBean> getCidByBidList(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
@@ -48,4 +48,8 @@ public interface CounselorCommentDao extends BaseMapper<CounselorCommentBean> {
     public void updateComById(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
 
     public int addCom(@Param("counselorCommentBean") CounselorCommentBean counselorCommentBean);
+
+
+    // 根据评论ID查询点赞数
+    public CounselorCommentBean  queryCounselorComment(CounselorCommentBean counselorCommentBean);
 }

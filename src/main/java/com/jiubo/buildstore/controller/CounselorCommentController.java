@@ -2,10 +2,12 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.CounselorCommentService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,11 +53,13 @@ public class CounselorCommentController {
      * @return
      */
     @PostMapping("/updateNumById")
-    public JSONObject updateNumById(@RequestBody CounselorCommentBean counselorCommentBean) {
+    public JSONObject updateNumById(@RequestBody String param) throws MessageException {
+        System.out.println(param);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        counselorCommentService.updateNumById(counselorCommentBean);
+        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param,CounselorCommentBean.class);
+        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.updateNumById(counselorCommentBean));
         return jsonObject;
     }
 
@@ -67,6 +71,7 @@ public class CounselorCommentController {
      */
     @PostMapping("/updateComById")
     public JSONObject updateComById(String param,@RequestParam("picImg") MultipartFile[] picImg){
+        System.out.println(param.toString());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

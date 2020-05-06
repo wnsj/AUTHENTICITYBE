@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.CouBean;
 import com.jiubo.buildstore.bean.CounselorCommentBean;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -27,7 +28,7 @@ public interface CounselorCommentService extends IService<CounselorCommentBean> 
 
     public CouBean getCounselorByBid(CounselorCommentBean counselorCommentBean);
 
-    public void updateNumById(CounselorCommentBean counselorCommentBean);
+    public CounselorCommentBean updateNumById(CounselorCommentBean counselorCommentBean) throws MessageException;
 
     public static String sendHttpContent(String httpURL, String msg) {
         HttpURLConnection connection = null;

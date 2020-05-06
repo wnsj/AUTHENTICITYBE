@@ -20,6 +20,11 @@
         order by COM_DATE desc
     </select>
 
+    <!--根据点赞ID查询点赞信息-->
+    <select id="queryCounselorComment" parameterType="com.jiubo.buildstore.bean.CounselorCommentBean" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
+        select COUC_ID,PRAISE_NUM  from counselor_comment where COUC_ID = #{coucId}
+    </select>
+
     <!--点赞-->
     <update id="updateNumById">
         UPDATE counselor_comment
