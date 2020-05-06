@@ -424,6 +424,10 @@ public class BuildingBean implements Serializable {
     private List<String> matchingRealPathList;
 
     /**
+     * 区位
+     */
+    private List<String> regionPathList;
+    /**
      * 标签名（随意选的）
      */
     private String label;

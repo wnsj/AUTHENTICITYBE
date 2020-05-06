@@ -76,12 +76,13 @@ public class BuildingController {
                                   @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
                                   @RequestParam("matchingRealImg") MultipartFile[] matchingRealImg,
                                   @RequestParam("headImg") MultipartFile[] headImg,
+                                  @RequestParam("regionImg") MultipartFile[] regionImg,
                                   @RequestParam("video") MultipartFile[] video) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingBean buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
-        buildingService.addBuilding(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,video);
+        buildingService.addBuilding(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
         return jsonObject;
     }
 
@@ -103,13 +104,14 @@ public class BuildingController {
                                 @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
                                 @RequestParam("matchingRealImg") MultipartFile[] matchingRealImg,
                                 @RequestParam("headImg") MultipartFile[] headImg,
+                                @RequestParam("regionImg") MultipartFile[] regionImg,
                                 @RequestParam("video") MultipartFile[] video) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 
         BuildingBean buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
-        buildingService.patchById(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,video);
+        buildingService.patchById(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
 
         return jsonObject;
     }
