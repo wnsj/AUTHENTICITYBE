@@ -93,6 +93,10 @@ public class CounselorCommentBean implements Serializable {
     private Integer ccId;
 
     /**
+     * 咨询师实体
+     */
+    private CounselorBean counselorBean;
+    /**
      * 特长描述
      */
     private String ccContent;

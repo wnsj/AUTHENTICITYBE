@@ -1,29 +1,23 @@
 package com.jiubo.buildstore.service.impl;
 
-import ch.qos.logback.core.util.TimeUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
-
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
-import com.jiubo.buildstore.service.BuildingAnalysisService;
-import com.jiubo.buildstore.service.BuildingHorseTypeService;
 import com.jiubo.buildstore.service.BuildingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.jiubo.buildstore.common.ImgTypeConstant.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -74,8 +68,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private LocationDistinguishDao locationDistinguishDao;
-    @Override
 
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
+    @Override
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean) {
         Page<BuildingBean> page = new Page<>();
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
@@ -199,7 +195,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> buildingImgBeans = headImgMap.get(bean.getBuildId());
                     if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
                         bean.setImgName(buildingImgBeans.get(0).getImgName());
-                        bean.setImgPath("/fileController/getFile?type=IMG&path=".concat(buildingImgBeans.get(0).getImgPath()));
+                        bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(buildingImgBeans.get(0).getImgPath()));
                     }
                 }
 
@@ -207,7 +203,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> imgBeans = videoMap.get(bean.getBuildId());
                     if (null != imgBeans && imgBeans.size()>0){
                         bean.setVideoName(imgBeans.get(0).getImgName());
-                        bean.setVideoPath("/fileController/getFile?type=IMG&path=".concat(imgBeans.get(0).getImgPath()));
+                        bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                     }
                 }
                 // 设置均值
@@ -510,7 +506,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<BuildingImgBean> imgBeans4 = map.get(6);
                 if (null != imgBeans4) {
                     build.setImgName(imgBeans4.get(0).getImgName());
-                    build.setImgPath("/fileController/getFile?path=".concat(imgBeans4.get(0).getImgPath()));
+                    build.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans4.get(0).getImgPath()));
                 }
 
                 List<BuildingImgBean> imgBeans6 = map.get(9);
@@ -523,7 +519,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<BuildingImgBean> imgBeans5 = map.get(7);
                 if (null != imgBeans5) {
                     build.setVideoName(imgBeans5.get(0).getImgName());
-                    build.setVideoPath("/fileController/getFile?path=".concat(imgBeans5.get(0).getImgPath()));
+                    build.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans5.get(0).getImgPath()));
                 }
 
                 if (null !=listMap &&build.getLdId() != null) {
@@ -585,7 +581,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private List<String> getStrings(List<String> effectList) {
         List<String> pathList = new ArrayList<>();
         for (String e : effectList) {
-            pathList.add("/fileController/getFile?path=".concat(e));
+            pathList.add(ImgPathConstant.INTERFACE_PATH.concat(e));
         }
         return pathList;
     }
@@ -787,7 +783,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 设置头图名字、路径
                 if (null != imgBeans) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
-                    buildingBean1.setImgPath("/fileController/getFile?path=".concat(imgBeans.get(0).getImgPath()));
+                    buildingBean1.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                 }
 
                 // 均价
@@ -906,7 +902,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                 String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                File dir = new File("D:/" + buildingBean.getBuildId() + "/" + type);
+                File dir = new File(buildStoreDir + ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -920,7 +916,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 System.out.println("path:" + path);
 
-//                System.out.println("路径：" + path);
                 //读写文件
                 if (!multipartFile.isEmpty()) {
                     InputStream is = multipartFile.getInputStream();
@@ -953,5 +948,4 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
-    // 热门楼盘查询
 }

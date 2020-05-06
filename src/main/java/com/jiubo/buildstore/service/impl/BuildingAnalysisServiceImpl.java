@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
 
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.BuildingAnalysisService;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiubo.buildstore.service.BuildingService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +54,8 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
     @Autowired
     private ImgTypeDao imgTypeDao;
 
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
     @Override
     public List<BuildingAnalysisBean> getBidByBhtIdList(BuildingAnalysisBean buildingAnalysisBean) {
         return buildingAnalysisDao.getBidByBhtIdList(buildingAnalysisBean);
@@ -194,8 +198,8 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     List<BuildingImgBean> buildingImgBeans = collect.get(bean.getBaId());
                     if (null != buildingImgBeans) {
                         bean.setHorseImgName(buildingImgBeans.get(0).getImgName());
+                        bean.setHorseImgPath(ImgPathConstant.INTERFACE_PATH +(buildingImgBeans.get(0).getImgPath()));
                     }
-
                 }
             }
             buildingAnalysisPageBean.setBuildingHorseTypeBeanList(buildingHorseTypeBeanList);
@@ -309,8 +313,8 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     List<BuildingImgBean> buildingImgBeans = collect.get(bean.getBaId());
                     if (null != buildingImgBeans) {
                         bean.setHorseImgName(buildingImgBeans.get(0).getImgName());
+                        bean.setHorseImgPath(ImgPathConstant.INTERFACE_PATH +(buildingImgBeans.get(0).getImgPath()));
                     }
-
                 }
             }
 
@@ -385,7 +389,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                     String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                    File dir = new File("D:/" + buildingBean.getBuildId() + "/" + type);
+                    File dir = new File(buildStoreDir + ImgPathConstant.HOUSE_PATH + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                     if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 

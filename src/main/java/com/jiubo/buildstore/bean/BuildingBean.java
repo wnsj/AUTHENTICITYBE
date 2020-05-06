@@ -454,6 +454,8 @@ public class BuildingBean implements Serializable {
      */
     private Integer regionId;
 
+    private List<Integer> regionIdList;
+
     /**
      * 模糊查询字段
      */

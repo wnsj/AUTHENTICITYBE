@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
 
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.CouRefDao;
 import com.jiubo.buildstore.dao.CounselorCharacterDao;
@@ -13,6 +14,7 @@ import com.jiubo.buildstore.service.CounselorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +48,8 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
     @Autowired
     private CounselorLabelDao counselorLabelDao;
 
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
     @Override
     public List<CounselorBean> getAllCouselor() {
         return counselorDao.getAllCouselor();
@@ -151,7 +155,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
 
-                File dir = new File("D:/" + counselorBean.getCouName());
+                File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + counselorBean.getCouName());
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
