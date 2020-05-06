@@ -53,6 +53,7 @@ public class CounselorCommentController {
      * @return
      */
     @PostMapping("/updateNumById")
+
     public JSONObject updateNumById(@RequestBody String param) throws MessageException {
         System.out.println(param);
         JSONObject jsonObject = new JSONObject();
@@ -70,8 +71,7 @@ public class CounselorCommentController {
      * @return
      */
     @PostMapping("/updateComById")
-    public JSONObject updateComById(String param,@RequestParam("picImg") MultipartFile[] picImg){
-        System.out.println(param.toString());
+    public JSONObject updateComById(String param,@RequestParam("picImg") MultipartFile[] picImg) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
