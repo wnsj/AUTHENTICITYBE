@@ -17,6 +17,7 @@
                and a.COUC_TYPE = #{counselorCommentBean.coucType}
             </if>
         </where>
+        order by COM_DATE desc
     </select>
 
     <!--点赞-->
