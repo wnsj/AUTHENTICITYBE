@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,4 +35,6 @@ public class BuildingHorseTypeBean implements Serializable {
 
     @TableField(exist = false)
     private Integer bhtNum;
+
+    private Integer area;
 }

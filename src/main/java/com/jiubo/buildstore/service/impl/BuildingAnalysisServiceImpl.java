@@ -139,6 +139,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     // 添加户型及户型id
                     buildingHorseTypeBean.setBhtId(analysisBeans.get(0).getBhtId());
                     buildingHorseTypeBean.setBhtName(analysisBeans.get(0).getImgName());
+                    buildingHorseTypeBean.setArea(analysisBeans.get(0).getBuildArea());
                     buildingHorseTypeBean.setBhtNum(analysisBeans.size());
                     buildingHorseTypeBeanList.add(buildingHorseTypeBean);
                 }
