@@ -3,7 +3,7 @@
 <mapper namespace="com.jiubo.buildstore.dao.CounselorCommentDao">
 
     <select id="getCounselorByBid" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
-        SELECT a.COUC_ID,a.COM_CONTENT,a.C_ID,a.BUILD_ID,a.COM_DATE,a.PRAISE_NUM,a.COUC_TYPE,
+        SELECT a.COUC_ID,a.COM_CONTENT,a.COU_ID,a.BUILD_ID,a.COM_DATE,a.PRAISE_NUM,a.COUC_TYPE,
         b.CC_CONTENT,d.COU_ID,d.COU_NAME,d.INTRODUCE,d.GRADUATE,d.CC_ID,d.PICTURE_NAME,PICTURE_PATH
         from counselor_comment a,counselor_character b,counselor d
         <where>
@@ -36,7 +36,7 @@
     <select id="getCidByBidList" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
         select a.COU_ID,a.BUILD_ID,b.COU_NAME,b.TEL from counselor_comment a,counselor b
         <where>
-            a.C_ID = b.COU_ID and
+            a.COU_ID = b.COU_ID and
             a.BUILD_ID in
             <foreach collection="counselorCommentBean.bIdList" open="(" close=")" separator="," item="bId">
                 #{bId}
