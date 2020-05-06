@@ -212,6 +212,7 @@ public class BuildingBean implements Serializable {
      */
     private Date proDate;
 
+    private String proDateTime;
     /**
      * 产权年限
      */

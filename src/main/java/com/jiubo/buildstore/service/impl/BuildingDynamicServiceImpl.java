@@ -63,10 +63,16 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                 collect = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
             }
             for (BuildingDynamicBean dynamicBean : dynamicBeans) {
-                dynamicBean.setHtName(collect.get(dynamicBean.getBuildId()).get(0).getHtName());
-                Date date = dynamicBean.getCreateDate();
-                if (null != date) {
-                    dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
+                if(dynamicBean.getBuildId() != null){
+                    List<BuildingBean> buildingBeans = collect.get(dynamicBean.getBuildId());
+                    if (null != buildingBeans) {
+                        dynamicBean.setHtName(buildingBeans.get(0).getHtName());
+
+                    }
+                    Date date = dynamicBean.getCreateDate();
+                    if (null != date) {
+                        dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
+                    }
                 }
             }
         }

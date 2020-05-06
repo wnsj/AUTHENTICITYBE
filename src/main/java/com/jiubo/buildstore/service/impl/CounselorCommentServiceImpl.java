@@ -142,15 +142,25 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             for (CounselorCommentBean commentBean : comByPageList) {
                 // 翻译楼盘名
                 if (null != map) {
-                    commentBean.setHtName(map.get(commentBean.getBuildId()).get(0).getHtName());
+                    if (null != commentBean.getBuildId()) {
+                        List<BuildingBean> buildingBeanList = map.get(commentBean.getBuildId());
+                        if (null != buildingBeanList) {
+                            commentBean.setHtName(buildingBeanList.get(0).getHtName());
+                        }
+                    }
                 }
                 //翻译咨询师名字
-                if (null != listMap) {
-                    commentBean.setCouName(listMap.get(commentBean.getCId()).get(0).getCouName());
+                if (null != listMap && commentBean.getCId() != null) {
+                    List<CounselorBean> counselorBeans = listMap.get(commentBean.getCId());
+                    if (null != counselorBeans){
+                        commentBean.setCouName(counselorBeans.get(0).getCouName());
+                    }
+
                 }
                 // 翻译类型
-                if (null != collect) {
-                    commentBean.setCouTypeName(collect.get(commentBean.getCoucType()).get(0).getCouTypeName());
+                if (null != collect && commentBean.getCoucType() != null) {
+                    List<CouTypeBean> typeBeans1 = collect.get(commentBean.getCoucType());
+                    commentBean.setCouTypeName(typeBeans1.get(0).getCouTypeName());
                 }
 
                 if (commentBean.getComDate() != null) {
