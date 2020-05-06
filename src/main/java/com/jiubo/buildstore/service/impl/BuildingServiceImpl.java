@@ -592,7 +592,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Override
     public List<BuildingBean> getSellWell() {
-        return buildingDao.getSellWell();
+
+        List<BuildingBean> sellWell = buildingDao.getSellWell();
+        getHeadImg(sellWell,2);
+        return sellWell;
     }
 
     @Override
@@ -802,8 +805,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                     buildingBean1.setLabelList(labelList);
                 }
-
-
             }
         }
     }
