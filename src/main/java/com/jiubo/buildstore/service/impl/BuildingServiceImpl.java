@@ -458,21 +458,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
-<<<<<<< HEAD
 
-        // 开盘时间
-        if (null != build.getOpenDate()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-            build.setOpenDateTime(sdf.format(build.getOpenDate()));
-        }
-
-=======
         List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish(new LocationDistinguishBean().setLtId(1));
         Map<Integer, List<LocationDistinguishBean>> listMap = null;
         if (null != allDistinguishList && allDistinguishList.size()>0) {
             listMap = allDistinguishList.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
         }
->>>>>>> 16e94396ea8cf441d0718718908d61601ec4a3fc
+
         if (null != build) {
             List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
             if (null != imgByBuildId) {
