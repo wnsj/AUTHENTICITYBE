@@ -71,7 +71,7 @@ public interface CounselorCommentService extends IService<CounselorCommentBean> 
 
     public Page<CounselorCommentBean> getCounselorByPage(CounselorCommentBean counselorCommentBean);
 
-    public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] picImg);
+    public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] picImg) throws Exception;
 
     public void addCom(CounselorCommentBean counselorCommentBean, MultipartFile[] picImg) throws Exception;
 }

@@ -147,7 +147,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                         List<String> collect1 = buildingImgBeans.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
                         List<String> pathList = new ArrayList<>();
                         for (String e : collect1) {
-                            pathList.add(ImgPathConstant.COMMENT.concat(e));
+                            pathList.add(ImgPathConstant.INTERFACE_PATH.concat(e));
                         }
                         commentBean.setImgPathList(pathList);
                     }
@@ -173,6 +173,13 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         List<CounselorCommentBean> comByPageList = counselorCommentDao.getComByPage(page, counselorCommentBean);
         if (null != comByPageList && comByPageList.size() > 0) {
 
+            // 获取图片
+            List<Integer> coucIdList = comByPageList.stream().map(CounselorCommentBean::getCoucId).collect(Collectors.toList());
+            List<BuildingImgBean> imgByBuildId = buildingImgDao.getHeadImgByBuildId(new BuildingImgBean().setCoucIdList(coucIdList));
+            Map<Integer, List<BuildingImgBean>> couMap = null;
+            if (null != imgByBuildId && imgByBuildId.size()>0){
+                couMap = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getCoucId));
+            }
             // 获取楼盘名
             List<BuildingBean> allBuildList = buildingDao.getAllBuild();
             Map<Integer, List<BuildingBean>> map = null;
@@ -221,14 +228,25 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     commentBean.setComTime(formatDate);
                 }
 
-
+// 图片路径
+                if (null != couMap) {
+                    List<BuildingImgBean> buildingImgBeans = couMap.get(commentBean.getCoucId());
+                    if (null != buildingImgBeans && buildingImgBeans.size()>0) {
+                        List<String> collect1 = buildingImgBeans.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+                        List<String> pathList = new ArrayList<>();
+                        for (String e : collect1) {
+                            pathList.add(ImgPathConstant.INTERFACE_PATH.concat(e));
+                        }
+                        commentBean.setImgPathList(pathList);
+                    }
+                }
             }
         }
         return page.setRecords(comByPageList);
     }
 
     @Override
-    public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] file) {
+    public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] file) throws Exception {
         BuildingImgBean buildingImgBean = new BuildingImgBean();
         buildingImgBean.setItId(8);
         buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
@@ -238,6 +256,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         }
 
         counselorCommentDao.updateComById(counselorCommentBean);
+        this.saveFile(counselorCommentBean,file);
     }
 
     @Override
@@ -274,7 +293,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                 String imgName = commentBean.getCoucId().toString().concat(fileName);
-                File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + commentBean.getCoucId() + "/" + "comment");
+                File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + commentBean.getCoucId());
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 

@@ -617,6 +617,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 均价
                 buildingBean.setAveragePrice(getAverage(buildingBean));
             }
+            getHeadImg(beanList,2);
         }
         return beanList;
     }
