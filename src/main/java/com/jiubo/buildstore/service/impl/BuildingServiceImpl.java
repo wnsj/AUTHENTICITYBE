@@ -488,7 +488,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
                     List<String> enList = imgBeans1.stream().map(BuildingImgBean::getImgPath).collect(toList());
                     List<String> pathList = getStrings(enList);
-                    build.setEnPlanList(pathList);
+                    build.setEnPlanPathList(pathList);
                 }
                 // 楼盘实景
                 List<BuildingImgBean> imgBeans2 = map.get(3);
