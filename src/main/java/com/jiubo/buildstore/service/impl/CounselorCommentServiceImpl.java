@@ -61,9 +61,22 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 //        page.setCurrent(StringUtils.isBlank(counselorCommentBean.getCurrent()) ? 1L : Long.parseLong(counselorCommentBean.getCurrent()));
 //        page.setSize(StringUtils.isBlank(counselorCommentBean.getPageSize()) ? 10L : Long.parseLong(counselorCommentBean.getPageSize()));
 
+
+
+
         // 咨询师评论数据
         List<CounselorCommentBean> counselorByBid = counselorCommentDao.getCounselorByBid(counselorCommentBean);
+
         if (null != counselorByBid && counselorByBid.size() > 0) {
+
+
+            // 获取图片
+            List<Integer> coucIdList = counselorByBid.stream().map(CounselorCommentBean::getCoucId).collect(Collectors.toList());
+            List<BuildingImgBean> imgByBuildId = buildingImgDao.getHeadImgByBuildId(new BuildingImgBean().setCoucIdList(coucIdList));
+            Map<Integer, List<BuildingImgBean>> couMap = null;
+            if (null != imgByBuildId && imgByBuildId.size()>0){
+                couMap = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getCoucId));
+            }
 
             Map<Integer, List<CounselorCommentBean>> map = counselorByBid.stream().collect(Collectors.groupingBy(CounselorCommentBean::getCoucType));
 
@@ -101,6 +114,24 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 
                     commentBean.setClContentList(collect1);
                 }
+
+                if (null != commentBean.getComDate()) {
+                    String date = DateUtils.formatDate(commentBean.getComDate(), "yyyy年MM月dd日");
+                    commentBean.setComTime(date);
+                }
+
+                // 图片路径
+                if (null != couMap) {
+                    List<BuildingImgBean> buildingImgBeans = couMap.get(commentBean.getCoucId());
+                    if (null != buildingImgBeans && buildingImgBeans.size()>0) {
+                        List<String> collect1 = buildingImgBeans.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+                        List<String> pathList = new ArrayList<>();
+                        for (String e : collect1) {
+                            pathList.add("/fileController/getFile?path=".concat(e));
+                        }
+                        commentBean.setImgPathList(pathList);
+                    }
+                }
             }
         }
 
@@ -121,6 +152,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         page.setSize(StringUtils.isBlank(counselorCommentBean.getPageSize()) ? 10L : Long.parseLong(counselorCommentBean.getPageSize()));
         List<CounselorCommentBean> comByPageList = counselorCommentDao.getComByPage(page, counselorCommentBean);
         if (null != comByPageList && comByPageList.size() > 0) {
+
             // 获取楼盘名
             List<BuildingBean> allBuildList = buildingDao.getAllBuild();
             Map<Integer, List<BuildingBean>> map = null;
@@ -152,7 +184,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 //翻译咨询师名字
                 if (null != listMap && commentBean.getCId() != null) {
                     List<CounselorBean> counselorBeans = listMap.get(commentBean.getCId());
-                    if (null != counselorBeans){
+                    if (null != counselorBeans) {
                         commentBean.setCouName(counselorBeans.get(0).getCouName());
                     }
 
@@ -163,10 +195,13 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     commentBean.setCouTypeName(typeBeans1.get(0).getCouTypeName());
                 }
 
+                // 发布时间
                 if (commentBean.getComDate() != null) {
                     String formatDate = DateUtils.formatDate(commentBean.getComDate(), "yyyy-MM-dd");
                     commentBean.setComTime(formatDate);
                 }
+
+
             }
         }
         return page.setRecords(comByPageList);
@@ -227,7 +262,8 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 //                System.out.println("name:" + name);
 
                 i++;
-                String path = dir.getPath() + "/" + name;
+                String replace = dir.getPath().replace("\\", "/");
+                String path = replace + "/" + name;
                 System.out.println("path:" + path);
 
 //                System.out.println("路径：" + path);
@@ -258,7 +294,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setImgPath(path);
                 buildingImgBean.setItId(8);
-                buildingImgBean.setBaId(commentBean.getCoucId());
+                buildingImgBean.setCoucId(commentBean.getCoucId());
                 buildingImgDao.addImg(buildingImgBean);
             }
         }

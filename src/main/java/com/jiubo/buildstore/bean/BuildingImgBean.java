@@ -62,7 +62,16 @@ public class BuildingImgBean implements Serializable {
     private List<Integer> bIdList;
 
     /**
+     * 评论id 集合
+     */
+    private List<Integer> coucIdList;
+    /**
      * 户型分析id
      */
     private Integer baId;
+
+     /**
+     * 咨询师评论ID
+     */
+    private Integer coucId;
 }
