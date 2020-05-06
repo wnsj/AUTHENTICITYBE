@@ -150,7 +150,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getBuildByBuildId")
-    public JSONObject getBuildByBuildId(@RequestBody BuildingBean buildingBean) {
+    public JSONObject getBuildByBuildId(BuildingBean buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
