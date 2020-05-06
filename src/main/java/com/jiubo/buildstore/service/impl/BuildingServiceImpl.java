@@ -10,6 +10,7 @@ import com.jiubo.buildstore.service.BuildingAnalysisService;
 import com.jiubo.buildstore.service.BuildingHorseTypeService;
 import com.jiubo.buildstore.service.BuildingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -458,21 +459,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public BuildingBean getBuildByBuildId(BuildingBean buildingBean) {
         BuildingBean build = buildingDao.getBuildById(buildingBean);
-<<<<<<< HEAD
 
-        // 开盘时间
-        if (null != build.getOpenDate()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-            build.setOpenDateTime(sdf.format(build.getOpenDate()));
-        }
 
-=======
+
         List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish(new LocationDistinguishBean().setLtId(1));
         Map<Integer, List<LocationDistinguishBean>> listMap = null;
         if (null != allDistinguishList && allDistinguishList.size()>0) {
             listMap = allDistinguishList.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
         }
->>>>>>> 16e94396ea8cf441d0718718908d61601ec4a3fc
+
         if (null != build) {
             List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
             if (null != imgByBuildId) {
@@ -562,6 +557,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (null != saleTypeBeans && saleTypeBeans.size()>0){
                     build.setSaleLabel(saleTypeBeans.get(0).getStName());
                 }
+            }
+            // 翻译时间
+            Date openDate = build.getOpenDate();
+            if (null != openDate) {
+                String formatDate = DateUtils.formatDate(openDate,"yyyy年MM月dd日");
+                build.setOpenDateTime(formatDate);
+            }
+            Date proDate = build.getProDate();
+            if (null != proDate) {
+                String date = DateUtils.formatDate(proDate, "yyyy年MM月dd日");
+                build.setProDateTime(date);
             }
         }
         return build;
