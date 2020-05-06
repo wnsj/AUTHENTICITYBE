@@ -70,7 +70,7 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
                 log.error("日期转换异常" + e);
             }
             linkPhoneBean.setWriteTime(write);
-            linkPhoneBean.setCreateDate(DateUtils.parseDate(new Date()));
+            linkPhoneBean.setCreateDate(new Date());
             linkPhoneDao.addLinkPhone(linkPhoneBean);
         }
     }
