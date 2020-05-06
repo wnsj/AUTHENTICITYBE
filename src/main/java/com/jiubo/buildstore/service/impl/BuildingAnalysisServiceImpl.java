@@ -389,7 +389,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
                     String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                    File dir = new File(buildStoreDir + ImgPathConstant.HOUSE_PATH + buildingBean.getBuildId() + "/" + type);
+                    File dir = new File(buildStoreDir + ImgPathConstant.HOUSE_PATH + buildingBean.getBaId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                     if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
