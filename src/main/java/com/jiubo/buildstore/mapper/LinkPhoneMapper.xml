@@ -15,7 +15,7 @@
                 LP_NAME like CONCAT('%',#{linkPhoneBean.lpName},'%')
             </if>
         </where>
-        ORDER BY CREATE_DATE
+        ORDER BY CREATE_DATE desc
     </select>
 
     <update id="patchLinkById">
