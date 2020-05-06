@@ -288,7 +288,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public void addBuilding(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg,
-                            MultipartFile[] headImg, MultipartFile[] video) throws Exception {
+                            MultipartFile[] headImg,
+                            MultipartFile[] regionImg,
+                            MultipartFile[] video) throws Exception {
 
 
         BuildingBean byHtName = buildingDao.getAllByHtName(buildingBean);
@@ -336,6 +338,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
             this.saveFile(buildingBean, matchingRealImg, "matchingRealImg", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
+            this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
     }
@@ -375,7 +378,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Override
     public void patchById(BuildingBean buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
-                          MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] video) throws Exception {
+                          MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg,MultipartFile[] regionImg,MultipartFile[] video) throws Exception {
         // 更新楼盘数据
         buildingDao.patchById(buildingBean);
 
@@ -395,7 +398,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 获取图片类型
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
         // 更新图片
-        updatePicture(buildingBean, imgTypeList, effectImg, enPlanImg, buildRealImg, matchingRealImg, headImg, video);
+        updatePicture(buildingBean, imgTypeList, effectImg, enPlanImg, buildRealImg, matchingRealImg, headImg,regionImg, video);
 
     }
 
@@ -508,6 +511,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (null != imgBeans4) {
                     build.setImgName(imgBeans4.get(0).getImgName());
                     build.setImgPath("/fileController/getFile?path=".concat(imgBeans4.get(0).getImgPath()));
+                }
+
+                List<BuildingImgBean> imgBeans6 = map.get(9);
+                if (null != imgBeans6) {
+                    List<String> bmList = imgBeans6.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    List<String> pathList = getStrings(bmList);
+                    build.setRegionPathList(pathList);
                 }
                 // 视频
                 List<BuildingImgBean> imgBeans5 = map.get(7);
@@ -799,45 +809,58 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     private void updatePicture(BuildingBean buildingBean, List<ImgTypeBean> imgTypeList, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
-                               MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] video) throws Exception {
+                               MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg,MultipartFile[] regionImg, MultipartFile[] video) throws Exception {
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
         BuildingImgBean buildingImgBean = new BuildingImgBean();
         buildingImgBean.setBId(buildingBean.getBuildId());
 
         if (null != effectImg && effectImg.length > 0) {
-            deleteImg(buildingImgBean);
+
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, effectImg, "effectImg", listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
         }
 
         if (null != enPlanImg && enPlanImg.length > 0) {
+
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, enPlanImg, "enPlanImg", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
         }
 
         if (null != buildRealImg && buildRealImg.length > 0) {
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
         }
 
         if (null != matchingRealImg && matchingRealImg.length > 0) {
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, matchingRealImg, "matchingRealImg", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
         }
 
         if (null != headImg && headImg.length > 0) {
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.headImg).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
         }
 
+        if (null != regionImg && regionImg.length > 0) {
+            buildingImgBean.setItId(listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
+            deleteImg(buildingImgBean);
+            buildingImgDao.deleteByImgName(buildingImgBean);
+            this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
+        }
         if (null != video && video.length > 0) {
             buildingImgBean.setItId(listMap.get(ImgTypeConstant.video).get(0).getItId());
+            deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
