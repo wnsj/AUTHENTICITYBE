@@ -122,6 +122,7 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
 
     @Override
     public void addRecruit(RecruitBean recruitBean) {
+        recruitBean.setCreateTime(new Date());
         recruitDao.insertRecruit(recruitBean);
     }
 

@@ -401,13 +401,26 @@ public class BuildingBean implements Serializable {
      */
     private BigDecimal averagePrice;
 
+
     private List<String> effectList;
+    /**
+     * 户型图
+     */
     private List<String> effectPathList;
     private List<String> enPlanList;
+    /**
+     * 小区环境
+     */
     private List<String> enPlanPathList;
     private List<String> buildReaList;
+    /**
+     * 实景图
+     */
     private List<String> buildReaPathList;
     private List<String> matchingRealList;
+    /**
+     * 全景看房
+     */
     private List<String> matchingRealPathList;
 
     /**

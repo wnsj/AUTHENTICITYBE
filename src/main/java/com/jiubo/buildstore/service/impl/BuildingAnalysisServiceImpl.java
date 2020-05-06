@@ -73,7 +73,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         BuildingAnalysisPageBean buildingAnalysisPageBean = new BuildingAnalysisPageBean();
         List<BuildingAnalysisBean> buildAnalysisList;
         Page<BuildingAnalysisBean> page = new Page<>();
-        if (null != buildingAnalysisBean && buildingAnalysisBean.getCode() == 1) {
+        if (null != buildingAnalysisBean && buildingAnalysisBean.getCode() != null && buildingAnalysisBean.getCode() == 1) {
             page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
             page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 3L : Long.parseLong(buildingAnalysisBean.getPageSize()));
             buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);

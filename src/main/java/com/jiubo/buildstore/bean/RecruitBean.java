@@ -37,6 +37,7 @@ public class RecruitBean implements Serializable {
      * 职位名称
      */
     private String position;
+
     /**
      * 职位类型
      */
