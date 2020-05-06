@@ -18,4 +18,6 @@ import java.util.List;
 public interface RecruitLabelService extends IService<RecruitLabelBean> {
 
     public List<RecruitLabelBean> getLabelByType(RecruitLabelBean recruitLabelBean);
+
+    public void addRecruitLabel(RecruitLabelBean recruitLabelBean);
 }

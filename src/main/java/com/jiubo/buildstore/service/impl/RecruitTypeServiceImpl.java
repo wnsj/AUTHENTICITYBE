@@ -26,4 +26,9 @@ public class RecruitTypeServiceImpl extends ServiceImpl<RecruitTypeDao, RecruitT
     public List<RecruitTypeBean> getAllRecruitType() {
         return recruitTypeDao.getAllRecruitType();
     }
+
+    @Override
+    public void addRecruitType(RecruitTypeBean recruitTypeBean) {
+        recruitTypeDao.insert(recruitTypeBean);
+    }
 }

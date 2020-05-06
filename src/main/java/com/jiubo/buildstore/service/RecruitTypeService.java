@@ -15,4 +15,5 @@ import java.util.List;
  */
 public interface RecruitTypeService extends IService<RecruitTypeBean> {
     public List<RecruitTypeBean> getAllRecruitType();
+    public void addRecruitType(RecruitTypeBean recruitTypeBean);
 }
