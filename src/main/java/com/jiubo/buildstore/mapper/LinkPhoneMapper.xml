@@ -3,9 +3,9 @@
 <mapper namespace="com.jiubo.buildstore.dao.LinkPhoneDao">
 
     <insert id="addLinkPhone">
-        INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE)
+        INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE,FORM)
         VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.buildId},
-        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate})
+        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate},#{linkPhoneBean.form})
     </insert>
 
     <select id="getPhone" resultType="com.jiubo.buildstore.bean.LinkPhoneBean">
@@ -15,6 +15,7 @@
                 LP_NAME like CONCAT('%',#{linkPhoneBean.lpName},'%')
             </if>
         </where>
+        ORDER BY CREATE_DATE
     </select>
 
     <update id="patchLinkById">
