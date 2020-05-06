@@ -5,7 +5,7 @@
     <insert id="addLinkPhone">
         INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE,FORM)
         VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.buildId},
-        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate},#{linkPhoneBean.createDate})
+        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate},#{linkPhoneBean.form})
     </insert>
 
     <select id="getPhone" resultType="com.jiubo.buildstore.bean.LinkPhoneBean">
