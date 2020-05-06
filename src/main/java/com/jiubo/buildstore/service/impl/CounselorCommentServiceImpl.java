@@ -138,6 +138,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     List<CounselorBean> beanList1 = listMap.get(commentBean.getCouId());
                     if (null != beanList1) {
                         CounselorBean bean = beanList1.get(0);
+                        bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
                         commentBean.setCounselorBean(bean);
                     }
                 }
