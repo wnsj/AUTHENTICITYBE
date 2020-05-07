@@ -21,6 +21,18 @@
         </where>
     </select>
 
+    <select id="getChaRefByChaIdList" resultType="com.jiubo.buildstore.bean.CharaRefBean">
+        select * from chara_ref
+        <where>
+            <if test="charaRefBean.chaIdList != null and charaRefBean.chaIdList.size >0">
+                HOUSE_ID in
+                <foreach collection="charaRefBean.chaIdList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
     <select id="getCharaByBuildId" resultType="com.jiubo.buildstore.bean.CharaRefBean">
         select * from chara_ref
         <where>

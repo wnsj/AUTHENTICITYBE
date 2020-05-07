@@ -43,6 +43,12 @@ public class CharaRefBean implements Serializable {
      */
     @TableField(exist = false)
     private List<Integer> buildIdList;
+
+    /**
+     * 特色id集合
+     */
+    @TableField(exist = false)
+    private List<Integer> chaIdList;
     /**
      * 特色id
      */
