@@ -134,10 +134,15 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 // 咨询师头像
                 if (null != listMap && commentBean.getCouId() != null) {
                     List<CounselorBean> beanList1 = listMap.get(commentBean.getCouId());
-                    if (null != beanList1) {
+                    if (null != beanList1 && beanList.size()>0) {
                         CounselorBean bean = beanList1.get(0);
-                        bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
-                        commentBean.setCounselorBean(bean);
+                        if (null != bean) {
+                            if (StringUtils.isBlank(bean.getPicturePath())) {
+                                bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
+                            }
+                            commentBean.setCounselorBean(bean);
+                        }
+
                     }
                 }
 
