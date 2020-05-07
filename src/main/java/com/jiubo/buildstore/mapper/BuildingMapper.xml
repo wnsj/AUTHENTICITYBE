@@ -51,13 +51,6 @@
                     #{buildId}
                 </foreach>
             </if>
-            /*房源特色*/
-            <if test="buildingBean.chaIdList != null and buildingBean.chaIdList.size() > 0">
-                and CHA_ID in
-                <foreach collection="buildingBean.chaIdList" open="(" close=")" separator="," item="chaId">
-                    #{chaId}
-                </foreach>
-            </if>
             <if test="buildingBean.openTimeList != null and buildingBean.openTimeList.size() > 0">
                 and
                 <foreach collection="buildingBean.openTimeList" open="(" close=")" separator="or" item="item">

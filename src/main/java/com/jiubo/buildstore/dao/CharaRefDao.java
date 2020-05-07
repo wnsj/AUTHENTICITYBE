@@ -22,4 +22,6 @@ public interface CharaRefDao extends BaseMapper<CharaRefBean> {
  public void deleteCharaRefByBid(@Param("buildId") Integer buildId);
 
  public List<CharaRefBean> getCharaByBuildId(@Param("buildId") Integer buildId);
+
+ public List<CharaRefBean> getChaRefByChaIdList(@Param("charaRefBean") CharaRefBean charaRefBean);
 }

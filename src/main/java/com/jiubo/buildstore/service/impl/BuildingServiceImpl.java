@@ -173,6 +173,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
                         bean.setCharaNameList(charaRefList);
                         bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                        if (null != charaRefList) {
+                            bean.setChaName(StringUtils.join(charaRefList,"、"));
+                        }
                     }
                 }
 
@@ -253,15 +256,32 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
         List<Integer> bhtIdList = buildingBean.getBhtIdList();
 
+        List<Integer> buildIdList = new ArrayList<>();
         if (null != bhtIdList && bhtIdList.size() > 0) {
             List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
             if (null != bhtRefByBhtIds && bhtRefByBhtIds.size()>0) {
-                List<Integer> buildIdList = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
-                buildingBean.setBuildIdList(buildIdList);
+                List<Integer> buildIds = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
+                buildIdList.addAll(buildIds);
             } else {
                 return true;
             }
         }
+
+        // 设置楼盘查询条件---通过传入的特色标签条件筛选楼盘
+        // （首先获取户型id集合，通过特色标签id集合 在特色关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
+
+        List<Integer> chaIdList = buildingBean.getChaIdList();
+        if (null != chaIdList && chaIdList.size()>0) {
+            List<CharaRefBean> chaRefByChaIdList = charaRefDao.getChaRefByChaIdList(new CharaRefBean().setChaIdList(chaIdList));
+            if (null != chaRefByChaIdList && chaRefByChaIdList.size()>0) {
+                List<Integer> collect = chaRefByChaIdList.stream().map(CharaRefBean::getBuildId).collect(toList());
+                buildIdList.addAll(collect);
+            } else {
+                return true;
+            }
+        }
+        List<Integer> list = buildIdList.stream().distinct().collect(toList());
+        buildingBean.setBuildIdList(list);
         return false;
     }
 
