@@ -153,11 +153,11 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
 
-                File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + counselorBean.getCouName());
+                File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + counselorBean.getCouId());
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = counselorBean.getCouName() + "_" + fileName;
+                String name = counselorBean.getCouId() + "_" + fileName;
 //                System.out.println("name:" + name);
                 String replace = dir.getPath().replace("\\", "/");
                 String path = replace + "/" + name;
