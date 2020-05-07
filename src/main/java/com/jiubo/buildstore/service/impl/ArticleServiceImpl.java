@@ -59,23 +59,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
         if (null != articleByPage && articleByPage.size() > 0) {
             for (ArticleBean bean : articleByPage) {
 
-                if (1==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("公司简介");
-                } else if (2==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("发展历程");
-                } else if (3==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("公司荣誉");
-                }else if (4==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("企业团队");
-                } else if(5==bean.getArticleType()){
-                    bean.setArticleTypeLabel("企业文化");
-                } else if (6==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("联系我们");
-                } else if (7==bean.getArticleType()) {
-                    bean.setArticleTypeLabel("服务声明");
-                } else {
-                    bean.setArticleTypeLabel("楼盘合作");
+                if (null != bean.getArticleType()) {
+                    if (1==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("公司简介");
+                    } else if (2==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("发展历程");
+                    } else if (3==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("公司荣誉");
+                    }else if (4==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("企业团队");
+                    } else if(5==bean.getArticleType()){
+                        bean.setArticleTypeLabel("企业文化");
+                    } else if (6==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("联系我们");
+                    } else if (7==bean.getArticleType()) {
+                        bean.setArticleTypeLabel("服务声明");
+                    } else {
+                        bean.setArticleTypeLabel("楼盘合作");
+                    }
                 }
+
 
                 if (null != bean.getCreateTime()) {
                     String formatDate = DateUtils.formatDate(bean.getCreateTime(), "yyyy-MM-dd");
