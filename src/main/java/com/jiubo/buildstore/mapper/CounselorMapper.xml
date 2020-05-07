@@ -57,5 +57,6 @@
                 PICTURE_PATH = #{counselorBean.picturePath}
             </if>
         </trim>
+        where COU_ID = #{counselorBean.couId}
     </update>
 </mapper>
