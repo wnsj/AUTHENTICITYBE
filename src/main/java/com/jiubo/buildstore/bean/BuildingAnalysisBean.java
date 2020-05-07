@@ -84,12 +84,8 @@ public class BuildingAnalysisBean implements Serializable {
 
     /**
      * 朝向
-     * 1-东
-     * 2-南
-     * 3-西
-     * 4-北
      */
-    private Integer drection;
+    private String drection;
 
     private String drectionLabel;
     /**

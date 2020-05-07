@@ -89,7 +89,7 @@ FROM
 				BUILD_AREA = #{buildingAnalysisBean.buildArea},
 			</if>
 			<if test="buildingAnalysisBean.house != null">
-				HOUSE = #{buildingAnalysisBean.house}
+				HOUSE = #{buildingAnalysisBean.house},
 			</if>
 			<if test="buildingAnalysisBean.floor != null and buildingAnalysisBean.floor != ''">
 				FLOOR = #{buildingAnalysisBean.floor}

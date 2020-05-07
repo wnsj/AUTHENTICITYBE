@@ -182,16 +182,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     bean.setSaleLabel(saleMap.get(bean.getIsSale()).get(0).getStName());
                 }
 
-                // 翻译朝向
-                if (bean.getDrection() == 1) {
-                    bean.setDrectionLabel("东");
-                } else if (bean.getDrection() == 2) {
-                    bean.setDrectionLabel("南");
-                } else if (bean.getDrection() == 3) {
-                    bean.setDrectionLabel("西");
-                } else if (bean.getDrection() == 4) {
-                    bean.setDrectionLabel("北");
-                }
+
 
                 // 图片绑定实体
                 if (null != collect) {
@@ -263,7 +254,6 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                 collect = imgList.stream().collect(Collectors.groupingBy(BuildingImgBean::getBaId));
             }
 
-
             for (BuildingAnalysisBean bean : buildAnalysisList) {
 
 
@@ -295,17 +285,6 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                 // 翻译出售状态
                 if (null != saleMap && null != bean.getIsSale()) {
                     bean.setSaleLabel(saleMap.get(bean.getIsSale()).get(0).getStName());
-                }
-
-                // 翻译朝向
-                if (bean.getDrection() == 1) {
-                    bean.setDrectionLabel("东");
-                } else if (bean.getDrection() == 2) {
-                    bean.setDrectionLabel("南");
-                } else if (bean.getDrection() == 3) {
-                    bean.setDrectionLabel("西");
-                } else if (bean.getDrection() == 4) {
-                    bean.setDrectionLabel("北");
                 }
 
                 // 图片绑定实体
