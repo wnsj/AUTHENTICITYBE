@@ -1,4 +1,4 @@
-package com.jiubo.samystore.util;
+package com.jiubo.buildstore.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

@@ -1,4 +1,4 @@
-package com.jiubo.samystore.util;
+package com.jiubo.buildstore.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

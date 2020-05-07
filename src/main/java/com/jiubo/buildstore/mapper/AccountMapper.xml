@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.AccountDao">
+
+    <select id="queryAccountList" parameterType="com.jiubo.buildstore.bean.AccountBean"
+            resultType="com.jiubo.buildstore.bean.AccountBean">
+        SELECT SA_ID,NAME,PHONE,ACCOUNT,PWD
+        FROM account
+        <where>
+            <if test="account != null and account != ''">
+                AND ACCOUNT = #{account}
+            </if>
+            <if test="pwd != null and pwd != ''">
+                AND PWD = #{pwd}
+            </if>
+        </where>
+    </select>
+</mapper>
