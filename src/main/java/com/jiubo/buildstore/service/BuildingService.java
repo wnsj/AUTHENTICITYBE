@@ -21,6 +21,9 @@ import java.util.List;
 public interface BuildingService extends IService<BuildingBean> {
     public Page<BuildingBean> getAllBulidBypage(BuildingBean buildingBean);
 
+
+    public Page<BuildingBean> getAllBulidByCondition(BuildingBean buildingBean);
+
     public void addBuilding(BuildingBean buildingBean,MultipartFile[] effectImg,
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,

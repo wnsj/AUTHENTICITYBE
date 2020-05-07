@@ -122,10 +122,16 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
             for (CounselorCommentBean commentBean : counselorByBid) {
                 if (null != refMap) {
                     List<CouRefBean> counselorLabelBeans = refMap.get(commentBean.getCouId());
+                    try{
+                        List<String> collect1 = counselorLabelBeans.stream().map(CouRefBean::getCouLabel).collect(Collectors.toList());
+                        commentBean.setClContentList(collect1);
+                    }catch (Exception e) {
+                        log.error("评论数据"+commentBean.toString());
+                        log.error("标签"+counselorLabelBeans.toString());
+                    }
 
-                    List<String> collect1 = counselorLabelBeans.stream().map(CouRefBean::getCouLabel).collect(Collectors.toList());
 
-                    commentBean.setClContentList(collect1);
+
                 }
 
                 if (null != commentBean.getComDate()) {
