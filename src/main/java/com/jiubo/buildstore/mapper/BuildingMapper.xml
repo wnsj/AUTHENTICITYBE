@@ -310,11 +310,11 @@
             <if test="null != buildingBean.longitude and buildingBean.longitude != ''">
                 LONGITUDE = #{buildingBean.longitude},
             </if>
-            <if test="null != buildingBean.quality and buildingBean.quality != ''">
+            <if test="null != buildingBean.latitude and buildingBean.latitude != ''">
                 LATITUDE = #{buildingBean.latitude},
             </if>
             <if test="null != buildingBean.buildDescription and buildingBean.buildDescription != ''">
-                LATITUDE = #{buildingBean.buildDescription},
+                BUILD_DESCRIPTION = #{buildingBean.buildDescription},
             </if>
             <if test="null != buildingBean.regionId">
                 REGION_ID = #{buildingBean.regionId}
