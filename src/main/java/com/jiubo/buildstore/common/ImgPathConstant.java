@@ -17,4 +17,9 @@ public  class ImgPathConstant {
      * 接口路径
      */
     public static final String INTERFACE_PATH = "/fileController/getFile?type=IMG&path=";
+
+    /**
+     * 图文 图片
+     */
+    public static final String ARTICLE = "/article";
 }

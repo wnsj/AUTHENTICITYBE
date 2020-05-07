@@ -5,6 +5,7 @@ import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.ArticleBean;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.dao.ArticleDao;
 import com.jiubo.buildstore.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,6 +34,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
     @Autowired
     private ArticleDao articleDao;
 
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
     @Override
     public List<ArticleBean> getArticleByType(ArticleBean articleBean) {
         List<ArticleBean> article = articleDao.getArticleByType(articleBean);
@@ -96,13 +99,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleBean> imp
             String srcName = fileName;
             //生成文件名
             fileName = fileName.substring(fileName.lastIndexOf("."));
-            String path = "D:/";
+
+            String path = buildStoreDir + ImgPathConstant.ARTICLE;
             File dir = new File(path);
-            if (!dir.exists()) dir.mkdirs();
-            path = path.concat(UUID.randomUUID().toString().replace("-", "")).concat(fileName);
+            if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
+            String replace = dir.getPath().replace("\\", "/");
+            path = replace.concat("/").concat(UUID.randomUUID().toString().replace("-", "")).concat(fileName);
+            System.out.println("路径" + path);
             Map<String, Object> map = new HashMap<>();
             map.put("srcName", srcName);
-            map.put("fileUrl", "/fileController/getFile?type=IMG&path=".concat(path));
+            map.put("fileUrl", ImgPathConstant.INTERFACE_PATH.concat(path));
             mapList.add(map);
             generateFile(multipartFile, path);
         }
