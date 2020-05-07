@@ -20,30 +20,19 @@
 
     <select id="getAllAnalysisByBid" resultType="com.jiubo.buildstore.bean.BuildingAnalysisBean">
         SELECT
-	a.BA_ID,
-	a.BUILD_ID,
-	a.BHT_ID,
-	a.IMG_NAME,
-	a.CREATE_DATE,
-	a.IS_SALE,
-	a.TOTLE_PRICE,
-	a.CONTENT,
-	a.DRECTION,
-	a.DOWN_PAYMENT,
-	a.CA_NAME,
-	a.BUILD_AREA
+	*
 FROM
-	building_analysis a
+	building_analysis
 	<where>
 		1=1
 		<if test="null != buildingAnalysisBean.buildId and buildingAnalysisBean.buildId != 0">
-			and a.BUILD_ID = #{buildingAnalysisBean.buildId}
+			and BUILD_ID = #{buildingAnalysisBean.buildId}
 		</if>
 		<if test="null != buildingAnalysisBean.isSale and buildingAnalysisBean.isSale != 0">
-			and a.IS_SALE = #{buildingAnalysisBean.isSale}
+			and IS_SALE = #{buildingAnalysisBean.isSale}
 		</if>
 		<if test="null != buildingAnalysisBean.bhtId and buildingAnalysisBean.bhtId != 8">
-			and a.BHT_ID = #{buildingAnalysisBean.bhtId}
+			and BHT_ID = #{buildingAnalysisBean.bhtId}
 		</if>
 	</where>
     </select>
