@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RecruitTypeBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.RecruitTypeService;
@@ -36,7 +37,7 @@ public class RecruitTypeController {
     }
 
     @PostMapping("/addRecruitType")
-    public JSONObject addRecruitType(@RequestBody RecruitTypeBean recruitTypeBean) {
+    public JSONObject addRecruitType(@RequestBody RecruitTypeBean recruitTypeBean) throws MessageException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

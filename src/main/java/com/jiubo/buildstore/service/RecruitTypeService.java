@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RecruitTypeBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface RecruitTypeService extends IService<RecruitTypeBean> {
     public List<RecruitTypeBean> getAllRecruitType();
-    public void addRecruitType(RecruitTypeBean recruitTypeBean);
+    public void addRecruitType(RecruitTypeBean recruitTypeBean) throws MessageException;
 }

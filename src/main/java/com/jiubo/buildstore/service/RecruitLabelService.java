@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RecruitLabelBean;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jiubo.buildstore.bean.RecruitLabelListBean;
@@ -19,5 +20,5 @@ public interface RecruitLabelService extends IService<RecruitLabelBean> {
 
     public List<RecruitLabelBean> getLabelByType(RecruitLabelBean recruitLabelBean);
 
-    public void addRecruitLabel(RecruitLabelBean recruitLabelBean);
+    public void addRecruitLabel(RecruitLabelBean recruitLabelBean)throws MessageException;
 }
