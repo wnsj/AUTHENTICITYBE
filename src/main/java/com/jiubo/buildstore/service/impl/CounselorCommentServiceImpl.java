@@ -158,6 +158,8 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                         commentBean.setImgPathList(pathList);
                     }
                 }
+
+
             }
         }
 

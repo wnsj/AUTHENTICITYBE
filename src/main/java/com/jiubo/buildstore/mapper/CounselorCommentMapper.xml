@@ -3,12 +3,29 @@
 <mapper namespace="com.jiubo.buildstore.dao.CounselorCommentDao">
 
     <select id="getCounselorByBid" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
-        SELECT a.COUC_ID,a.COM_CONTENT,a.COU_ID,a.BUILD_ID,a.COM_DATE,a.PRAISE_NUM,a.COUC_TYPE,
-        b.CC_CONTENT,d.COU_ID,d.COU_NAME,d.INTRODUCE,d.GRADUATE,d.CC_ID,d.PICTURE_NAME,PICTURE_PATH
-        from counselor_comment a,counselor_character b,counselor d
+        SELECT
+        a.COUC_ID,
+        a.COM_CONTENT,
+        a.COU_ID,
+        a.BUILD_ID,
+        a.COM_DATE,
+        a.PRAISE_NUM,
+        a.COUC_TYPE,
+        b.CC_CONTENT,
+        d.COU_ID,
+        d.COU_NAME,
+        d.INTRODUCE,
+        d.GRADUATE,
+        d.CC_ID,
+        d.PICTURE_NAME,
+        PICTURE_PATH
+        FROM
+        counselor_comment a
+        left join 	counselor d
+        on a.COU_ID = d.COU_ID
+        left join counselor_character b
+        on  b.CC_ID = d.CC_ID
         <where>
-            a.COU_ID = d.COU_ID and b.CC_ID = d.CC_ID
-
              <if test="counselorCommentBean.buildId != null">
                  and a.BUILD_ID = #{counselorCommentBean.buildId}
              </if>
