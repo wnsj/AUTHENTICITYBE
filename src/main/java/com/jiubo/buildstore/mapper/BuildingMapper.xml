@@ -62,13 +62,13 @@
                 and
                 <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minArea != null and item.maxArea == null">
-                        #{item.minArea} > MIN_AREA
+                        MAX_AREA > #{item.minArea}
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea == null">
-                        #{item.maxArea} >= MAX_AREA
+                        #{item.maxArea} >= MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
-                        #{item.maxArea} >= MIN_AREA and MAX_AREA > #{item.minArea}
+                        MIN_AREA >= #{item.minArea} and  #{item.maxArea} >= MIN_AREA or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
                     </if>
                 </foreach>
             </if>
@@ -82,7 +82,7 @@
                         #{item.maxTitlePrice} > MIN_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
-                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} > MIN_TITLE_PRICE or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
                     </if>
                 </foreach>
             </if>
