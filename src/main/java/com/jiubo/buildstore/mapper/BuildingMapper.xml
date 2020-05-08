@@ -328,7 +328,7 @@
     </select>
 
     <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        select BUILD_ID,HT_NAME from building
+        select BUILD_ID,HT_NAME,DECORATION from building
     </select>
 
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">

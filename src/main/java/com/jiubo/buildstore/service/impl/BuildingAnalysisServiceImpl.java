@@ -174,6 +174,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     List<BuildingBean> beanList = buildMap.get(bean.getBuildId());
                     if (null != beanList) {
                         bean.setHtName(beanList.get(0).getHtName());
+                        bean.setDecoration(beanList.get(0).getDecoration());
                     }
                 }
 

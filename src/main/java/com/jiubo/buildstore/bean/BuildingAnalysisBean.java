@@ -47,6 +47,11 @@ public class BuildingAnalysisBean implements Serializable {
      * 楼盘名称
      */
     private String htName;
+
+    /**
+     * 装修情况
+     */
+    private String decoration;
     /**
      * 户型ID
      */
