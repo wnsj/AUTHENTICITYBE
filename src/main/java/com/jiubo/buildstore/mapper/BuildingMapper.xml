@@ -377,6 +377,8 @@
         1=1
             <if test="null != buildingBean.special">
                 and (b.LD_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or a.HT_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or a.ALIAS like CONCAT('%',#{buildingBean.special},'%')
                 or c.BT_NAME like CONCAT('%',#{buildingBean.special},'%')
                 or d.BHT_NAME like CONCAT('%',#{buildingBean.special},'%')
                 or e.ST_NAME like CONCAT('%',#{buildingBean.special},'%')
