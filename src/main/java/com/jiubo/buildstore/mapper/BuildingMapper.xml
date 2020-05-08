@@ -79,7 +79,7 @@
                         MIN_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice == null">
-                        #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        #{item.maxTitlePrice} > MAX_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
                         #{item.minTitlePrice} >= MIN_TITLE_PRICE and #{item.maxTitlePrice} >= MAX_TITLE_PRICE
@@ -90,10 +90,10 @@
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
-                         (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 >= #{item.minUnitPrice}
+                         (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 > #{item.minUnitPrice}
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
-                        #{item.maxUnitPrice} >= (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
+                        #{item.maxUnitPrice} > (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null">
                         (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
