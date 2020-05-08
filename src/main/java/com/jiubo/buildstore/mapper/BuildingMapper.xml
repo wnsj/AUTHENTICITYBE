@@ -76,13 +76,13 @@
                 and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minTitlePrice != null and item.maxTitlePrice == null">
-                        MIN_TITLE_PRICE > #{item.minTitlePrice}
+                        MAX_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice == null">
-                        #{item.maxTitlePrice} > MAX_TITLE_PRICE
+                        #{item.maxTitlePrice} > MIN_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.minTitlePrice != null">
-                        #{item.minTitlePrice} >= MIN_TITLE_PRICE and #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} > MIN_TITLE_PRICE or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
                     </if>
                 </foreach>
             </if>
