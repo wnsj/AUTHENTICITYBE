@@ -90,7 +90,7 @@
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
-                        #{item.minUnitPrice} > MIN_UNIT_PRICE or MAX_UNIT_PRICE > #{item.minUnitPrice}
+                         MIN_UNIT_PRICE > #{item.minUnitPrice} or MAX_UNIT_PRICE > #{item.minUnitPrice}
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
                         #{item.maxUnitPrice} >= MAX_UNIT_PRICE
