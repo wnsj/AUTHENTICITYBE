@@ -39,7 +39,7 @@ public class RecruitLabelServiceImpl extends ServiceImpl<RecruitLabelDao, Recrui
     @Override
     public void addRecruitLabel(RecruitLabelBean recruitLabelBean) throws MessageException{
         if (StringUtils.isBlank(recruitLabelBean.getRecruitName())) throw new MessageException("岗位名不能为空");
-        if (recruitLabelBean.getTypeId()>0) throw new MessageException("岗位类型不能为空");
+        if (null == recruitLabelBean.getTypeId() || recruitLabelBean.getTypeId()==0) throw new MessageException("岗位类型不能为空");
         QueryWrapper<RecruitLabelBean> queryWrapper = new QueryWrapper<RecruitLabelBean>();
         queryWrapper.select("*");
         queryWrapper.eq("TYPE_ID", recruitLabelBean.getTypeId());

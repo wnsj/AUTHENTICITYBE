@@ -362,7 +362,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
 
-
             }
         }
         return page.setRecords(allBulidBypage);
@@ -510,14 +509,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null != chaIdList && chaIdList.size() > 0) {
             List<CharacteristicBean> characteristicBeanList = characteristicDao.selectBatchIds(chaIdList);
             List<CharaRefBean> charaRefBeanList = new ArrayList<>();
-            for (CharacteristicBean characteristicBean : characteristicBeanList) {
-                CharaRefBean charaRefBean = new CharaRefBean();
-                charaRefBean.setBuildId(buildingBean.getBuildId());
-                charaRefBean.setHouseId(characteristicBean.getChaId());
-                charaRefBean.setHouseName(characteristicBean.getChaName());
-                charaRefBeanList.add(charaRefBean);
+            if (null != characteristicBeanList && characteristicBeanList.size() > 0) {
+                for (CharacteristicBean characteristicBean : characteristicBeanList) {
+                    CharaRefBean charaRefBean = new CharaRefBean();
+                    charaRefBean.setBuildId(buildingBean.getBuildId());
+                    charaRefBean.setHouseId(characteristicBean.getChaId());
+                    charaRefBean.setHouseName(characteristicBean.getChaName());
+                    charaRefBeanList.add(charaRefBean);
+                }
+                charaRefDao.insertChaRefBatch(charaRefBeanList);
             }
-            charaRefDao.insertChaRefBatch(charaRefBeanList);
+
         }
     }
 
