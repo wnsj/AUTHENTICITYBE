@@ -18,9 +18,9 @@ public interface DevelogerService extends IService<DevelogerBean> {
     public List<DevelogerBean> getAllDev();
 
     //添加开发商
-    public void addDeveloger(DevelogerBean recruitLabelBean) throws MessageException;
+    public void addDeveloger(DevelogerBean develogerBean) throws MessageException;
 
     //修改开发商
-    public void updateDeveloger(DevelogerBean recruitLabelBean) throws MessageException;
+    public void updateDeveloger(DevelogerBean develogerBean) throws MessageException;
 
 }

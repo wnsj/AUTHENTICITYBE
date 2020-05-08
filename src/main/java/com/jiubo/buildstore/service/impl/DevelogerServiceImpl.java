@@ -32,25 +32,25 @@ public class DevelogerServiceImpl extends ServiceImpl<DevelogerDao, DevelogerBea
     }
 
     @Override
-    public void addDeveloger(DevelogerBean recruitLabelBean) throws MessageException {
-        if (StringUtils.isBlank(recruitLabelBean.getDevsName())) throw new MessageException("开发商简名不能为空");
+    public void addDeveloger(DevelogerBean develogerBean) throws MessageException {
+        if (StringUtils.isBlank(develogerBean.getDevsName())) throw new MessageException("开发商简名不能为空");
         QueryWrapper<DevelogerBean> queryWrapper = new QueryWrapper<DevelogerBean>();
         queryWrapper.select("*");
-        queryWrapper.eq("DEVS_NAME", recruitLabelBean.getDevsName());
+        queryWrapper.eq("DEVS_NAME", develogerBean.getDevsName());
         List<DevelogerBean> develogerBeans = develogerDao.selectList(queryWrapper);
         if (develogerBeans.size()>0)  throw new MessageException("开发商已经存在");
-        develogerDao.insert(recruitLabelBean);
+        develogerDao.insert(develogerBean);
     }
 
     @Override
-    public void updateDeveloger(DevelogerBean recruitLabelBean) throws MessageException{
-        if (StringUtils.isBlank(recruitLabelBean.getDevsName())) throw new MessageException("开发商简名不能为空");
-        if (recruitLabelBean.getDevId()>0) throw new MessageException("开发商ID不能为空");
+    public void updateDeveloger(DevelogerBean develogerBean) throws MessageException{
+        if (StringUtils.isBlank(develogerBean.getDevsName())) throw new MessageException("开发商简名不能为空");
+        if (develogerBean.getDevId()>0) throw new MessageException("开发商ID不能为空");
         QueryWrapper<DevelogerBean> queryWrapper = new QueryWrapper<DevelogerBean>();
         queryWrapper.select("*");
-        queryWrapper.eq("DEVS_NAME", recruitLabelBean.getDevsName());
+        queryWrapper.eq("DEVS_NAME", develogerBean.getDevsName());
         List<DevelogerBean> develogerBeans = develogerDao.selectList(queryWrapper);
         if (develogerBeans.size()>0)  throw new MessageException("开发商已经存在");
-        develogerDao.updateById(recruitLabelBean);
+        develogerDao.updateById(develogerBean);
     }
 }
