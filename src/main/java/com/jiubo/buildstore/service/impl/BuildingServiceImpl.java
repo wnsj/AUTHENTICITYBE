@@ -916,7 +916,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> buildingImgBeans = headImgMap.get(bean.getBuildId());
                     if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
                         bean.setImgName(buildingImgBeans.get(0).getImgName());
-                        bean.setImgPath(buildingImgBeans.get(0).getImgPath());
+                        bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(buildingImgBeans.get(0).getImgPath()));
                     }
                 }
 
@@ -924,7 +924,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<BuildingImgBean> imgBeans = videoMap.get(bean.getBuildId());
                     if (null != imgBeans && imgBeans.size() > 0) {
                         bean.setVideoName(imgBeans.get(0).getImgName());
-                        bean.setVideoPath(imgBeans.get(0).getImgPath());
+                        bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                     }
                 }
                 // 设置均值
