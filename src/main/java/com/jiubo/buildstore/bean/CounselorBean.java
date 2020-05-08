@@ -36,7 +36,7 @@ public class CounselorBean implements Serializable {
 
     private String graduate;
 
-    private Integer ccId;
+    private String ccId;
 
     private String tel;
 

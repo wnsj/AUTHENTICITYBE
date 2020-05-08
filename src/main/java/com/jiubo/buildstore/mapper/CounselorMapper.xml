@@ -44,9 +44,6 @@
             <if test="counselorBean.graduate != null and counselorBean.graduate != ''">
                 GRADUATE = #{counselorBean.graduate},
             </if>
-            <if test="counselorBean.ccId != null">
-                CC_ID = #{counselorBean.ccId},
-            </if>
             <if test="counselorBean.tel != null and counselorBean.tel != ''">
                 TEL = #{counselorBean.tel},
             </if>

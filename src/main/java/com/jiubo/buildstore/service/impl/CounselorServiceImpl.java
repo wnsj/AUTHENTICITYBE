@@ -65,12 +65,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
         if (null != counselorBeanList && counselorBeanList.size() > 0) {
             //咨询师id集合
             List<Integer> list = counselorBeanList.stream().map(CounselorBean::getCouId).collect(Collectors.toList());
-            // 咨询师特点
-            List<CounselorCharacterBean> characterBeans = counselorCharacterDao.getAllCouChara();
-            Map<Integer, List<CounselorCharacterBean>> charaMap = null;
-            if (null != characterBeans && characterBeans.size() > 0) {
-                charaMap = characterBeans.stream().collect(Collectors.groupingBy(CounselorCharacterBean::getCcId));
-            }
+
             // 从咨询师标签关联表中获取标签
             List<CouRefBean> couRefBeans = couRefDao.getRefByCouIdList(new CouRefBean().setCouIdList(list));
             Map<Integer, List<CouRefBean>> couRefMap = null;
@@ -79,9 +74,6 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
             }
 
             for (CounselorBean counselorBean1 : counselorBeanList) {
-                if (null != charaMap && null != counselorBean1.getCcId()) {
-                    counselorBean1.setCharaName(charaMap.get(counselorBean1.getCcId()).get(0).getCcContent());
-                }
 
                 if (null != couRefMap) {
                     List<CouRefBean> beanList = couRefMap.get(counselorBean1.getCouId());
@@ -97,6 +89,10 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
                         counselorBean1.setLabelList(labelIdList);
                     }
                 }
+                if (null != counselorBean1.getPicturePath()) {
+                    counselorBean1.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(counselorBean1.getPicturePath()));
+                }
+
             }
         }
         return page.setRecords(counselorBeanList);

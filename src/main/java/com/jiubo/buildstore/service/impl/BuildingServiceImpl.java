@@ -362,7 +362,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
 
-                // 轮播图路径
 
             }
         }

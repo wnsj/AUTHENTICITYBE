@@ -200,7 +200,7 @@ public class BuildingBean implements Serializable {
     /**
      * 开发商id
      */
-    private Integer devId;
+    private String devId;
 
     /**
      * 开盘时间
