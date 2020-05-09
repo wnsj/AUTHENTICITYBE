@@ -52,9 +52,8 @@
     </update>
 
     <select id="getCidByBidList" resultType="com.jiubo.buildstore.bean.CounselorCommentBean">
-        select a.COU_ID,a.BUILD_ID,b.COU_NAME,b.TEL from counselor_comment a,counselor b
+        select a.COU_ID,a.BUILD_ID,b.COU_NAME,b.TEL from counselor_comment a left join counselor b on a.COU_ID = b.COU_ID
         <where>
-            a.COU_ID = b.COU_ID and
             a.BUILD_ID in
             <foreach collection="counselorCommentBean.bIdList" open="(" close=")" separator="," item="bId">
                 #{bId}
