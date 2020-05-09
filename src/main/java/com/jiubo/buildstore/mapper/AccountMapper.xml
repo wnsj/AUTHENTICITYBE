@@ -4,7 +4,7 @@
 
     <select id="queryAccountList" parameterType="com.jiubo.buildstore.bean.AccountBean"
             resultType="com.jiubo.buildstore.bean.AccountBean">
-        SELECT SA_ID,NAME,PHONE,ACCOUNT,PWD
+        SELECT SA_ID,NAME,PHONE,ACCOUNT,PWD,ACCOUNT_ID
         FROM account
         <where>
             <if test="account != null and account != ''">

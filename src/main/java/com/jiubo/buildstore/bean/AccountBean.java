@@ -36,5 +36,6 @@ public class AccountBean implements Serializable {
 
     private String pwd;
 
+    private String accountId;
 
 }
