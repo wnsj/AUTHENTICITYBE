@@ -124,7 +124,7 @@ public class BuildingAnalysisBean implements Serializable {
     /**
      * 建筑面积
      */
-    private Integer buildArea;
+    private BigDecimal buildArea;
 
     /**
      * 居室

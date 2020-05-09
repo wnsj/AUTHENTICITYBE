@@ -37,5 +37,5 @@ public class BuildingHorseTypeBean implements Serializable {
     private Integer bhtNum;
 
     @TableField(exist = false)
-    private Integer area;
+    private BigDecimal area;
 }

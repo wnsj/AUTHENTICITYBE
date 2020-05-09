@@ -8,11 +8,13 @@ import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 /**
  * <p>
@@ -22,6 +24,7 @@ import java.util.List;
  * @author syl
  * @since 2020-04-10
  */
+@Slf4j
 @RestController
 @RequestMapping("/buildingBean")
 public class BuildingController {
@@ -81,7 +84,14 @@ public class BuildingController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        BuildingBean buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
+        BuildingBean buildingBean = null;
+        try{
+            buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
+        }catch (Exception e) {
+            log.error("转译失败Json{}",addParam);
+            log.error("异常{}",e.toString());
+        }
+
         buildingService.addBuilding(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
         return jsonObject;
     }
