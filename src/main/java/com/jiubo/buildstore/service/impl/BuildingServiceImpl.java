@@ -177,6 +177,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
                     if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
                         List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+                       // 特色中是否有优惠楼盘 并赋值
+                        List<Integer> collect = charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList());
+                        if (collect.contains(4)){
+                            bean.setDiscount(1L);
+                        } else {
+                            bean.setDiscount(2L);
+                        }
                         bean.setCharaNameList(charaRefList);
                         bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
                         if (null != charaRefList) {
