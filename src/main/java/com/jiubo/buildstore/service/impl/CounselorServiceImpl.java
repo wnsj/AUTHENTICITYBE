@@ -136,6 +136,20 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
         counselorDao.patchCouById(counselorBean);
     }
 
+    @Override
+    public List<CounselorBean> getAllCharaName() {
+        List<CounselorBean> counselorBeanList = counselorDao.getAllCharaName();
+        List<CounselorBean> counselorBeans = new ArrayList<>();
+        if (null != counselorBeanList && counselorBeanList.size()>0){
+            for (CounselorBean counselorBean : counselorBeanList) {
+                if (null !=counselorBean && null != counselorBean.getCharaName()) {
+                    counselorBeans.add(counselorBean);
+                }
+            }
+        }
+        return counselorBeans;
+    }
+
     private void saveFile(CounselorBean counselorBean, MultipartFile[] file) throws Exception {
         if (file != null) {
 

@@ -26,4 +26,6 @@ public interface CounselorService extends IService<CounselorBean> {
 
 
     public void patchCou(CounselorBean counselorBean,MultipartFile[] picture)throws Exception;
+
+    public List<CounselorBean> getAllCharaName();
 }

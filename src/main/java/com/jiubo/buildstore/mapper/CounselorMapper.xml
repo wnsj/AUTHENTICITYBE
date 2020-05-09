@@ -16,12 +16,15 @@
             <if test="counselorBean.couId != null">
                 and COU_ID = #{counselorBean.couId}
             </if>
-            <if test="counselorBean.charaName != null">
+            <if test="counselorBean.charaName != null and counselorBean.charaName != ''">
                 and  CHARA_NAME = #{counselorBean.charaName}
             </if>
         </where>
     </select>
 
+    <select id="getAllCharaName" resultType="com.jiubo.buildstore.bean.CounselorBean">
+        select distinct CHARA_NAME from counselor
+    </select>
     <insert id="insertCou"  useGeneratedKeys="true" keyProperty="couId">
         insert into counselor (COU_NAME,INTRODUCE,GRADUATE,CC_ID,TEL,PICTURE_NAME,PICTURE_PATH,CHARA_NAME) values
          (#{counselorBean.couName},#{counselorBean.introduce},#{counselorBean.graduate},

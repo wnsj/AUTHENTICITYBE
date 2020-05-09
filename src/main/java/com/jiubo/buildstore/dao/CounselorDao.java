@@ -26,4 +26,6 @@ public interface CounselorDao extends BaseMapper<CounselorBean> {
     public CounselorBean getCouById(@Param("couId") Integer couId);
 
     public void patchCouById(@Param("counselorBean") CounselorBean counselorBean);
+
+    public List<CounselorBean> getAllCharaName();
 }

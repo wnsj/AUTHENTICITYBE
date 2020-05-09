@@ -89,4 +89,5 @@ public class CounselorCommentController {
         counselorCommentService.addCom(counselorCommentBean,picImg);
         return jsonObject;
     }
+
 }
