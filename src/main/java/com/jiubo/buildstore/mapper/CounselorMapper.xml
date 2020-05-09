@@ -16,8 +16,8 @@
             <if test="counselorBean.couId != null">
                 and COU_ID = #{counselorBean.couId}
             </if>
-            <if test="counselorBean.ccId != null">
-                and  CC_ID = #{counselorBean.ccId}
+            <if test="counselorBean.charaName != null">
+                and  CHARA_NAME = #{counselorBean.charaName}
             </if>
         </where>
     </select>
@@ -54,7 +54,10 @@
                 CHARA_NAME = #{counselorBean.charaName},
             </if>
             <if test="counselorBean.picturePath != null and counselorBean.picturePath != ''">
-                PICTURE_PATH = #{counselorBean.picturePath}
+                PICTURE_PATH = #{counselorBean.picturePath},
+            </if>
+            <if test="counselorBean.charaName != null and counselorBean.charaName != ''">
+                CHARA_NAME = #{counselorBean.charaName}
             </if>
         </trim>
         where COU_ID = #{counselorBean.couId}

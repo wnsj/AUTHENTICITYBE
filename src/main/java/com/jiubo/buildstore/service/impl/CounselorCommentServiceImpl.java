@@ -137,7 +137,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                     if (null != beanList1 && beanList.size()>0) {
                         CounselorBean bean = beanList1.get(0);
                         if (null != bean) {
-                            if (StringUtils.isBlank(bean.getPicturePath())) {
+                            if (!StringUtils.isBlank(bean.getPicturePath())) {
                                 bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
                             }
                             commentBean.setCounselorBean(bean);

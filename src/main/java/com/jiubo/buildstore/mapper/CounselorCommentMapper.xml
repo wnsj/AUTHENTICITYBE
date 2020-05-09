@@ -16,6 +16,7 @@
         d.COU_NAME,
         d.INTRODUCE,
         d.GRADUATE,
+        d.CHARA_NAME,
         d.CC_ID,
         d.PICTURE_NAME,
         PICTURE_PATH
