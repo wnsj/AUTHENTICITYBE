@@ -4,6 +4,7 @@ package com.jiubo.buildstore.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,6 +220,16 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         jsonObject.put(Constant.Result.RETDATA, buildingService.getBuildLikePage(buildingBean));
+
+        return jsonObject;
+    }
+
+    @PostMapping("/deleteImgFile")
+    public JSONObject deleteImgFile(@RequestBody BuildingImgBean buildingImgBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        buildingService.deleteImgFile(buildingImgBean);
 
         return jsonObject;
     }
