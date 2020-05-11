@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -293,7 +290,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     List<BuildingImgBean> buildingImgBeans = collect.get(bean.getBaId());
                     if (null != buildingImgBeans) {
                         bean.setHorseImgName(buildingImgBeans.get(0).getImgName());
-                        bean.setHorseImgPath(ImgPathConstant.INTERFACE_PATH +(buildingImgBeans.get(0).getImgPath()));
+                        bean.setHorseImgPath(ImgPathConstant.INTERFACE_PATH +(buildingImgBeans.get(0).getImgPath().concat("&imgId=").concat(buildingImgBeans.get(0).getImgId().toString())));
                     }
                 }
             }
@@ -336,18 +333,18 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
         if (null != horseTypeImg && horseTypeImg.length > 0) {
             // 更新图片
-            BuildingImgBean buildingImgBean = new BuildingImgBean();
-            buildingImgBean.setBuildId(buildingAnalysisBean.getBuildId());
-            buildingImgBean.setBaId(buildingAnalysisBean.getBaId());
-            deleteImg(buildingImgBean);
+//            BuildingImgBean buildingImgBean = new BuildingImgBean();
+//            buildingImgBean.setBuildId(buildingAnalysisBean.getBuildId());
+//            buildingImgBean.setBaId(buildingAnalysisBean.getBaId());
+//            deleteImg(buildingImgBean);
 
             // 获取图片类型
-            List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
-            if (null != imgTypeList && imgTypeList.size() > 0) {
-                Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-                buildingImgBean.setItId(listMap.get(ImgTypeConstant.horseType).get(0).getItId());
-                buildingImgDao.deleteByImgName(buildingImgBean);
-            }
+//            List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
+//            if (null != imgTypeList && imgTypeList.size() > 0) {
+//                Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
+//                buildingImgBean.setItId(listMap.get(ImgTypeConstant.horseType).get(0).getItId());
+//                buildingImgDao.deleteByImgName(buildingImgBean);
+//            }
             this.saveFile(buildingAnalysisBean, horseTypeImg, "horseType", 5);
         }
     }
@@ -368,12 +365,13 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 //                File directory = new File("");// 参数为空
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
-                    String imgName = buildingBean.getBuildId().toString().concat(fileName);
+//                    String imgName = buildingBean.getBuildId().toString().concat(fileName);
                     File dir = new File(buildStoreDir + ImgPathConstant.HOUSE_PATH + buildingBean.getBaId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                     if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                    String name = type + i + "_" + imgName;
+                    String name = UUID.randomUUID().toString().replace("-","").concat(fileName);
+//                    String name = type + i + "_" + imgName;
 //                System.out.println("name:" + name);
 
                     i++;

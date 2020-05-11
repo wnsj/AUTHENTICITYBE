@@ -1147,7 +1147,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public void deleteImgFile(BuildingImgBean buildingImgBean) {
         //删除文件
         BuildingImgBean img = buildingImgDao.getImgById(buildingImgBean);
-        delFile(img.getImgPath());
+        if (null != img) {
+            delFile(img.getImgPath());
+        }
+
         // 删除表中数据
         buildingImgDao.deleteImgById(buildingImgBean);
     }

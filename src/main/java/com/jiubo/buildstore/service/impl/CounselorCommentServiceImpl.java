@@ -19,10 +19,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.rmi.MarshalException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -243,10 +240,15 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 if (null != couMap) {
                     List<BuildingImgBean> buildingImgBeans = couMap.get(commentBean.getCoucId());
                     if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
-                        List<String> collect1 = buildingImgBeans.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+//                        List<String> collect1 = buildingImgBeans.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+//                        List<String> pathList = new ArrayList<>();
+//                        for (String e : collect1) {
+//                            pathList.add(ImgPathConstant.INTERFACE_PATH.concat(e));
+//                        }
                         List<String> pathList = new ArrayList<>();
-                        for (String e : collect1) {
-                            pathList.add(ImgPathConstant.INTERFACE_PATH.concat(e));
+                        for (BuildingImgBean imgBean : buildingImgBeans) {
+                            String path = ImgPathConstant.INTERFACE_PATH.concat(imgBean.getImgPath()).concat("&imgId=").concat(imgBean.getImgId().toString());
+                            pathList.add(path);
                         }
                         commentBean.setImgPathList(pathList);
                     }
@@ -258,13 +260,13 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 
     @Override
     public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] file) throws Exception {
-        BuildingImgBean buildingImgBean = new BuildingImgBean();
-        buildingImgBean.setItId(8);
-        buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
-        List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
-        if (null != allByBid && allByBid.size()>0) {
-            this.delFile(allByBid.get(0).getImgPath());
-        }
+//        BuildingImgBean buildingImgBean = new BuildingImgBean();
+//        buildingImgBean.setItId(8);
+//        buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
+//        List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
+//        if (null != allByBid && allByBid.size()>0) {
+//            this.delFile(allByBid.get(0).getImgPath());
+//        }
         counselorCommentDao.updateComById(counselorCommentBean);
         this.saveFile(counselorCommentBean, file);
     }
@@ -302,12 +304,12 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 //                File directory = new File("");// 参数为空
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
-                String imgName = commentBean.getCoucId().toString().concat(fileName);
+//                String imgName = commentBean.getCoucId().toString().concat(fileName);
                 File dir = new File(buildStoreDir + ImgPathConstant.COMMENT + commentBean.getCoucId());
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = i + "_" + imgName;
+                String name = UUID.randomUUID().toString().replace("-","").concat(fileName);
 //                System.out.println("name:" + name);
 
                 i++;
