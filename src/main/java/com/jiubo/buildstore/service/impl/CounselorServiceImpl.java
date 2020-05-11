@@ -167,7 +167,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = counselorBean.getCouId() + "_" + fileName;
+                String name = counselorBean.getCouId() + fileName;
 //                System.out.println("name:" + name);
                 String replace = dir.getPath().replace("\\", "/");
                 String path = replace + "/" + name;
