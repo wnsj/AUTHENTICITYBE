@@ -3,10 +3,10 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingImgDao">
 
     <insert id="addImg">
-        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,B_ID,IMG_PATH,BA_ID,COUC_ID)
+        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,BUILD_ID,IMG_PATH,BA_ID,COUC_ID)
          values
          (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},
-         #{buildingImgBean.bId},#{buildingImgBean.imgPath},#{buildingImgBean.baId},#{buildingImgBean.coucId})
+         #{buildingImgBean.buildId},#{buildingImgBean.imgPath},#{buildingImgBean.baId},#{buildingImgBean.coucId})
     </insert>
 
     <update id="patchImgById">
@@ -14,14 +14,14 @@
         <if test="buildingImgBean.imgName != null and buildingImgBean.imgName != ''">
             IMG_NAME = #{buildingImgBean.imgName}
         </if>
-        <if test="buildingImgBean.createDate != null and buildingImgBean.createDate != ''">
+        <if test="buildingImgBean.createDate != null">
             CREATE_DATE = #{buildingImgBean.createDate}
         </if>
-        <if test="buildingImgBean.itId != null and buildingImgBean.itId != ''">
+        <if test="buildingImgBean.itId != null">
             IT_ID = #{buildingImgBean.itId}
         </if>
-        <if test="buildingImgBean.bId != null and buildingImgBean.bId != ''">
-            B_ID = #{buildingImgBean.bId}
+        <if test="buildingImgBean.buildId != null">
+            BUILD_ID = #{buildingImgBean.buildId}
         </if>
         where IMG_ID = #{buildingImgBean.imgId}
     </update>
@@ -32,8 +32,14 @@
             <if test="buildingImgBean.itId != null">
                 and IT_ID = #{buildingImgBean.itId}
             </if>
-            <if test="buildingImgBean.bId != null">
-                and B_ID = #{buildingImgBean.bId}
+            <if test="buildingImgBean.buildId != null">
+                and BUILD_ID = #{buildingImgBean.buildId}
+            </if>
+            <if test="buildingImgBean.baId != null">
+                and BA_ID = #{buildingImgBean.baId}
+            </if>
+            <if test="buildingImgBean.coucId != null">
+                and COUC_ID = #{buildingImgBean.coucId}
             </if>
         </where>
     </select>
@@ -44,8 +50,11 @@
             <if test="buildingImgBean.itId != null">
                 and IT_ID = #{buildingImgBean.itId}
             </if>
-            <if test="buildingImgBean.bId != null">
-                and B_ID = #{buildingImgBean.bId}
+            <if test="buildingImgBean.buildId != null">
+                and BUILD_ID = #{buildingImgBean.buildId}
+            </if>
+            <if test="buildingImgBean.baId != null">
+                and BA_ID = #{buildingImgBean.baId}
             </if>
             <if test="buildingImgBean.coucId != null">
                 and COUC_ID = #{buildingImgBean.coucId}
@@ -57,7 +66,7 @@
         select * from building_img
         <where>
         <if test="buildingImgBean.bIdList != null and buildingImgBean.bIdList.size() > 0">
-            B_ID in
+            BUILD_ID in
             <foreach collection="buildingImgBean.bIdList" open="(" close=")" separator="," item="item">
                 #{item}
             </foreach>
@@ -77,8 +86,8 @@
     <select id="getAllImgByBuildId" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
         select * from building_img
         <where>
-            <if test="buildingImgBean.bId != null">
-                B_ID = #{buildingImgBean.bId}
+            <if test="buildingImgBean.buildId != null">
+                BUILD_ID = #{buildingImgBean.buildId}
             </if>
         </where>
     </select>

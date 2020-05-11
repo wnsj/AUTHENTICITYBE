@@ -262,7 +262,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
         buildingImgBean.setItId(8);
         buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
         List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
-        if (null != allByBid) {
+        if (null != allByBid && allByBid.size()>0) {
             this.delFile(allByBid.get(0).getImgPath());
         }
         counselorCommentDao.updateComById(counselorCommentBean);
@@ -339,7 +339,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 }
 
                 buildingImgBean.setImgName(name);
-                buildingImgBean.setBId(commentBean.getBuildId());
+                buildingImgBean.setBuildId(commentBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setImgPath(path);
                 buildingImgBean.setItId(8);

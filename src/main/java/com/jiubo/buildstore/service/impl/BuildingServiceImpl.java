@@ -130,14 +130,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> headImgMap = null;
             if (null != byBuildId && byBuildId.size() > 0) {
-                headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
 
             buildingImgBean.setItId(7);
             List<BuildingImgBean> video = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> videoMap = null;
             if (null != video && video.size() > 0) {
-                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
             // 遍历实体 翻译各个类型字段
             for (BuildingBean bean : allBulidBypage) {
@@ -226,7 +226,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 bean.setAveragePrice(getAverage(bean));
 
                 // 是否是热销标签
-                if (bean.getSellWell() != null) {
+                if (null != bean.getSellWell() && bean.getSellWell()>5) {
                     bean.setSellWellLabel(1);
                 } else {
                     bean.setSellWellLabel(2);
@@ -284,7 +284,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> imgMap = null;
             if (null != byBuildId && byBuildId.size() > 0) {
-                imgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                imgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
 
             // 遍历实体 翻译各个类型字段
@@ -642,7 +642,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
 
         if (null != build) {
-            List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBId(build.getBuildId()));
+            List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setBuildId(build.getBuildId()));
             if (null != imgByBuildId) {
                 Map<Integer, List<BuildingImgBean>> map = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
                 getPicPath(build, map);
@@ -853,14 +853,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> headImgMap = null;
             if (null != byBuildId && byBuildId.size() > 0) {
-                headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
 
             buildingImgBean.setItId(7);
             List<BuildingImgBean> video = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> videoMap = null;
             if (null != video && video.size() > 0) {
-                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+                videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
 
             for (BuildingBean bean : beanPageList) {
@@ -956,7 +956,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         buildingImgBean.setItId(6);
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
         if (null != byBuildId) {
-            Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBId));
+            Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
 
             for (BuildingBean buildingBean1 : beans) {
                 List<String> labelList = new ArrayList<>();
@@ -991,7 +991,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
         BuildingImgBean buildingImgBean = new BuildingImgBean();
-        buildingImgBean.setBId(buildingBean.getBuildId());
+        buildingImgBean.setBuildId(buildingBean.getBuildId());
 
         if (null != effectImg && effectImg.length > 0) {
 
@@ -1120,7 +1120,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 buildingImgBean.setImgName(name);
-                buildingImgBean.setBId(buildingBean.getBuildId());
+                buildingImgBean.setBuildId(buildingBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setItId(typeId);
                 buildingImgBean.setImgPath(path);
