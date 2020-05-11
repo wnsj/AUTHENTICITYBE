@@ -989,10 +989,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (type == 1) {
                     if (buildingBean1.getHotSearch() != null) {
                         labelList.add("热搜");
-                        buildingBean1.setLabel("热搜");
                     }
                     if (buildingBean1.getPopularity() != null) {
                         labelList.add("人气");
+                    }
+                    if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
+                        buildingBean1.setLabel("热搜");
+                    } else{
                         buildingBean1.setLabel("人气");
                     }
                     buildingBean1.setLabelList(labelList);
