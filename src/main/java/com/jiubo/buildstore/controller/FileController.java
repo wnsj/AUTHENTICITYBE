@@ -38,7 +38,7 @@ public class FileController {
             response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
             FileInputStream fis = new FileInputStream(file);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[8192];
             int len = 0;
             while ((len = bis.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, len);
