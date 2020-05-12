@@ -397,8 +397,17 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<Map<String, Object>> unitPriceList = new ArrayList<>();
             for (UnitPriceTypeBean unitPriceTypeBean : priceByIdList) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("minUnitPrice", unitPriceTypeBean.getBegPrice());
-                map.put("maxUnitPrice", unitPriceTypeBean.getEndPrice());
+                if (null == unitPriceTypeBean.getBegPrice()) {
+                    map.put("minUnitPrice", null);
+                } else {
+                    map.put("minUnitPrice", unitPriceTypeBean.getBegPrice().multiply(new BigDecimal(10000)));
+                }
+
+                if (null == unitPriceTypeBean.getEndPrice()) {
+                    map.put("maxUnitPrice", null);
+                } else {
+                    map.put("maxUnitPrice", unitPriceTypeBean.getEndPrice().multiply(new BigDecimal(10000)));
+                }
                 unitPriceList.add(map);
             }
             buildingBean.setUnitPriceList(unitPriceList);

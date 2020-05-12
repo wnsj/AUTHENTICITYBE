@@ -68,8 +68,9 @@
                         #{item.maxArea} > MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
-                        MIN_AREA >= #{item.minArea} and  #{item.maxArea} >= MIN_AREA or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA or
-                         #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea}
+                        MIN_AREA >= #{item.minArea} and  #{item.maxArea} >= MIN_AREA
+                         or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
+                         or #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea}
                     </if>
                 </foreach>
             </if>
@@ -83,7 +84,8 @@
                         #{item.maxTitlePrice} > MIN_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
-                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and (#{item.maxTitlePrice} >= MIN_TITLE_PRICE or MAX_TITLE_PRICE >=#{item.minTitlePrice}) and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE
+                         or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
                         or #{item.minTitlePrice} >= MIN_TITLE_PRICE  and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
                     </if>
                 </foreach>
@@ -91,13 +93,13 @@
             <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
-                    <if test="null != item and item.minUnitPrice != null and item.maxUnitPrice == null">
+                    <if test="null != item and item.minUnitPrice != null and item.minUnitPrice != 0 and item.maxUnitPrice == null">
                          (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 > #{item.minUnitPrice}
                     </if>
-                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice == null">
+                    <if test="null != item and item.maxUnitPrice != null and (item.minUnitPrice == null or item.minUnitPrice == 0)">
                         #{item.maxUnitPrice} > (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
                     </if>
-                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null">
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null and item.minUnitPrice != 0">
                         (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
                     </if>
                 </foreach>
