@@ -65,7 +65,7 @@
                         MAX_AREA > #{item.minArea}
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea == null">
-                        #{item.maxArea} >= MIN_AREA
+                        #{item.maxArea} > MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
                         MIN_AREA >= #{item.minArea} and  #{item.maxArea} >= MIN_AREA or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA or
@@ -79,7 +79,7 @@
                     <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
                         MAX_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
-                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.maxTitlePrice ==0)">
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
                         #{item.maxTitlePrice} > MIN_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
