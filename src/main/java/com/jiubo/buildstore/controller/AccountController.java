@@ -42,16 +42,28 @@ public class AccountController {
         return jsonObject;
     }
 
-//    //微信账号添加
-//    @PostMapping("/addAccount")
-//    public JSONObject addAccount(@RequestBody String params) throws Exception {
-//        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-//        System.out.println("测试：" + params.toString());
-//        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
-//        jsonObject.put(Constant.Result.RETDATA, accountService.addAccount(accountBean));
-//        return jsonObject;
-//    }
+    //微信账号添加
+    @PostMapping("/addAccount")
+    public JSONObject addAccount(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        System.out.println("测试：" + params.toString());
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        jsonObject.put(Constant.Result.RETDATA, accountService.addAccount(accountBean));
+        return jsonObject;
+    }
+
+
+    @PostMapping("/patchAccount")
+    public JSONObject patchAccount(@RequestBody String params) throws Exception {
+        if (StringUtils.isBlank(params)) throw new MessageException("参数接收失败!");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        AccountBean accountBean = JSONObject.parseObject(params, AccountBean.class);
+        accountService.patchAccount(accountBean);
+        return jsonObject;
+    }
 }

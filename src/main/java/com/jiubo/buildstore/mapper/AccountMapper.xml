@@ -15,4 +15,33 @@
             </if>
         </where>
     </select>
+
+    <insert id="addAccount" useGeneratedKeys="true" keyProperty="saId">
+        insert into account (NAME,PHONE,ACCOUNT,PWD,ACCOUNT_ID)
+        values
+        (#{name},#{phone},#{account},#{pwd},#{accountId})
+    </insert>
+
+    <update id="patchAccount">
+        update account
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                NAME = #{name},
+            </if>
+            <if test="phone != null and phone != ''">
+                PHONE = #{phone},
+            </if>
+            <if test="account != null and account != ''">
+                ACCOUNT = #{account},
+            </if>
+            <if test="pwd != null and pwd != ''">
+                PWD = #{pwd},
+            </if>
+            <if test="accountId != null">
+                ACCOUNT_ID = #{accountId}
+            </if>
+        </trim>
+    </update>
+
+
 </mapper>

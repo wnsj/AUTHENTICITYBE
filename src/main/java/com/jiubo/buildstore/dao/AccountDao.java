@@ -16,5 +16,7 @@ import java.util.List;
 public interface AccountDao extends BaseMapper<AccountBean> {
     public List<AccountBean> queryAccountList(AccountBean accountBean);
 
-//    int insertAccount(AccountBean accountBean);
+    public int addAccount(AccountBean accountBean);
+
+    public void patchAccount(AccountBean accountBean);
 }

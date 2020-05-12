@@ -76,4 +76,21 @@ public class AccountServiceImpl implements AccountService {
         return jsonObject;
     }
 
+
+    public AccountBean addAccount(AccountBean accountBean) throws Exception {
+        List<AccountBean> accountBeans = queryAccountList(accountBean);
+        if (null != accountBeans && accountBeans.size() > 0 ) throw new MessageException("该账号已存在");
+        accountDao.addAccount(accountBean);
+
+        return accountBean;
+    }
+
+    @Override
+    public void patchAccount(AccountBean accountBean) throws Exception {
+        List<AccountBean> accountBeans = queryAccountList(new AccountBean().setAccount(accountBean.getAccount()));
+        if (null != accountBeans && accountBeans.size() > 0 ) throw new MessageException("该账号已存在");
+//        List<AccountBean> accountBeanList = queryAccountList(new AccountBean().setPwd(accountBean.getPwd()));
+//        if (null == accountBeanList || accountBeanList.size() == 0 ) throw new MessageException("原密码输入不正确");
+        accountDao.patchAccount(accountBean);
+    }
 }

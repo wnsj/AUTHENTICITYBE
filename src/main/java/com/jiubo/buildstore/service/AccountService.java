@@ -20,9 +20,9 @@ public interface AccountService {
 
     public JSONObject login(AccountBean accountBean) throws Exception;
 
-//    //添加账号
-//    public AccountBean addAccount(AccountBean accountBean) throws Exception;
-//
-//    //修改账号
-//    public void updateAccount(AccountBean accountBean) throws Exception;
+    //添加账号
+    public AccountBean addAccount(AccountBean accountBean) throws Exception;
+
+    //修改账号
+    public void patchAccount(AccountBean accountBean) throws Exception;
 }

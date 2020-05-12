@@ -335,7 +335,7 @@
         select BUILD_ID,HT_NAME,DECORATION from building
     </select>
 
-    <!--首页推荐楼盘-->
+    <!--首页推荐楼盘||优质楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where RECOMMEND = 1 order by POPULARITY desc limit 4
     </select>
