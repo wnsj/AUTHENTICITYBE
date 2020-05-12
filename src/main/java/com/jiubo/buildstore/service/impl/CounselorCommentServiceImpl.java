@@ -131,15 +131,18 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 // 咨询师头像
                 if (null != listMap && commentBean.getCouId() != null) {
                     List<CounselorBean> beanList1 = listMap.get(commentBean.getCouId());
-                    if (null != beanList1 && beanList.size()>0) {
+                    log.debug("CouId{}" + commentBean.getCouId());
+                    if (null != beanList1 && beanList1.size() > 0) {
                         CounselorBean bean = beanList1.get(0);
                         if (null != bean) {
                             if (!StringUtils.isBlank(bean.getPicturePath())) {
-                                bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
+                                if (!"1".equals(bean.getFlag())) {
+                                    bean.setFlag("1");
+                                    bean.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(bean.getPicturePath()));
+                                }
                             }
                             commentBean.setCounselorBean(bean);
                         }
-
                     }
                 }
 
@@ -155,8 +158,6 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                         commentBean.setImgPathList(pathList);
                     }
                 }
-
-
             }
         }
 
@@ -260,13 +261,19 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 
     @Override
     public void updateComById(CounselorCommentBean counselorCommentBean, MultipartFile[] file) throws Exception {
-//        BuildingImgBean buildingImgBean = new BuildingImgBean();
-//        buildingImgBean.setItId(8);
-//        buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
-//        List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
-//        if (null != allByBid && allByBid.size()>0) {
-//            this.delFile(allByBid.get(0).getImgPath());
-//        }
+        BuildingImgBean buildingImgBean = new BuildingImgBean();
+        buildingImgBean.setItId(8);
+        buildingImgBean.setCoucId(counselorCommentBean.getCoucId());
+        List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
+        if (null != file && file.length>0) {
+            if (null != allByBid && allByBid.size()>0) {
+                for (BuildingImgBean imgBean : allByBid) {
+                    buildingImgDao.deleteByImgName(imgBean);
+                    this.delFile(imgBean.getImgPath());
+                }
+            }
+        }
+
         counselorCommentDao.updateComById(counselorCommentBean);
         this.saveFile(counselorCommentBean, file);
     }
@@ -309,7 +316,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = UUID.randomUUID().toString().replace("-","").concat(fileName);
+                String name = UUID.randomUUID().toString().replace("-", "").concat(fileName);
 //                System.out.println("name:" + name);
 
                 i++;

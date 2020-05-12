@@ -46,6 +46,7 @@ public class CounselorBean implements Serializable {
 
     private List<Integer> labelList;
 
+    private String picPath;
     /**
      * 页码
      */
@@ -61,4 +62,6 @@ public class CounselorBean implements Serializable {
     private String pictureName;
 
     private String picturePath;
+
+    private String flag;
 }

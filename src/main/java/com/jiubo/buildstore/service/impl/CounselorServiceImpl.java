@@ -130,7 +130,10 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
             CounselorBean cou = counselorDao.getCouById(counselorBean.getCouId());
             delFile(cou.getPicturePath());
             this.saveFile(counselorBean, picture);
+        } else {
+            counselorBean.setPicturePath(null);
         }
+
         counselorDao.patchCouById(counselorBean);
     }
 
