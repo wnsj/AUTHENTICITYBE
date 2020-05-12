@@ -76,13 +76,13 @@
             <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
                 and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
-                    <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and (item.maxTitlePrice == null or item.maxTitlePrice == '')">
+                    <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
                         MAX_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
-                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and (item.minTitlePrice == null or item.minTitlePrice == '')">
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.maxTitlePrice ==0)">
                         #{item.maxTitlePrice} > MIN_TITLE_PRICE
                     </if>
-                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.minTitlePrice != null and item.minTitlePrice != ''">
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
                         MIN_TITLE_PRICE >= #{item.minTitlePrice} and (#{item.maxTitlePrice} >= MIN_TITLE_PRICE or MAX_TITLE_PRICE >=#{item.minTitlePrice}) and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
                         or #{item.minTitlePrice} >= MIN_TITLE_PRICE  and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
                     </if>
@@ -333,14 +333,17 @@
         select BUILD_ID,HT_NAME,DECORATION from building
     </select>
 
+    <!--首页推荐楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where RECOMMEND = 1 order by POPULARITY desc limit 4
     </select>
 
+    <!--首页优选-->
     <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where OPTIMIZATION = 1
     </select>
 
+    <!--首页品质楼盘-->
     <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
     </select>
