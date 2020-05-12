@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildMainBean;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,4 +65,6 @@ public interface BuildingService extends IService<BuildingBean> {
      * @return
      */
     public Page<BuildingBean> getBuildLikePage(BuildingBean buildingBean);
+
+    public void deleteImgFile(BuildingImgBean buildingImgBean);
 }

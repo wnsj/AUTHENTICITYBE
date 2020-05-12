@@ -108,7 +108,7 @@ public class CounselorCommentBean implements Serializable {
 
     private String pictureName;
 
-    private String picturePath;
+    private String picPath;
 
     private List<String> imgPathList;
     private String htName;

@@ -226,7 +226,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 bean.setAveragePrice(getAverage(bean));
 
                 // 是否是热销标签
-                if (null != bean.getSellWell() && bean.getSellWell()>5) {
+                if (null != bean.getSellWell() && bean.getSellWell()>100) {
                     bean.setSellWellLabel(1);
                 } else {
                     bean.setSellWellLabel(2);
@@ -346,13 +346,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         // 头图
                         if (null != map.get(6)) {
                             bean.setImgName(map.get(6).get(0).getImgName());
-                            bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(map.get(6).get(0).getImgPath()));
+                            bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(map.get(6).get(0).getImgPath()).concat("&imgId=").concat(map.get(6).get(0).getImgId().toString()));
                         }
 
                         // 视频
                         if (null != map.get(7)) {
                             bean.setVideoName(map.get(7).get(0).getImgName());
-                            bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(map.get(7).get(0).getImgPath()));
+                            bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(map.get(7).get(0).getImgPath()).concat("&imgId=").concat(map.get(7).get(0).getImgId().toString()));
                         }
 
                     }
@@ -714,48 +714,63 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingImgBean> imgBeans = map.get(1);
         if (null != imgBeans) {
             build.setEffectList(imgBeans.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            List<String> effectList = imgBeans.stream().map(BuildingImgBean::getImgPath).collect(toList());
-            List<String> pathList = getStrings(effectList);
+//            List<String> effectList = imgBeans.stream().map(BuildingImgBean::getImgPath).collect(toList());
+//            List<String> pathList = getStrings(effectList);
+//            build.setEffectPathList(pathList);
+            List<String> pathList = getPathList(imgBeans);
             build.setEffectPathList(pathList);
         }
         // 环境规划图
         List<BuildingImgBean> imgBeans1 = map.get(2);
         if (null != imgBeans1) {
             build.setEnPlanList(imgBeans1.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            List<String> enList = imgBeans1.stream().map(BuildingImgBean::getImgPath).collect(toList());
-            List<String> pathList = getStrings(enList);
+//            List<String> enList = imgBeans1.stream().map(BuildingImgBean::getImgPath).collect(toList());
+//            List<String> pathList = getStrings(enList);
+            List<String> pathList = getPathList(imgBeans1);
             build.setEnPlanPathList(pathList);
         }
         // 楼盘实景
         List<BuildingImgBean> imgBeans2 = map.get(3);
         if (null != imgBeans2) {
             build.setBuildReaList(imgBeans2.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            List<String> bmList = imgBeans2.stream().map(BuildingImgBean::getImgPath).collect(toList());
-            List<String> pathList = getStrings(bmList);
+//            List<String> bmList = imgBeans2.stream().map(BuildingImgBean::getImgPath).collect(toList());
+//            List<String> pathList = getStrings(bmList);
+            List<String> pathList = getPathList(imgBeans2);
             build.setBuildReaPathList(pathList);
         }
         // 配套实景
         List<BuildingImgBean> imgBeans3 = map.get(4);
         if (null != imgBeans3) {
             build.setMatchingRealList(imgBeans3.stream().map(BuildingImgBean::getImgName).collect(toList()));
-            List<String> bmList = imgBeans3.stream().map(BuildingImgBean::getImgPath).collect(toList());
-            List<String> pathList = getStrings(bmList);
+//            List<String> bmList = imgBeans3.stream().map(BuildingImgBean::getImgPath).collect(toList());
+//            List<String> pathList = getStrings(bmList);
+            List<String> pathList = getPathList(imgBeans3);
             build.setMatchingRealPathList(pathList);
         }
         // 头图
         List<BuildingImgBean> imgBeans4 = map.get(6);
         if (null != imgBeans4) {
             build.setImgName(imgBeans4.get(0).getImgName());
-            build.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans4.get(0).getImgPath()));
+            build.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans4.get(0).getImgPath()).concat("&imgId=").concat(imgBeans4.get(0).getImgId().toString()));
         }
 
         // 区位图
         List<BuildingImgBean> imgBeans6 = map.get(9);
         if (null != imgBeans6) {
-            List<String> bmList = imgBeans6.stream().map(BuildingImgBean::getImgPath).collect(toList());
-            List<String> pathList = getStrings(bmList);
+//            List<String> bmList = imgBeans6.stream().map(BuildingImgBean::getImgPath).collect(toList());
+//            List<String> pathList = getStrings(bmList);
+            List<String> pathList = getPathList(imgBeans6);
             build.setRegionPathList(pathList);
         }
+    }
+
+    private List<String> getPathList(List<BuildingImgBean> imgBeans) {
+        List<String> pathList = new ArrayList<>();
+        for (BuildingImgBean buildingImgBean : imgBeans) {
+            String path = ImgPathConstant.INTERFACE_PATH.concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
+            pathList.add(path);
+        }
+        return pathList;
     }
 
     private List<String> getStrings(List<String> effectList) {
@@ -974,10 +989,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (type == 1) {
                     if (buildingBean1.getHotSearch() != null) {
                         labelList.add("热搜");
-                        buildingBean1.setLabel("热搜");
                     }
                     if (buildingBean1.getPopularity() != null) {
                         labelList.add("人气");
+                    }
+                    if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
+                        buildingBean1.setLabel("热搜");
+                    } else{
                         buildingBean1.setLabel("人气");
                     }
                     buildingBean1.setLabelList(labelList);
@@ -990,56 +1008,56 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                                MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] regionImg, MultipartFile[] video) throws Exception {
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-        BuildingImgBean buildingImgBean = new BuildingImgBean();
-        buildingImgBean.setBuildId(buildingBean.getBuildId());
+//        BuildingImgBean buildingImgBean = new BuildingImgBean();
+//        buildingImgBean.setBuildId(buildingBean.getBuildId());
 
         if (null != effectImg && effectImg.length > 0) {
 
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, effectImg, "effectImg", listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
         }
 
         if (null != enPlanImg && enPlanImg.length > 0) {
 
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, enPlanImg, "enPlanImg", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
         }
 
         if (null != buildRealImg && buildRealImg.length > 0) {
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
         }
 
         if (null != matchingRealImg && matchingRealImg.length > 0) {
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, matchingRealImg, "matchingRealImg", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
         }
 
         if (null != headImg && headImg.length > 0) {
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.headImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.headImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
         }
 
         if (null != regionImg && regionImg.length > 0) {
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
         }
         if (null != video && video.length > 0) {
-            buildingImgBean.setItId(listMap.get(ImgTypeConstant.video).get(0).getItId());
-            deleteImg(buildingImgBean);
-            buildingImgDao.deleteByImgName(buildingImgBean);
+//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.video).get(0).getItId());
+//            deleteImg(buildingImgBean);
+//            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
     }
@@ -1082,12 +1100,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                File directory = new File("");// 参数为空
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
-                String imgName = buildingBean.getBuildId().toString().concat(fileName);
+//                String imgName = buildingBean.getBuildId().toString().concat(fileName);
                 File dir = new File(buildStoreDir + ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = type + i + "_" + imgName;
+                String name = UUID.randomUUID().toString().replace("-","").concat(fileName);
 //                System.out.println("name:" + name);
 
                 i++;
@@ -1129,4 +1147,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
+    public void deleteImgFile(BuildingImgBean buildingImgBean) {
+        //删除文件
+        BuildingImgBean img = buildingImgDao.getImgById(buildingImgBean);
+        if (null != img) {
+            delFile(img.getImgPath());
+        }
+
+        // 删除表中数据
+        buildingImgDao.deleteImgById(buildingImgBean);
+    }
 }

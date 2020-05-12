@@ -334,7 +334,7 @@
     </select>
 
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        select * from building where RECOMMEND = 1 order by POPULARITY,HOT_SEARCH desc limit 4
+        select * from building where RECOMMEND = 1 order by POPULARITY desc limit 4
     </select>
 
     <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildingBean">
