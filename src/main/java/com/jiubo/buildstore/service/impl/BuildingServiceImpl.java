@@ -435,7 +435,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<Integer> bhtIdList = buildingBean.getBhtIdList();
 
         List<Integer> buildIdList = new ArrayList<>();
-        if (!CollectionsUtils.isEmpty(buildIdList)) {
+        if (!CollectionsUtils.isEmpty(bhtIdList)) {
             List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
             if (!CollectionsUtils.isEmpty(bhtRefByBhtIds)) {
                 List<Integer> buildIds = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());

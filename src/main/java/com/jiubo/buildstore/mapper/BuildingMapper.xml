@@ -126,6 +126,9 @@
                 </foreach>
             </if>
 
+            <if test="buildingBean.regionId != null">
+                and REGION_ID = #{buildingBean.regionId}
+            </if>
         </where>
         <if test="buildingBean.dateSort != null and buildingBean.dateSort != 0">
             <if test="buildingBean.dateSort == 1">
