@@ -7,6 +7,7 @@ import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.BuildingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,35 +88,35 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 楼盘数据
         List<BuildingBean> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
 
-        if (null != allBulidBypage && allBulidBypage.size() > 0) {
+        if (!CollectionsUtils.isEmpty(allBulidBypage)) {
             // 获取楼盘id
             List<Integer> list = allBulidBypage.stream().map(BuildingBean::getBuildId).collect(toList());
 
             // 获取所有类型
             List<BuildingTypeBean> buildTypeList = buildingTypeDao.getAllBuildingType();
             Map<Integer, List<BuildingTypeBean>> btMap = null;
-            if (null != buildTypeList && buildTypeList.size() > 0) {
+            if (!CollectionsUtils.isEmpty(buildTypeList)) {
                 btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
             }
 
             //获取所有特色
             List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
             Map<Integer, List<CharaRefBean>> charaRefMap = null;
-            if (null != chaRefByBidList && chaRefByBidList.size() > 0) {
+            if (!CollectionsUtils.isEmpty(chaRefByBidList)) {
                 charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
             }
 
             // 翻译楼盘户型
             List<BhtRefBean> bhtRefBeanList = bhtRefDao.getAllBhtRefByBIds(new BhtRefBean().setBuildIdList(list));
             Map<Integer, List<BhtRefBean>> bhtRefMap = null;
-            if (null != bhtRefBeanList && bhtRefBeanList.size() > 0) {
+            if (!CollectionsUtils.isEmpty(bhtRefBeanList)) {
                 bhtRefMap = bhtRefBeanList.stream().collect(Collectors.groupingBy(BhtRefBean::getBuildId));
             }
 
             // 翻译出售状态
             List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
             Map<Integer, List<SaleTypeBean>> saleMap = null;
-            if (null != allSaleType && allSaleType.size() > 0) {
+            if (!CollectionsUtils.isEmpty(allSaleType)) {
                 saleMap = allSaleType.stream().collect(Collectors.groupingBy(SaleTypeBean::getStId));
             }
             // 获取咨询师名字 联系方式
@@ -129,14 +130,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingImgBean.setItId(6);
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> headImgMap = null;
-            if (null != byBuildId && byBuildId.size() > 0) {
+            if (!CollectionsUtils.isEmpty(byBuildId)) {
                 headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
 
             buildingImgBean.setItId(7);
             List<BuildingImgBean> video = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> videoMap = null;
-            if (null != video && video.size() > 0) {
+            if (!CollectionsUtils.isEmpty(video)) {
                 videoMap = video.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
             // 遍历实体 翻译各个类型字段
@@ -145,7 +146,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 户型
                 if (null != bhtRefMap) {
                     List<BhtRefBean> bhtRefBeans = bhtRefMap.get(bean.getBuildId());
-                    if (null != bhtRefBeans && bhtRefBeans.size() > 0) {
+                    if (!CollectionsUtils.isEmpty(bhtRefBeans)) {
                         List<String> bhtNameList = bhtRefBeans.stream().map(BhtRefBean::getBhtName).collect(toList());
                         if (null != bhtNameList && bhtNameList.size() > 0) {
                             bean.setCaName(StringUtils.join(bhtNameList, "/"));
@@ -177,18 +178,23 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
                     if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
                         List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
-                       // 特色中是否有优惠楼盘 并赋值
+
+
+                        // 特色中是否有优惠楼盘 并赋值
                         List<Integer> collect = charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList());
                         if (collect.contains(4)){
+                           // （若是给楼盘打优惠楼盘标签）
                             bean.setDiscount(1L);
                         } else {
                             bean.setDiscount(2L);
                         }
+
+                        // 特色标签集合
                         bean.setCharaNameList(charaRefList);
+                        // 特色id集合
                         bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
-                        if (null != charaRefList) {
-                            bean.setChaName(StringUtils.join(charaRefList, "、"));
-                        }
+//                        // 特色标签集合组成的字符串
+//                        bean.setChaName(StringUtils.join(charaRefList, "、"));
                     }
                 }
 
@@ -790,6 +796,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return pathList;
     }
 
+
+    /**
+     * 文章页 热门
+     */
     @Override
     public List<BuildingBean> getSellWell() {
 
@@ -798,6 +808,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return sellWell;
     }
 
+    /**
+     * 条件筛选页 热门
+     */
     @Override
     public BuildMainBean getHot() {
         BuildMainBean buildMainBean = new BuildMainBean();

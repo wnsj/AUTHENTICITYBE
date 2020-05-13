@@ -35,6 +35,8 @@ public class LinkPhoneBean implements Serializable {
 
     private Integer buildId;
 
+    @TableField(exist = false)
+    private String build;
     /**
      * 1:详情--参考单价
             2:详情--最近开盘
@@ -48,10 +50,14 @@ public class LinkPhoneBean implements Serializable {
      */
     private Integer moId;
 
+    @TableField(exist = false)
+    private String moLabel;
+
     private String phone;
 
     private Date createDate;
 
+    @TableField(exist = false)
     private String createTime;
     /**
      * 前台传入的日期
@@ -78,6 +84,7 @@ public class LinkPhoneBean implements Serializable {
      */
     private Integer remarks;
 
+    @TableField(exist = false)
     private String remarksLabel;
 
     private String form;

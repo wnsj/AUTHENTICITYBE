@@ -129,7 +129,7 @@ public class BuildingController {
 
 
     /**
-     * 获取所有楼盘
+     * 获取所有楼盘的名字及id（楼盘下拉）
      * @return
      */
     @GetMapping("/getAllBuild")
@@ -172,7 +172,7 @@ public class BuildingController {
         return jsonObject;
     }
 
-    /**
+    /**(文章页热门)
      * 获取热门
      * @return
      */
@@ -186,7 +186,7 @@ public class BuildingController {
         return jsonObject;
     }
     /**
-     * 获取热门楼盘
+     * 获取热门楼盘（条件筛选页）
      */
     @GetMapping("/getHot")
     public JSONObject getHot() {
@@ -214,6 +214,11 @@ public class BuildingController {
     }
 
 
+    /**
+     * 条件筛选页模糊查询
+     * @param buildingBean
+     * @return
+     */
     @PostMapping("/getBuildLikePage")
     public JSONObject getBuildLikePage(@RequestBody BuildingBean buildingBean){
         JSONObject jsonObject = new JSONObject();
@@ -224,6 +229,11 @@ public class BuildingController {
         return jsonObject;
     }
 
+    /**
+     * 后台管理 修改楼盘||评论中的图片删除（点击x）
+     * @param buildingImgBean
+     * @return
+     */
     @PostMapping("/deleteImgFile")
     public JSONObject deleteImgFile(@RequestBody BuildingImgBean buildingImgBean) {
         JSONObject jsonObject = new JSONObject();

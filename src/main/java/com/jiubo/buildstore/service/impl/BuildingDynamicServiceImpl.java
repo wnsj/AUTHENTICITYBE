@@ -86,7 +86,6 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 
     @Override
     public void addDynamic(BuildingDynamicBean buildingDynamicBean) {
-        buildingDynamicBean.setCreateDate(new Date());
         buildingDynamicDao.addDynamic(buildingDynamicBean);
     }
 }

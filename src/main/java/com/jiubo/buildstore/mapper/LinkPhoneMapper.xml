@@ -14,6 +14,12 @@
             <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
                 LP_NAME like CONCAT('%',#{linkPhoneBean.lpName},'%')
             </if>
+            <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
+               and PHONE like CONCAT('%',#{linkPhoneBean.phone},'%')
+            </if>
+            <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
+                and REMARKS = #{linkPhoneBean.remarks}
+            </if>
         </where>
         ORDER BY CREATE_DATE DESC
     </select>

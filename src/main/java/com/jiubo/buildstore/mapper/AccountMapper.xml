@@ -41,6 +41,7 @@
                 ACCOUNT_ID = #{accountId}
             </if>
         </trim>
+        where SA_ID = #{saId}
     </update>
 
 
