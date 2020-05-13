@@ -36,7 +36,7 @@ public class BuildingDynamicBean implements Serializable {
     private String bdContent;
 
     private Date createDate;
-
+    @TableField(exist = false)
     private String createTime;
     @TableField(exist = false)
     private String htName;

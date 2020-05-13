@@ -31,7 +31,10 @@
                 BD_CONTENT =  #{buildingDynamicBean.bdContent},
             </if>
             <if test="buildingDynamicBean.buildId != null">
-                BUILD_ID = #{buildingDynamicBean.buildId}
+                BUILD_ID = #{buildingDynamicBean.buildId},
+            </if>
+            <if test="buildingDynamicBean.createDate != null">
+                CREATE_DATE = #{buildingDynamicBean.createDate}
             </if>
         </trim>
         where BD_ID = #{buildingDynamicBean.bdId}
