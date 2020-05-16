@@ -8,5 +8,6 @@
                 LT_ID = #{locationDistinguishBean.ltId}
             </if>
         </where>
+        order by LD_ID asc
     </select>
 </mapper>
