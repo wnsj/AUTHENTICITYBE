@@ -3,6 +3,8 @@ package com.jiubo.buildstore.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.bean.BuildReceive;
+import com.jiubo.buildstore.bean.BuildReturn;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.common.Constant;
@@ -40,7 +42,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getAllBuildByPage")
-    public JSONObject getAllBulidBypages(@RequestBody BuildingBean buildingBean) {
+    public JSONObject getAllBulidBypages(@RequestBody BuildReceive buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -55,7 +57,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getAllBulidBypages")
-    public JSONObject getAllBuildByPage(@RequestBody BuildingBean buildingBean) {
+    public JSONObject getAllBuildByPage(@RequestBody BuildReceive buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -85,9 +87,9 @@ public class BuildingController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        BuildingBean buildingBean = null;
+        BuildReceive buildingBean = null;
         try{
-            buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
+            buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
         }catch (Exception e) {
             log.error("转译失败Json{}",addParam);
             log.error("异常{}",e.toString());
@@ -121,7 +123,7 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 
-        BuildingBean buildingBean = JSONObject.parseObject(addParam, BuildingBean.class);
+        BuildReceive buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
         buildingService.patchById(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
 
         return jsonObject;
@@ -163,7 +165,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getBuildByBuildId")
-    public JSONObject getBuildByBuildId(BuildingBean buildingBean) {
+    public JSONObject getBuildByBuildId(BuildReceive buildingBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -220,7 +222,7 @@ public class BuildingController {
      * @return
      */
     @PostMapping("/getBuildLikePage")
-    public JSONObject getBuildLikePage(@RequestBody BuildingBean buildingBean){
+    public JSONObject getBuildLikePage(@RequestBody BuildReceive buildingBean){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -243,4 +245,6 @@ public class BuildingController {
 
         return jsonObject;
     }
+
+
 }

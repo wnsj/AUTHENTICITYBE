@@ -1,6 +1,8 @@
 package com.jiubo.buildstore.dao;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.bean.BuildReceive;
+import com.jiubo.buildstore.bean.BuildReturn;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,13 +26,13 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
      * @param buildingBean
      * @return
      */
-    public List<BuildingBean> getAllBulidBypage(Page page, @Param("buildingBean") BuildingBean buildingBean);
+    public List<BuildReturn> getAllBulidBypage(Page page, @Param("buildingBean") BuildReceive buildingBean);
 
-    public int addBuilding(@Param("buildingBean") BuildingBean buildingBean);
+    public int addBuilding(@Param("buildingBean") BuildReceive buildingBean);
 
-    public void patchById(@Param("buildingBean") BuildingBean buildingBean);
+    public void patchById(@Param("buildingBean") BuildReceive buildingBean);
 
-    public BuildingBean getAllByHtName(@Param("buildingBean") BuildingBean buildingBean);
+    public BuildReturn getAllByHtName(@Param("buildingBean") BuildReceive buildingBean);
 
     public List<BuildingBean> getAllBuild();
 
@@ -38,41 +40,41 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
      * 推荐楼盘（根据人气热搜排序）
      * @return
      */
-    public List<BuildingBean> getRecommend();
+    public List<BuildReturn> getRecommend();
 
     /**
      * 优选楼盘
      * @return
      */
-    public List<BuildingBean> getOptimization();
+    public List<BuildReturn> getOptimization();
 
     /**
      * 品质楼盘（根据热销值排序）
      * @return
      */
-    public List<BuildingBean> getQuality();
+    public List<BuildReturn> getQuality();
 
-    public BuildingBean getBuildById(@Param("buildingBean") BuildingBean buildingBean);
+    public BuildReturn getBuildById(@Param("buildingBean") BuildReceive buildingBean);
 
-    public List<BuildingBean> getSellWell();
+    public List<BuildReturn> getSellWell();
 
     /**
      * 人气
      * @return
      */
-    public List<BuildingBean> getPHotBuild();
+    public List<BuildReturn> getPHotBuild();
 
     /**
      * 热销
      * @return
      */
-    public List<BuildingBean> getSWBuild();
+    public List<BuildReturn> getSWBuild();
 
     /**
      * 热搜
      * @return
      */
-    public List<BuildingBean> getHotSBuild();
+    public List<BuildReturn> getHotSBuild();
 
-    public List<BuildingBean> getBuildLikePage(Page page,@Param("buildingBean") BuildingBean buildingBean);
+    public List<BuildReturn> getBuildLikePage(Page page,@Param("buildingBean") BuildReceive buildingBean);
 }

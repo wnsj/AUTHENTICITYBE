@@ -18,6 +18,8 @@ import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * <p>
@@ -36,9 +38,7 @@ public class BuildingBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "BUILD_ID", type = IdType.AUTO)
-    private Integer buildId;
-
-    private List<Integer> buildIdList;
+    public Integer buildId;
     /**
      * 楼盘名称
      */
@@ -49,11 +49,7 @@ public class BuildingBean implements Serializable {
      */
     private Integer isSale;
 
-    private String saleLabel;
-    /**
-     * 是否在售集合(1在售；2已售)
-     */
-    private List<Integer> isSaleList;
+
 
     /**
      * 别名
@@ -65,24 +61,13 @@ public class BuildingBean implements Serializable {
      */
     private Integer proId;
 
-    /**
-     * 省份IDList
-     */
-    private List<Integer> proIdList;
+
     /**
      * 区域ID
      */
     private Integer ldId;
 
-    /**
-     * 区域idList
-     */
-    private List<Integer> ldIdList;
 
-    /**
-     * 开发商id集合
-     */
-    private List<Integer> devIdList;
     /**
      * 最小面积
      */
@@ -94,10 +79,6 @@ public class BuildingBean implements Serializable {
     private BigDecimal maxArea;
 
     /**
-     * 面积id集合
-     */
-    private List<Integer> areaIdList;
-    /**
      * 最大单价
      */
     private BigDecimal maxUnitPrice;
@@ -107,10 +88,6 @@ public class BuildingBean implements Serializable {
      */
     private BigDecimal minUnitPrice;
 
-    /**
-     * 均价id集合
-     */
-    private List<Integer> unitPriceIdList;
     /**
      * 最大总价
      */
@@ -125,73 +102,17 @@ public class BuildingBean implements Serializable {
      * 楼盘类型ID
      */
     private Integer btId;
-    /**
-     * 楼盘类型ID集合
-     */
-    private List<Integer> btIdList;
+
     /**
      * 楼盘地址
      */
     private String adress;
-    /**
-     * 楼盘户型ID
-     */
-    private Integer bhtId;
 
-    /**
-     * 楼盘户型ID集合
-     */
-    private List<Integer> bhtIdList;
-
-
-    /**
-     * 页码
-     */
-    @TableField(exist = false)
-    private String current;
-
-    /**
-     * 每页尺寸
-     */
-    @TableField(exist = false)
-    private String pageSize;
-    /**
-     * 排序依据
-     */
-    @TableField(exist = false)
-    private String pageOrder;
-
-    /**
-     * 时间排序(1:升序；2降序)
-     */
-    @TableField(exist = false)
-    private Integer dateSort;
-
-    /**
-     * 价格排序(1:升序；2降序)
-     */
-    @TableField(exist = false)
-    private Integer priceSort;
-
-    /**
-     * 楼盘类型名
-     */
-    private String btName;
     /**
      * 加推时间
      */
     private Date createDate;
 
-    /**
-     * 户型类型名
-     */
-    private String caName;
-    /**
-     * 房源特色名
-     */
-    private String chaName;
-
-    private List<String> charaNameList;
     /**
      * 房源特色id
      */
@@ -212,7 +133,6 @@ public class BuildingBean implements Serializable {
      */
     private Date proDate;
 
-    private String proDateTime;
     /**
      * 产权年限
      */
@@ -238,10 +158,7 @@ public class BuildingBean implements Serializable {
      */
     private String saleAddress;
 
-    /**
-     * 房源特色id集合
-     */
-    private List<Integer> chaIdList;
+
     /**
      * 物业地址
      */
@@ -261,7 +178,6 @@ public class BuildingBean implements Serializable {
      * 建筑面积
      */
     private BigDecimal floorage;
-    private List<Integer> idList;
     /**
      * 户数
      */
@@ -281,13 +197,8 @@ public class BuildingBean implements Serializable {
      * 物业公司
      */
     private String propertyCompany;
-    private List<Map<String, Object>> openTimeList;
 
-    private List<Map<String, Object>> areaList;
 
-    private List<Map<String, Object>> totalPriceList;
-
-    private List<Map<String, Object>> unitPriceList;
     /**
      * 物业费
      */
@@ -313,7 +224,6 @@ public class BuildingBean implements Serializable {
      */
     private Integer sellWell;
 
-    private Integer sellWellLabel;
     /**
      * 人气值
      */
@@ -333,22 +243,10 @@ public class BuildingBean implements Serializable {
      */
     private Long buildOpen;
 
-
-    /**
-     * 咨询师名字
-     */
-    private String couName;
-
     /**
      * 联系方式
      */
     private String tel;
-
-    private String openDateTime;
-
-
-    private String startTime;
-    private String endTime;
 
     /**
      * 是否推荐户型（1：是；2：否）
@@ -379,87 +277,14 @@ public class BuildingBean implements Serializable {
     private Date modifyTime;
 
     /**
-     * 头图名
-     */
-    private String imgName;
-
-    /**
-     * 头图路径
-     */
-    private String imgPath;
-
-    /**
-     * 视频名
-     */
-    private String videoName;
-    /**
-     * 视频路径
-     */
-    private String videoPath;
-    /**
-     * 均价
-     */
-    private BigDecimal averagePrice;
-
-    /**
-     * 户型图
-     */
-    private List<String> effectList;
-    private List<String> effectPathList;
-
-    /**
-     * 小区环境
-     */
-    private List<String> enPlanList;
-    private List<String> enPlanPathList;
-
-    /**
-     * 实景图
-     */
-    private List<String> buildReaList;
-    private List<String> buildReaPathList;
-
-
-    /**
-     * 全景看房
-     */
-    private List<String> matchingRealList;
-    private List<String> matchingRealPathList;
-
-    /**
-     * 区位
-     */
-    private List<String> regionPathList;
-    /**
-     * 标签名（随意选的）
-     */
-    private String label;
-    /**
-     * 标签集合
-     */
-    private List<String> labelList;
-
-    /**
      * 楼盘特点描述
      */
     private String buildDescription;
-
-    /**
-     * 楼盘居室信息
-     */
-    private List<HouseTypeNum> htnNumList;
 
     /**
      * 区域id
      */
     private Integer regionId;
 
-    private List<Integer> regionIdList;
-
-    /**
-     * 模糊查询字段
-     */
-    private String special;
-
-    private String ldName;
+    private Date updateTime;
 }

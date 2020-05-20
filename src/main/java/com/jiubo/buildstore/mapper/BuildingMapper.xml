@@ -3,7 +3,7 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDao">
 
     <!--条件查询-->
-    <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildReturn">
         SELECT *
         from building
 
@@ -330,7 +330,7 @@
         where BUILD_ID = #{buildingBean.buildId}
     </update>
 
-    <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where  HT_NAME = #{buildingBean.htName}
     </select>
 
@@ -339,39 +339,39 @@
     </select>
 
     <!--首页推荐楼盘||优质楼盘-->
-    <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where RECOMMEND = 1 order by POPULARITY desc limit 4
     </select>
 
     <!--首页优选-->
-    <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where OPTIMIZATION = 1
     </select>
 
     <!--首页品质楼盘-->
-    <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
     </select>
 
-    <select id="getSellWell" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getSellWell" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building order by SELL_WELL desc limit 3
     </select>
 
-    <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where BUILD_ID = #{buildingBean.buildId}
     </select>
 
-    <select id="getPHotBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getPHotBuild" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building order by POPULARITY limit 3
     </select>
-    <select id="getSWBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getSWBuild" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building order by SELL_WELL limit 3
     </select>
-    <select id="getHotSBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getHotSBuild" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building order by HOT_SEARCH limit 3
     </select>
 
-    <select id="getBuildLikePage" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <select id="getBuildLikePage" resultType="com.jiubo.buildstore.bean.BuildReturn">
         SELECT DISTINCT
         a.*
         FROM

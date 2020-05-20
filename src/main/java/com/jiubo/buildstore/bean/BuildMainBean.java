@@ -11,15 +11,15 @@ import java.util.List;
 @Accessors(chain = true)
 public class BuildMainBean {
 
-    private List<BuildingBean> commendList;
+    private List<BuildReturn> commendList;
 
-    private List<BuildingBean> qualityList;
+    private List<BuildReturn> qualityList;
 
-    private List<BuildingBean> newPopularityList;
+    private List<BuildReturn> newPopularityList;
 
-    private List<BuildingBean> newHotSearchList;
+    private List<BuildReturn> newHotSearchList;
 
-    private List<BuildingBean> newSellWellList;
+    private List<BuildReturn> newSellWellList;
 
   /*  private List<BuildingBean> commendPopularityList;
 
