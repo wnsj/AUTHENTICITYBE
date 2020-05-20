@@ -77,9 +77,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private LocationDistinguishDao locationDistinguishDao;
 
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
-
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -877,20 +874,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
 
         List<BuildReturn> beanPageList = buildingDao.getBuildLikePage(page, buildingBean);
-
-        String index = "test";
-        String type = "doc";
-
-//        IndexQuery indexQuery = new IndexQueryBuilder().withIndexName(index)
-//                .withType(type).withId(beanPageList.get(0).getBuildId().toString()).withObject(beanPageList.get(0)).build();
-//        elasticsearchTemplate.index(indexQuery);
-
-//        List<String> idList = new ArrayList<>();
-//        idList.add("202");
-//        idList.add("198");
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withIndices(index).withTypes(type).build();
-        List<BuildingBean> beanList = elasticsearchTemplate.queryForList(searchQuery, BuildingBean.class);
-        log.info("数据{}",beanList);
         if (!CollectionsUtils.isEmpty(beanPageList)) {
             // 获取楼盘id
             List<Integer> list = beanPageList.stream().map(BuildingBean::getBuildId).collect(toList());
