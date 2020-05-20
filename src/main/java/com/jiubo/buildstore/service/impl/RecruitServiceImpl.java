@@ -95,7 +95,7 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitDao, RecruitBean> imp
                         recruitBean1.setFoodShelterLabel("包吃包住");
                     }
 
-                    if (null != recruitBean1.getFoodShelter() && "1".equals(recruitBean1.getWeekend().toString())) {
+                    if (null != recruitBean1.getWeekend() && "1".equals(recruitBean1.getWeekend().toString())) {
                         recruitBean1.setWeekendLabel("双休");
                     }
                     String s = getDateToString(recruitBean1.getCreateTime());
