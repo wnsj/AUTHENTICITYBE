@@ -72,17 +72,16 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
     @Override
     public BuildingAnalysisPageBean getAllAnalysisByBid(BuildingAnalysisBean buildingAnalysisBean) {
         BuildingAnalysisPageBean buildingAnalysisPageBean = new BuildingAnalysisPageBean();
-        List<BuildingAnalysisBean> buildAnalysisList;
-        Page<BuildingAnalysisBean> page = new Page<>();
-        if (null != buildingAnalysisBean && buildingAnalysisBean.getCode() != null && buildingAnalysisBean.getCode() == 1) {
-            page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
-            page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 3L : Long.parseLong(buildingAnalysisBean.getPageSize()));
-            buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
-        } else {
-            buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(buildingAnalysisBean);
-            page.setTotal(buildAnalysisList.size());
-        }
 
+        Page<BuildingAnalysisBean> page = new Page<>();
+//        if (null != buildingAnalysisBean && buildingAnalysisBean.getCode() != null && buildingAnalysisBean.getCode() == 1) {
+//            page.setCurrent(StringUtils.isBlank(buildingAnalysisBean.getCurrent()) ? 1L : Long.parseLong(buildingAnalysisBean.getCurrent()));
+//            page.setSize(StringUtils.isBlank(buildingAnalysisBean.getPageSize()) ? 3L : Long.parseLong(buildingAnalysisBean.getPageSize()));
+//            buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(page, buildingAnalysisBean);
+//        } else {
+            List<BuildingAnalysisBean> buildAnalysisList = buildingAnalysisDao.getAllAnalysisByBid(buildingAnalysisBean);
+//        }
+            page.setTotal(buildAnalysisList.size());
 
         if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
             // 楼盘
