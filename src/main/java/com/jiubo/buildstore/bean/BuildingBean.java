@@ -282,6 +282,10 @@ public class BuildingBean implements Serializable {
     private String buildDescription;
 
     /**
+     * 均价
+     */
+    private BigDecimal averagePrice;
+    /**
      * 区域id
      */
     private Integer regionId;

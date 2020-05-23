@@ -106,10 +106,6 @@ public class BuildReturn extends BuildingBean{
      */
     private String imgName;
 
-    /**
-     * 均价
-     */
-    private BigDecimal averagePrice;
 
     /**
      * 页码

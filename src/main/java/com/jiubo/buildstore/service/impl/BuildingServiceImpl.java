@@ -2,6 +2,7 @@ package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.*;
+import com.jiubo.buildstore.common.BuildConstant;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
@@ -240,8 +241,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                     }
                 }
-                // 设置均值
-                bean.setAveragePrice(getAverage(bean));
 
                 // 是否是热销标签
                 if (null != bean.getSellWell() && bean.getSellWell()>100) {
@@ -370,8 +369,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                 }
 
-                // 设置均值
-                bean.setAveragePrice(getAverage(bean));
 
                 // 是否是热销标签
                 if (bean.getSellWell() != null) {
@@ -470,20 +467,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         return false;
     }
 
-    private BigDecimal getAverage(BuildReturn bean) {
-        BigDecimal average;
-        if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() != null) {
-            BigDecimal decimal = bean.getMinUnitPrice().add(bean.getMaxUnitPrice());
-            average = decimal.divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
-        } else if (bean.getMinUnitPrice() != null && bean.getMaxUnitPrice() == null) {
-            average = bean.getMinUnitPrice().divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
-        } else if (bean.getMinUnitPrice() == null && bean.getMaxUnitPrice() != null) {
-            average = bean.getMaxUnitPrice().divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
-        } else {
-            average = new BigDecimal(0);
-        }
-        return average;
-    }
 
     @Override
     public void addBuilding(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
@@ -495,6 +478,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
 
         BuildReturn byHtName = buildingDao.getAllByHtName(buildingBean);
+
+        // 判断联系方式是否为空
+        if (StringUtils.isBlank(buildingBean.getTel())) {
+            buildingBean.setTel(BuildConstant.MODIFY_TEL);
+        }
 
         if (null == byHtName) {
             // 若不存在 创建
@@ -585,6 +573,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public void patchById(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                           MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] regionImg, MultipartFile[] video) throws Exception {
+        // 如果联系方式为空
+        if (StringUtils.isBlank(buildingBean.getTel())) {
+            buildingBean.setTel(BuildConstant.MODIFY_TEL);
+        }
+
         // 更新楼盘数据
         buildingDao.patchById(buildingBean);
 
@@ -713,9 +706,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
                 build.setCharaNameList(collect);
             }
-            // 均价
-            BigDecimal average = getAverage(build);
-            build.setAveragePrice(average);
 
             // 翻译出售状态
             List<SaleTypeBean> allSaleType = saleTypeDao.getAllSaleType();
@@ -857,10 +847,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildReturn> getRecommend() {
         List<BuildReturn> beanList = buildingDao.getRecommend();
         if (!CollectionsUtils.isEmpty(beanList)) {
-            for (BuildReturn buildingBean : beanList) {
-                // 均价
-                buildingBean.setAveragePrice(getAverage(buildingBean));
-            }
             getHeadImg(beanList, 2);
         }
         return beanList;
@@ -946,8 +932,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 setImgPath(headImgMap, bean);
                 // 设置视频 路径
                 setVideoPath(videoMap, bean);
-                // 设置均值
-                bean.setAveragePrice(getAverage(bean));
 
                 // 是否是热销标签
                 if (bean.getSellWell() != null) {
@@ -1064,9 +1048,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
                     buildingBean1.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                 }
-
-                // 均价
-                buildingBean1.setAveragePrice(getAverage(buildingBean1));
 
                 // 人气 热搜 热销 判断
                 if (type == 1) {

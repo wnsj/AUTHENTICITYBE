@@ -94,13 +94,13 @@
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minUnitPrice != null and item.minUnitPrice != 0 and item.maxUnitPrice == null">
-                         (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 > #{item.minUnitPrice}
+                        AVERAGE_PRICE > #{item.minUnitPrice}
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and (item.minUnitPrice == null or item.minUnitPrice == 0)">
-                        #{item.maxUnitPrice} > (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
+                        #{item.maxUnitPrice} > AVERAGE_PRICE
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null and item.minUnitPrice != 0">
-                        (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2 >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= (MIN_UNIT_PRICE + MAX_UNIT_PRICE)/2
+                        AVERAGE_PRICE >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= AVERAGE_PRICE
                     </if>
                 </foreach>
             </if>
@@ -140,10 +140,10 @@
         </if>
         <if test="buildingBean.priceSort != null and buildingBean.priceSort != 0">
             <if test="buildingBean.priceSort == 1">
-                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2 asc
+                order by AVERAGE_PRICE asc
             </if>
             <if test="buildingBean.priceSort == 2">
-                order by (MAX_UNIT_PRICE + MIN_UNIT_PRICE)/2 desc
+                order by AVERAGE_PRICE desc
             </if>
         </if>
     </select>
@@ -153,7 +153,7 @@
         insert into
         building
         (HT_NAME,IS_SALE,ALIAS,PRO_ID,LD_ID,DEV_ID,OPEN_DATE,TEL,
-        MIN_AREA,MAX_AREA,MAX_UNIT_PRICE,MIN_UNIT_PRICE,MAX_TITLE_PRICE,MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,
+        MIN_AREA,MAX_AREA,AVERAGE_PRICE,MAX_TITLE_PRICE,MIN_TITLE_PRICE,BT_ID,ADRESS,CREATE_DATE,
         OWNERSHIP_YEAR,PROPERTY_TYPE,PLOT_RATIO,GREENING_RATE,SALE_ADDRESS,PROPERTY_ADDRESS,DECORATION,COVERED_AREA,FLOORAGE,
         HOUSEHOLDS,ARCHITECTURAL_STYLE,ITERATION,PROPERTY_COMPANY,PROPERTY_FEE,PARKING_SPACE,PROJECT_INTRODUCTION,
         DISCOUNT,SELL_WELL,POPULARITY,HOT_SEARCH,SPECIAL_OFFER,RECOMMEND,OPTIMIZATION,QUALITY,BUILD_OPEN,CHA_ID,PRO_DATE,LONGITUDE,
@@ -161,7 +161,7 @@
         VALUES
         (#{buildingBean.htName},#{buildingBean.isSale},#{buildingBean.alias},#{buildingBean.proId},
         #{buildingBean.ldId},#{buildingBean.devId},#{buildingBean.openDate},#{buildingBean.tel},#{buildingBean.minArea},
-        #{buildingBean.maxArea},#{buildingBean.maxUnitPrice},#{buildingBean.minUnitPrice},
+        #{buildingBean.maxArea},#{buildingBean.averagePrice},
         #{buildingBean.maxTitlePrice},#{buildingBean.minTitlePrice},#{buildingBean.btId},#{buildingBean.adress},#{buildingBean.createDate},
         #{buildingBean.ownershipYear},#{buildingBean.propertyType},#{buildingBean.plotRatio},#{buildingBean.greeningRate},
         #{buildingBean.saleAddress},#{buildingBean.propertyAddress},#{buildingBean.decoration},#{buildingBean.coveredArea},
@@ -184,7 +184,7 @@
             <if test="null != buildingBean.isSale">
                 IS_SALE = #{buildingBean.isSale},
             </if>
-            <if test="null != buildingBean.alias and buildingBean.alias != ''">
+            <if test="null != buildingBean.alias">
                 ALIAS = #{buildingBean.alias},
             </if>
             <if test="null != buildingBean.proId">
@@ -199,11 +199,8 @@
             <if test="null != buildingBean.maxArea">
                 MAX_AREA = #{buildingBean.maxArea},
             </if>
-            <if test="null != buildingBean.maxUnitPrice">
-                MAX_UNIT_PRICE = #{buildingBean.maxUnitPrice},
-            </if>
-            <if test="null != buildingBean.minUnitPrice">
-                MIN_UNIT_PRICE = #{buildingBean.minUnitPrice},
+            <if test="null != buildingBean.averagePrice">
+                AVERAGE_PRICE = #{buildingBean.averagePrice},
             </if>
             <if test="null != buildingBean.maxTitlePrice">
                 MAX_TITLE_PRICE = #{buildingBean.maxTitlePrice},
@@ -300,7 +297,7 @@
             <if test="null != buildingBean.buildOpen">
                 BUILD_OPEN = #{buildingBean.buildOpen},
             </if>
-            <if test="null != buildingBean.tel and buildingBean.tel != ''">
+            <if test="null != buildingBean.tel">
                 TEL = #{buildingBean.tel},
             </if>
 

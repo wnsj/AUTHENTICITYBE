@@ -3,9 +3,10 @@
 <mapper namespace="com.jiubo.buildstore.dao.LinkPhoneDao">
 
     <insert id="addLinkPhone">
-        INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE,FORM)
+        INSERT INTO link_phone(LP_NAME, BUILD_ID, MO_ID, PHONE,WRITE_TIME,CREATE_DATE,FORM,RETURN_SALE)
         VALUES (#{linkPhoneBean.lpName}, #{linkPhoneBean.buildId},
-        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},#{linkPhoneBean.createDate},#{linkPhoneBean.form})
+        #{linkPhoneBean.moId}, #{linkPhoneBean.phone},#{linkPhoneBean.writeTime},
+        #{linkPhoneBean.createDate},#{linkPhoneBean.form},#{linkPhoneBean.returnSale})
     </insert>
 
     <select id="getPhone" resultType="com.jiubo.buildstore.bean.LinkPhoneBean">
@@ -14,10 +15,10 @@
             <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
                 LP_NAME like CONCAT('%',#{linkPhoneBean.lpName},'%')
             </if>
-            <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
+            <if test="linkPhoneBean.phone != null and linkPhoneBean.phone != ''">
                and PHONE like CONCAT('%',#{linkPhoneBean.phone},'%')
             </if>
-            <if test="linkPhoneBean.lpName != null and linkPhoneBean.lpName != ''">
+            <if test="linkPhoneBean.remarks != null">
                 and REMARKS = #{linkPhoneBean.remarks}
             </if>
         </where>
@@ -30,6 +31,15 @@
 
 
     <update id="patchFormById">
-        update link_phone set FORM = #{linkPhoneBean.form} where LP_ID = #{linkPhoneBean.lpId}
+        update link_phone
+        <trim prefix="set" suffixOverrides=",">
+            <if test="linkPhoneBean.form != null and linkPhoneBean.form != ''">
+                FORM = #{linkPhoneBean.form},
+            </if>
+            <if test="linkPhoneBean.returnSale != null and linkPhoneBean.returnSale != ''">
+                RETURN_SALE = #{linkPhoneBean.returnSale}
+            </if>
+        </trim>
+          where LP_ID = #{linkPhoneBean.lpId}
     </update>
 </mapper>

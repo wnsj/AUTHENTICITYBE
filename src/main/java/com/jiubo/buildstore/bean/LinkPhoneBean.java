@@ -87,5 +87,13 @@ public class LinkPhoneBean implements Serializable {
     @TableField(exist = false)
     private String remarksLabel;
 
+    /**
+     * 备注
+     */
     private String form;
+
+    /**
+     * 回访销售
+     */
+    private String returnSale;
 }
