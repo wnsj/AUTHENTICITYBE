@@ -49,30 +49,30 @@ public class BuildReceive extends BuildingBean{
     /**
      * 页码
      */
-    @TableField(exist = false)
+
     private String current;
 
     /**
      * 每页尺寸
      */
-    @TableField(exist = false)
+
     private String pageSize;
     /**
      * 排序依据
      */
-    @TableField(exist = false)
+
     private String pageOrder;
 
     /**
      * 时间排序(1:升序；2降序)
      */
-    @TableField(exist = false)
+
     private Integer dateSort;
 
     /**
      * 价格排序(1:升序；2降序)
      */
-    @TableField(exist = false)
+
     private Integer priceSort;
     /**
      * 房源特色id集合
@@ -95,4 +95,11 @@ public class BuildReceive extends BuildingBean{
      * 模糊查询字段
      */
     private String special;
+
+    /**
+     * 地铁ID集合
+     */
+    private List<Integer> metroIdList;
+
+    private Integer metroId;
 }

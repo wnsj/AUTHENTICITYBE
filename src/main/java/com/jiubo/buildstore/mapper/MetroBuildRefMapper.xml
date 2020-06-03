@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiubo.buildstore.dao.MetroBuildRefDao">
+
+    <insert id="insertMBRefBatch" parameterType="java.util.List">
+        insert into metro_build_ref (METRO_ID,BUILD_ID) values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.metroId},#{item.buildId})
+        </foreach>
+    </insert>
+
+    <select id="getAllMBRefByBIds" resultType="com.jiubo.buildstore.bean.MetroBuildRefBean">
+        select * from metro_build_ref
+        <where>
+            1=1
+            <if test="metroBuildRefBean.buildIdList != null and metroBuildRefBean.buildIdList.size >0">
+                and BUILD_ID in
+                <foreach collection="metroBuildRefBean.buildIdList" open="(" close=")" separator="," item="buildId">
+                    #{buildId}
+                </foreach>
+            </if>
+            <if test="metroBuildRefBean.metroIdList != null and metroBuildRefBean.metroIdList.size() > 0">
+                and METRO_ID in
+                <foreach collection="metroBuildRefBean.metroIdList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="metroBuildRefBean.metroId != null">
+                and METRO_ID = #{metroBuildRefBean.metroId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteMBRefByBid">
+        delete from metro_build_ref where BUILD_ID = #{buildId}
+    </delete>
+</mapper>

@@ -30,11 +30,11 @@ public class LocationDistinguishController {
      * @return
      */
     @PostMapping("/getAllDistinguish")
-    public JSONObject getAllDistinguish(LocationDistinguishBean locationDistinguishBean) {
+    public JSONObject getAllDistinguish() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,locationDistinguishService.getAllDistinguish(locationDistinguishBean));
+        jsonObject.put(Constant.Result.RETDATA,locationDistinguishService.getAllDistinguish());
         return jsonObject;
     }
 
@@ -43,11 +43,11 @@ public class LocationDistinguishController {
      * @return
      */
     @PostMapping("/getAllDis")
-    public JSONObject getAllDis(@RequestBody LocationDistinguishBean locationDistinguishBean) {
+    public JSONObject getAllDis() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,locationDistinguishService.getAllDistinguish(locationDistinguishBean));
+        jsonObject.put(Constant.Result.RETDATA,locationDistinguishService.getAllDistinguish());
         return jsonObject;
     }
 }

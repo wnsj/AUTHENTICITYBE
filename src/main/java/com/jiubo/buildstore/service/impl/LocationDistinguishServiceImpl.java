@@ -24,7 +24,7 @@ public class LocationDistinguishServiceImpl extends ServiceImpl<LocationDistingu
     @Autowired
     private LocationDistinguishDao locationDistinguishDao;
     @Override
-    public List<LocationDistinguishBean> getAllDistinguish(LocationDistinguishBean locationDistinguishBean) {
-        return locationDistinguishDao.getAllDistinguish(locationDistinguishBean);
+    public List<LocationDistinguishBean> getAllDistinguish() {
+        return locationDistinguishDao.getAllDistinguish();
     }
 }

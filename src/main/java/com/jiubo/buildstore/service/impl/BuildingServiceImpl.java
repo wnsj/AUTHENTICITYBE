@@ -78,6 +78,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private LocationDistinguishDao locationDistinguishDao;
 
+    @Autowired
+    private MetroBuildRefDao metroBuildRefDao;
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -304,6 +306,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             if (!CollectionsUtils.isEmpty(byBuildId)) {
                 imgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
             }
+            // 获取地铁
+            List<MetroBuildRefBean> allMBRefByBIds = metroBuildRefDao.getAllMBRefByBIds(new MetroBuildRefBean().setBuildIdList(list));
+            Map<Integer, List<MetroBuildRefBean>> mBRefMap = null;
+            if (!CollectionsUtils.isEmpty(allMBRefByBIds)) {
+                mBRefMap = allMBRefByBIds.stream().collect(Collectors.groupingBy(MetroBuildRefBean::getBuildId));
+            }
 
             // 遍历实体 翻译各个类型字段
             for (BuildReturn bean : allBulidBypage) {
@@ -311,6 +319,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 户型
                 buildSetBht(bhtRefMap, bean);
 
+                // 地铁线id集合
+                if (null != mBRefMap) {
+                    List<MetroBuildRefBean> metroBuildRefBeanList = mBRefMap.get(bean.getBuildId());
+                    if (!CollectionsUtils.isEmpty(metroBuildRefBeanList)) {
+                        List<Integer> collect = metroBuildRefBeanList.stream().map(MetroBuildRefBean::getMetroId).collect(toList());
+                        bean.setMetroIdList(collect);
+                    }
+                }
 
                 // 开盘时间
                 if (null != bean.getOpenDate()) {
@@ -462,6 +478,22 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 return true;
             }
         }
+
+//        List<Integer> metroIdList = buildingBean.getMetroIdList();
+
+//        if (!CollectionsUtils.isEmpty(metroIdList)) {
+//            metroBuildRefBean.setMetroIdList(metroIdList);
+//        }
+        // 根据地铁线查（目前查询条件支持单选、可多选）
+        if (null != buildingBean.getMetroId()) {
+            List<MetroBuildRefBean> allMBRefByBIds = metroBuildRefDao.getAllMBRefByBIds(new MetroBuildRefBean().setMetroId(buildingBean.getMetroId()));
+            if (!CollectionsUtils.isEmpty(allMBRefByBIds)) {
+                List<Integer> list = allMBRefByBIds.stream().map(MetroBuildRefBean::getBuildId).collect(toList());
+                buildIdList.addAll(list);
+            } else {
+                return true;
+            }
+        }
         List<Integer> list = buildIdList.stream().distinct().collect(toList());
         buildingBean.setBuildIdList(list);
         return false;
@@ -494,6 +526,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 绑定楼盘特色关系
             bindCharaRef(buildingBean);
 
+            // 绑定楼盘 地铁之间的关系
+            bindMBRef(buildingBean);
+
         } else {
             // 存在 则更新
             int id = byHtName.getBuildId();
@@ -512,6 +547,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 charaRefDao.deleteCharaRefByBid(id);
                 bindCharaRef(buildingBean);
             }
+
+            //更新楼盘地铁关系
+            List<Integer> metroIdList = buildingBean.getMetroIdList();
+            if (!CollectionsUtils.isEmpty(metroIdList)) {
+                metroBuildRefDao.deleteMBRefByBid(id);
+                bindMBRef(buildingBean);
+            }
         }
 
 
@@ -529,6 +571,20 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
             this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
+        }
+    }
+
+    private void bindMBRef(BuildReceive buildingBean) {
+        List<Integer> metroIdList = buildingBean.getMetroIdList();
+        if (!CollectionsUtils.isEmpty(metroIdList)) {
+            List<MetroBuildRefBean> metroBuildRefBeanList = new ArrayList<>();
+            for (Integer metroId : metroIdList) {
+                MetroBuildRefBean metroBuildRefBean = new MetroBuildRefBean();
+                metroBuildRefBean.setMetroId(metroId);
+                metroBuildRefBean.setBuildId(buildingBean.getBuildId());
+                metroBuildRefBeanList.add(metroBuildRefBean);
+            }
+            metroBuildRefDao.insertMBRefBatch(metroBuildRefBeanList);
         }
     }
 
@@ -592,6 +648,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (!CollectionsUtils.isEmpty(chaIdList)) {
             charaRefDao.deleteCharaRefByBid(buildingBean.getBuildId());
             bindCharaRef(buildingBean);
+        }
+
+        //更新楼盘地铁关系
+        List<Integer> metroIdList = buildingBean.getMetroIdList();
+        if (!CollectionsUtils.isEmpty(metroIdList)) {
+            metroBuildRefDao.deleteMBRefByBid(buildingBean.getBuildId());
+            bindMBRef(buildingBean);
         }
 
         // 获取图片类型
@@ -733,7 +796,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     private Map<Integer, List<LocationDistinguishBean>> getLdMap() {
-        List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish(new LocationDistinguishBean().setLtId(1));
+        List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish();
         Map<Integer, List<LocationDistinguishBean>> listMap = null;
         if (!CollectionsUtils.isEmpty(allDistinguishList)) {
             listMap = allDistinguishList.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));

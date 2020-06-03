@@ -14,5 +14,5 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface LocationDistinguishService extends IService<LocationDistinguishBean> {
-    public List<LocationDistinguishBean> getAllDistinguish(LocationDistinguishBean locationDistinguishBean);
+    public List<LocationDistinguishBean> getAllDistinguish();
 }

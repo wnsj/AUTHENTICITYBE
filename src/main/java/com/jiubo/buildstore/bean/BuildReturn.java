@@ -110,17 +110,22 @@ public class BuildReturn extends BuildingBean{
     /**
      * 页码
      */
-    @TableField(exist = false)
+
     private String current;
 
     /**
      * 每页尺寸
      */
-    @TableField(exist = false)
+
     private String pageSize;
 
     /**
      * 楼盘户型ID集合
      */
     private List<Integer> bhtIdList;
+
+    /**
+     * 地铁ID集合
+     */
+    private List<Integer> metroIdList;
 }
