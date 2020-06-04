@@ -473,7 +473,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<CharaRefBean> chaRefByChaIdList = charaRefDao.getChaRefByChaIdList(new CharaRefBean().setChaIdList(chaIdList));
             if (!CollectionsUtils.isEmpty(chaRefByChaIdList)) {
                 List<Integer> collect = chaRefByChaIdList.stream().map(CharaRefBean::getBuildId).collect(toList());
-                buildIdList.addAll(collect);
+                if (!CollectionsUtils.isEmpty(buildIdList)) {
+                    buildIdList = buildIdList.stream().filter(collect::contains).collect(toList());
+                } else {
+                    buildIdList.addAll(collect);
+                }
             } else {
                 return true;
             }
@@ -489,13 +493,24 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<MetroBuildRefBean> allMBRefByBIds = metroBuildRefDao.getAllMBRefByBIds(new MetroBuildRefBean().setMetroId(buildingBean.getMetroId()));
             if (!CollectionsUtils.isEmpty(allMBRefByBIds)) {
                 List<Integer> list = allMBRefByBIds.stream().map(MetroBuildRefBean::getBuildId).collect(toList());
-                buildIdList.addAll(list);
+
+                if (!CollectionsUtils.isEmpty(buildIdList)) {
+                    buildIdList = buildIdList.stream().filter(list::contains).collect(toList());
+                } else {
+                    buildIdList.addAll(list);
+                }
             } else {
                 return true;
             }
         }
+
         List<Integer> list = buildIdList.stream().distinct().collect(toList());
-        buildingBean.setBuildIdList(list);
+        if (!CollectionsUtils.isEmpty(list)) {
+            buildingBean.setBuildIdList(list);
+        } else {
+            return true;
+        }
+
         return false;
     }
 
