@@ -452,10 +452,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         // 设置楼盘查询条件---通过传入的户型条件筛选楼盘
         // （首先获取户型id集合，通过户型id集合 在户型关联表中获取楼盘id集合 再去楼盘表中根据楼盘id进行筛选 因为是多选所以如此实现，单选可用左外连接实现）
+
+        int flag = 1;
         List<Integer> bhtIdList = buildingBean.getBhtIdList();
 
         List<Integer> buildIdList = new ArrayList<>();
         if (!CollectionsUtils.isEmpty(bhtIdList)) {
+            flag = 2;
             List<BhtRefBean> bhtRefByBhtIds = bhtRefDao.getAllBhtRefByBhtIds(new BhtRefBean().setBhtIdList(bhtIdList));
             if (!CollectionsUtils.isEmpty(bhtRefByBhtIds)) {
                 List<Integer> buildIds = bhtRefByBhtIds.stream().map(BhtRefBean::getBuildId).distinct().collect(toList());
@@ -470,6 +473,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         List<Integer> chaIdList = buildingBean.getChaIdList();
         if (!CollectionsUtils.isEmpty(chaIdList)) {
+            flag = 2;
             List<CharaRefBean> chaRefByChaIdList = charaRefDao.getChaRefByChaIdList(new CharaRefBean().setChaIdList(chaIdList));
             if (!CollectionsUtils.isEmpty(chaRefByChaIdList)) {
                 List<Integer> collect = chaRefByChaIdList.stream().map(CharaRefBean::getBuildId).collect(toList());
@@ -490,6 +494,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //        }
         // 根据地铁线查（目前查询条件支持单选、可多选）
         if (null != buildingBean.getMetroId()) {
+            flag = 2;
             List<MetroBuildRefBean> allMBRefByBIds = metroBuildRefDao.getAllMBRefByBIds(new MetroBuildRefBean().setMetroId(buildingBean.getMetroId()));
             if (!CollectionsUtils.isEmpty(allMBRefByBIds)) {
                 List<Integer> list = allMBRefByBIds.stream().map(MetroBuildRefBean::getBuildId).collect(toList());
@@ -505,10 +510,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
 
         List<Integer> list = buildIdList.stream().distinct().collect(toList());
-        if (!CollectionsUtils.isEmpty(list)) {
-            buildingBean.setBuildIdList(list);
-        } else {
+        if (flag == 1) {
+            return false;
+        } else if (CollectionsUtils.isEmpty(list)){
             return true;
+        } else if (!CollectionsUtils.isEmpty(list)){
+            buildingBean.setBuildIdList(list);
         }
 
         return false;
