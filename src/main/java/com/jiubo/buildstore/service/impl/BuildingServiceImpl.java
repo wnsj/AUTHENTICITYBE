@@ -1100,33 +1100,35 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         buildingImgBean.setBIdList(list);
         buildingImgBean.setItId(6);
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
+        Map<Integer, List<BuildingImgBean>> listMap = null;
         if (!CollectionsUtils.isEmpty(byBuildId)) {
-            Map<Integer, List<BuildingImgBean>> listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
-
-            for (BuildReturn buildingBean1 : beans) {
-                List<String> labelList = new ArrayList<>();
+            listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
+        }
+        for (BuildReturn buildingBean1 : beans) {
+            List<String> labelList = new ArrayList<>();
+            if (null != listMap) {
                 List<BuildingImgBean> imgBeans = listMap.get(buildingBean1.getBuildId());
                 // 设置头图名字、路径
                 if (!CollectionsUtils.isEmpty(imgBeans)) {
                     buildingBean1.setImgName(imgBeans.get(0).getImgName());
                     buildingBean1.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                 }
+            }
 
-                // 人气 热搜 热销 判断
-                if (type == 1) {
-                    if (buildingBean1.getHotSearch() != null) {
-                        labelList.add("热搜");
-                    }
-                    if (buildingBean1.getPopularity() != null) {
-                        labelList.add("人气");
-                    }
-                    if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
-                        buildingBean1.setLabel("热搜");
-                    } else{
-                        buildingBean1.setLabel("人气");
-                    }
-                    buildingBean1.setLabelList(labelList);
+            // 人气 热搜 热销 判断
+            if (type == 1) {
+                if (buildingBean1.getHotSearch() != null) {
+                    labelList.add("热搜");
                 }
+                if (buildingBean1.getPopularity() != null) {
+                    labelList.add("人气");
+                }
+                if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
+                    buildingBean1.setLabel("热搜");
+                } else{
+                    buildingBean1.setLabel("人气");
+                }
+                buildingBean1.setLabelList(labelList);
             }
         }
     }
