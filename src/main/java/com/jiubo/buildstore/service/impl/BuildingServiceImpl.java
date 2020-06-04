@@ -726,6 +726,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         BuildReturn build = buildingDao.getBuildById(buildingBean);
 
         if (null != build) {
+            List<BuildingTypeBean> allBuildingType = buildingTypeDao.getAllBuildingType();
+            if (!CollectionsUtils.isEmpty(allBuildingType)) {
+                Map<Integer, List<BuildingTypeBean>> map1 = allBuildingType.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
+                List<BuildingTypeBean> buildingTypeBeans = map1.get(build.getBtId());
+                if (!CollectionsUtils.isEmpty(buildingTypeBeans)) {
+                    build.setBtName(buildingTypeBeans.get(0).getBtName());
+                }
+
+            }
             // 获取所有位置
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
 
