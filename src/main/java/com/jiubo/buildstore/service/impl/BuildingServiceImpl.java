@@ -509,13 +509,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             }
         }
 
-        List<Integer> list = buildIdList.stream().distinct().collect(toList());
+        List<Integer> reduceList = buildIdList.stream().distinct().collect(toList());
         if (flag == 1) {
             return false;
-        } else if (CollectionsUtils.isEmpty(list)){
+        } else if (CollectionsUtils.isEmpty(reduceList)){
             return true;
-        } else if (!CollectionsUtils.isEmpty(list)){
-            buildingBean.setBuildIdList(list);
+        } else if (!CollectionsUtils.isEmpty(reduceList)){
+            buildingBean.setBuildIdList(reduceList);
         }
 
         return false;
@@ -771,11 +771,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     build.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans5.get(0).getImgPath()));
                 }
 
-                if (null != listMap && build.getLdId() != null) {
-                    List<LocationDistinguishBean> beans = listMap.get(build.getLdId());
-                    if (!CollectionsUtils.isEmpty(beans)) {
-                        build.setLdName(beans.get(0).getLdName());
-                    }
+            }
+
+            if (null != listMap && build.getLdId() != null) {
+                List<LocationDistinguishBean> beans = listMap.get(build.getLdId());
+                if (!CollectionsUtils.isEmpty(beans)) {
+                    build.setLdName(beans.get(0).getLdName());
                 }
             }
 
