@@ -197,8 +197,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                         // 特色中是否有优惠楼盘 并赋值
                         List<Integer> collect = charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList());
-                        if (collect.contains(4)){
-                           // （若是给楼盘打优惠楼盘标签）
+                        if (collect.contains(4)) {
+                            // （若是给楼盘打优惠楼盘标签）
                             bean.setDiscount(1L);
                         } else {
                             bean.setDiscount(2L);
@@ -245,7 +245,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 // 是否是热销标签
-                if (null != bean.getSellWell() && bean.getSellWell()>100) {
+                if (null != bean.getSellWell() && bean.getSellWell() > 100) {
                     bean.setSellWellLabel(1);
                 } else {
                     bean.setSellWellLabel(2);
@@ -512,9 +512,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<Integer> reduceList = buildIdList.stream().distinct().collect(toList());
         if (flag == 1) {
             return false;
-        } else if (CollectionsUtils.isEmpty(reduceList)){
+        } else if (CollectionsUtils.isEmpty(reduceList)) {
             return true;
-        } else if (!CollectionsUtils.isEmpty(reduceList)){
+        } else if (!CollectionsUtils.isEmpty(reduceList)) {
             buildingBean.setBuildIdList(reduceList);
         }
 
@@ -538,7 +538,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingBean.setTel(BuildConstant.MODIFY_TEL);
         }
 
+
         if (null == byHtName) {
+
             // 若不存在 创建
             buildingDao.addBuilding(buildingBean);
 
@@ -552,6 +554,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             bindMBRef(buildingBean);
 
         } else {
+
             // 存在 则更新
             int id = byHtName.getBuildId();
             buildingBean.setBuildId(id);
@@ -585,13 +588,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         if (!CollectionsUtils.isEmpty(imgTypeList)) {
             Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-
             this.saveFile(buildingBean, effectImg, "effectImg", listMap.get(ImgTypeConstant.effectImg).get(0).getItId());
             this.saveFile(buildingBean, enPlanImg, "enPlanImg", listMap.get(ImgTypeConstant.enPlanImg).get(0).getItId());
             this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
             this.saveFile(buildingBean, matchingRealImg, "matchingRealImg", listMap.get(ImgTypeConstant.matchingRealImg).get(0).getItId());
-            this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
             this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
+            this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
     }
@@ -1157,7 +1159,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
                 if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
                     buildingBean1.setLabel("热搜");
-                } else{
+                } else {
                     buildingBean1.setLabel("人气");
                 }
                 buildingBean1.setLabelList(labelList);
@@ -1170,8 +1172,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                                MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] regionImg, MultipartFile[] video) throws Exception {
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-//        BuildingImgBean buildingImgBean = new BuildingImgBean();
-//        buildingImgBean.setBuildId(buildingBean.getBuildId());
+        BuildingImgBean buildingImgBean = new BuildingImgBean();
+        buildingImgBean.setBuildId(buildingBean.getBuildId());
 
         if (null != effectImg && effectImg.length > 0) {
 
@@ -1204,9 +1206,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
 
         if (null != headImg && headImg.length > 0) {
-//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.headImg).get(0).getItId());
-//            deleteImg(buildingImgBean);
-//            buildingImgDao.deleteByImgName(buildingImgBean);
+            buildingImgBean.setItId(listMap.get(ImgTypeConstant.headImg).get(0).getItId());
+            deleteImg(buildingImgBean);
+            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
         }
 
@@ -1217,9 +1219,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             this.saveFile(buildingBean, regionImg, "regionImg", listMap.get(ImgTypeConstant.regionImg).get(0).getItId());
         }
         if (null != video && video.length > 0) {
-//            buildingImgBean.setItId(listMap.get(ImgTypeConstant.video).get(0).getItId());
-//            deleteImg(buildingImgBean);
-//            buildingImgDao.deleteByImgName(buildingImgBean);
+            buildingImgBean.setItId(listMap.get(ImgTypeConstant.video).get(0).getItId());
+            deleteImg(buildingImgBean);
+            buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
     }
@@ -1267,7 +1269,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = UUID.randomUUID().toString().replace("-","").concat(fileName);
+                String name = UUID.randomUUID().toString().replace("-", "").concat(fileName);
 //                System.out.println("name:" + name);
 
                 i++;
