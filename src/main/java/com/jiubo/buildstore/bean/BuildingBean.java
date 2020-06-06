@@ -236,7 +236,7 @@ public class BuildingBean implements Serializable {
     /**
      * 特价值
      */
-    private Integer specialOffer;
+    private BigDecimal specialOffer;
 
     /**
      * (1:近期开盘;2:不是近期开盘)
