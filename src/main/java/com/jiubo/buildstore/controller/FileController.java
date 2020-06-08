@@ -5,6 +5,7 @@ import com.jiubo.buildstore.Exception.MessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,11 +19,14 @@ import java.util.Map;
 @Controller
 @RequestMapping("/fileController")
 public class FileController {
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
     //获取图片、视频、音频
     @RequestMapping("/getFile")
     public void getFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String path = request.getParameter("path");
         if (StringUtils.isBlank(path)) throw new MessageException("路径为空!");
+        if (!path.toUpperCase().startsWith(buildStoreDir.toUpperCase())) throw new MessageException("无权限访问!");
         File file = new File(path);
         outputFile(file, response);
     }
