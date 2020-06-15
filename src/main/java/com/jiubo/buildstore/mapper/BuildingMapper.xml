@@ -332,7 +332,7 @@
     </select>
 
     <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
-        select BUILD_ID,HT_NAME,DECORATION from building
+        select BUILD_ID,HT_NAME,DECORATION from building order by CONVERT(TRIM(HT_NAME) USING GBK) asc
     </select>
 
     <!--首页推荐楼盘||优质楼盘-->
