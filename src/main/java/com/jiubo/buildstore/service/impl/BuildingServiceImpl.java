@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.common.BuildConstant;
 import com.jiubo.buildstore.common.ImgPathConstant;
@@ -1341,6 +1342,56 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 buildingImgBean.setImgPath(path);
                 buildingImgDao.addImg(buildingImgBean);
             }
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> uploadFile(MultipartFile[] file) throws Exception {
+        if (file == null || file.length <= 0) throw new MessageException("未接收到文件!");
+        List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+        for (MultipartFile multipartFile : file) {
+            //原文件名
+            String fileName = multipartFile.getOriginalFilename();
+            String srcName = fileName;
+            //生成文件名
+            fileName = fileName.substring(fileName.lastIndexOf("."));
+
+            String path = buildStoreDir + ImgPathConstant.MOBILE_INTRODUCE;
+            File dir = new File(path);
+            if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
+            String replace = dir.getPath().replace("\\", "/");
+            path = replace.concat("/").concat(UUID.randomUUID().toString().replace("-", "")).concat(fileName);
+            System.out.println("路径" + path);
+            Map<String, Object> map = new HashMap<>();
+            map.put("srcName", srcName);
+            map.put("fileUrl", ImgPathConstant.INTERFACE_PATH.concat(path));
+            mapList.add(map);
+            generateFile(multipartFile, path);
+        }
+        return mapList;
+    }
+
+    private void generateFile(MultipartFile multipartFile, String path) throws Exception {
+        //读写文件
+        if (!multipartFile.isEmpty()) {
+            InputStream is = multipartFile.getInputStream();
+            int len = 0;
+            byte[] by = new byte[1024];
+            OutputStream os = new FileOutputStream(path);
+            BufferedInputStream bis = new BufferedInputStream(is);
+            BufferedOutputStream bos = new BufferedOutputStream(os);
+            while ((len = bis.read(by)) != -1) {
+                bos.write(by, 0, len);
+                bos.flush();
+            }
+            if (bos != null)
+                bos.close();
+            if (bis != null)
+                bis.close();
+            if (os != null)
+                os.close();
+            if (is != null)
+                is.close();
         }
     }
 

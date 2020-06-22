@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -85,4 +86,6 @@ public interface BuildingService extends IService<BuildingBean> {
      * 移动端详情
      */
     public BuildReturn getDetails(BuildingBean buildingBean);
+
+    public List<Map<String, Object>> uploadFile(MultipartFile[] file)throws Exception;
 }

@@ -19,7 +19,11 @@ public  class ImgPathConstant {
     public static final String INTERFACE_PATH = "/fileController/getFile?type=IMG&path=";
 
     /**
-     * 图文 图片
+     * 文章图文 图片
      */
     public static final String ARTICLE = "/article";
+    /**
+     * 楼盘移动端介绍 图文图片
+     */
+    public static final String MOBILE_INTRODUCE = "/mobileIntroduce";
 }

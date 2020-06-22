@@ -286,4 +286,15 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETDATA, buildingService.getDetails(buildingBean));
         return jsonObject;
     }
+
+    //上传文件接口
+    @ResponseBody
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public JSONObject uploadFile(@RequestParam("file") MultipartFile[] file) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.uploadFile(file));
+        return jsonObject;
+    }
 }
