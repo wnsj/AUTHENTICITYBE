@@ -59,4 +59,10 @@ public class BuildingDynamicBean implements Serializable {
      */
     @TableField(exist = false)
     private String pageOrder;
+
+    /**
+     * 动态数目
+     */
+    @TableField(exist = false)
+    private Integer dyCount;
 }

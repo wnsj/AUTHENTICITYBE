@@ -241,5 +241,49 @@ public class BuildingController {
         return jsonObject;
     }
 
+    /**
+     * 移动端精选（全部数据）
+     */
+    @PostMapping("/getSelected")
+    public JSONObject getSelected() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getSelected());
+        return jsonObject;
+    }
+    /**
+     * 移动端头部（3个）
+     */
+    @PostMapping("/getHeadList")
+    public JSONObject getHeadList() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getHeadList());
+        return jsonObject;
+    }
 
+    /**
+     * 移动端猜你喜欢（4个）
+     */
+    @PostMapping("/getGuestLike")
+    public JSONObject getGuestLike() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getGuestLike());
+        return jsonObject;
+    }
+    /**
+     * 移动端详情
+     */
+    @PostMapping("/getDetails")
+    public JSONObject getDetails(BuildingBean buildingBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getDetails(buildingBean));
+        return jsonObject;
+    }
 }

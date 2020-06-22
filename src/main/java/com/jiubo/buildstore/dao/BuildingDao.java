@@ -77,4 +77,7 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
     public List<BuildReturn> getHotSBuild();
 
     public List<BuildReturn> getBuildLikePage(Page page,@Param("buildingBean") BuildReceive buildingBean);
+
+    public List<BuildReturn> getMobileList(Page page,@Param("buildingBean") BuildingBean buildingBean);
+    public List<BuildReturn> getMobileList(@Param("buildingBean") BuildingBean buildingBean);
 }

@@ -8,11 +8,13 @@ import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingDynamicDao;
 import com.jiubo.buildstore.service.BuildingDynamicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,25 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
             }
         }
         return dynamicByBidList;
+    }
+
+    @Override
+    public BuildingDynamicBean getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+        List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
+        BuildingDynamicBean bean = new BuildingDynamicBean();
+        if (!CollectionsUtils.isEmpty(dynamicByBidList)) {
+            List<BuildingDynamicBean> dynamicBeans = dynamicByBidList.stream().sorted(Comparator.comparing(BuildingDynamicBean::getCreateDate).reversed()).limit(1).collect(Collectors.toList());
+            bean = dynamicBeans.get(0);
+            bean.setDyCount(dynamicByBidList.size());
+            for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
+                if (dynamicBean.getCreateDate() != null) {
+                    dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(),"yyyy-MM-dd"));
+                }
+            }
+        } else {
+            bean.setDyCount(0);
+        }
+        return bean;
     }
 
     @Override

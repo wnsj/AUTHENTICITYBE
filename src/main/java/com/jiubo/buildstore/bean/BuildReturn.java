@@ -128,4 +128,9 @@ public class BuildReturn extends BuildingBean{
      * 地铁ID集合
      */
     private List<Integer> metroIdList;
+
+    /**
+     * 移动端图片路径集合
+     */
+    private List<String> mobilePathList;
 }

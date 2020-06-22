@@ -271,10 +271,7 @@ public class BuildingBean implements Serializable {
      * 经度
      */
     private String longitude;
-    /**
-     * 修改时间
-     */
-    private Date modifyTime;
+
 
     /**
      * 楼盘特点描述
@@ -289,6 +286,28 @@ public class BuildingBean implements Serializable {
      * 区域id
      */
     private Integer regionId;
-
-    private Date updateTime;
+    /**
+     * 移动端排序权重
+     */
+    private Integer sort;
+    /**
+     * 是否是移动端(1:是；2：否)
+     */
+    private Integer isMobile;
+    /**
+     * 移动端头部展示(1:是；2：否)
+     */
+    private Integer mobileHead;
+    /**
+     * 移动端项目介绍
+     */
+    private String mobileIntroduction;
+    /**
+     * 修改时间
+     */
+    private Date modifyTime;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

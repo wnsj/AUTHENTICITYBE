@@ -65,4 +65,24 @@ public interface BuildingService extends IService<BuildingBean> {
     public Page<BuildReturn> getBuildLikePage(BuildReceive buildingBean);
 
     public void deleteImgFile(BuildingImgBean buildingImgBean);
+
+    /**
+     * 移动端精选（全部数据）
+     */
+    public List<BuildReturn> getSelected();
+
+    /**
+     * 移动端头部（3个）
+     */
+    public List<BuildReturn> getHeadList();
+
+    /**
+     * 猜你喜欢(4个)
+     */
+    public List<BuildReturn> getGuestLike();
+
+    /**
+     * 移动端详情
+     */
+    public BuildReturn getDetails(BuildingBean buildingBean);
 }

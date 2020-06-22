@@ -36,6 +36,20 @@ public class BuildingDynamicController {
         return jsonObject;
     }
 
+    /**
+     * 移动端详情动态
+     * @param buildingDynamicBean
+     * @return
+     */
+    @PostMapping("/getNewestDynamicByBid")
+    public JSONObject getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getNewestDynamicByBid(buildingDynamicBean));
+        return jsonObject;
+    }
+
     @PostMapping("/getDynamicByPage")
     public JSONObject getDynamicByPage(@RequestBody BuildingDynamicBean buildingDynamicBean) {
         JSONObject jsonObject = new JSONObject();
@@ -56,11 +70,10 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(String param) {
+    public JSONObject addDynamic(BuildingDynamicBean buildingDynamicBean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.addDynamic(buildingDynamicBean);
         return jsonObject;
     }

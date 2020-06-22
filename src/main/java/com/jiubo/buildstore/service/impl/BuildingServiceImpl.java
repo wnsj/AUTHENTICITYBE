@@ -361,9 +361,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 // 图片名字 路径
                 if (null != imgMap && null != bean.getBuildId()) {
-
                     List<BuildingImgBean> buildingImgBeans = imgMap.get(bean.getBuildId());
-
                     if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
                         Map<Integer, List<BuildingImgBean>> map = buildingImgBeans.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
                         // 轮播图
@@ -541,6 +539,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         if (null == byHtName) {
 
+            buildingBean.setCreateTime(new Date());
             // 若不存在 创建
             buildingDao.addBuilding(buildingBean);
 
@@ -893,6 +892,40 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
     }
 
+    private List<String> getMobilePicPath(Map<Integer, List<BuildingImgBean>> map) {
+        List<String> mobilePathList = new ArrayList<>();
+
+        // 环境规划图
+        List<BuildingImgBean> imgBeans1 = map.get(2);
+        if (!CollectionsUtils.isEmpty(imgBeans1)) {
+            List<BuildingImgBean> collect1 = imgBeans1.stream().limit(2).collect(toList());
+            List<String> pathList = getPathList(collect1);
+            mobilePathList.addAll(pathList);
+        }
+        // 楼盘实景
+        List<BuildingImgBean> imgBeans2 = map.get(3);
+        if (!CollectionsUtils.isEmpty(imgBeans2)) {
+            List<BuildingImgBean> collect3 = imgBeans2.stream().limit(2).collect(toList());
+            List<String> pathList = getPathList(collect3);
+            mobilePathList.addAll(pathList);
+        }
+        // 配套实景
+        List<BuildingImgBean> imgBeans3 = map.get(4);
+        if (!CollectionsUtils.isEmpty(imgBeans3)) {
+            List<BuildingImgBean> collect4 = imgBeans3.stream().limit(2).collect(toList());
+            List<String> pathList = getPathList(collect4);
+            mobilePathList.addAll(pathList);
+        }
+
+        // 效果图实体
+        List<BuildingImgBean> imgBeans = map.get(1);
+        if (!CollectionsUtils.isEmpty(imgBeans)) {
+            List<BuildingImgBean> collect = imgBeans.stream().limit(2).collect(toList());
+            List<String> pathList = getPathList(collect);
+            mobilePathList.addAll(pathList);
+        }
+        return mobilePathList;
+    }
     private List<String> getPathList(List<BuildingImgBean> imgBeans) {
         List<String> pathList = new ArrayList<>();
         for (BuildingImgBean buildingImgBean : imgBeans) {
@@ -1320,5 +1353,100 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         // 删除表中数据
         buildingImgDao.deleteImgById(buildingImgBean);
+    }
+
+    @Override
+    public List<BuildReturn> getSelected() {
+        List<BuildReturn> mobileList = buildingDao.getMobileList(new BuildingBean());
+        if (!CollectionsUtils.isEmpty(mobileList)) {
+            getHeadImg(mobileList,2);
+        }
+        return mobileList;
+    }
+
+    @Override
+    public List<BuildReturn> getHeadList() {
+        List<BuildReturn> mobileList = buildingDao.getMobileList(new BuildingBean().setMobileHead(1));
+        if (!CollectionsUtils.isEmpty(mobileList)) {
+            List<BuildReturn> buildReturns = mobileList.stream().sorted(Comparator.comparing(BuildingBean::getSort)).limit(3).collect(toList());
+            getHeadImg(buildReturns,2);
+            return buildReturns;
+        }
+        return null;
+    }
+
+    @Override
+    public List<BuildReturn> getGuestLike() {
+        List<BuildReturn> mobileList = buildingDao.getMobileList(new BuildingBean());
+        if (!CollectionsUtils.isEmpty(mobileList)) {
+            List<BuildReturn> buildReturns = mobileList.stream().sorted(Comparator.comparing(BuildingBean::getSort)).limit(4).collect(toList());
+//            getHeadImg(buildReturns,2);
+            // 楼盘ID集合
+            List<Integer> list = buildReturns.stream().map(BuildingBean::getBuildId).collect(toList());
+            // 获取头图
+            BuildingImgBean buildingImgBean = new BuildingImgBean();
+            buildingImgBean.setBIdList(list);
+            buildingImgBean.setItId(6);
+            Map<Integer, List<BuildingImgBean>> headImgMap = getHeadImgMap(buildingImgBean);
+
+            // 获取所有类型
+            Map<Integer, List<BuildingTypeBean>> btMap = getBtMap();
+
+            // 获取所有区域
+            List<LocationDistinguishBean> allDistinguish = locationDistinguishDao.getAllDistinguish();
+            Map<Integer, List<LocationDistinguishBean>> ldMap = null;
+            if (!CollectionsUtils.isEmpty(allDistinguish)) {
+                ldMap = allDistinguish.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
+            }
+            for (BuildReturn buildReturn : buildReturns) {
+                // 类型
+                if (null != btMap && buildReturn.getBtId() != null) {
+                    buildReturn.setBtName(btMap.get(buildReturn.getBtId()).get(0).getBtName());
+                }
+
+                // 头图名字 路径
+                setImgPath(headImgMap, buildReturn);
+
+                // 区域
+                if (null != ldMap && buildReturn.getLdId() != null) {
+                    buildReturn.setLdName(ldMap.get(buildReturn.getLdId()).get(0).getLdName());
+                }
+            }
+            return buildReturns;
+        }
+        return null;
+    }
+
+    @Override
+    public BuildReturn getDetails(BuildingBean buildingBean) {
+        List<BuildReturn> mobileList = buildingDao.getMobileList(buildingBean);
+        if (!CollectionsUtils.isEmpty(mobileList)) {
+            BuildReturn buildReturn = mobileList.get(0);
+
+            // 翻译时间
+            Date openDate = buildReturn.getOpenDate();
+            if (null != openDate) {
+                String formatDate = DateUtils.formatDate(openDate, "yyyy-MM-dd");
+                buildReturn.setOpenDateTime(formatDate);
+            }
+            // 特色标签
+            List<CharaRefBean> charaByBuildId = charaRefDao.getCharaByBuildId(buildReturn.getBuildId());
+            if (!CollectionsUtils.isEmpty(charaByBuildId)) {
+                List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
+                buildReturn.setCharaNameList(collect);
+            }
+
+            List<Integer> buildIdList = new ArrayList<>();
+            buildIdList.add(buildReturn.getBuildId());
+            List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(new BuildingImgBean().setBIdList(buildIdList));
+
+            if (!CollectionsUtils.isEmpty(byBuildId)) {
+                Map<Integer, List<BuildingImgBean>> map = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
+                List<String> mobilePicPath = getMobilePicPath(map);
+                buildReturn.setMobilePathList(mobilePicPath);
+            }
+            return buildReturn;
+        }
+        return null;
     }
 }

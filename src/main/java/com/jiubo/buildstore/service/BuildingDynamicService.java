@@ -18,6 +18,8 @@ import java.util.List;
 public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
     public List<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean);
 
+    public BuildingDynamicBean getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean);
+
     public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean);
 
     public void patchDyById(BuildingDynamicBean buildingDynamicBean);
