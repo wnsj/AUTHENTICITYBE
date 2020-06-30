@@ -522,7 +522,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
 
     @Override
-    public void addBuilding(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
+    public BuildingBean addBuilding(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg,
                             MultipartFile[] headImg,
@@ -596,6 +596,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             this.saveFile(buildingBean, headImg, "headImg", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
+
+        return buildingBean;
     }
 
     private void bindMBRef(BuildReceive buildingBean) {
@@ -651,7 +653,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     @Override
-    public void patchById(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
+    public BuildingBean patchById(BuildReceive buildingBean, MultipartFile[] effectImg, MultipartFile[] enPlanImg,
                           MultipartFile[] buildRealImg, MultipartFile[] matchingRealImg, MultipartFile[] headImg, MultipartFile[] regionImg, MultipartFile[] video) throws Exception {
         // 如果联系方式为空
         if (StringUtils.isBlank(buildingBean.getTel())) {
@@ -686,6 +688,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         // 更新图片
         updatePicture(buildingBean, imgTypeList, effectImg, enPlanImg, buildRealImg, matchingRealImg, headImg, regionImg, video);
 
+        return buildingBean;
     }
 
     @Override
@@ -1369,6 +1372,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             generateFile(multipartFile, path);
         }
         return mapList;
+    }
+
+    @Override
+    public void patchMobileById(BuildingBean buildingBean) {
+        buildingDao.patchMobileById(buildingBean);
     }
 
     private void generateFile(MultipartFile multipartFile, String path) throws Exception {

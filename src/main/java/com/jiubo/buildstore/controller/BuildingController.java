@@ -90,7 +90,8 @@ public class BuildingController {
 
         BuildReceive buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
 
-        buildingService.addBuilding(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
+        BuildingBean bean = buildingService.addBuilding(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg, headImg, regionImg, video);
+        jsonObject.put(Constant.Result.RETDATA, bean);
         return jsonObject;
     }
 
@@ -119,8 +120,8 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 
         BuildReceive buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
-        buildingService.patchById(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
-
+        BuildingBean bean = buildingService.patchById(buildingBean, effectImg, enPlanImg, buildRealImg, matchingRealImg,headImg,regionImg,video);
+        jsonObject.put(Constant.Result.RETDATA, bean);
         return jsonObject;
     }
 
@@ -295,6 +296,18 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         jsonObject.put(Constant.Result.RETDATA, buildingService.uploadFile(file));
+        return jsonObject;
+    }
+
+    /**
+     * 移动端详情
+     */
+    @PostMapping("/patchMobileById")
+    public JSONObject patchMobileById(@RequestBody BuildingBean buildingBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        buildingService.patchMobileById(buildingBean);
         return jsonObject;
     }
 }

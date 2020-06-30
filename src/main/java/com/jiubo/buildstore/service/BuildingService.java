@@ -24,7 +24,7 @@ public interface BuildingService extends IService<BuildingBean> {
 
     public Page<BuildReturn> getAllBulidByCondition(BuildReceive buildingBean);
 
-    public void addBuilding(BuildReceive buildingBean,MultipartFile[] effectImg,
+    public BuildingBean addBuilding(BuildReceive buildingBean,MultipartFile[] effectImg,
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg,
@@ -32,7 +32,7 @@ public interface BuildingService extends IService<BuildingBean> {
                             MultipartFile[] regionImg,
                             MultipartFile[] video) throws Exception;
 
-    public void patchById(BuildReceive buildingBean,MultipartFile[] effectImg,
+    public BuildingBean patchById(BuildReceive buildingBean,MultipartFile[] effectImg,
                             MultipartFile[] enPlanImg,
                             MultipartFile[] buildRealImg,
                             MultipartFile[] matchingRealImg,
@@ -88,4 +88,6 @@ public interface BuildingService extends IService<BuildingBean> {
     public BuildReturn getDetails(BuildingBean buildingBean);
 
     public List<Map<String, Object>> uploadFile(MultipartFile[] file)throws Exception;
+
+    public void patchMobileById(BuildingBean buildingBean);
 }

@@ -80,4 +80,6 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
 
     public List<BuildReturn> getMobileList(Page page,@Param("buildingBean") BuildingBean buildingBean);
     public List<BuildReturn> getMobileList(@Param("buildingBean") BuildingBean buildingBean);
+
+    public void patchMobileById(@Param("buildingBean") BuildingBean buildingBean);
 }

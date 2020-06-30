@@ -340,6 +340,24 @@
         where BUILD_ID = #{buildingBean.buildId}
     </update>
 
+    <update id="patchMobileById">
+        update building
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null != buildingBean.isMobile">
+                IS_MOBILE = #{buildingBean.isMobile},
+            </if>
+            <if test="null != buildingBean.sort">
+                SORT = #{buildingBean.sort},
+            </if>
+            <if test="null != buildingBean.mobileHead">
+                MOBILE_HEAD = #{buildingBean.mobileHead},
+            </if>
+            <if test="null != buildingBean.mobileIntroduction">
+                MOBILE_INTRODUCTION = #{buildingBean.mobileIntroduction}
+            </if>
+        </trim>
+        where BUILD_ID = #{buildingBean.buildId}
+    </update>
     <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where  HT_NAME = #{buildingBean.htName}
     </select>
