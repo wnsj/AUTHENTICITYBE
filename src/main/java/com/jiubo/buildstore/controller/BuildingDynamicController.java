@@ -7,6 +7,7 @@ import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.BuildingDynamicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
  * @since 2020-04-10
  */
 @RestController
+@Scope("prototype")
 @RequestMapping("/buildingDynamicBean")
 public class BuildingDynamicController {
 
@@ -70,10 +72,11 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(BuildingDynamicBean buildingDynamicBean) {
+    public JSONObject addDynamic(@RequestBody String param) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.addDynamic(buildingDynamicBean);
         return jsonObject;
     }

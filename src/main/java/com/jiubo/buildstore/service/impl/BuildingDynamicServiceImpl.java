@@ -107,6 +107,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 
     @Override
     public void addDynamic(BuildingDynamicBean buildingDynamicBean) {
+
         buildingDynamicDao.addDynamic(buildingDynamicBean);
     }
 }
