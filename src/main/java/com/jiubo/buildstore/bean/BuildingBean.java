@@ -213,4 +213,9 @@ public class BuildingBean implements Serializable {
      * 头图路径
      */
     private String headPath;
+
+    /**
+     * 周边
+     */
+    private String periphery;
 }
