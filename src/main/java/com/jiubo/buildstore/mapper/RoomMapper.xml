@@ -1,5 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.RoomDao">
+		
+		<!--条件查询-->
+    <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomBean">
+        SELECT *
+        from room
 
+        <where>
+            1=1
+            /*省id*/
+            <if test="receive.proIdList != null and receive.proIdList.size() > 0">
+                and PRO_ID in
+                <foreach collection="receive.proIdList" open="(" close=")" separator="," item="proId">
+                    #{proId}
+                </foreach>
+            </if>
+            /*是否出售*/
+            <!-- <if test="receive.isSaleList != null and receive.isSaleList.size() > 0">
+                and IS_SALE in
+                <foreach collection="receive.isSaleList" open="(" close=")" separator="," item="isSale">
+                    #{isSale}
+                </foreach>
+            </if> -->
+            /*区域*/
+            <if test="receive.ldIdList != null and receive.ldIdList.size() > 0">
+                and LD_ID in
+                <foreach collection="receive.ldIdList" open="(" close=")" separator="," item="ldId">
+                    #{ldId}
+                </foreach>
+            </if>
+            /*楼盘类型*/
+            <if test="receive.btIdList != null and receive.btIdList.size() > 0">
+                and BT_ID in
+                <foreach collection="receive.btIdList" open="(" close=")" separator="," item="btId">
+                    #{btId}
+                </foreach>
+            </if>
+            <if test="receive.areaList != null and receive.areaList.size() > 0">
+                and
+                <foreach collection="receive.areaList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minArea != null and item.maxArea == null">
+                        build_area > #{item.minArea}
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea == null">
+                        #{item.maxArea} > build_area
+                    </if>
+                    <if test="null != item and item.maxArea != null and item.minArea != null">
+                        build_area >= #{item.minArea} and  #{item.maxArea} >= build_area
+                         <!-- or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
+                         or #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea} -->
+                    </if>
+                </foreach>
+            </if>
+            <if test="receive.totalPriceList != null and receive.totalPriceList.size() > 0">
+                and
+                <foreach collection="receive.totalPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
+                        MAX_TITLE_PRICE > #{item.minTitlePrice}
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
+                        #{item.maxTitlePrice} > MIN_TITLE_PRICE
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
+                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE
+                         or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        or #{item.minTitlePrice} >= MIN_TITLE_PRICE  and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
+                    </if>
+                </foreach>
+            </if>
+            <if test="receive.unitPriceList != null and receive.unitPriceList.size() > 0">
+                and
+                <foreach collection="receive.unitPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minUnitPrice != null and item.minUnitPrice != 0 and item.maxUnitPrice == null">
+                        unit_price > #{item.minUnitPrice}
+                    </if>
+                    <if test="null != item and item.maxUnitPrice != null and (item.minUnitPrice == null or item.minUnitPrice == 0)">
+                        #{item.maxUnitPrice} > unit_price
+                    </if>
+                    <if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null and item.minUnitPrice != 0">
+                        unit_price >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= unit_price
+                    </if>
+                </foreach>
+            </if>
+            <if test="receive.startTime != null and receive.startTime != ''">
+                and (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > #{receive.startTime}
+            </if>
+            <if test="receive.endTime != null and receive.endTime != ''">
+                and #{receive.endTime} >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
+            </if>
+            <if test="receive.regionIdList != null and receive.regionIdList.size() > 0">
+                and business_id in
+                <foreach collection="receive.regionIdList" open="(" close=")" separator="," item="regionId">
+                    #{regionId}
+                </foreach>
+            </if>
+
+            <if test="receive.regionId != null">
+                and business_id = #{receive.regionId}
+            </if>
+        </where>
+    </select>
+		
 </mapper>

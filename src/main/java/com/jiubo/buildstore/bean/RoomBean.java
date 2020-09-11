@@ -126,7 +126,17 @@ public class RoomBean implements Serializable {
      * 是否在租
      */
     private Integer isRent;
-
+   
+    /**
+     * 类型id
+     */
+    private Integer btId;
+    
+    /**
+     * 区域id
+     */
+    private Integer ldId;
+    
     /**
      * 商圈id
      */
@@ -161,6 +171,16 @@ public class RoomBean implements Serializable {
      * 路途
      */
     private String way;
+    
+    /**
+     * 经度
+     */
+    private String longitude;
+    
+    /**
+     * 纬度
+     */
+    private String latitude;
 
     /**
      * 创建时间
