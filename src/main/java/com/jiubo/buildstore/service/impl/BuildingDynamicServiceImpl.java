@@ -78,18 +78,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
         page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L : Long.parseLong(buildingDynamicBean.getPageSize()));
         List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
         if (null != dynamicBeans && dynamicBeans.size()>0) {
-            List<BuildingBean> buildList = buildingDao.getAllBuild();
-            Map<Integer, List<BuildingBean>> collect = null;
-            if (null != buildList && buildList.size()>0){
-                collect = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
-            }
             for (BuildingDynamicBean dynamicBean : dynamicBeans) {
                 if(dynamicBean.getBuildId() != null){
-                    List<BuildingBean> buildingBeans = collect.get(dynamicBean.getBuildId());
-                    if (null != buildingBeans) {
-                        dynamicBean.setHtName(buildingBeans.get(0).getHtName());
-
-                    }
                     Date date = dynamicBean.getCreateDate();
                     if (null != date) {
                         dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));

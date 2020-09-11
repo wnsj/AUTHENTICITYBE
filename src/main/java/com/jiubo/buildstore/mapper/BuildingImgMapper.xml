@@ -65,8 +65,9 @@
     <select id="getHeadImgByBuildId" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
         select * from building_img
         <where>
+            ROOM_ID is null
         <if test="buildingImgBean.bIdList != null and buildingImgBean.bIdList.size() > 0">
-            BUILD_ID in
+           and BUILD_ID in
             <foreach collection="buildingImgBean.bIdList" open="(" close=")" separator="," item="item">
                 #{item}
             </foreach>

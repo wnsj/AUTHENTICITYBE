@@ -74,4 +74,6 @@ public class BuildingImgBean implements Serializable {
      * 咨询师评论ID
      */
     private Integer coucId;
+
+    private Integer roomId;
 }
