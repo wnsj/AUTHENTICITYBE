@@ -2,22 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDynamicDao">
     <select id="getDynamicByBid" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
-        SELECT a.BD_ID,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID,b.OPEN_DATE,b.PRO_DATE
-         from building_dynamic a left join building b on a.BUILD_ID = b.BUILD_ID
-         <where>
-             <if test="null != buildingDynamicBean.buildId">
-                 a.BUILD_ID = #{buildingDynamicBean.buildId}
-             </if>
-         </where>
+        SELECT a.BD_ID,a.BD_PATH,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID
+         from building_dynamic a
          order by CREATE_DATE desc
     </select>
 
     <select id="getDynamicByPage" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
         select * from building_dynamic
         <where>
-        <if test="buildingDynamicBean.buildId != null">
-            BUILD_ID = #{buildingDynamicBean.buildId}
-        </if>
+            1=1
+            <if test="buildingDynamicBean.buildId != null">
+                and BUILD_ID = #{buildingDynamicBean.buildId}
+            </if>
+            <if test="buildingDynamicBean.bdName != null != buildingDynamicBean.bdName != ''">
+                and BD_NAME like CONCAT('%',#{buildingDynamicBean.bdName},'%')
+            </if>
+            <if test="buildingDynamicBean.startDate != null">
+                and DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' ) >= DATE_FORMAT(buildingDynamicBean.startDate, '%Y-%m-%d' )
+            </if>
+            <if test="buildingDynamicBean.endDate != null">
+                and DATE_FORMAT(buildingDynamicBean.endDate, '%Y-%m-%d' ) >= DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' )
+            </if>
         </where>
     </select>
 
@@ -28,7 +33,7 @@
                 BD_NAME = #{buildingDynamicBean.bdName},
             </if>
             <if test="buildingDynamicBean.bdContent != null and buildingDynamicBean.bdContent != ''">
-                BD_CONTENT =  #{buildingDynamicBean.bdContent},
+                BD_CONTENT = #{buildingDynamicBean.bdContent},
             </if>
             <if test="buildingDynamicBean.buildId != null">
                 BUILD_ID = #{buildingDynamicBean.buildId},
