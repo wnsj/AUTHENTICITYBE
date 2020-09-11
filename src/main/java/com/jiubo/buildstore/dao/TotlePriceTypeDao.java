@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * <p>
  *  Mapper 接口
@@ -15,4 +17,6 @@ import java.util.List;
  */
 public interface TotlePriceTypeDao extends BaseMapper<TotlePriceTypeBean> {
     public List<TotlePriceTypeBean> getAllTotalPrice();
+    
+    public List<TotlePriceTypeBean> getTotalPriceByIdList(@Param("totlePriceTypeBean") TotlePriceTypeBean totlePriceTypeBean);
 }

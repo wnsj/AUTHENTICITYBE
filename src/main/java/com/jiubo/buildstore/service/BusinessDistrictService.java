@@ -18,4 +18,6 @@ public interface BusinessDistrictService extends IService<BusinessDistrictBean> 
 
 	public List<BusinessDistrictBean> getBusinessDistrict(Integer ldId);
 
+	public List<BusinessDistrictBean> getHotBusinessDistrict();
+
 }

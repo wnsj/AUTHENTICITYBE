@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class EntrustRentController {
 	
 	@ApiOperation(value = "添加委托出租", notes = "添加委托出租")
 	@PostMapping("/insertEntrustRent")
-	public JSONObject insertEntrustRent(EntrustRentBean entrustRentBean) {
+	public JSONObject insertEntrustRent(@RequestBody EntrustRentBean entrustRentBean) {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

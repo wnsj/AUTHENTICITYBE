@@ -50,6 +50,12 @@ public class BusinessDistrictBean implements Serializable {
      * 区域id
      */
     private Integer ldId;
+    
+    /**
+     * 是否热门
+     */
+    private Integer isHot;
+
 
     /**
      * 创建时间
