@@ -72,10 +72,7 @@ public interface BuildingService extends IService<BuildingBean> {
      */
     public List<BuildReturn> getSelected();
 
-    /**
-     * 移动端头部（3个）
-     */
-    public List<BuildReturn> getHeadList();
+
 
     /**
      * 猜你喜欢(4个)
@@ -89,5 +86,4 @@ public interface BuildingService extends IService<BuildingBean> {
 
     public List<Map<String, Object>> uploadFile(MultipartFile[] file)throws Exception;
 
-    public void patchMobileById(BuildingBean buildingBean);
 }

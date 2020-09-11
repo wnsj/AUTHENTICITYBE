@@ -253,17 +253,7 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETDATA, buildingService.getSelected());
         return jsonObject;
     }
-    /**
-     * 移动端头部（3个）
-     */
-    @PostMapping("/getHeadList")
-    public JSONObject getHeadList() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA, buildingService.getHeadList());
-        return jsonObject;
-    }
+
 
     /**
      * 移动端猜你喜欢（4个）
@@ -299,15 +289,4 @@ public class BuildingController {
         return jsonObject;
     }
 
-    /**
-     * 移动端详情
-     */
-    @PostMapping("/patchMobileById")
-    public JSONObject patchMobileById(@RequestBody BuildingBean buildingBean) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        buildingService.patchMobileById(buildingBean);
-        return jsonObject;
-    }
 }

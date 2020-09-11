@@ -14,14 +14,14 @@
             <if test="buildingDynamicBean.buildId != null">
                 and BUILD_ID = #{buildingDynamicBean.buildId}
             </if>
-            <if test="buildingDynamicBean.bdName != null != buildingDynamicBean.bdName != ''">
+            <if test="buildingDynamicBean.bdName != null and buildingDynamicBean.bdName != ''">
                 and BD_NAME like CONCAT('%',#{buildingDynamicBean.bdName},'%')
             </if>
             <if test="buildingDynamicBean.startDate != null">
-                and DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' ) >= DATE_FORMAT(buildingDynamicBean.startDate, '%Y-%m-%d' )
+                and DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' ) >= #{buildingDynamicBean.startDate}
             </if>
             <if test="buildingDynamicBean.endDate != null">
-                and DATE_FORMAT(buildingDynamicBean.endDate, '%Y-%m-%d' ) >= DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' )
+                and #{buildingDynamicBean.endDate} >= DATE_FORMAT(CREATE_DATE, '%Y-%m-%d' )
             </if>
         </where>
     </select>
