@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,4 +26,6 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
     public void patchDyById(BuildingDynamicBean buildingDynamicBean);
 
     public void addDynamic(BuildingDynamicBean buildingDynamicBean);
+    
+    public Map<Integer, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
 }

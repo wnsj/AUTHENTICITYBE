@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,4 +112,36 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 
         buildingDynamicDao.addDynamic(buildingDynamicBean);
     }
+
+	@Override
+	public Map<Integer, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId) {
+		Map<Integer, BuildingDynamicBean> result = new HashMap<Integer, BuildingDynamicBean>();
+		//记录此条咨询数据在list的下标
+		Integer index = null;
+		QueryWrapper<BuildingDynamicBean> queryWrapper = new QueryWrapper<BuildingDynamicBean>();
+		queryWrapper.select("*");
+		List<BuildingDynamicBean> list = buildingDynamicDao.selectList(queryWrapper);
+		for (int i = 0; i < list.size(); i++) {
+			BuildingDynamicBean bean = list.get(i);
+			if(bean.getBdId() == dynamicId) {
+				index = i;
+				break;
+			}
+		}
+		//2代表当前查询的这条咨询信息3上一条4下一条
+		result.put(2, buildingDynamicDao.selectById(dynamicId));
+		//如果下标等于0说明为第一条数据没有上一条放null
+		if(index == 0) {
+			result.put(3, null);
+		}else {
+			result.put(3, list.get(index-1));
+		}
+		//如果下标等于集合大小减一说明为最后一条数据没有下一条放null
+		if(index == list.size()-1) {
+			result.put(4, null);
+		}else {
+			result.put(4, list.get(index+1));
+		}
+		return result;
+	}
 }

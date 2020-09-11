@@ -38,4 +38,13 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		return null;
 	}
 
+	@Override
+	public List<BusinessDistrictBean> getHotBusinessDistrict() {
+		QueryWrapper<BusinessDistrictBean> queryWrapper = new QueryWrapper<BusinessDistrictBean>();
+		queryWrapper.select("*");
+		queryWrapper.eq("is_hot", 2);
+		List<BusinessDistrictBean> list = businessDistrictDao.selectList(queryWrapper);
+		return list;
+	}
+
 }

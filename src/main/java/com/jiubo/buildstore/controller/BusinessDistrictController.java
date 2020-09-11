@@ -40,4 +40,14 @@ public class BusinessDistrictController {
         return jsonObject;
 	}
 	
+	@ApiOperation(value = "查询热门商圈", notes = "查询热门商圈")
+	@GetMapping("/getHotBusinessDistrict")
+	public JSONObject getHotBusinessDistrict() {
+		JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,businessDistrictService.getHotBusinessDistrict());
+        return jsonObject;
+	}
+	
 }
