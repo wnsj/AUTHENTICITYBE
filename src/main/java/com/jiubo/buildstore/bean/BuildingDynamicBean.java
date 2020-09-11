@@ -41,6 +41,13 @@ public class BuildingDynamicBean implements Serializable {
     @TableField(exist = false)
     private String htName;
 
+    @TableField(exist = false)
+    private Date startDate;
+    @TableField(exist = false)
+    private Date endDate;
+    /**
+     * 类型
+     */
     private Integer buildId;
 
     /**
@@ -60,6 +67,10 @@ public class BuildingDynamicBean implements Serializable {
     @TableField(exist = false)
     private String pageOrder;
 
+    /**
+     * 图片路径
+     */
+    private String bdPath;
     /**
      * 动态数目
      */
