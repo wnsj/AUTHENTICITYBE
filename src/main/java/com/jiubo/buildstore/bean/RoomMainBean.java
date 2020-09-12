@@ -53,10 +53,24 @@ public class RoomMainBean implements Serializable {
     private Integer businessId;
 
     /**
+     * 看房时间
+     */
+    private String watchHouseTime;
+
+    /**
+     * 免租时间
+     */
+    private String rentFreeTime;
+
+    /**
      * 是否可注册
      */
     private Integer isRegister;
-    
+
+    /**
+     * 是否首页目前用于共享办公
+     */
+    private Integer isHome;
 
     /**
      * 是否热销
@@ -107,11 +121,31 @@ public class RoomMainBean implements Serializable {
      * 头图路径
      */
     private String roomImg;
-    
+
+    /**
+     * 经度
+     */
+    private String longitude;
+
+    /**
+     * 纬度
+     */
+    private String latitude;
+
     /**
      * 类型id对应buildtype表
      */
-    private String btId;
+    private Integer btId;
+
+    /**
+     * 装修情况
+     */
+    private String renovationCondition;
+
+    /**
+     * 距地铁
+     */
+    private String surround;
 
     /**
      * 标签List
@@ -122,6 +156,11 @@ public class RoomMainBean implements Serializable {
      * 1,写字楼，2，共享，3商铺
      */
     private Integer roomType;
+
+    /**
+     * 面积信息
+     */
+    private String areaInfo;
 
 
 }

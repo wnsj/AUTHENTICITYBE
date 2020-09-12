@@ -1,19 +1,25 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.AreaBean;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BuildingTypeBean;
+import com.jiubo.buildstore.bean.CounselorBean;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
+import com.jiubo.buildstore.bean.RoomReturn;
 import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
 import com.jiubo.buildstore.dao.AreaDao;
+import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BuildingTypeDao;
+import com.jiubo.buildstore.dao.CounselorDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.dao.UnitPriceTypeDao;
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.util.CollectionsUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -53,6 +59,12 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	
 	@Autowired
 	private TotlePriceTypeDao totlePriceTypeDao;
+	
+	@Autowired
+	private CounselorDao counselorDao;
+	
+	@Autowired
+	private BuildingImgDao buildingImgDao;
 	
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
@@ -132,5 +144,36 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					roomReceive.setUnitPriceList(totalPriceList);
 				}
 
+	}
+
+
+
+	@Override
+	public Map<String, Object> getRoomDetails(Integer roomMainId) {
+		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
+		CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
+		QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
+		queryWrapper.select("*");
+		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
+		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
+		qwP.select("*");
+		qwP.eq("IT_ID", 2);
+		qwP.eq("TYPE", 2);
+		qwP.eq("INFO_ID", roomMainId);
+		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
+		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
+		qwV.select("*");
+		qwV.eq("IT_ID", 3);
+		qwV.eq("TYPE", 2);
+		qwV.eq("INFO_ID", roomMainId);
+		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
+		
+		Map<String, Object> result = new  HashMap<String, Object>();
+		result.put("roomDetail", mainBean);
+		result.put("counselor", counselorBean);
+		result.put("allCounselor", list);
+		result.put("picture", pictureList);
+		result.put("video", videoList);
+		return result;
 	}
 }

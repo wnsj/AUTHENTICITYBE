@@ -27,7 +27,7 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
 
     public void addDynamic(BuildingDynamicBean buildingDynamicBean);
     
-    public Map<Integer, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
+    public Map<String, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
 
     List<BuildingDynamicBean> getNewestDy();
 }

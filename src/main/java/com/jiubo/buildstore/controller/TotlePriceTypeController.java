@@ -31,11 +31,11 @@ public class TotlePriceTypeController {
      * @return
      */
     @GetMapping("/getAllTotalPrice")
-    public JSONObject getAllTotalPrice() {
+    public JSONObject getAllTotalPrice(Integer type) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,totlePriceTypeService.getAllTotalPrice());
+        jsonObject.put(Constant.Result.RETDATA,totlePriceTypeService.getAllTotalPrice(type));
         return jsonObject;
     }
 }

@@ -31,11 +31,11 @@ public class BuildingTypeController {
      * @return
      */
     @GetMapping("/getAllBuildingType")
-    public JSONObject getAllBuildingType() {
+    public JSONObject getAllBuildingType(Integer type) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,buildingTypeService.getAllBuildingType());
+        jsonObject.put(Constant.Result.RETDATA,buildingTypeService.getAllBuildingType(type));
         return jsonObject;
     }
 }

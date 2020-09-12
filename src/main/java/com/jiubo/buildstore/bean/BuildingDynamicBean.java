@@ -48,6 +48,11 @@ public class BuildingDynamicBean implements Serializable {
      * 类型
      */
     private Integer buildId;
+    
+    /**
+     * 咨询标题
+     */
+    private Integer bdLabel;
 
     /**
      * 页码

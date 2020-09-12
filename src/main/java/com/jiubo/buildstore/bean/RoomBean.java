@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author swd
- * @since 2020-09-11
+ * @since 2020-09-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -43,6 +43,11 @@ public class RoomBean implements Serializable {
     private Integer roomCode;
 
     /**
+     * roommain表的id
+     */
+    private Integer roomId;
+
+    /**
      * 房源概况
      */
     private Integer surveyId;
@@ -56,11 +61,6 @@ public class RoomBean implements Serializable {
      * 是否可注册
      */
     private Integer isRegister;
-
-    /**
-     * 免租时间
-     */
-    private String rentFreeTime;
 
     /**
      * 最早可租
@@ -81,11 +81,6 @@ public class RoomBean implements Serializable {
      * 总价
      */
     private BigDecimal totalPrice;
-
-    /**
-     * 看房时间
-     */
-    private String watchHouseTime;
 
     /**
      * 所在楼层
@@ -118,7 +113,7 @@ public class RoomBean implements Serializable {
     private Integer isRecommend;
 
     /**
-     * 是否热门
+     * 是否热门2为热门3为不热门
      */
     private Integer isHot;
 
@@ -126,17 +121,17 @@ public class RoomBean implements Serializable {
      * 是否在租
      */
     private Integer isRent;
-   
+
     /**
      * 类型id
      */
     private Integer btId;
-    
+
     /**
      * 区域id
      */
     private Integer ldId;
-    
+
     /**
      * 商圈id
      */
@@ -148,54 +143,19 @@ public class RoomBean implements Serializable {
     private String horseLabel;
 
     /**
-     * 装修描述
-     */
-    private String renovationLabel;
-
-    /**
-     * 楼盘介绍
-     */
-    private String buildLabel;
-
-    /**
      * 交通出行
      */
     private String traffic;
 
     /**
-     * 距离地铁
-     */
-    private String surround;
-
-    /**
      * 路途
      */
     private String way;
-    
+
     /**
-     * 经度
+     * 装修描述
      */
-    private String longitude;
-    
-    /**
-     * 纬度
-     */
-    private String latitude;
-    
-    /**
-     * 标签list
-     */
-    private String label;
-    
-    /**
-     * 咨询师id
-     */
-    private String couId;
-    
-    /**
-     * 头图路径
-     */
-    private String roomImg;
+    private String renovationLabel;
 
     /**
      * 创建时间
@@ -203,7 +163,19 @@ public class RoomBean implements Serializable {
     private LocalDateTime createDate;
 
     /**
+     * 楼盘介绍
+     */
+    private String buildIntroduce;
+
+    /**
+     * 周边配套
+     */
+    private String rimMating;
+
+    /**
      * 修改时间
      */
     private LocalDateTime modifyDate;
+
+
 }

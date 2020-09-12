@@ -16,5 +16,5 @@ import java.util.List;
 public interface BuildingTypeService extends IService<BuildingTypeBean> {
 
 
-    public List<BuildingTypeBean> getAllBuildingType();
+    public List<BuildingTypeBean> getAllBuildingType(Integer type);
 }

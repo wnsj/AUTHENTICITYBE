@@ -6,9 +6,12 @@
     <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomMainBean">
         SELECT *
         from room_main
-
         <where>
-            1=1
+            1=1 and room_type = #{receive.type}
+             /*查询首页共享房源*/
+			 <if test="receive.isHome != null and receive.isHome != ''">
+                and is_home = #{receive.isHome}
+            </if>
 			 /*是否查询楼盘对应的房源*/
 			 <if test="receive.buildId != null and receive.buildId != ''">
                 and build_id = #{receive.buildId}

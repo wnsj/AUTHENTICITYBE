@@ -14,5 +14,5 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface AreaService extends IService<AreaBean> {
-    public List<AreaBean> getAllArea();
+    public List<AreaBean> getAllArea(Integer type);
 }
