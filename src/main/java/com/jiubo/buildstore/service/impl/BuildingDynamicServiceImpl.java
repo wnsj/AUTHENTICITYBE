@@ -134,4 +134,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 		}
 		return result;
 	}
+
+    @Override
+    public List<BuildingDynamicBean> getNewestDy() {
+        return buildingDynamicDao.getNewestDy();
+    }
 }

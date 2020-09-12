@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -86,6 +87,27 @@ public class EntrustRentBean implements Serializable {
      */
     @ApiModelProperty(required = false, value = "创建时间")
     private Date createTime;
+    /**
+     * 商圈名
+     */
+    @TableField(exist = false)
+    private String buName;
+    /**
+     * 区域名
+     */
+    @TableField(exist = false)
+    private String ldName;
 
 
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String current;
+
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
 }

@@ -50,4 +50,8 @@
         values (#{buildingDynamicBean.bdName},#{buildingDynamicBean.bdContent},
         #{buildingDynamicBean.createDate},#{buildingDynamicBean.buildId})
     </insert>
+
+    <select id="getNewestDy" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
+        select * from building_dynamic order By BD_ID DESC limit 4
+    </select>
 </mapper>
