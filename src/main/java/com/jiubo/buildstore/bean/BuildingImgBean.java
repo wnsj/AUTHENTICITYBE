@@ -73,13 +73,12 @@ public class BuildingImgBean implements Serializable {
     /**
      * 用于区分房源和楼盘，房源2，楼盘3，咨询师4
      */
-    private String type;
+    private Integer type;
 
      /**
      * 房源或楼盘ID
      */
     private Integer infoId;
-    
-    private Integer coucId;
+
 
 }

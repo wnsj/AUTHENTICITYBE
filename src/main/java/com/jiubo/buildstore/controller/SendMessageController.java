@@ -40,11 +40,11 @@ public class SendMessageController {
         paramMap.put("signature","a825cf5d6d76d51013d1839aebb09989");
         String requestString = JSONObject.toJSONString(paramMap);
 
-        String httpContent = CounselorCommentService.sendHttpContent(url, requestString);
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code",result);
-        jsonObject.put("returnData",httpContent);
-        return jsonObject;
+//        String httpContent = CounselorCommentService.sendHttpContent(url, requestString);
+//
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("code",result);
+//        jsonObject.put("returnData",httpContent);
+        return null;
     }
 }

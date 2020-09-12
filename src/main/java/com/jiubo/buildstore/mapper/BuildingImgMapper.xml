@@ -3,10 +3,10 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingImgDao">
 
     <insert id="addImg">
-        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,BUILD_ID,IMG_PATH,BA_ID,COUC_ID)
+        insert into building_img (IMG_NAME,CREATE_DATE,IT_ID,INFO_ID,IMG_PATH,BA_ID,COUC_ID)
          values
-         (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},
-         #{buildingImgBean.buildId},#{buildingImgBean.imgPath},#{buildingImgBean.baId},#{buildingImgBean.coucId})
+         (#{buildingImgBean.imgName},#{buildingImgBean.createDate},#{buildingImgBean.itId},#{buildingImgBean.type},
+         #{buildingImgBean.infoId},#{buildingImgBean.imgPath},#{buildingImgBean.baId})
     </insert>
 
     <update id="patchImgById">
@@ -21,7 +21,10 @@
             IT_ID = #{buildingImgBean.itId}
         </if>
         <if test="buildingImgBean.buildId != null">
-            BUILD_ID = #{buildingImgBean.buildId}
+            INFO_ID = #{buildingImgBean.infoId}
+        </if>
+        <if test="buildingImgBean.type != null">
+            TYPE = #{buildingImgBean.type}
         </if>
         where IMG_ID = #{buildingImgBean.imgId}
     </update>
@@ -33,13 +36,13 @@
                 and IT_ID = #{buildingImgBean.itId}
             </if>
             <if test="buildingImgBean.buildId != null">
-                and BUILD_ID = #{buildingImgBean.buildId}
+                and INFO_ID = #{buildingImgBean.infoId}
             </if>
             <if test="buildingImgBean.baId != null">
                 and BA_ID = #{buildingImgBean.baId}
             </if>
-            <if test="buildingImgBean.coucId != null">
-                and COUC_ID = #{buildingImgBean.coucId}
+            <if test="buildingImgBean.type != null">
+                and TYPE = #{buildingImgBean.type}
             </if>
         </where>
     </select>
@@ -51,13 +54,13 @@
                 and IT_ID = #{buildingImgBean.itId}
             </if>
             <if test="buildingImgBean.buildId != null">
-                and BUILD_ID = #{buildingImgBean.buildId}
+                and INFO_ID = #{buildingImgBean.infoId}
             </if>
             <if test="buildingImgBean.baId != null">
                 and BA_ID = #{buildingImgBean.baId}
             </if>
-            <if test="buildingImgBean.coucId != null">
-                and COUC_ID = #{buildingImgBean.coucId}
+            <if test="buildingImgBean.type != null">
+                and TYPE = #{buildingImgBean.type}
             </if>
         </where>
     </delete>
@@ -65,22 +68,18 @@
     <select id="getHeadImgByBuildId" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
         select * from building_img
         <where>
-            ROOM_ID is null
-        <if test="buildingImgBean.bIdList != null and buildingImgBean.bIdList.size() > 0">
-           and BUILD_ID in
-            <foreach collection="buildingImgBean.bIdList" open="(" close=")" separator="," item="item">
-                #{item}
-            </foreach>
-        </if>
-        <if test="buildingImgBean.itId != null">
-            and IT_ID = #{buildingImgBean.itId}
-        </if>
-        <if test="buildingImgBean.coucIdList != null and buildingImgBean.coucIdList.size() > 0">
-            and COUC_ID in
-            <foreach collection="buildingImgBean.coucIdList" open="(" close=")" separator="," item="item">
-                #{item}
-            </foreach>
-        </if>
+            <if test="buildingImgBean.bIdList != null and buildingImgBean.bIdList.size() > 0">
+                and INFO_ID in
+                <foreach collection="buildingImgBean.bIdList" open="(" close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="buildingImgBean.itId != null">
+                and IT_ID = #{buildingImgBean.itId}
+            </if>
+            <if test="buildingImgBean.type != null">
+                and TYPE = #{buildingImgBean.type}
+            </if>
         </where>
     </select>
 
@@ -88,7 +87,10 @@
         select * from building_img
         <where>
             <if test="buildingImgBean.buildId != null">
-                BUILD_ID = #{buildingImgBean.buildId}
+                INFO_ID = #{buildingImgBean.infoId}
+            </if>
+            <if test="buildingImgBean.type != null">
+                and TYPE = #{buildingImgBean.type}
             </if>
         </where>
     </select>

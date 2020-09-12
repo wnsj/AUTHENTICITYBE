@@ -26,68 +26,68 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/counselorCommentBean")
 public class CounselorCommentController {
 
-    @Autowired
-    private CounselorCommentService counselorCommentService;
-
-
-    @PostMapping("/getCounselorByBid")
-    public JSONObject getCounselorByBid(CounselorCommentBean counselorCommentBean) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        System.out.println();
-        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByBid(counselorCommentBean));
-        return jsonObject;
-    }
-    @PostMapping("/getCounselorByPage")
-    public JSONObject getCounselorByPage(@RequestBody CounselorCommentBean counselorCommentBean){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByPage(counselorCommentBean));
-        return jsonObject;
-    }
-
-    /**
-     * 点赞接口
-     * @return
-     */
-    @PostMapping("/updateNumById")
-
-    public JSONObject updateNumById(@RequestBody String param) throws MessageException {
-        System.out.println(param);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param,CounselorCommentBean.class);
-        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.updateNumById(counselorCommentBean));
-        return jsonObject;
-    }
-
-
-    /**
-     * 修改评论
-     * @param
-     * @return
-     */
-    @PostMapping("/updateComById")
-    public JSONObject updateComById(String param,@RequestParam("picImg") MultipartFile[] picImg) throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
-        counselorCommentService.updateComById(counselorCommentBean,picImg);
-        return jsonObject;
-    }
-
-    @PostMapping("/addCom")
-    public JSONObject addCom(String param, @RequestParam("picImg")MultipartFile[] picImg) throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
-        counselorCommentService.addCom(counselorCommentBean,picImg);
-        return jsonObject;
-    }
+//    @Autowired
+//    private CounselorCommentService counselorCommentService;
+//
+//
+//    @PostMapping("/getCounselorByBid")
+//    public JSONObject getCounselorByBid(CounselorCommentBean counselorCommentBean) {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        System.out.println();
+//        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByBid(counselorCommentBean));
+//        return jsonObject;
+//    }
+//    @PostMapping("/getCounselorByPage")
+//    public JSONObject getCounselorByPage(@RequestBody CounselorCommentBean counselorCommentBean){
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.getCounselorByPage(counselorCommentBean));
+//        return jsonObject;
+//    }
+//
+//    /**
+//     * 点赞接口
+//     * @return
+//     */
+//    @PostMapping("/updateNumById")
+//
+//    public JSONObject updateNumById(@RequestBody String param) throws MessageException {
+//        System.out.println(param);
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param,CounselorCommentBean.class);
+//        jsonObject.put(Constant.Result.RETDATA,counselorCommentService.updateNumById(counselorCommentBean));
+//        return jsonObject;
+//    }
+//
+//
+//    /**
+//     * 修改评论
+//     * @param
+//     * @return
+//     */
+//    @PostMapping("/updateComById")
+//    public JSONObject updateComById(String param,@RequestParam("picImg") MultipartFile[] picImg) throws Exception {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
+//        counselorCommentService.updateComById(counselorCommentBean,picImg);
+//        return jsonObject;
+//    }
+//
+//    @PostMapping("/addCom")
+//    public JSONObject addCom(String param, @RequestParam("picImg")MultipartFile[] picImg) throws Exception {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+//        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+//        CounselorCommentBean counselorCommentBean = JSONObject.parseObject(param, CounselorCommentBean.class);
+//        counselorCommentService.addCom(counselorCommentBean,picImg);
+//        return jsonObject;
+//    }
 
 }

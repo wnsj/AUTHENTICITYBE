@@ -24,20 +24,12 @@ public interface BuildingService extends IService<BuildingBean> {
 
     public Page<BuildReturn> getAllBulidByCondition(BuildReceive buildingBean);
 
-    public BuildingBean addBuilding(BuildReceive buildingBean,MultipartFile[] effectImg,
-                            MultipartFile[] enPlanImg,
+    public BuildingBean addBuilding(BuildReceive buildingBean,
                             MultipartFile[] buildRealImg,
-                            MultipartFile[] matchingRealImg,
-                            MultipartFile[] headImg,
-                            MultipartFile[] regionImg,
                             MultipartFile[] video) throws Exception;
 
-    public BuildingBean patchById(BuildReceive buildingBean,MultipartFile[] effectImg,
-                            MultipartFile[] enPlanImg,
+    public BuildingBean patchById(BuildReceive buildingBean,
                             MultipartFile[] buildRealImg,
-                            MultipartFile[] matchingRealImg,
-                            MultipartFile[] headImg,
-                          MultipartFile[] regionImg,
                           MultipartFile[] video) throws Exception;
 
     public List<BuildingBean> getAllBuild();
