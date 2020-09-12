@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.*;
@@ -81,6 +82,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private MetroBuildRefDao metroBuildRefDao;
+
+    @Autowired
+    private BusinessDistrictDao businessDistrictDao;
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -109,12 +113,20 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
             }
 
-            //获取所有特色
-            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
-            Map<Integer, List<CharaRefBean>> charaRefMap = null;
-            if (!CollectionsUtils.isEmpty(chaRefByBidList)) {
-                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
+            // 商圈
+            QueryWrapper<BusinessDistrictBean> queryWrapper = new QueryWrapper<BusinessDistrictBean>();
+            queryWrapper.select("*");
+            List<BusinessDistrictBean> beans = businessDistrictDao.selectList(queryWrapper);
+            Map<Integer, List<BusinessDistrictBean>> buMap = null;
+            if (!CollectionsUtils.isEmpty(beans)) {
+                buMap = beans.stream().collect(Collectors.groupingBy(BusinessDistrictBean::getId));
             }
+//            //获取所有特色
+//            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
+//            Map<Integer, List<CharaRefBean>> charaRefMap = null;
+//            if (!CollectionsUtils.isEmpty(chaRefByBidList)) {
+//                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
+//            }
 
 
             BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -163,17 +175,24 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                 }
 
-                // 特色
-                if (null != charaRefMap) {
-                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
-                    if (!CollectionsUtils.isEmpty(charaRefBeanList)) {
-                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
-                        // 特色标签集合
-                        bean.setCharaNameList(charaRefList);
-                        // 特色id集合
-                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                // 商圈名
+                if (null != buMap) {
+                    List<BusinessDistrictBean> beanList = buMap.get(bean.getBusinessId());
+                    if (!CollectionsUtils.isEmpty(beanList)) {
+                        bean.setBuName(beanList.get(0).getBuName());
                     }
                 }
+//                // 特色
+//                if (null != charaRefMap) {
+//                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+//                    if (!CollectionsUtils.isEmpty(charaRefBeanList)) {
+//                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+//                        // 特色标签集合
+//                        bean.setCharaNameList(charaRefList);
+//                        // 特色id集合
+//                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+//                    }
+//                }
 
             }
         }

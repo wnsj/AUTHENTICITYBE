@@ -15,7 +15,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 
-public class BuildReturn extends BuildingBean{
+public class BuildReturn extends BuildingBean {
 
 
     /**
@@ -30,7 +30,10 @@ public class BuildReturn extends BuildingBean{
 
     private List<String> charaNameList;
 
-
+    /**
+     * 商圈名
+     */
+    private String buName;
 
     /**
      * 房源特色id集合
@@ -60,7 +63,6 @@ public class BuildReturn extends BuildingBean{
      * 标签集合
      */
     private List<String> labelList;
-
 
 
     private String ldName;
