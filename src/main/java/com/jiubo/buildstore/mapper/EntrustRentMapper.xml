@@ -2,4 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.EntrustRentDao">
 
+    <sql id="condition">
+        <where>
+        1=1
+            <if test="entrustRentBean.proId != null">
+                and T.PRO_ID = #{entrustRentBean.proId}
+            </if>
+            <if test="entrustRentBean.ldId != null">
+                and T.LD_ID = #{entrustRentBean.ldId}
+            </if>
+            <if test="entrustRentBean.taId != null">
+                and T.TA_ID = #{entrustRentBean.taId}
+            </if>
+            <if test="entrustRentBean.obName != null and entrustRentBean.obName != ''">
+                and T.OB_NAME like CONCAT('%',#{entrustRentBean.obName},'%')
+            </if>
+            <if test="entrustRentBean.isContact != null and entrustRentBean.isContact != ''">
+                and T.IS_CONTACT = #{entrustRentBean.isContact }
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="getEnByPage" resultType="com.jiubo.buildstore.bean.EntrustRentBean">
+        select T.*,B.bu_name as buName,L.LD_NAME as ldName from entrust_rent T
+        LEFT JOIN business_district B ON T.TA_ID = B.id
+        LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
+        <include refid="condition"/>
+    </select>
+
 </mapper>
