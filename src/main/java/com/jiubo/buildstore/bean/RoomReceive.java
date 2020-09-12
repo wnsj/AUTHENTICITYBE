@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class RoomReceive implements Serializable{
-//	private List<Integer> buildIdList;
+	private Integer buildId;
 	/**
 	 * 是否在售集合(1在售；2已售)
 	 */
@@ -34,6 +34,11 @@ public class RoomReceive implements Serializable{
 	 * 区域idList
 	 */
 	private List<Integer> ldIdList;
+	
+	/**
+	 * 商圈idlist
+	 */
+	private List<Integer> bdIdList;
 
 	/**
 	 * 开发商id集合
@@ -50,7 +55,7 @@ public class RoomReceive implements Serializable{
 	private List<Integer> totalPriceIdList;
 	
 	/**
-	 * 楼盘类型ID集合
+	 * 类型ID集合
 	 */
 	private List<Integer> btIdList;
 	/**
@@ -79,16 +84,22 @@ public class RoomReceive implements Serializable{
 	private String pageOrder;
 
 	/**
-	 * 时间排序(1:升序；2降序)
+	 * 面积排序(2:升序；3降序)
 	 */
 
-//	private Integer dateSort;
+	private Integer areaSort;
 
 	/**
-	 * 价格排序(1:升序；2降序)
+	 * 单价排序(2:升序；3降序)
 	 */
 
-//	private Integer priceSort;
+	private Integer unitPriceSort;
+	
+	/**
+	 * 总价排序(2:升序；3降序)
+	 */
+
+	private Integer totalPriceSort;
 	/**
 	 * 房源特色id集合
 	 */
@@ -102,21 +113,16 @@ public class RoomReceive implements Serializable{
 
 	private List<Map<String, Object>> unitPriceList;
 
-//	private String startTime;
-//	private String endTime;
 	private List<Integer> regionIdList;
-
-	/**
-	 * 模糊查询字段
-	 */
-//	private String special;
-
-	/**
-	 * 地铁ID集合
-	 */
-//	private List<Integer> metroIdList;
-//
-//	private Integer metroId;
 	
+	/**
+	 * 是否查询热门 2热门
+	 */
+	private Integer isHot;
+
+	/**
+	 * 房源类型1,写字楼，2，共享，3商铺
+	 */
+	private Integer type;
 
 }

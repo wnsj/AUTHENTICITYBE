@@ -35,4 +35,9 @@ public class AreaBean implements Serializable {
     private Integer endArea;
     @TableField(exist = false)
     private List<Integer> idList;
+    
+    /**
+     * 1,写字楼，2，共享，3商铺
+     */
+    private Integer type;
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jiubo.buildstore.dao.RoomDao">
+<mapper namespace="com.jiubo.buildstore.dao.RoomMainDao">
 		
 		<!--条件查询-->
-    <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomBean">
+    <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomMainBean">
         SELECT *
         from room_main
 
@@ -24,9 +24,16 @@
                     #{ldId}
                 </foreach>
             </if>
+            /*商圈*/
+            <if test="receive.bdIdList != null and receive.bdIdList.size() > 0">
+                and business_id in
+                <foreach collection="receive.bdIdList" open="(" close=")" separator="," item="bdId">
+                    #{bdId}
+                </foreach>
+            </if>
             /*楼盘类型*/
             <if test="receive.btIdList != null and receive.btIdList.size() > 0">
-                and BT_ID in
+                and room_type in
                 <foreach collection="receive.btIdList" open="(" close=")" separator="," item="btId">
                     #{btId}
                 </foreach>
@@ -89,4 +96,6 @@
         	        
         </if> -->
     </select>
+		
+		
 </mapper>

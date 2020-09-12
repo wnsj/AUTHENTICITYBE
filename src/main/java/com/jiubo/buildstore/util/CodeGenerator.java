@@ -27,7 +27,7 @@ public class CodeGenerator {
         String packageName = "com.jiubo.buildstore";
         boolean serviceNameStartWithI = false;//auth -> UserService, 设置成true: auth -> IUserService
         //把需要自动生成的表 放在这里!!
-        generateByTables(serviceNameStartWithI, packageName, "swd", "boot", "store_room");
+        generateByTables(serviceNameStartWithI, packageName, "swd", "boot", "commercial_activitie");
         System.out.println("completed...");
     }
 

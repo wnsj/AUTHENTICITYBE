@@ -13,27 +13,27 @@ import lombok.experimental.Accessors;
  * 
  * </p>
  *
- * @author syl
- * @since 2020-04-10
+ * @author swd
+ * @since 2020-09-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("building_type")
-public class BuildingTypeBean implements Serializable {
+@TableName("commercial_activitie")
+public class CommercialActivitieBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "BT_ID", type = IdType.AUTO)
-    private Integer btId;
-    
     /**
-     * 类型名字
+     * 序列号
      */
-    private String btName;
-   
+    @TableId(value = "CA_ID", type = IdType.AUTO)
+    private Integer caId;
+
     /**
-     * 1,写字楼，2，共享，3商铺
+     * 业态名称
      */
-    private Integer type;
+    private String caName;
+
+
 }
