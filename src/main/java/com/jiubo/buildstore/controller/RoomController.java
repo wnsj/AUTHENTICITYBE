@@ -29,17 +29,4 @@ import org.springframework.stereotype.Controller;
 @RequestMapping("/roomBean")
 public class RoomController {
 	
-	@Autowired
-	private RoomService roomService;
-	
-	@ApiOperation(value = "多条件查询房源", notes = "多条件查询房源")
-	@GetMapping("/getRoomByConditions")
-	public JSONObject getHotBusinessDistrict(RoomReceive receive) {
-		JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,roomService.getRoomByConditions(receive));
-        return jsonObject;
-	}
-
 }

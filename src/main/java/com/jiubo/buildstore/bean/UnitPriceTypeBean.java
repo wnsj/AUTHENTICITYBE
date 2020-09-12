@@ -38,5 +38,10 @@ public class UnitPriceTypeBean implements Serializable {
 
     @TableField(exist = false)
     private List<Integer> idList;
-
+    
+    /**
+     * 1,写字楼，2，共享，3商铺
+     */
+    private Integer type;
+    
 }
