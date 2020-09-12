@@ -1,19 +1,11 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.AreaBean;
-import com.jiubo.buildstore.bean.BhtRefBean;
-import com.jiubo.buildstore.bean.BuildReceive;
-import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BuildingTypeBean;
-import com.jiubo.buildstore.bean.CharaRefBean;
-import com.jiubo.buildstore.bean.MetroBuildRefBean;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomReceive;
-import com.jiubo.buildstore.bean.RoomReturn;
-import com.jiubo.buildstore.bean.SaleTypeBean;
 import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
-import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.dao.AreaDao;
 import com.jiubo.buildstore.dao.BuildingTypeDao;
 import com.jiubo.buildstore.dao.RoomDao;
@@ -23,11 +15,9 @@ import com.jiubo.buildstore.service.RoomService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
-import static java.util.stream.Collectors.toList;
-
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,18 +55,18 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 	private TotlePriceTypeDao totlePriceTypeDao;
 
 	@Override
-	public Page<RoomBean> getRoomByConditions(RoomReceive receive) {
-		Page<RoomBean> page = new Page<>();
-		page.setCurrent(StringUtils.isBlank(receive.getCurrent()) ? 1L : Long.parseLong(receive.getCurrent()));
-		page.setSize(StringUtils.isBlank(receive.getPageSize()) ? 10L : Long.parseLong(receive.getPageSize()));
+	public PageInfo<RoomBean> getRoomByConditions(RoomReceive receive) {
+		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
+		Integer pageSize = StringUtils.isBlank(receive.getPageSize()) ? 10 : Integer.valueOf(receive.getPageSize());
 		setCondition(receive);
 
 		// 房源数据
+		PageHelper.startPage(pageNum,pageSize);
 		List<RoomBean> allRoomBypage = roomDao.getAllRoomBypage(receive);
 
 		if (!CollectionsUtils.isEmpty(allRoomBypage)) {
 			// 获取房源id
-			List<Integer> list = allRoomBypage.stream().map(RoomBean::getId).collect(toList());
+//			List<Integer> list = allRoomBypage.stream().map(RoomBean::getId).collect(toList());
 
 			// 获取所有类型
 			List<BuildingTypeBean> buildTypeList = buildingTypeDao.getAllBuildingType();
@@ -85,42 +75,8 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
 			}
 
-			// 获取头图
-//            BuildingImgBean buildingImgBean = new BuildingImgBean();
-//            buildingImgBean.setBIdList(list);
-//            List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
-//            Map<Integer, List<BuildingImgBean>> imgMap = null;
-//            if (!CollectionsUtils.isEmpty(byBuildId)) {
-//                imgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
-//            }
-
-
 			// 遍历实体 翻译各个类型字段
 			for (RoomBean bean : allRoomBypage) {
-
-				// 图片名字 路径
-//                if (null != imgMap && null != bean.getBuildId()) {
-//                    List<BuildingImgBean> buildingImgBeans = imgMap.get(bean.getBuildId());
-//                    if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
-//                        Map<Integer, List<BuildingImgBean>> map = buildingImgBeans.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
-//                        // 轮播图
-//                        getPicPath(bean, map);
-//                        // 头图
-//                        List<BuildingImgBean> imgBeans = map.get(6);
-//                        if (!CollectionsUtils.isEmpty(imgBeans)) {
-//                            bean.setImgName(imgBeans.get(0).getImgName());
-//                            String imgPath = imgBeans.get(0).getImgPath();
-//                            bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgPath).concat("&imgId=").concat(imgBeans.get(0).getImgId().toString()));
-//                        }
-//
-//                        // 视频
-//                        List<BuildingImgBean> imgBeanList = map.get(7);
-//                        if (!CollectionsUtils.isEmpty(imgBeanList)) {
-//                            bean.setVideoName(imgBeanList.get(0).getImgName());
-//                            bean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeanList.get(0).getImgPath()).concat("&imgId=").concat(map.get(7).get(0).getImgId().toString()));
-//                        }
-//                    }
-//                }
 
 				// 是否是热销标签
 				if (bean.getIsHot() != null) {
@@ -131,7 +87,8 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 
 			}
 		}
-		return page.setRecords(allRoomBypage);
+		PageInfo<RoomBean> page = new PageInfo<RoomBean>(allRoomBypage);
+		return page;
 	}
 
 	private void setCondition(RoomReceive roomReceive) {

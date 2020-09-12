@@ -163,7 +163,7 @@ public class RoomBean implements Serializable {
     private String traffic;
 
     /**
-     * 周边配套
+     * 距离地铁
      */
     private String surround;
 
@@ -181,6 +181,21 @@ public class RoomBean implements Serializable {
      * 纬度
      */
     private String latitude;
+    
+    /**
+     * 标签list
+     */
+    private String label;
+    
+    /**
+     * 咨询师id
+     */
+    private String couId;
+    
+    /**
+     * 头图路径
+     */
+    private String roomImg;
 
     /**
      * 创建时间
@@ -191,6 +206,4 @@ public class RoomBean implements Serializable {
      * 修改时间
      */
     private LocalDateTime modifyDate;
-
-
 }

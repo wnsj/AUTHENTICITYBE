@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.pagehelper.PageInfo;
 
 /**
  * <p>
@@ -18,6 +19,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoomService extends IService<RoomBean> {
 
-	public Page<RoomBean> getRoomByConditions(RoomReceive receive);
+	public PageInfo<RoomBean> getRoomByConditions(RoomReceive receive);
 
 }

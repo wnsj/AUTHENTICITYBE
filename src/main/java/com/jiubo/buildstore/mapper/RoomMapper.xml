@@ -10,12 +10,12 @@
         <where>
             1=1
             /*省id*/
-            <if test="receive.proIdList != null and receive.proIdList.size() > 0">
+            <!-- <if test="receive.proIdList != null and receive.proIdList.size() > 0">
                 and PRO_ID in
                 <foreach collection="receive.proIdList" open="(" close=")" separator="," item="proId">
                     #{proId}
                 </foreach>
-            </if>
+            </if> -->
             /*是否出售*/
             <!-- <if test="receive.isSaleList != null and receive.isSaleList.size() > 0">
                 and IS_SALE in
@@ -83,21 +83,17 @@
                     </if>
                 </foreach>
             </if>
-            <if test="receive.startTime != null and receive.startTime != ''">
+            <!-- <if test="receive.startTime != null and receive.startTime != ''">
                 and (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > #{receive.startTime}
             </if>
             <if test="receive.endTime != null and receive.endTime != ''">
                 and #{receive.endTime} >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
-            </if>
+            </if> -->
             <if test="receive.regionIdList != null and receive.regionIdList.size() > 0">
                 and business_id in
                 <foreach collection="receive.regionIdList" open="(" close=")" separator="," item="regionId">
                     #{regionId}
                 </foreach>
-            </if>
-
-            <if test="receive.regionId != null">
-                and business_id = #{receive.regionId}
             </if>
         </where>
     </select>
