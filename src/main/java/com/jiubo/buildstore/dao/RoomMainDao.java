@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.dao;
 
+import com.jiubo.buildstore.bean.RMChildSharedBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 
@@ -21,4 +22,5 @@ public interface RoomMainDao extends BaseMapper<RoomMainBean> {
 
 	List<RoomMainBean> getAllRoomBypage(@Param("receive") RoomReceive receive);
 
+	RMChildSharedBean getSharedById(@Param("id") Integer id);
 }

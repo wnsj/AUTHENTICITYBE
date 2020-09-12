@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.jiubo.buildstore.bean.RMChildSharedBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -19,5 +21,5 @@ import com.github.pagehelper.PageInfo;
 public interface RoomMainService extends IService<RoomMainBean> {
 
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive);
-
+	RMChildSharedBean getSharedById(Integer id);
 }

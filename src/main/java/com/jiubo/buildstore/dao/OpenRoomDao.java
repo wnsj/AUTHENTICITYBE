@@ -1,7 +1,11 @@
 package com.jiubo.buildstore.dao;
 
+import com.jiubo.buildstore.bean.AloneRoomBean;
 import com.jiubo.buildstore.bean.OpenRoomBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OpenRoomDao extends BaseMapper<OpenRoomBean> {
 
+    List<OpenRoomBean> getOpenRoomByRoomId(@Param("roomId") Integer roomId);
 }

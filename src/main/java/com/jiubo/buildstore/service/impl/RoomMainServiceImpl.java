@@ -1,17 +1,7 @@
 package com.jiubo.buildstore.service.impl;
 
-import com.jiubo.buildstore.bean.AreaBean;
-import com.jiubo.buildstore.bean.BuildingTypeBean;
-import com.jiubo.buildstore.bean.RoomBean;
-import com.jiubo.buildstore.bean.RoomMainBean;
-import com.jiubo.buildstore.bean.RoomReceive;
-import com.jiubo.buildstore.bean.TotlePriceTypeBean;
-import com.jiubo.buildstore.bean.UnitPriceTypeBean;
-import com.jiubo.buildstore.dao.AreaDao;
-import com.jiubo.buildstore.dao.BuildingTypeDao;
-import com.jiubo.buildstore.dao.RoomMainDao;
-import com.jiubo.buildstore.dao.TotlePriceTypeDao;
-import com.jiubo.buildstore.dao.UnitPriceTypeDao;
+import com.jiubo.buildstore.bean.*;
+import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -46,14 +36,16 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	private AreaDao areaDao;
 
 	@Autowired
-	private BuildingTypeDao buildingTypeDao;
-
-	@Autowired
 	private UnitPriceTypeDao unitPriceTypeDao;
 	
 	@Autowired
 	private TotlePriceTypeDao totlePriceTypeDao;
-	
+
+	@Autowired
+	private AloneRoomDao aloneRoomDao;
+
+	@Autowired
+	private OpenRoomDao openRoomDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -81,9 +73,21 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		PageInfo<RoomMainBean> page = new PageInfo<RoomMainBean>(allRoomBypage);
 		return page;
 	}
-	
-	
-	
+
+	@Override
+	public RMChildSharedBean getSharedById(Integer id) {
+		RMChildSharedBean roomMainBean = roomMainDao.getSharedById(id);
+		if (null != roomMainBean) {
+			List<AloneRoomBean> aloneRoomBeans = aloneRoomDao.getAloneRoomByRoomId(roomMainBean.getId());
+			List<OpenRoomBean> openRoomBeans = openRoomDao.getOpenRoomByRoomId(roomMainBean.getId());
+			roomMainBean.setAloneRoomBeanList(aloneRoomBeans);
+			roomMainBean.setOpenRoomBeanList(openRoomBeans);
+			return roomMainBean;
+		}
+		return roomMainBean;
+	}
+
+
 	private void setCondition(RoomReceive roomReceive) {
 		// 获取面积集合
 		List<Integer> areaIdList = roomReceive.getAreaIdList();

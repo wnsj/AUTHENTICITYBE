@@ -97,5 +97,10 @@
         </if> -->
     </select>
 		
-		
+    <select id="getSharedById" resultType="com.jiubo.buildstore.bean.RMChildSharedBean">
+        select T.*,B.bu_name as buName,L.LD_NAME as ldName from room_main T
+         LEFT JOIN business_district B ON T.business_id = B.id
+        LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
+         where T.id = #{id}
+    </select>
 </mapper>

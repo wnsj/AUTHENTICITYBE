@@ -1,9 +1,8 @@
 package com.jiubo.buildstore.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.jiubo.buildstore.bean.RoomMainBean;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.buildstore.bean.RoomReceive;
@@ -40,5 +39,15 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA,roomMainService.getRoomByConditions(receive));
         return jsonObject;
 	}
-	
+
+	@ApiOperation(value = "查询共享详情", notes = "查询共享详情")
+	@PostMapping("/getSharedById")
+	public JSONObject getSharedById(@RequestBody RoomMainBean roomMainBean) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+		jsonObject.put(Constant.Result.RETDATA,roomMainService.getSharedById(roomMainBean.getId()));
+		return jsonObject;
+	}
+
 }
