@@ -1,33 +1,24 @@
 package com.jiubo.buildstore.bean;
 
 import java.math.BigDecimal;
-
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-
 import java.time.LocalDateTime;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
- * @author syl
- * @since 2020-04-23
+ * @author swd
+ * @since 2020-09-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -37,36 +28,26 @@ public class BuildingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键
+     */
     @TableId(value = "BUILD_ID", type = IdType.AUTO)
-    public Integer buildId;
+    private Integer buildId;
+
     /**
      * 楼盘名称
      */
     private String htName;
 
     /**
-     * 是否在售(1在售；2已售)
-     */
-    private Integer isSale;
-
-
-
-    /**
-     * 别名
-     */
-    private String alias;
-
-    /**
      * 省份ID
      */
     private Integer proId;
-
 
     /**
      * 区域ID
      */
     private Integer ldId;
-
 
     /**
      * 最小面积
@@ -99,24 +80,9 @@ public class BuildingBean implements Serializable {
     private BigDecimal minTitlePrice;
 
     /**
-     * 楼盘类型ID
-     */
-    private Integer btId;
-
-    /**
      * 楼盘地址
      */
     private String adress;
-
-    /**
-     * 加推时间
-     */
-    private Date createDate;
-
-    /**
-     * 房源特色id
-     */
-    private Integer chaId;
 
     /**
      * 开发商id
@@ -124,90 +90,14 @@ public class BuildingBean implements Serializable {
     private String devId;
 
     /**
-     * 开盘时间
-     */
-    private Date openDate;
-
-    /**
-     * 预交房时间
-     */
-    private Date proDate;
-
-    /**
-     * 产权年限
-     */
-    private Integer ownershipYear;
-
-    /**
-     * 物业类型
-     */
-    private String propertyType;
-
-    /**
-     * 容积率
-     */
-    private BigDecimal plotRatio;
-
-    /**
-     * 绿化率
-     */
-    private BigDecimal greeningRate;
-
-    /**
-     * 售楼地址
-     */
-    private String saleAddress;
-
-
-    /**
-     * 物业地址
-     */
-    private String propertyAddress;
-
-    /**
-     * 装修情况
-     */
-    private String decoration;
-
-    /**
-     * 占地面积
-     */
-    private BigDecimal coveredArea;
-
-    /**
      * 建筑面积
      */
     private BigDecimal floorage;
-    /**
-     * 户数
-     */
-    private Integer households;
-
-    /**
-     * 建筑风格
-     */
-    private String architecturalStyle;
-
-    /**
-     * 开发周期
-     */
-    private Integer iteration;
 
     /**
      * 物业公司
      */
     private String propertyCompany;
-
-
-    /**
-     * 物业费
-     */
-    private BigDecimal propertyFee;
-
-    /**
-     * 停车位
-     */
-    private Integer parkingSpace;
 
     /**
      * 项目介绍
@@ -215,19 +105,10 @@ public class BuildingBean implements Serializable {
     private String projectIntroduction;
 
     /**
-     * 优惠(1:优惠；2：不优惠)
-     */
-    private Long discount;
-
-    /**
-     * 热销值
-     */
-    private Integer sellWell;
-
-    /**
      * 人气值
      */
     private Integer popularity;
+
     /**
      * 热搜值
      */
@@ -239,14 +120,9 @@ public class BuildingBean implements Serializable {
     private BigDecimal specialOffer;
 
     /**
-     * (1:近期开盘;2:不是近期开盘)
+     * 热销值
      */
-    private Long buildOpen;
-
-    /**
-     * 联系方式
-     */
-    private String tel;
+    private Integer sellWell;
 
     /**
      * 是否推荐户型（1：是；2：否）
@@ -264,50 +140,82 @@ public class BuildingBean implements Serializable {
     private Long quality;
 
     /**
-     * 纬度
+     * 联系方式
      */
-    private String latitude;
+    private String tel;
+
     /**
      * 经度
      */
     private String longitude;
 
-
     /**
-     * 楼盘特点描述
+     * 纬度
      */
-    private String buildDescription;
+    private String latitude;
 
-    /**
-     * 均价
-     */
-    private BigDecimal averagePrice;
     /**
      * 区域id
      */
     private Integer regionId;
+
     /**
-     * 移动端排序权重
+     * 排序权重
      */
     private Integer sort;
+
     /**
-     * 是否是移动端(1:是；2：否)
+     * 楼层
      */
-    private Integer isMobile;
+    private Integer floor;
+
     /**
-     * 移动端头部展示(1:是；2：否)
+     * 客梯数
      */
-    private Integer mobileHead;
+    private Integer elevatorNum;
+
     /**
-     * 移动端项目介绍
+     * 标准层高
      */
-    private String mobileIntroduction;
+    private BigDecimal floorHeight;
+
+    /**
+     * 入住企业
+     */
+    private String enterprises;
+
+    /**
+     * 咨询师id
+     */
+    private Integer couId;
+
+    /**
+     * 商圈id
+     */
+    private Integer businessId;
+
     /**
      * 修改时间
      */
     private Date modifyTime;
+
     /**
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 楼盘类型
+     */
+    private Integer buildType;
+
+    /**
+     * 头图路径
+     */
+    private String headPath;
+
+    /**
+     * 周边
+     */
+    private String periphery;
 }
