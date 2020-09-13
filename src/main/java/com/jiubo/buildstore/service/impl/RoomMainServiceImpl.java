@@ -98,10 +98,12 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	public RMChildSharedBean getSharedById(Integer id) {
 		RMChildSharedBean roomMainBean = roomMainDao.getSharedById(id);
 		if (null != roomMainBean) {
+			//办公室信息
 			QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
 			qwP.select("*");
 			qwP.eq("room_id", roomMainBean.getId());
 			List<OfficeBean> officeBeanList = officeDao.selectList(qwP);
+			// 网点信息
 			ShareRoomBean shareRoomBean = shareRoomDao.getShareRoomByRoomId(roomMainBean.getId());
 			if (null != shareRoomBean) {
 				String chaList = shareRoomBean.getChaList();
@@ -112,7 +114,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					shareRoomBean.setChList(arrayList);
 				}
 			}
+			// 图片路径
+			QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
+			qw.select("*");
+			qw.eq("IT_ID", 2);
+			qw.eq("TYPE", 2);
+			qw.eq("INFO_ID", roomMainBean.getId());
+			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qw);
+			if (!CollectionsUtils.isEmpty(pictureList)) {
+				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+				roomMainBean.setPictureList(list);
+			}
 			roomMainBean.setOfficeBeanList(officeBeanList);
+			// 网点信息
 			roomMainBean.setShareRoomBean(shareRoomBean);
 			return roomMainBean;
 		}

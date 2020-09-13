@@ -22,4 +22,5 @@ public class RMChildSharedBean extends RoomMainBean {
     private String ldName;
     private ShareRoomBean shareRoomBean;
     private List<OfficeBean> officeBeanList;
+    private List<String> pictureList;
 }
