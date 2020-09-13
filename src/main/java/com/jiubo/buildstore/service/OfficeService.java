@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-09-13
  */
 public interface OfficeService extends IService<OfficeBean> {
-
+    OfficeBean getOfficeByPk(Integer id);
 }
