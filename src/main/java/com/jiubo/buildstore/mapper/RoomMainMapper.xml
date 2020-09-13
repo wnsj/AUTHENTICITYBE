@@ -12,10 +12,6 @@
 			 <if test="receive.isHome != null and receive.isHome != ''">
                 and is_home = #{receive.isHome}
             </if>
-			 /*是否查询楼盘对应的房源*/
-			 <if test="receive.buildId != null and receive.buildId != ''">
-                and build_id = #{receive.buildId}
-            </if>
              /*是否是热门*/
             <if test="receive.isHot != null and receive.isHot != ''">
                 and is_hot = #{receive.isHot}
@@ -34,9 +30,16 @@
                     #{bdId}
                 </foreach>
             </if>
-            /*楼盘类型*/
+            /*楼盘*/
+			<if test="receive.buildIdList != null and receive.buildIdList.size() > 0">
+                and build_id in
+                <foreach collection="receive.buildIdList" open="(" close=")" separator="," item="bId">
+                    #{bId}
+                </foreach>
+            </if>
+            /*房源类型*/
             <if test="receive.btIdList != null and receive.btIdList.size() > 0">
-                and room_type in
+                and bt_id in
                 <foreach collection="receive.btIdList" open="(" close=")" separator="," item="btId">
                     #{btId}
                 </foreach>
@@ -94,10 +97,24 @@
                 </foreach>
             </if>
         </where>
-        <!-- order by 
-        <if test="receive.areaSort != null and receive.areaSort != ''">
-        	        
-        </if> -->
+        <if test="receive.areaOrder == 2">
+               order by build_area DESC
+         </if>
+        <if test="receive.areaOrder == 3">
+               order by build_area ASC
+         </if>
+        <if test="receive.unitPriceOrder == 2">
+               order by unit_price DESC
+         </if>
+        <if test="receive.unitPriceOrder == 3">
+               order by unit_price ASC
+         </if>
+        <if test="receive.totalPriceOrder == 2">
+               order by total_price DESC
+         </if>
+        <if test="receive.totalPriceOrder == 3">
+               order by total_price ASC
+         </if>
     </select>
 		
     <select id="getSharedById" resultType="com.jiubo.buildstore.bean.RMChildSharedBean">

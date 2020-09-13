@@ -1,11 +1,4 @@
 package com.jiubo.buildstore.service.impl;
-import com.jiubo.buildstore.bean.AreaBean;
-import com.jiubo.buildstore.bean.BuildingImgBean;
-import com.jiubo.buildstore.bean.CounselorBean;
-import com.jiubo.buildstore.bean.RoomMainBean;
-import com.jiubo.buildstore.bean.RoomReceive;
-import com.jiubo.buildstore.bean.TotlePriceTypeBean;
-import com.jiubo.buildstore.bean.UnitPriceTypeBean;
 import com.jiubo.buildstore.dao.AreaDao;
 import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.CounselorDao;
@@ -69,7 +62,17 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	private RoomDao roomDao;
 	
 	@Autowired
+	private LocationDistinguishDao locationDistinguishDao;
+	
+	@Autowired
+	private BusinessDistrictDao businessDistrictDao;
+	
+	@Autowired
+	private BuildingDao buildingDao;
+	
+	@Autowired
 	private StoreRoomDao storeRoomDao;
+	
 	@Autowired
 	private ShareRoomDao shareRoomDao;
 	@Override
@@ -77,7 +80,29 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
 		Integer pageSize = StringUtils.isBlank(receive.getPageSize()) ? 10 : Integer.valueOf(receive.getPageSize());
 		setCondition(receive);
-
+		
+		//如果是通过名字搜索的房源根据名字取查对应的区域商圈
+		if(!StringUtils.isBlank(receive.getNameLike())) {
+			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
+			wrapperLd.select("*");
+			wrapperLd.like("LD_NAME", receive.getNameLike());
+			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
+			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
+			receive.getLdIdList().addAll(ldList);
+			QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
+			wrapperBd.select("*");
+			wrapperBd.like("bu_name", receive.getNameLike());
+			List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
+			List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
+			receive.getBdIdList().addAll(bdList);
+			QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
+			wrapperb.select("*");
+			wrapperb.like("HT_NAME", receive.getNameLike());
+			List<BuildingBean> b = buildingDao.selectList(wrapperb);
+			List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
+			receive.getBuildIdList().addAll(bList);
+		}
+		
 		// 房源数据
 		PageHelper.startPage(pageNum,pageSize);
 		List<RoomMainBean> allRoomBypage = roomMainDao.getAllRoomBypage(receive);

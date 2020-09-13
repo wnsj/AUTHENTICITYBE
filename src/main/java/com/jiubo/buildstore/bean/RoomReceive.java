@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class RoomReceive implements Serializable{
-	private Integer buildId;
+	private List<Integer> buildIdList;
 	/**
 	 * 是否在售集合(1在售；2已售)
 	 */
@@ -77,29 +77,34 @@ public class RoomReceive implements Serializable{
 	 */
 
 	private String pageSize;
+	
+	/**
+	 * 搜索查询房源
+	 */
+
+	private String nameLike;
+	
 	/**
 	 * 排序依据
 	 */
 
 	private String pageOrder;
-
-	/**
-	 * 面积排序(2:升序；3降序)
-	 */
-
-	private Integer areaSort;
-
-	/**
-	 * 单价排序(2:升序；3降序)
-	 */
-
-	private Integer unitPriceSort;
 	
 	/**
-	 * 总价排序(2:升序；3降序)
+	 * 面积排序
 	 */
-
-	private Integer totalPriceSort;
+	private Integer areaOrder;
+	
+	/**
+	 * 单价排序
+	 */
+	private Integer unitPriceOrder;
+	
+	/**
+	 * 总价排序
+	 */
+	private Integer totalPriceOrder;
+	
 	/**
 	 * 房源特色id集合
 	 */
