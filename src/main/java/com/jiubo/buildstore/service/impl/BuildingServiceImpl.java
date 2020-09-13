@@ -85,6 +85,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private BusinessDistrictDao businessDistrictDao;
+
+    @Autowired
+    private CounselorDao counselorDao;
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -264,18 +267,18 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 // 特色
-                if (null != charaRefMap) {
-
-                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
-                    if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
-                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
-                        bean.setCharaNameList(charaRefList);
-                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
-                        if (!CollectionsUtils.isEmpty(charaRefList)) {
-                            bean.setChaName(StringUtils.join(charaRefList, "、"));
-                        }
-                    }
-                }
+//                if (null != charaRefMap) {
+//
+//                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+//                    if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
+//                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+//                        bean.setCharaNameList(charaRefList);
+//                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+//                        if (!CollectionsUtils.isEmpty(charaRefList)) {
+//                            bean.setChaName(StringUtils.join(charaRefList, "、"));
+//                        }
+//                    }
+//                }
 
 
                 // 图片名字 路径
@@ -546,6 +549,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     build.setBuName(list.get(0).getBuName());
                 }
             }
+            CounselorBean cou = counselorDao.getCouById(build.getCouId());
+            build.setCounselorBean(cou);
         }
         return build;
     }
@@ -745,11 +750,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null != charaRefMap && null != bean.getBuildId()) {
 
             List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
-            if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
-                List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
-                bean.setCharaNameList(charaRefList);
-                bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
-            }
+//            if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
+//                List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+//                bean.setCharaNameList(charaRefList);
+//                bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+//            }
         }
     }
 
@@ -769,7 +774,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
             List<BuildingImgBean> buildingImgBeans = headImgMap.get(bean.getBuildId());
             if (null != buildingImgBeans && buildingImgBeans.size() > 0) {
-                bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(buildingImgBeans.get(0).getImgPath()));
+               // bean.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(buildingImgBeans.get(0).getImgPath()));
             }
         }
     }
@@ -841,7 +846,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<BuildingImgBean> imgBeans = listMap.get(buildingBean1.getBuildId());
                 // 设置头图名字、路径
                 if (!CollectionsUtils.isEmpty(imgBeans)) {
-                    buildingBean1.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
+                  //  buildingBean1.setImgPath(ImgPathConstant.INTERFACE_PATH.concat(imgBeans.get(0).getImgPath()));
                 }
             }
 
@@ -853,12 +858,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (buildingBean1.getPopularity() != null) {
                     labelList.add("人气");
                 }
-                if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
-                    buildingBean1.setLabel("热搜");
-                } else {
-                    buildingBean1.setLabel("人气");
-                }
-                buildingBean1.setLabelList(labelList);
+//                if (buildingBean1.getHotSearch() > buildingBean1.getPopularity()) {
+//                    buildingBean1.setLabel("热搜");
+//                } else {
+//                    buildingBean1.setLabel("人气");
+//                }
+//                buildingBean1.setLabelList(labelList);
             }
         }
     }
@@ -1098,11 +1103,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
 
             // 特色标签
-            List<CharaRefBean> charaByBuildId = charaRefDao.getCharaByBuildId(buildReturn.getBuildId());
-            if (!CollectionsUtils.isEmpty(charaByBuildId)) {
-                List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
-                buildReturn.setCharaNameList(collect);
-            }
+//            List<CharaRefBean> charaByBuildId = charaRefDao.getCharaByBuildId(buildReturn.getBuildId());
+//            if (!CollectionsUtils.isEmpty(charaByBuildId)) {
+//                List<String> collect = charaByBuildId.stream().map(CharaRefBean::getHouseName).collect(toList());
+//                buildReturn.setCharaNameList(collect);
+//            }
 
             List<Integer> buildIdList = new ArrayList<>();
             buildIdList.add(buildReturn.getBuildId());

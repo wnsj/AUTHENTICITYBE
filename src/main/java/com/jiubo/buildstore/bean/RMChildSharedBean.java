@@ -13,13 +13,14 @@ public class RMChildSharedBean extends RoomMainBean {
     /**
      * 商圈名
      */
-    @TableField(exist = false)
+
     private String buName;
     /**
      * 区域名
      */
-    @TableField(exist = false)
+
     private String ldName;
-    private List<AloneRoomBean> aloneRoomBeanList;
-    private List<OpenRoomBean> openRoomBeanList;
+    private ShareRoomBean shareRoomBean;
+    private List<OfficeBean> officeBeanList;
+    private List<String> pictureList;
 }

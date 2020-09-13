@@ -1,5 +1,4 @@
 package com.jiubo.buildstore.service.impl;
-
 import com.jiubo.buildstore.bean.AreaBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.CounselorBean;
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	
 
 	@Autowired
-	private AloneRoomDao aloneRoomDao;
+	private OfficeDao officeDao;
 
 	@Autowired
 	private OpenRoomDao openRoomDao;
@@ -73,6 +74,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Autowired
 	private StoreRoomDao storeRoomDao;
 	
+	private ShareRoomDao shareRoomDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -105,13 +107,39 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	public RMChildSharedBean getSharedById(Integer id) {
 		RMChildSharedBean roomMainBean = roomMainDao.getSharedById(id);
 		if (null != roomMainBean) {
-			List<AloneRoomBean> aloneRoomBeans = aloneRoomDao.getAloneRoomByRoomId(roomMainBean.getId());
-			List<OpenRoomBean> openRoomBeans = openRoomDao.getOpenRoomByRoomId(roomMainBean.getId());
-			roomMainBean.setAloneRoomBeanList(aloneRoomBeans);
-			roomMainBean.setOpenRoomBeanList(openRoomBeans);
+			//办公室信息
+			QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
+			qwP.select("*");
+			qwP.eq("room_id", roomMainBean.getId());
+			List<OfficeBean> officeBeanList = officeDao.selectList(qwP);
+			// 网点信息
+			ShareRoomBean shareRoomBean = shareRoomDao.getShareRoomByRoomId(roomMainBean.getId());
+			if (null != shareRoomBean) {
+				String chaList = shareRoomBean.getChaList();
+				if (StringUtils.isNotBlank(chaList)) {
+					String[] split = chaList.split("\\|");
+					ArrayList< String> arrayList = new ArrayList<String>(split.length);
+					Collections.addAll(arrayList, split);
+					shareRoomBean.setChList(arrayList);
+				}
+			}
+			// 图片路径
+			QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
+			qw.select("*");
+			qw.eq("IT_ID", 2);
+			qw.eq("TYPE", 2);
+			qw.eq("INFO_ID", roomMainBean.getId());
+			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qw);
+			if (!CollectionsUtils.isEmpty(pictureList)) {
+				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+				roomMainBean.setPictureList(list);
+			}
+			roomMainBean.setOfficeBeanList(officeBeanList);
+			// 网点信息
+			roomMainBean.setShareRoomBean(shareRoomBean);
 			return roomMainBean;
 		}
-		return roomMainBean;
+		return null;
 	}
 
 

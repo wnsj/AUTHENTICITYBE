@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 开放工位表 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author swd
- * @since 2020-09-12
+ * @since 2020-09-13
  */
 @RestController
-@RequestMapping("/openRoomBean")
-public class OpenRoomController {
+@RequestMapping("/officeBean")
+public class OfficeController {
 
 }
