@@ -27,9 +27,7 @@ public interface RoomMainService extends IService<RoomMainBean> {
 	public Map<String, Object> getRoomDetails(Integer roomMainId);
 
 	RMChildSharedBean getSharedById(Integer id);
-<<<<<<< HEAD
+
 
 	public Map<String, Object> getStoneDetail(Integer roomMainId);
-=======
->>>>>>> 0185a531018dd34189816caacb1c4148cb557afd
 }

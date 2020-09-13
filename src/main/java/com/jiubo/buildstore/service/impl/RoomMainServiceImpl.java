@@ -64,16 +64,13 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 	@Autowired
 	private OfficeDao officeDao;
-
-	@Autowired
-	private OpenRoomDao openRoomDao;
 	
 	@Autowired
 	private RoomDao roomDao;
 	
 	@Autowired
 	private StoreRoomDao storeRoomDao;
-	
+	@Autowired
 	private ShareRoomDao shareRoomDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
