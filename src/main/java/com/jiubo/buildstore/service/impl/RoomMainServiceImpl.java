@@ -1,6 +1,4 @@
 package com.jiubo.buildstore.service.impl;
-
-<<<<<<< HEAD
 import com.jiubo.buildstore.bean.AreaBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BuildingTypeBean;
@@ -18,10 +16,8 @@ import com.jiubo.buildstore.dao.CounselorDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.dao.UnitPriceTypeDao;
-=======
 import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.dao.*;
->>>>>>> 19cb3e55f22e33f6b08fbae4ed5cbd5130dcf972
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,10 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,22 +54,18 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	
 	@Autowired
 	private TotlePriceTypeDao totlePriceTypeDao;
-<<<<<<< HEAD
-	
+
 	@Autowired
 	private CounselorDao counselorDao;
 	
 	@Autowired
 	private BuildingImgDao buildingImgDao;
-	
-=======
 
 	@Autowired
-	private AloneRoomDao aloneRoomDao;
+	private OfficeDao officeDao;
 
 	@Autowired
-	private OpenRoomDao openRoomDao;
->>>>>>> 19cb3e55f22e33f6b08fbae4ed5cbd5130dcf972
+	private ShareRoomDao shareRoomDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -109,13 +98,25 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	public RMChildSharedBean getSharedById(Integer id) {
 		RMChildSharedBean roomMainBean = roomMainDao.getSharedById(id);
 		if (null != roomMainBean) {
-			List<AloneRoomBean> aloneRoomBeans = aloneRoomDao.getAloneRoomByRoomId(roomMainBean.getId());
-			List<OpenRoomBean> openRoomBeans = openRoomDao.getOpenRoomByRoomId(roomMainBean.getId());
-			roomMainBean.setAloneRoomBeanList(aloneRoomBeans);
-			roomMainBean.setOpenRoomBeanList(openRoomBeans);
+			QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
+			qwP.select("*");
+			qwP.eq("room_id", roomMainBean.getId());
+			List<OfficeBean> officeBeanList = officeDao.selectList(qwP);
+			ShareRoomBean shareRoomBean = shareRoomDao.getShareRoomByRoomId(roomMainBean.getId());
+			if (null != shareRoomBean) {
+				String chaList = shareRoomBean.getChaList();
+				if (StringUtils.isNotBlank(chaList)) {
+					String[] split = chaList.split("\\|");
+					ArrayList< String> arrayList = new ArrayList<String>(split.length);
+					Collections.addAll(arrayList, split);
+					shareRoomBean.setChList(arrayList);
+				}
+			}
+			roomMainBean.setOfficeBeanList(officeBeanList);
+			roomMainBean.setShareRoomBean(shareRoomBean);
 			return roomMainBean;
 		}
-		return roomMainBean;
+		return null;
 	}
 
 

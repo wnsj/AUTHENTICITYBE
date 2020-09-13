@@ -1,10 +1,14 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -49,7 +53,11 @@ public class ShareRoomBean implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
-
+    /**
+     * 特点集合
+     */
+    @TableField(exist = false)
+    private List<String> chList;
 }

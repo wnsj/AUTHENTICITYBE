@@ -28,22 +28,11 @@ public class BuildReturn extends BuildingBean {
      */
     private String chaName;
 
-    private List<String> charaNameList;
 
     /**
      * 商圈名
      */
     private String buName;
-
-    /**
-     * 房源特色id集合
-     */
-    private List<Integer> chaIdList;
-
-    /**
-     * 头图路径
-     */
-    private String imgPath;
 
 
     /**
@@ -55,16 +44,10 @@ public class BuildReturn extends BuildingBean {
      * 图片路径
      */
     private List<String> picturePath;
-    /**
-     * 标签名（随意选的）
-     */
-    private String label;
-    /**
-     * 标签集合
-     */
-    private List<String> labelList;
 
-
+    /**
+     * 区域名
+     */
     private String ldName;
 
 
@@ -79,6 +62,11 @@ public class BuildReturn extends BuildingBean {
      */
 
     private String pageSize;
+
+    /**
+     * 咨询顾问
+     */
+    private CounselorBean counselorBean;
 
 
 }
