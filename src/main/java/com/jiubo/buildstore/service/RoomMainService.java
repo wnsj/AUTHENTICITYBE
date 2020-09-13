@@ -23,11 +23,10 @@ import org.apache.ibatis.annotations.Param;
 public interface RoomMainService extends IService<RoomMainBean> {
 
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive);
-<<<<<<< HEAD
 
-	public Map<String, Object> getRoomDetails(Integer roomId);
+	public Map<String, Object> getRoomDetails(Integer roomMainId);
 
-=======
 	RMChildSharedBean getSharedById(Integer id);
->>>>>>> 19cb3e55f22e33f6b08fbae4ed5cbd5130dcf972
+
+	public Map<String, Object> getStoneDetail(Integer roomMainId);
 }

@@ -1,27 +1,20 @@
 package com.jiubo.buildstore.service.impl;
 
-<<<<<<< HEAD
 import com.jiubo.buildstore.bean.AreaBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
-import com.jiubo.buildstore.bean.BuildingTypeBean;
 import com.jiubo.buildstore.bean.CounselorBean;
-import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
-import com.jiubo.buildstore.bean.RoomReturn;
 import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
 import com.jiubo.buildstore.dao.AreaDao;
 import com.jiubo.buildstore.dao.BuildingImgDao;
-import com.jiubo.buildstore.dao.BuildingTypeDao;
 import com.jiubo.buildstore.dao.CounselorDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.dao.UnitPriceTypeDao;
-=======
 import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.dao.*;
->>>>>>> 19cb3e55f22e33f6b08fbae4ed5cbd5130dcf972
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -33,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +53,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	
 	@Autowired
 	private TotlePriceTypeDao totlePriceTypeDao;
-<<<<<<< HEAD
 	
 	@Autowired
 	private CounselorDao counselorDao;
@@ -69,14 +60,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Autowired
 	private BuildingImgDao buildingImgDao;
 	
-=======
 
 	@Autowired
 	private AloneRoomDao aloneRoomDao;
 
 	@Autowired
 	private OpenRoomDao openRoomDao;
->>>>>>> 19cb3e55f22e33f6b08fbae4ed5cbd5130dcf972
+	
+	@Autowired
+	private RoomDao roomDao;
+	
+	@Autowired
+	private StoreRoomDao storeRoomDao;
+	
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -174,6 +170,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public Map<String, Object> getRoomDetails(Integer roomMainId) {
 		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
+		QueryWrapper<RoomBean> qwRoom = new QueryWrapper<RoomBean>();
+		qwRoom.select("*");
+		qwRoom.eq("room_id", roomMainId);
+		RoomBean roomBean = roomDao.selectOne(qwRoom);
 		CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
 		QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
 		queryWrapper.select("*");
@@ -192,6 +192,41 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
 		
 		Map<String, Object> result = new  HashMap<String, Object>();
+		result.put("roomDetail", roomBean);
+		result.put("roomDetail", mainBean);
+		result.put("counselor", counselorBean);
+		result.put("allCounselor", list);
+		result.put("picture", pictureList);
+		result.put("video", videoList);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getStoneDetail(Integer roomMainId) {
+		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
+		QueryWrapper<StoreRoomBean> stRoom = new QueryWrapper<StoreRoomBean>();
+		stRoom.select("*");
+		stRoom.eq("room_id", roomMainId);
+		StoreRoomBean storeRoomBean = storeRoomDao.selectOne(stRoom);
+		CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
+		QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
+		queryWrapper.select("*");
+		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
+		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
+		qwP.select("*");
+		qwP.eq("IT_ID", 2);
+		qwP.eq("TYPE", 2);
+		qwP.eq("INFO_ID", roomMainId);
+		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
+		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
+		qwV.select("*");
+		qwV.eq("IT_ID", 3);
+		qwV.eq("TYPE", 2);
+		qwV.eq("INFO_ID", roomMainId);
+		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
+		
+		Map<String, Object> result = new  HashMap<String, Object>();
+		result.put("stRoomDetail", storeRoomBean);
 		result.put("roomDetail", mainBean);
 		result.put("counselor", counselorBean);
 		result.put("allCounselor", list);

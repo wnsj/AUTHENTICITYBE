@@ -42,11 +42,11 @@ public class RoomMainController {
 	
 	@ApiOperation(value = "查询房源详情", notes = "查询房源详情")
 	@GetMapping("/getRoomDetails")
-	public JSONObject getRoomDetails(Integer roomId) {
+	public JSONObject getRoomDetails(Integer roomMainId) {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,roomMainService.getRoomDetails(roomId));
+        jsonObject.put(Constant.Result.RETDATA,roomMainService.getRoomDetails(roomMainId));
         return jsonObject;
 	}
 	
@@ -58,6 +58,16 @@ public class RoomMainController {
 		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
 		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 		jsonObject.put(Constant.Result.RETDATA,roomMainService.getSharedById(roomMainBean.getId()));
+		return jsonObject;
+	}
+	
+	@ApiOperation(value = "查询商铺详情", notes = "查询商铺详情")
+	@PostMapping("/getStoneDetail")
+	public JSONObject getStoneDetail(Integer roomMainId) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+		jsonObject.put(Constant.Result.RETDATA,roomMainService.getStoneDetail(roomMainId));
 		return jsonObject;
 	}
 
