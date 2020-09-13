@@ -70,7 +70,8 @@ public class BuildingDynamicBean implements Serializable {
      */
     @TableField(exist = false)
     private String pageOrder;
-
+    @TableField(exist = false)
+    private String mtName;
     /**
      * 图片路径
      */

@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
@@ -144,5 +145,18 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     @Override
     public List<BuildingDynamicBean> getNewestDy() {
         return buildingDynamicDao.getNewestDy();
+    }
+
+    @Override
+    public JSONObject getDynamicByBuildId() {
+        JSONObject jsonObject = new JSONObject();
+        // 行业新闻
+        List<BuildingDynamicBean> dynamicByBuildId = buildingDynamicDao.getDynamicByBuildId(1);
+        // 找房攻略
+        List<BuildingDynamicBean> dynamicByBuildId1 = buildingDynamicDao.getDynamicByBuildId(7);
+
+        jsonObject.put("industry",dynamicByBuildId);
+        jsonObject.put("strategy",dynamicByBuildId1);
+        return jsonObject;
     }
 }
