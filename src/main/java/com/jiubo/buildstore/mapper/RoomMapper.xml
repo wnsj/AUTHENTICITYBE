@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.RoomDao">
-		
-		<!--条件查询-->
+
+    <!--条件查询-->
     <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomBean">
         SELECT *
         from room_main
 
         <where>
             1=1
-			 /*是否查询楼盘对应的房源*/
-			 <if test="receive.buildId != null and receive.buildId != ''">
+            /*是否查询楼盘对应的房源*/
+            <if test="receive.buildId != null and receive.buildId != ''">
                 and build_id = #{receive.buildId}
             </if>
-             /*是否是热门*/
+            /*是否是热门*/
             <if test="receive.isHot != null and receive.isHot != ''">
                 and is_hot = #{receive.isHot}
             </if>
@@ -41,9 +41,9 @@
                         #{item.maxArea} > build_area
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
-                        build_area >= #{item.minArea} and  #{item.maxArea} >= build_area
-                         <!-- or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
-                         or #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea} -->
+                        build_area >= #{item.minArea} and #{item.maxArea} >= build_area
+                        <!-- or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
+                        or #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea} -->
                     </if>
                 </foreach>
             </if>
@@ -58,8 +58,8 @@
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
                         MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE
-                         or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
-                        or #{item.minTitlePrice} >= MIN_TITLE_PRICE  and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
+                        or MAX_TITLE_PRICE >=#{item.minTitlePrice} and #{item.maxTitlePrice} >= MAX_TITLE_PRICE
+                        or #{item.minTitlePrice} >= MIN_TITLE_PRICE and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
                     </if>
                 </foreach>
             </if>
