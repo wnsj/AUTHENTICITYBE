@@ -1,13 +1,10 @@
 package com.jiubo.buildstore.service;
 
+import com.github.pagehelper.PageInfo;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 
-import java.util.List;
-
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.github.pagehelper.PageInfo;
 
 /**
  * <p>
