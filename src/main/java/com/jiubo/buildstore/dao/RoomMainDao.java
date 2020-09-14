@@ -23,4 +23,6 @@ public interface RoomMainDao extends BaseMapper<RoomMainBean> {
 	List<RoomMainBean> getAllRoomBypage(@Param("receive") RoomReceive receive);
 
 	RMChildSharedBean getSharedById(@Param("id") Integer id);
+
+	List<RoomMainBean> getRoomByBuildIdList(List<Integer> buildIdList);
 }

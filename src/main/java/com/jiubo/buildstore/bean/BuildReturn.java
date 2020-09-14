@@ -68,5 +68,9 @@ public class BuildReturn extends BuildingBean {
      */
     private CounselorBean counselorBean;
 
+    private List<String> charaNameList;
 
+    private List<Integer> ChaIdList;
+
+    private List<RoomMainBean> roomMainBeanList;
 }

@@ -135,4 +135,12 @@
         LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
          where T.id = #{id}
     </select>
+
+    <select id="getRoomByBuildIdList" resultType="com.jiubo.buildstore.bean.RoomMainBean">
+        select build_id,build_area,id from room_main where
+        build_id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
 </mapper>
