@@ -42,10 +42,11 @@ public class CounselorBean implements Serializable {
 
     private String charaName;
 
-    private String couLabel;
-
+  
+    @TableField(exist = false)
     private List<Integer> labelList;
-
+    
+    @TableField(exist = false)
     private String picPath;
     /**
      * 页码
@@ -60,8 +61,9 @@ public class CounselorBean implements Serializable {
     private String pageSize;
 
     private String pictureName;
-
+    
     private String picturePath;
-
+    
+    @TableField(exist = false)
     private String flag;
 }

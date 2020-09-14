@@ -62,7 +62,7 @@ public class RoomMainController {
 	}
 	
 	@ApiOperation(value = "查询商铺详情", notes = "查询商铺详情")
-	@PostMapping("/getStoneDetail")
+	@GetMapping("/getStoneDetail")
 	public JSONObject getStoneDetail(Integer roomMainId) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

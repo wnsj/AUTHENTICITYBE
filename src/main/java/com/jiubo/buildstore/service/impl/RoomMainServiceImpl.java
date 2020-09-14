@@ -132,16 +132,22 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (!CollectionsUtils.isEmpty(allRoomBypage)) {
 
 			// 遍历实体 翻译各个类型字段
-//			for (RoomMainBean bean : allRoomBypage) {
-//
-//				// 是否是热销标签
-//				if (bean.getIsHot() != null) {
-//					bean.setIsHot(2);
-//				} else {
-//					bean.setIsHot(3);
-//				}
-//
-//			}
+			for (RoomMainBean bean : allRoomBypage) {
+
+				// 查询区域名称
+				System.out.println("bean.getId"+bean.getLdId());
+				if(bean.getLdId() != null) {
+					bean.setLdName(locationDistinguishDao.selectById(bean.getLdId()).getLdName());
+				}
+				// 查询楼盘名称
+				if(bean.getBuildId() != null) {
+					bean.setBuildName(buildingDao.selectById(bean.getBuildId()).getHtName());
+				}
+				// 查询商圈名称
+				if(bean.getBusinessId() != null) {
+					bean.setBussinessName(businessDistrictDao.selectById(bean.getBusinessId()).getBuName());
+				}
+			}
 		}
 		PageInfo<RoomMainBean> page = new PageInfo<RoomMainBean>(allRoomBypage);
 		return page;
@@ -265,11 +271,14 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		
 		Map<String, Object> result = new  HashMap<String, Object>();
 		result.put("roomDetail", roomBean);
-		result.put("roomDetail", mainBean);
+		result.put("roomMainDetail", mainBean);
 		result.put("counselor", counselorBean);
 		result.put("allCounselor", list);
 		result.put("picture", pictureList);
 		result.put("video", videoList);
+		result.put("ldName", locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
+		result.put("buildName", buildingDao.selectById(mainBean.getBuildId()).getHtName());
+		result.put("businessName", businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
 		return result;
 	}
 

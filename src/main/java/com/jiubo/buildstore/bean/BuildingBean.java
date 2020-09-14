@@ -154,10 +154,7 @@ public class BuildingBean implements Serializable {
      */
     private String latitude;
 
-    /**
-     * 区域id
-     */
-    private Integer regionId;
+
 
     /**
      * 排序权重
