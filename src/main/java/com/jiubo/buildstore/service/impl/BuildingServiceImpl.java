@@ -88,6 +88,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private CounselorDao counselorDao;
+
+    @Autowired
+    private RoomMainDao roomMainDao;
+
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -130,6 +134,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 区域
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
 
+            // 房源面积集合
+            List<RoomMainBean> roomByBuildIdList = roomMainDao.getRoomByBuildIdList(list);
+            Map<Integer, List<RoomMainBean>> areaMap = null;
+            if (!CollectionsUtils.isEmpty(roomByBuildIdList)) {
+                areaMap = roomByBuildIdList.stream().collect(Collectors.groupingBy(RoomMainBean::getBuildId));
+            }
+            //图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
             buildingImgBean.setBIdList(list);
             buildingImgBean.setType(3);
@@ -156,7 +167,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         BuildingImgBean imgBean = imgBeans.get(0);
                         bean.setVideoPath(imgBean.getImgPath());
                     }
-
                 }
 
                 // 图片
@@ -170,7 +180,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 // 区域
                 if (null != listMap) {
-                    List<LocationDistinguishBean> beans = listMap.get(bean.getBuildId());
+                    List<LocationDistinguishBean> beans = listMap.get(bean.getLdId());
                     if (!CollectionsUtils.isEmpty(beans)) {
                         bean.setLdName(beans.get(0).getLdName());
                     }
@@ -204,6 +214,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         }
                     }
                 }
+                // 面积
+                List<RoomMainBean> mainBeans = null;
+                if (null != areaMap) {
+                    mainBeans = areaMap.get(bean.getBuildId());
+                }
+                bean.setRoomMainBeanList(mainBeans);
             }
         }
         return page.setRecords(allBulidBypage);
