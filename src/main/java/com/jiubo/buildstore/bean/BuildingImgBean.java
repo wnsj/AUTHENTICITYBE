@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -59,11 +60,13 @@ public class BuildingImgBean implements Serializable {
     /**
      * 楼盘id集合
      */
+    @TableField(exist = false)
     private List<Integer> bIdList;
 
     /**
      * 评论id 集合
      */
+    @TableField(exist = false)
     private List<Integer> coucIdList;
     /**
      * 户型分析id

@@ -405,7 +405,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             this.saveFile(buildingBean, buildRealImg, "picture", listMap.get(ImgTypeConstant.picture).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
-
+        buildingDao.updateById(buildingBean);
         return buildingBean;
     }
 
@@ -960,7 +960,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private void saveFile(BuildingBean buildingBean, MultipartFile[] file, String type, Integer typeId) throws Exception {
         if (file != null) {
 
-            int i = 1;
+            int i = 0;
             for (MultipartFile multipartFile : file) {
                 i++;
                 BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -1016,7 +1016,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 buildingImgBean.setItId(typeId);
                 buildingImgBean.setImgPath(path);
                 buildingImgBean.setType(ImgTypeConstant.BUILD);
-                buildingImgDao.addImg(buildingImgBean);
+                buildingImgDao.insert(buildingImgBean);
             }
         }
     }
