@@ -177,7 +177,7 @@ public class RoomMainBean implements Serializable {
     /**
      * 转让费
      */
-    private String transferFee;
+    private BigDecimal transferFee;
     
     /**
      * 区域名称
@@ -197,4 +197,13 @@ public class RoomMainBean implements Serializable {
     @TableField(exist = false)
     private String bussinessName;
 
+    /**
+     *支付方式
+     */
+    private String payType;
+
+    /**
+     * 是否在租
+     */
+    private Integer isRent;
 }

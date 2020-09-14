@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author swd
- * @since 2020-09-13
+ * @since 2020-09-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,6 +36,11 @@ public class OfficeBean implements Serializable {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+
+    /**
+     * 房源id
+     */
+    private Integer roomId;
 
     /**
      * 头图
@@ -73,21 +78,6 @@ public class OfficeBean implements Serializable {
     private BigDecimal area;
 
     /**
-     * 是否可注册(1:是;2:否)
-     */
-    private Integer isRegister;
-
-    /**
-     * 免租时间
-     */
-    private String freeRentTime;
-
-    /**
-     * 看房时间
-     */
-    private String watchHouseTime;
-
-    /**
      * 是否靠墙(1:是;2:否)
      */
     private Integer isWall;
@@ -107,7 +97,6 @@ public class OfficeBean implements Serializable {
      */
     private Date modifyDate;
 
-    private Integer roomId;
     @TableField(exist = false)
     private List<String> picList;
 }
