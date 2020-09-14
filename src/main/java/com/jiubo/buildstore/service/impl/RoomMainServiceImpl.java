@@ -88,19 +88,41 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			wrapperLd.like("LD_NAME", receive.getNameLike());
 			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
 			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
+			if(receive.getLdIdList() == null) {
+				List<Integer> ldIdList = new ArrayList<Integer>();
+				receive.setLdIdList(ldIdList);
+			}
 			receive.getLdIdList().addAll(ldList);
 			QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
 			wrapperBd.select("*");
 			wrapperBd.like("bu_name", receive.getNameLike());
 			List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
 			List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
+			if(receive.getBdIdList() == null) {
+				List<Integer> bdIdList = new ArrayList<Integer>();
+				receive.setBdIdList(bdIdList);
+			}
 			receive.getBdIdList().addAll(bdList);
 			QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
 			wrapperb.select("*");
 			wrapperb.like("HT_NAME", receive.getNameLike());
 			List<BuildingBean> b = buildingDao.selectList(wrapperb);
 			List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
+			if(receive.getBuildIdList() == null) {
+				List<Integer> bIdList = new ArrayList<Integer>();
+				receive.setBuildIdList(bIdList);
+			}
 			receive.getBuildIdList().addAll(bList);
+		}
+		
+		//如果商铺业态不为null
+		if(!StringUtils.isBlank(receive.getCaId())) {
+			String[] strs = receive.getCaId().split(",");
+			for (int i = 0; i < strs.length; i++) {
+				List<Integer> caIdList = new ArrayList<Integer>();
+				receive.setCaIdList(caIdList);
+				receive.getCaIdList().add(Integer.valueOf(strs[i]));
+			}
 		}
 		
 		// 房源数据
