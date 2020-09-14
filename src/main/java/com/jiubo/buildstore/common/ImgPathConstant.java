@@ -26,4 +26,5 @@ public  class ImgPathConstant {
      * 楼盘移动端介绍 图文图片
      */
     public static final String MOBILE_INTRODUCE = "/mobileIntroduce";
+
 }
