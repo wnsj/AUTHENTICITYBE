@@ -116,6 +116,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
             }
 
+            //获取所有特色
+            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
+            Map<Integer, List<CharaRefBean>> charaRefMap = null;
+            if (!CollectionsUtils.isEmpty(chaRefByBidList)) {
+                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
+            }
+
             // 商圈
             Map<Integer, List<BusinessDistrictBean>> buMap = getBuMap();
 
@@ -184,6 +191,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                 }
 
+                // 特色
+                if (null != charaRefMap) {
+
+                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+                    if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
+                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+                        bean.setCharaNameList(charaRefList);
+                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                        if (!CollectionsUtils.isEmpty(charaRefList)) {
+                            bean.setChaName(StringUtils.join(charaRefList, "、"));
+                        }
+                    }
+                }
             }
         }
         return page.setRecords(allBulidBypage);
@@ -622,8 +642,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public List<BuildReturn> getSellWell() {
 
+        //        getHeadImg(sellWell, 2);
         List<BuildReturn> sellWell = buildingDao.getSellWell();
-        getHeadImg(sellWell, 2);
+        addLdAndBu(sellWell);
         return sellWell;
     }
 
@@ -649,6 +670,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildReturn> getRecommend() {
 
         List<BuildReturn> returnList = buildingDao.getRecommend();
+        addLdAndBu(returnList);
+        return returnList;
+    }
+
+    private void addLdAndBu(List<BuildReturn> returnList) {
         if (!CollectionsUtils.isEmpty(returnList)) {
             // 获取所有位置
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
@@ -670,7 +696,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
             }
         }
-        return returnList;
     }
 
     @Override
