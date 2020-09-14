@@ -45,12 +45,16 @@ public class EntrustRentServiceImpl extends ServiceImpl<EntrustRentDao, EntrustR
 	}
 
 	@Override
-	public Integer updateEntrustRent(Integer enId, Integer isConcat, String remark) {
-		QueryWrapper<EntrustRentBean> wrapper = new QueryWrapper<EntrustRentBean>();
+	public Integer updateEntrustRent(Integer enId, Integer isContact, String remark) {
 		EntrustRentBean entity = entrustRentDao.selectById(enId);
-		wrapper.eq("IS_CONTACT", isConcat);
-		wrapper.eq("REMARK", remark);
-		return entrustRentDao.update(entity, wrapper);
+		if(!StringUtils.isBlank(remark)) {
+			entity.setRemark(remark);
+		}
+		if(isContact != null) {
+			entity.setIsContact(isContact);
+		}
+		
+		return entrustRentDao.updateById(entity);
 	}
 
 }

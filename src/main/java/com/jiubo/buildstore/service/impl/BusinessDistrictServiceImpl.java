@@ -3,13 +3,18 @@ package com.jiubo.buildstore.service.impl;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
+import com.jiubo.buildstore.util.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -22,7 +27,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao, BusinessDistrictBean>
 		implements BusinessDistrictService {
-
+	
+	@Value("${buildStoreDir}")
+    private String buildStoreDir;
+	
 	@Autowired
 	private BusinessDistrictDao businessDistrictDao;
 
@@ -45,6 +53,24 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		queryWrapper.eq("is_hot", 2);
 		List<BusinessDistrictBean> list = businessDistrictDao.selectList(queryWrapper);
 		return list;
+	}
+
+	@Override
+	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
+		bean.setCreateDate(new Date());
+		bean.setModifyTime(new Date());
+		String path = FileUtil.uploadFile(file,buildStoreDir);
+		bean.setBuPath(path);
+		return businessDistrictDao.insert(bean);
+	}
+
+	@Override
+	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
+		String path = FileUtil.uploadFile(file,buildStoreDir);
+		FileUtil.delFile(bean.getBuPath());
+		bean.setBuPath(path);
+		bean.setModifyTime(new Date());
+		return businessDistrictDao.updateById(bean);
 	}
 
 }

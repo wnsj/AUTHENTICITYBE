@@ -1,6 +1,8 @@
 package com.jiubo.buildstore.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -32,6 +34,7 @@ public class EntrustRentBean implements Serializable {
      * 序列号
      */
     @ApiModelProperty(required = false, value = "序列号")
+    @TableId(value = "EN_ID", type = IdType.AUTO)
     private Integer enId;
 
     /**
