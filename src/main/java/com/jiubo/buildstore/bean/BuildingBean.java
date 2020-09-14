@@ -154,7 +154,6 @@ public class BuildingBean implements Serializable {
      */
     private String latitude;
 
-
     /**
      * 排序权重
      */

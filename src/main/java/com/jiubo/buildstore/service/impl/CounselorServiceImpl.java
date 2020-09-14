@@ -82,7 +82,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
                             labelList.add(couRefBean.getCouLabel());
                         }
                         String label = StringUtils.join(labelList, "、");
-                        counselorBean1.setCouLabel(label);
+//                        counselorBean1.setCouLabel(label);
                         counselorBean1.setLabelList(labelIdList);
                     }
                 }
