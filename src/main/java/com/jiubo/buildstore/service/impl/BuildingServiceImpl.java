@@ -422,7 +422,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             buildingBean.setCreateTime(new Date());
 
             buildingDao.insert(buildingBean);
-
+            bindCharaRef(buildingBean);
         } else {
             throw new MessageException("该楼盘已存在");
         }
@@ -495,13 +495,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public BuildingBean patchById(BuildReceive buildingBean,
                           MultipartFile[] buildRealImg,MultipartFile[] video) throws Exception {
         // 如果联系方式为空
-        if (StringUtils.isBlank(buildingBean.getTel())) {
-            buildingBean.setTel(BuildConstant.MODIFY_TEL);
-        }
+//        if (StringUtils.isBlank(buildingBean.getTel())) {
+//            buildingBean.setTel(BuildConstant.MODIFY_TEL);
+//        }
 
         // 更新楼盘数据
         buildingDao.updateById(buildingBean);
 
+        // 更新楼盘特色关系
+        List<Integer> chaIdList = buildingBean.getChaIdList();
+        if (!CollectionsUtils.isEmpty(chaIdList)) {
+            charaRefDao.deleteCharaRefByBid(buildingBean.getBuildId());
+            bindCharaRef(buildingBean);
+        }
 
         // 获取图片类型
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
@@ -929,7 +935,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //            buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
 //            deleteImg(buildingImgBean);
 //            buildingImgDao.deleteByImgName(buildingImgBean);
-            this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.picture).get(0).getItId());
+            this.saveFile(buildingBean, buildRealImg, "picture", listMap.get(ImgTypeConstant.picture).get(0).getItId());
         }
 
         if (null != video && video.length > 0) {
