@@ -44,6 +44,18 @@
                     #{btId}
                 </foreach>
             </if>
+            /*商铺类别*/
+            <if test="receive.stId != null and receive.stId != ''">
+                and st_id = #{receive.stId}
+            </if>
+            /*商铺业态*/
+            <if test="receive.caIdList != null and receive.caIdList.size() > 0">
+            	and
+            	<foreach collection="receive.caIdList" open="(" close=")" separator="," item="caId">
+                   ca_id like concat("%",#{caId},"%")
+                </foreach>
+                
+            </if>
             <if test="receive.areaList != null and receive.areaList.size() > 0">
                 and
                 <foreach collection="receive.areaList" open="(" close=")" separator="or" item="item">
