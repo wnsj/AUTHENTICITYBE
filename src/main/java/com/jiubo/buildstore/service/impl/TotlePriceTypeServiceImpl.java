@@ -4,6 +4,7 @@ import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.service.TotlePriceTypeService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,10 @@ public class TotlePriceTypeServiceImpl extends ServiceImpl<TotlePriceTypeDao, To
 
 
     @Override
-    public List<TotlePriceTypeBean> getAllTotalPrice() {
-        return totlePriceTypeDao.getAllTotalPrice();
+    public List<TotlePriceTypeBean> getAllTotalPrice(Integer type) {
+    	QueryWrapper<TotlePriceTypeBean> queryWrapper = new QueryWrapper<TotlePriceTypeBean>();
+    	queryWrapper.eq("TYPE", type);
+    	
+        return totlePriceTypeDao.selectList(queryWrapper);
     }
 }

@@ -64,7 +64,7 @@ public class BuildingDynamicController {
     /**
      * 
      * 根据咨询id查询咨询详情及上一条和下一条
-     * @param buildingDynamicBean
+     * @param
      * @return
      */
     @GetMapping("/getDynamicByDyId")
@@ -93,6 +93,27 @@ public class BuildingDynamicController {
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.addDynamic(buildingDynamicBean);
+        return jsonObject;
+    }
+    @PostMapping("/getNewestDy")
+    public JSONObject getNewestDy() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getNewestDy());
+        return jsonObject;
+    }
+
+    /**
+     * 首页资讯
+     * @return
+     */
+    @PostMapping("/getDynamicByBuildId")
+    public JSONObject getDynamicByBuildId() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getDynamicByBuildId());
         return jsonObject;
     }
 }

@@ -20,4 +20,8 @@ public interface BuildingDynamicDao extends BaseMapper<BuildingDynamicBean> {
     public List<BuildingDynamicBean> getDynamicByPage(Page page, @Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
     public void patchDyById(@Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
     public void addDynamic(@Param("buildingDynamicBean") BuildingDynamicBean buildingDynamicBean);
+
+    List<BuildingDynamicBean> getNewestDy();
+
+    List<BuildingDynamicBean> getDynamicByBuildId(@Param("buildId") Integer buildId);
 }

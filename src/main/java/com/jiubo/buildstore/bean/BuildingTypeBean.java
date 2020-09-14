@@ -26,8 +26,14 @@ public class BuildingTypeBean implements Serializable {
 
     @TableId(value = "BT_ID", type = IdType.AUTO)
     private Integer btId;
-
+    
+    /**
+     * 类型名字
+     */
     private String btName;
-
-
+   
+    /**
+     * 1,写字楼，2，共享，3商铺
+     */
+    private Integer type;
 }

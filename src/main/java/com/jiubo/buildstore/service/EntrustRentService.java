@@ -1,7 +1,11 @@
 package com.jiubo.buildstore.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.EntrustRentBean;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +18,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface EntrustRentService extends IService<EntrustRentBean> {
 	
 	public void insertEntrustRent(EntrustRentBean entrustRentBean);
+
+	Page<EntrustRentBean> getEnByPage(EntrustRentBean entrustRentBean);
 
 }

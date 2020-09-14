@@ -15,5 +15,5 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface TotlePriceTypeService extends IService<TotlePriceTypeBean> {
-    public List<TotlePriceTypeBean> getAllTotalPrice();
+    public List<TotlePriceTypeBean> getAllTotalPrice(Integer type);
 }

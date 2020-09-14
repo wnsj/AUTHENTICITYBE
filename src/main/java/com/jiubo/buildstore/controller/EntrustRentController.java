@@ -42,4 +42,14 @@ public class EntrustRentController {
         entrustRentService.insertEntrustRent(entrustRentBean);
         return jsonObject;
 	}
+
+	@ApiOperation(value = "查看委托出租", notes = "查看委托出租")
+	@PostMapping("/getEnByPage")
+	public JSONObject getEnByPage(@RequestBody EntrustRentBean entrustRentBean) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+		jsonObject.put(Constant.Result.RETDATA,entrustRentService.getEnByPage(entrustRentBean));
+		return jsonObject;
+	}
 }

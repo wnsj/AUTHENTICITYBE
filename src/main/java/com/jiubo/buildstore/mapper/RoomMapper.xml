@@ -5,24 +5,18 @@
 		<!--条件查询-->
     <select id="getAllRoomBypage" resultType="com.jiubo.buildstore.bean.RoomBean">
         SELECT *
-        from room
+        from room_main
 
         <where>
             1=1
-            /*省id*/
-            <!-- <if test="receive.proIdList != null and receive.proIdList.size() > 0">
-                and PRO_ID in
-                <foreach collection="receive.proIdList" open="(" close=")" separator="," item="proId">
-                    #{proId}
-                </foreach>
-            </if> -->
-            /*是否出售*/
-            <!-- <if test="receive.isSaleList != null and receive.isSaleList.size() > 0">
-                and IS_SALE in
-                <foreach collection="receive.isSaleList" open="(" close=")" separator="," item="isSale">
-                    #{isSale}
-                </foreach>
-            </if> -->
+			 /*是否查询楼盘对应的房源*/
+			 <if test="receive.buildId != null and receive.buildId != ''">
+                and build_id = #{receive.buildId}
+            </if>
+             /*是否是热门*/
+            <if test="receive.isHot != null and receive.isHot != ''">
+                and is_hot = #{receive.isHot}
+            </if>
             /*区域*/
             <if test="receive.ldIdList != null and receive.ldIdList.size() > 0">
                 and LD_ID in
@@ -83,12 +77,6 @@
                     </if>
                 </foreach>
             </if>
-            <!-- <if test="receive.startTime != null and receive.startTime != ''">
-                and (DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ) > #{receive.startTime}
-            </if>
-            <if test="receive.endTime != null and receive.endTime != ''">
-                and #{receive.endTime} >= DATE_FORMAT(OPEN_DATE, '%Y-%m-%d' ))
-            </if> -->
             <if test="receive.regionIdList != null and receive.regionIdList.size() > 0">
                 and business_id in
                 <foreach collection="receive.regionIdList" open="(" close=")" separator="," item="regionId">
@@ -96,5 +84,9 @@
                 </foreach>
             </if>
         </where>
+        <!-- order by 
+        <if test="receive.areaSort != null and receive.areaSort != ''">
+        	        
+        </if> -->
     </select>
 </mapper>

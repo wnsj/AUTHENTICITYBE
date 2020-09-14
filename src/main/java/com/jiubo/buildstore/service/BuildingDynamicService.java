@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -27,5 +28,9 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
 
     public void addDynamic(BuildingDynamicBean buildingDynamicBean);
     
-    public Map<Integer, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
+    public Map<String, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
+
+    List<BuildingDynamicBean> getNewestDy();
+
+    JSONObject getDynamicByBuildId();
 }

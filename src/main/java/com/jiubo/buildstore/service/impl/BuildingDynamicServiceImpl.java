@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
@@ -104,8 +105,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     }
 
 	@Override
-	public Map<Integer, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId) {
-		Map<Integer, BuildingDynamicBean> result = new HashMap<Integer, BuildingDynamicBean>();
+	public Map<String, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId) {
+		Map<String, BuildingDynamicBean> result = new HashMap<String, BuildingDynamicBean>();
 		//记录此条咨询数据在list的下标
 		Integer index = null;
 		QueryWrapper<BuildingDynamicBean> queryWrapper = new QueryWrapper<BuildingDynamicBean>();
@@ -118,20 +119,44 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 				break;
 			}
 		}
-		//2代表当前查询的这条咨询信息3上一条4下一条
-		result.put(2, buildingDynamicDao.selectById(dynamicId));
+		//now代表当前查询的这条咨询信息up上一条down下一条
+		BuildingDynamicBean bd = buildingDynamicDao.selectById(dynamicId);
+		bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
+		result.put("now", bd);
 		//如果下标等于0说明为第一条数据没有上一条放null
 		if(index == 0) {
-			result.put(3, null);
+			result.put("up", null);
 		}else {
-			result.put(3, list.get(index-1));
+			bd = list.get(index-1);
+			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
+			result.put("up", bd);
 		}
 		//如果下标等于集合大小减一说明为最后一条数据没有下一条放null
 		if(index == list.size()-1) {
-			result.put(4, null);
+			result.put("down", null);
 		}else {
-			result.put(4, list.get(index+1));
+			bd = list.get(index+1);
+			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
+			result.put("down", bd);
 		}
 		return result;
 	}
+
+    @Override
+    public List<BuildingDynamicBean> getNewestDy() {
+        return buildingDynamicDao.getNewestDy();
+    }
+
+    @Override
+    public JSONObject getDynamicByBuildId() {
+        JSONObject jsonObject = new JSONObject();
+        // 行业新闻
+        List<BuildingDynamicBean> dynamicByBuildId = buildingDynamicDao.getDynamicByBuildId(1);
+        // 找房攻略
+        List<BuildingDynamicBean> dynamicByBuildId1 = buildingDynamicDao.getDynamicByBuildId(7);
+
+        jsonObject.put("industry",dynamicByBuildId);
+        jsonObject.put("strategy",dynamicByBuildId1);
+        return jsonObject;
+    }
 }

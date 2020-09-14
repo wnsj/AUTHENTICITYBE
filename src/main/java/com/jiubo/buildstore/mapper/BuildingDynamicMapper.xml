@@ -50,4 +50,14 @@
         values (#{buildingDynamicBean.bdName},#{buildingDynamicBean.bdContent},
         #{buildingDynamicBean.createDate},#{buildingDynamicBean.buildId})
     </insert>
+
+    <select id="getNewestDy" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
+        select * from building_dynamic order By BD_ID DESC limit 3
+    </select>
+
+    <select id="getDynamicByBuildId" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
+        select B.*,M.MT_NAME as mtName from building_dynamic B
+         LEFT JOIN message_type M ON B.BUILD_ID = M.MT_ID
+        where  BUILD_ID = #{buildId} order by BD_ID DESC limit 6
+    </select>
 </mapper>

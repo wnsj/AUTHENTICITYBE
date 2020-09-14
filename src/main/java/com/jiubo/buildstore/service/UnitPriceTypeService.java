@@ -14,5 +14,5 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface UnitPriceTypeService extends IService<UnitPriceTypeBean> {
-    public List<UnitPriceTypeBean> getAllUnitPrice();
+    public List<UnitPriceTypeBean> getAllUnitPrice(Integer type);
 }

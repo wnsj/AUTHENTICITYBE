@@ -34,11 +34,11 @@ public class AreaController {
      * @return
      */
     @GetMapping("/getAllArea")
-    public JSONObject getAllArea() {
+    public JSONObject getAllArea(Integer type) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,areaService.getAllArea());
+        jsonObject.put(Constant.Result.RETDATA,areaService.getAllArea(type));
         return jsonObject;
     }
 }

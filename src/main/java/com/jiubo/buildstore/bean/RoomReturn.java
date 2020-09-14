@@ -24,10 +24,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("room")
 
-public class RoomReturn extends RoomBean{
+public class RoomReturn extends RoomMainBean{
 
-	  /**
-     * 
-     */
+	
     private String btName;
 }
