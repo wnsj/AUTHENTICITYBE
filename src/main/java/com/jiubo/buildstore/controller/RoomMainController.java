@@ -32,7 +32,7 @@ public class RoomMainController {
 	
 	@ApiOperation(value = "多条件查询房源", notes = "多条件查询房源")
 	@GetMapping("/getRoomByConditions")
-	public JSONObject getHotBusinessDistrict(RoomReceive receive) {
+	public JSONObject getHotBusinessDistrict(@RequestBody RoomReceive receive) {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -62,7 +62,7 @@ public class RoomMainController {
 	}
 	
 	@ApiOperation(value = "查询商铺详情", notes = "查询商铺详情")
-	@PostMapping("/getStoneDetail")
+	@GetMapping("/getStoneDetail")
 	public JSONObject getStoneDetail(Integer roomMainId) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

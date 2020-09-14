@@ -21,6 +21,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class RoomReceive implements Serializable{
+	/**
+	 * 楼盘idlist
+	 */
 	private List<Integer> buildIdList;
 	/**
 	 * 是否在售集合(1在售；2已售)
@@ -124,6 +127,26 @@ public class RoomReceive implements Serializable{
 	 * 是否查询热门 2热门
 	 */
 	private Integer isHot;
+	
+	/**
+	 * 是否在首页用于共享办公
+	 */
+	private Integer isHome;
+	
+	/**
+	 * 商铺类别id
+	 */
+	private Integer stId;
+	
+	/**
+	 * 商铺业态
+	 */
+	private String caId;
+	
+	/**
+	 * 商铺业态
+	 */
+	private List<Integer> caIdList;
 
 	/**
 	 * 房源类型1,写字楼，2，共享，3商铺

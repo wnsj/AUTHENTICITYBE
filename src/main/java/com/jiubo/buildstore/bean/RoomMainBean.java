@@ -3,8 +3,10 @@ package com.jiubo.buildstore.bean;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -161,6 +163,38 @@ public class RoomMainBean implements Serializable {
      * 面积信息
      */
     private String areaInfo;
-
+    
+    /**
+     * 商铺类别
+     */
+    private Integer stId;
+    
+    /**
+     * 业态
+     */
+    private String caId;
+    
+    /**
+     * 转让费
+     */
+    private String transferFee;
+    
+    /**
+     * 区域名称
+     */
+    @TableField(exist = false)
+    private String ldName;
+    
+    /**
+     * 楼盘名称
+     */
+    @TableField(exist = false)
+    private String buildName;
+    
+    /**
+     * 商圈名称
+     */
+    @TableField(exist = false)
+    private String bussinessName;
 
 }

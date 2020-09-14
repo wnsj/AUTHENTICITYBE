@@ -44,6 +44,18 @@
                     #{btId}
                 </foreach>
             </if>
+            /*商铺类别*/
+            <if test="receive.stId != null and receive.stId != ''">
+                and st_id = #{receive.stId}
+            </if>
+            /*商铺业态*/
+            <if test="receive.caIdList != null and receive.caIdList.size() > 0">
+            	and
+            	<foreach collection="receive.caIdList" open="(" close=")" separator="," item="caId">
+                   ca_id like concat("%",#{caId},"%")
+                </foreach>
+                
+            </if>
             <if test="receive.areaList != null and receive.areaList.size() > 0">
                 and
                 <foreach collection="receive.areaList" open="(" close=")" separator="or" item="item">
@@ -122,5 +134,13 @@
          LEFT JOIN business_district B ON T.business_id = B.id
         LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
          where T.id = #{id}
+    </select>
+
+    <select id="getRoomByBuildIdList" resultType="com.jiubo.buildstore.bean.RoomMainBean">
+        select build_id,build_area,id from room_main where
+        build_id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
     </select>
 </mapper>

@@ -88,6 +88,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
     @Autowired
     private CounselorDao counselorDao;
+
+    @Autowired
+    private RoomMainDao roomMainDao;
+
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -116,6 +120,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
             }
 
+            //获取所有特色
+            List<CharaRefBean> chaRefByBidList = charaRefDao.getChaRefByBidList(new CharaRefBean().setBuildIdList(list));
+            Map<Integer, List<CharaRefBean>> charaRefMap = null;
+            if (!CollectionsUtils.isEmpty(chaRefByBidList)) {
+                charaRefMap = chaRefByBidList.stream().collect(Collectors.groupingBy(CharaRefBean::getBuildId));
+            }
+
             // 商圈
             Map<Integer, List<BusinessDistrictBean>> buMap = getBuMap();
 
@@ -123,6 +134,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 区域
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
 
+            // 房源面积集合
+            List<RoomMainBean> roomByBuildIdList = roomMainDao.getRoomByBuildIdList(list);
+            Map<Integer, List<RoomMainBean>> areaMap = null;
+            if (!CollectionsUtils.isEmpty(roomByBuildIdList)) {
+                areaMap = roomByBuildIdList.stream().collect(Collectors.groupingBy(RoomMainBean::getBuildId));
+            }
+            //图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
             buildingImgBean.setBIdList(list);
             buildingImgBean.setType(3);
@@ -149,7 +167,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         BuildingImgBean imgBean = imgBeans.get(0);
                         bean.setVideoPath(imgBean.getImgPath());
                     }
-
                 }
 
                 // 图片
@@ -163,7 +180,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
                 // 区域
                 if (null != listMap) {
-                    List<LocationDistinguishBean> beans = listMap.get(bean.getBuildId());
+                    List<LocationDistinguishBean> beans = listMap.get(bean.getLdId());
                     if (!CollectionsUtils.isEmpty(beans)) {
                         bean.setLdName(beans.get(0).getLdName());
                     }
@@ -184,6 +201,25 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     }
                 }
 
+                // 特色
+                if (null != charaRefMap) {
+
+                    List<CharaRefBean> charaRefBeanList = charaRefMap.get(bean.getBuildId());
+                    if (null != charaRefBeanList && charaRefBeanList.size() > 0) {
+                        List<String> charaRefList = charaRefBeanList.stream().map(CharaRefBean::getHouseName).collect(toList());
+                        bean.setCharaNameList(charaRefList);
+                        bean.setChaIdList(charaRefBeanList.stream().map(CharaRefBean::getHouseId).collect(toList()));
+                        if (!CollectionsUtils.isEmpty(charaRefList)) {
+                            bean.setChaName(StringUtils.join(charaRefList, "、"));
+                        }
+                    }
+                }
+                // 面积
+                List<RoomMainBean> mainBeans = null;
+                if (null != areaMap) {
+                    mainBeans = areaMap.get(bean.getBuildId());
+                }
+                bean.setRoomMainBeanList(mainBeans);
             }
         }
         return page.setRecords(allBulidBypage);
@@ -346,9 +382,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         BuildReturn byHtName = buildingDao.getAllByHtName(buildingBean);
 
         // 判断联系方式是否为空
-        if (StringUtils.isBlank(buildingBean.getTel())) {
-            buildingBean.setTel(BuildConstant.MODIFY_TEL);
-        }
+//        if (StringUtils.isBlank(buildingBean.getTel())) {
+//            buildingBean.setTel(BuildConstant.MODIFY_TEL);
+//        }
 
 
         if (null == byHtName) {
@@ -366,7 +402,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         if (!CollectionsUtils.isEmpty(imgTypeList)) {
             Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
-            this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+            this.saveFile(buildingBean, buildRealImg, "picture", listMap.get(ImgTypeConstant.picture).get(0).getItId());
             this.saveFile(buildingBean, video, "video", listMap.get(ImgTypeConstant.video).get(0).getItId());
         }
 
@@ -622,8 +658,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Override
     public List<BuildReturn> getSellWell() {
 
+        //        getHeadImg(sellWell, 2);
         List<BuildReturn> sellWell = buildingDao.getSellWell();
-        getHeadImg(sellWell, 2);
+        addLdAndBu(sellWell);
         return sellWell;
     }
 
@@ -649,6 +686,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildReturn> getRecommend() {
 
         List<BuildReturn> returnList = buildingDao.getRecommend();
+        addLdAndBu(returnList);
+        return returnList;
+    }
+
+    private void addLdAndBu(List<BuildReturn> returnList) {
         if (!CollectionsUtils.isEmpty(returnList)) {
             // 获取所有位置
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
@@ -670,7 +712,6 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
             }
         }
-        return returnList;
     }
 
     @Override
@@ -880,7 +921,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //            buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
 //            deleteImg(buildingImgBean);
 //            buildingImgDao.deleteByImgName(buildingImgBean);
-            this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());
+            this.saveFile(buildingBean, buildRealImg, "buildRealImg", listMap.get(ImgTypeConstant.picture).get(0).getItId());
         }
 
         if (null != video && video.length > 0) {
@@ -931,7 +972,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //                String path = directory.getCanonicalPath();
 //                System.out.println("路径a：" + path);
 //                String imgName = buildingBean.getBuildId().toString().concat(fileName);
-                File dir = new File(ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type);
+                File dir = new File(buildStoreDir + ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type);
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -966,7 +1007,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         is.close();
                 }
 
-                if (i==1&& type.equals("buildRealImg")) {
+                if (i==1 && typeId.equals(ImgTypeConstant.PICTURE)) {
                     buildingBean.setHeadPath(path);
                 }
                 buildingImgBean.setImgName(name);
@@ -974,7 +1015,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setItId(typeId);
                 buildingImgBean.setImgPath(path);
-                buildingImgBean.setType(3);
+                buildingImgBean.setType(ImgTypeConstant.BUILD);
                 buildingImgDao.addImg(buildingImgBean);
             }
         }
