@@ -35,7 +35,7 @@ public class SysControllerAdvice {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.ERROR);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.ERROR_MSG);
-//        log.error("-------samy---------".concat(Constant.Result.RETMSG), e);
+        log.error(Constant.Result.RETMSG, e);
         return jsonObject;
     }
 
