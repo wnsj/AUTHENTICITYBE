@@ -70,5 +70,27 @@ public class RoomMainController {
 		jsonObject.put(Constant.Result.RETDATA,roomMainService.getStoneDetail(roomMainId));
 		return jsonObject;
 	}
+	
+	@ApiOperation(value = "添加房源主表", notes = "添加房源主表")
+	@PostMapping("/addRoomMain")
+	public JSONObject addRoomMain(@RequestBody String param) {
+		JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
+        jsonObject.put(Constant.Result.RETDATA,roomMainService.addRoomMain(bean));
+        return jsonObject;
+	}
+	
+	@ApiOperation(value = "修改房源主表", notes = "修改房源主表")
+	@PostMapping("/updateRoomMain")
+	public JSONObject updateRoomMain(@RequestBody String param) {
+		JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
+        jsonObject.put(Constant.Result.RETDATA,roomMainService.updateRoomMain(bean));
+        return jsonObject;
+	}
 
 }

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -75,17 +76,6 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
 			}
 
-			// 遍历实体 翻译各个类型字段
-			for (RoomBean bean : allRoomBypage) {
-
-				// 是否是热销标签
-				if (bean.getIsHot() != null) {
-					bean.setIsHot(2);
-				} else {
-					bean.setIsHot(3);
-				}
-
-			}
 		}
 		PageInfo<RoomBean> page = new PageInfo<RoomBean>(allRoomBypage);
 		return page;

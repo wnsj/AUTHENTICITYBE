@@ -59,8 +59,11 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
 		bean.setCreateDate(new Date());
 		bean.setModifyTime(new Date());
-		String path = FileUtil.uploadFile(file,buildStoreDir);
-		bean.setBuPath(path);
+		if(file != null) {
+			String path = FileUtil.uploadFile(file,buildStoreDir);
+			bean.setBuPath(path);
+		}
+		
 		return businessDistrictDao.insert(bean);
 	}
 

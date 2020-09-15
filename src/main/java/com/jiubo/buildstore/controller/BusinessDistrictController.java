@@ -83,7 +83,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "修改商圈", notes = "修改商圈")
 	@PostMapping("/updateBusinessDistrict")
-	public JSONObject addBusinessDistrict(BusinessDistrictBean bean,MultipartFile file) throws IOException {
+	public JSONObject addBusinessDistrict(@RequestBody BusinessDistrictBean bean,MultipartFile file) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

@@ -30,4 +30,8 @@ public interface RoomMainService extends IService<RoomMainBean> {
 
 
 	public Map<String, Object> getStoneDetail(Integer roomMainId);
+
+	public Integer addRoomMain(RoomMainBean bean);
+
+	public Integer updateRoomMain(RoomMainBean bean);
 }

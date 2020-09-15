@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.io.Serializable;
 import lombok.Data;
@@ -107,12 +108,12 @@ public class RoomMainBean implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 修改时间
      */
-    private LocalDateTime modifyDate;
+    private Date modifyDate;
 
     /**
      * 咨询师id
