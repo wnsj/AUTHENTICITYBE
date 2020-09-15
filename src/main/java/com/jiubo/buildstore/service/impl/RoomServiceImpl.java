@@ -1,20 +1,9 @@
 package com.jiubo.buildstore.service.impl;
 
-import com.jiubo.buildstore.bean.AreaBean;
-import com.jiubo.buildstore.bean.BuildingImgBean;
-import com.jiubo.buildstore.bean.BuildingTypeBean;
-import com.jiubo.buildstore.bean.RoomBean;
-import com.jiubo.buildstore.bean.RoomReceive;
-import com.jiubo.buildstore.bean.TotlePriceTypeBean;
-import com.jiubo.buildstore.bean.UnitPriceTypeBean;
+import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
-import com.jiubo.buildstore.dao.AreaDao;
-import com.jiubo.buildstore.dao.BuildingImgDao;
-import com.jiubo.buildstore.dao.BuildingTypeDao;
-import com.jiubo.buildstore.dao.RoomDao;
-import com.jiubo.buildstore.dao.TotlePriceTypeDao;
-import com.jiubo.buildstore.dao.UnitPriceTypeDao;
+import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.RoomService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.FileUtil;
@@ -62,7 +51,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 
 
 	@Override
-	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video) throws IOException {
+	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException {
 		bean.setCreateDate(new Date());
 		bean.setModifyDate(new Date());
 		roomDao.insert(bean);
@@ -86,7 +75,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 		if(video != null) {
 			for (int i = 0; i < video.length; i++) {
 				MultipartFile file = video[i];
-				Map<String, String> map = FileUtil.uploadFile(file, buildStoreDir, ImgPathConstant.HOUSE_PATH,bean.getId(),ImgTypeConstant.VIDEO);
+				Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,bean.getId(),ImgTypeConstant.VIDEO);
 				BuildingImgBean imgBean = new BuildingImgBean();
 				imgBean.setImgName(map.get("name"));
 				imgBean.setCreateDate(new Date());
@@ -100,7 +89,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 			list.clear();
 		}
 		if(headPicture != null) {
-			Map<String, String> map = FileUtil.uploadFile(headPicture, buildStoreDir, ImgPathConstant.HOUSE_PATH,bean.getId(),ImgTypeConstant.HEAD_PICTURE);
+			Map<String, String> map = FileUtil.uploadFile(headPicture, ImgPathConstant.HOUSE_PATH,bean.getId(),ImgTypeConstant.HEAD_PICTURE);
 			BuildingImgBean imgBean = new BuildingImgBean();
 			imgBean.setImgName(map.get("name"));
 			imgBean.setCreateDate(new Date());

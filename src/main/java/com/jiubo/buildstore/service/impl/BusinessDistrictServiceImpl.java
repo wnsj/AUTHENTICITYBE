@@ -1,7 +1,10 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
+import com.jiubo.buildstore.common.ImgTypeConstant;
+import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
 import com.jiubo.buildstore.util.FileUtil;
