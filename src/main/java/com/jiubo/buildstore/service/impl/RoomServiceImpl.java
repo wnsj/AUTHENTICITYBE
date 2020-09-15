@@ -1,24 +1,29 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.AreaBean;
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BuildingTypeBean;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
 import com.jiubo.buildstore.dao.AreaDao;
+import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BuildingTypeDao;
 import com.jiubo.buildstore.dao.RoomDao;
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.dao.UnitPriceTypeDao;
 import com.jiubo.buildstore.service.RoomService;
 import com.jiubo.buildstore.util.CollectionsUtils;
+import com.jiubo.buildstore.util.FileUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +31,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,95 +45,37 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements RoomService {
-
-	@Autowired
-	private RoomDao roomDao;
-
-	@Autowired
-	private AreaDao areaDao;
-
-	@Autowired
-	private BuildingTypeDao buildingTypeDao;
-
-	@Autowired
-	private UnitPriceTypeDao unitPriceTypeDao;
+	
+	@Value("${buildStoreDir}")
+    private String buildStoreDir;
 	
 	@Autowired
-	private TotlePriceTypeDao totlePriceTypeDao;
+	private RoomDao roomDao;
+	
+	@Autowired
+	private BuildingImgDao buildingImgDao;
+
 
 	@Override
-	public PageInfo<RoomBean> getRoomByConditions(RoomReceive receive) {
-		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
-		Integer pageSize = StringUtils.isBlank(receive.getPageSize()) ? 10 : Integer.valueOf(receive.getPageSize());
-		setCondition(receive);
-
-		// 房源数据
-		PageHelper.startPage(pageNum,pageSize);
-		List<RoomBean> allRoomBypage = roomDao.getAllRoomBypage(receive);
-
-		if (!CollectionsUtils.isEmpty(allRoomBypage)) {
-			// 获取房源id
-//			List<Integer> list = allRoomBypage.stream().map(RoomBean::getId).collect(toList());
-
-			// 获取所有类型
-			List<BuildingTypeBean> buildTypeList = buildingTypeDao.getAllBuildingType();
-			Map<Integer, List<BuildingTypeBean>> btMap = null;
-			if (!CollectionsUtils.isEmpty(buildTypeList)) {
-				btMap = buildTypeList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
+	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video) throws IOException {
+		bean.setCreateDate(new Date());
+		bean.setModifyDate(new Date());
+		roomDao.insert(bean);
+		for (int i = 0; i < picture.length; i++) {
+			MultipartFile file = picture[i];
+			Map<String, String> map = FileUtil.uploadFile(file, buildStoreDir,bean.getId(),2);
+			if(i == 0) {
+				
 			}
-
+			BuildingImgBean imgBean = new BuildingImgBean();
+			imgBean.setImgName(map.get("name"));
+			imgBean.setCreateDate(new Date());
+			imgBean.setItId(2);
+			imgBean.setImgPath(map.get("path"));
+			imgBean.setInfoId(bean.getId());
+			imgBean.setType(2);
+			buildingImgDao.insert(imgBean);
 		}
-		PageInfo<RoomBean> page = new PageInfo<RoomBean>(allRoomBypage);
-		return page;
-	}
-
-	private void setCondition(RoomReceive roomReceive) {
-		// 获取面积集合
-		List<Integer> areaIdList = roomReceive.getAreaIdList();
-		List<Map<String, Object>> areaList = roomReceive.getAreaList();
-		if (null != areaIdList && areaIdList.size() > 0) {
-			List<AreaBean> areaByIdList = areaDao.getAreaByIdList(new AreaBean().setIdList(areaIdList));
-			areaList = new ArrayList<>();
-			for (AreaBean areaBean : areaByIdList) {
-				Map<String, Object> map = new HashMap<>();
-				map.put("minArea", areaBean.getBegArea());
-				map.put("maxArea", areaBean.getEndArea());
-				areaList.add(map);
-			}
-			roomReceive.setAreaList(areaList);
-		}
-
-		// 获取单价集合
-		List<Integer> unitPriceIdList = roomReceive.getUnitPriceIdList();
-		List<Map<String, Object>> unitPriceList = roomReceive.getUnitPriceList();
-		if (!CollectionsUtils.isEmpty(unitPriceIdList)) {
-			List<UnitPriceTypeBean> priceByIdList = unitPriceTypeDao
-					.getUnitPriceByIdList(new UnitPriceTypeBean().setIdList(unitPriceIdList));
-			unitPriceList = new ArrayList<>();
-			for (UnitPriceTypeBean unitPriceTypeBean : priceByIdList) {
-				Map<String, Object> map = new HashMap<>();
-				map.put("minUnitPrice", unitPriceTypeBean.getBegPrice());
-				map.put("maxUnitPrice", unitPriceTypeBean.getEndPrice());
-				unitPriceList.add(map);
-			}
-			roomReceive.setUnitPriceList(unitPriceList);
-		}
-		
-		// 获取总价集合
-				List<Integer> totalPriceIdList = roomReceive.getTotalPriceIdList();
-				List<Map<String, Object>> totalPriceList = roomReceive.getUnitPriceList();
-				if (!CollectionsUtils.isEmpty(totalPriceIdList)) {
-					List<TotlePriceTypeBean> priceByIdList = totlePriceTypeDao
-							.getTotalPriceByIdList(new TotlePriceTypeBean().setIdList(totalPriceIdList));
-					totalPriceList = new ArrayList<>();
-					for (TotlePriceTypeBean totlePriceTypeBean : priceByIdList) {
-						Map<String, Object> map = new HashMap<>();
-						map.put("minUnitPrice", totlePriceTypeBean.getBegPrice());
-						map.put("maxUnitPrice", totlePriceTypeBean.getEndPrice());
-						totalPriceList.add(map);
-					}
-					roomReceive.setUnitPriceList(totalPriceList);
-				}
-
+		return null;
 	}
 }

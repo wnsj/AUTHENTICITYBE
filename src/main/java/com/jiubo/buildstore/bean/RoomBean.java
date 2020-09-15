@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -115,7 +116,7 @@ public class RoomBean implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 楼盘介绍
@@ -130,7 +131,7 @@ public class RoomBean implements Serializable {
     /**
      * 修改时间
      */
-    private LocalDateTime modifyDate;
+    private Date modifyDate;
 
 
 }

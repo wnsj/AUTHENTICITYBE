@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,16 +21,18 @@ public class FileUtil {
 	@Value("${buildStoreDir}")
     private static String buildStoreDir;
 	
-	public static String uploadFile(MultipartFile file,String s) throws IOException {
+	public static Map<String, String> uploadFile(MultipartFile file,String s,Integer id,Integer type) throws IOException {
 		 //原文件名
         String fileName = file.getOriginalFilename();
         fileName = fileName.substring(fileName.lastIndexOf("."));
-
-//        File directory = new File("");// 参数为空
-//        String path = directory.getCanonicalPath();
-//        System.out.println("路径a：" + path);
-//        String imgName = buildingBean.getBuildId().toString().concat(fileName);
-        File dir = new File(s + ImgPathConstant.BUILD_PATH + 1 + "/" + "cs");
+        String str = "";
+        if(type == 2) {
+        	str = "picture";	
+        }
+        if(type == 3) {
+        	str = "video";	
+        }
+        File dir = new File(s + ImgPathConstant.BUILD_PATH + id + "/" + str);
 //        System.out.println("dir:" + dir.getPath());
         if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -62,7 +66,10 @@ public class FileUtil {
             if (null != is)
                 is.close();
         }
-		return null;
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("name", name);
+        map.put("path", path);
+		return map;
 	}
 	
 	public static void delFile(String filePathAndName) {

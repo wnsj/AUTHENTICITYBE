@@ -17,6 +17,8 @@ import com.jiubo.buildstore.service.RoomService;
 
 import io.swagger.annotations.ApiOperation;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -38,7 +40,7 @@ public class RoomController {
 	@ApiOperation(value = "添加写字楼房源", notes = "添加写字楼房源")
 	@PostMapping("/addRoom")
 	public JSONObject addRoom(String param, MultipartFile[] picture
-			, MultipartFile[] video) {
+			, MultipartFile[] video) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

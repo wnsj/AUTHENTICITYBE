@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,19 +60,25 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
 		bean.setCreateDate(new Date());
 		bean.setModifyTime(new Date());
+		businessDistrictDao.insert(bean);
 		if(file != null) {
-			String path = FileUtil.uploadFile(file,buildStoreDir);
-			bean.setBuPath(path);
+			Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,bean.getId(),2);
+			if(!map.isEmpty()) {
+				bean.setBuPath(map.get("path"));
+				businessDistrictDao.updateById(bean);
+			}
 		}
 		
-		return businessDistrictDao.insert(bean);
+		return 1;
 	}
 
 	@Override
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
-		String path = FileUtil.uploadFile(file,buildStoreDir);
 		FileUtil.delFile(bean.getBuPath());
-		bean.setBuPath(path);
+		Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,bean.getId(),2);
+		if(!map.isEmpty()) {
+			bean.setBuPath(map.get("path"));
+		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);
 	}
