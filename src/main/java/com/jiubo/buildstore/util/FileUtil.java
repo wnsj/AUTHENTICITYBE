@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.jiubo.buildstore.common.ImgTypeConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,18 +22,21 @@ public class FileUtil {
 	@Value("${buildStoreDir}")
     private static String buildStoreDir;
 	
-	public static Map<String, String> uploadFile(MultipartFile file,String s,Integer id,Integer type) throws IOException {
+	public static Map<String, String> uploadFile(MultipartFile file,String s,String picPath,Integer id,Integer type) throws IOException {
 		 //原文件名
         String fileName = file.getOriginalFilename();
         fileName = fileName.substring(fileName.lastIndexOf("."));
         String str = "";
-        if(type == 2) {
+        if(type.equals(ImgTypeConstant.PICTURE)) {
         	str = "picture";	
         }
-        if(type == 3) {
+        if(type.equals(ImgTypeConstant.VIDEO)) {
         	str = "video";	
         }
-        File dir = new File(s + ImgPathConstant.BUILD_PATH + id + "/" + str);
+        if (type.equals(ImgTypeConstant.HEAD_PICTURE)) {
+            str = "headImg";
+        }
+        File dir = new File(s + picPath + id + "/" + str);
 //        System.out.println("dir:" + dir.getPath());
         if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 

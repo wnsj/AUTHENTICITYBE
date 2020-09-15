@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,5 +46,14 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
             }
         }
         return bean;
+    }
+
+    @Override
+    public void addOffice(OfficeBean officeBean,
+                          MultipartFile[] headImg,
+                          MultipartFile[] picture,
+                          MultipartFile[] video) {
+        officeDao.insert(officeBean);
+
     }
 }

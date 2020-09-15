@@ -6,9 +6,13 @@ public  class ImgPathConstant {
      */
     public static final String BUILD_PATH = "/build";
     /**
-     * 户型分析
+     * 房源
      */
     public static final String HOUSE_PATH = "/horse";
+    /**
+     * 商圈
+     */
+    public static final String BU_PATH = "/business";
     /**
      * 点评
      */

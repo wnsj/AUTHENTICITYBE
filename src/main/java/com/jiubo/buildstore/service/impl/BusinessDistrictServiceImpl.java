@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
 import com.jiubo.buildstore.util.FileUtil;
@@ -62,7 +63,7 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		bean.setModifyTime(new Date());
 		businessDistrictDao.insert(bean);
 		if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,bean.getId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir, ImgPathConstant.BU_PATH,bean.getId(),2);
 			if(!map.isEmpty()) {
 				bean.setBuPath(map.get("path"));
 				businessDistrictDao.updateById(bean);
@@ -75,7 +76,7 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	@Override
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
 		FileUtil.delFile(bean.getBuPath());
-		Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,bean.getId(),2);
+		Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,ImgPathConstant.BU_PATH,bean.getId(),2);
 		if(!map.isEmpty()) {
 			bean.setBuPath(map.get("path"));
 		}

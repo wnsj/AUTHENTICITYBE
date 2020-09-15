@@ -7,6 +7,8 @@ import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 import com.jiubo.buildstore.bean.TotlePriceTypeBean;
 import com.jiubo.buildstore.bean.UnitPriceTypeBean;
+import com.jiubo.buildstore.common.ImgPathConstant;
+import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.AreaDao;
 import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BuildingTypeDao;
@@ -63,7 +65,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 		roomDao.insert(bean);
 		for (int i = 0; i < picture.length; i++) {
 			MultipartFile file = picture[i];
-			Map<String, String> map = FileUtil.uploadFile(file, buildStoreDir,bean.getId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file, buildStoreDir, ImgPathConstant.HOUSE_PATH,bean.getId(),2);
 			if(i == 0) {
 				
 			}
