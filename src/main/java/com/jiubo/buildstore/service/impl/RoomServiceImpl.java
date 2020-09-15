@@ -65,7 +65,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 		roomDao.insert(bean);
 		for (int i = 0; i < picture.length; i++) {
 			MultipartFile file = picture[i];
-			Map<String, String> map = FileUtil.uploadFile(file, buildStoreDir, ImgPathConstant.HOUSE_PATH,bean.getId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,bean.getId(),2);
 			if(i == 0) {
 				
 			}
