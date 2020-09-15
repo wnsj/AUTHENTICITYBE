@@ -52,7 +52,7 @@ public class BuildingDynamicBean implements Serializable {
     /**
      * 咨询标题
      */
-    private Integer bdLabel;
+    private String bdLabel;
 
     /**
      * 页码

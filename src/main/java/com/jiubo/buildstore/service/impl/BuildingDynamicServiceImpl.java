@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 
+import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingDynamicDao;
 import com.jiubo.buildstore.service.BuildingDynamicService;
@@ -94,14 +95,36 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     }
 
     @Override
+    public Page<BuildingDynamicBean> getDynamicByPageBe(BuildingDynamicBean buildingDynamicBean) {
+        Page<BuildingDynamicBean> page = new Page<>();
+        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
+        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L : Long.parseLong(buildingDynamicBean.getPageSize()));
+        List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
+        if (null != dynamicBeans && dynamicBeans.size()>0) {
+            for (BuildingDynamicBean dynamicBean : dynamicBeans) {
+                if(dynamicBean.getBuildId() != null){
+                    Date date = dynamicBean.getCreateDate();
+                    if (null != date) {
+                        dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
+                    }
+                }
+                if (StringUtils.isNotBlank(dynamicBean.getBdPath())){
+                    dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(dynamicBean.getBdPath()));
+                }
+            }
+        }
+        return page.setRecords(dynamicBeans);
+    }
+
+    @Override
     public void patchDyById(BuildingDynamicBean buildingDynamicBean) {
-        buildingDynamicDao.patchDyById(buildingDynamicBean);
+        buildingDynamicDao.updateById(buildingDynamicBean);
     }
 
     @Override
     public void addDynamic(BuildingDynamicBean buildingDynamicBean) {
 
-        buildingDynamicDao.addDynamic(buildingDynamicBean);
+        buildingDynamicDao.insert(buildingDynamicBean);
     }
 
 	@Override

@@ -23,6 +23,7 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
     public BuildingDynamicBean getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean);
 
     public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean);
+    public Page<BuildingDynamicBean> getDynamicByPageBe(BuildingDynamicBean buildingDynamicBean);
 
     public void patchDyById(BuildingDynamicBean buildingDynamicBean);
 

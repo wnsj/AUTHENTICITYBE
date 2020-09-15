@@ -79,11 +79,11 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 			for (RoomBean bean : allRoomBypage) {
 
 				// 是否是热销标签
-				if (bean.getIsHot() != null) {
-					bean.setIsHot(2);
-				} else {
-					bean.setIsHot(3);
-				}
+//				if (bean.getIsHot() != null) {
+//					bean.setIsHot(2);
+//				} else {
+//					bean.setIsHot(3);
+//				}
 
 			}
 		}
