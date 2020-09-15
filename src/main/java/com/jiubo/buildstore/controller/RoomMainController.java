@@ -31,7 +31,7 @@ public class RoomMainController {
 	private RoomMainService roomMainService;
 	
 	@ApiOperation(value = "多条件查询房源", notes = "多条件查询房源")
-	@GetMapping("/getRoomByConditions")
+	@PostMapping("/getRoomByConditions")
 	public JSONObject getHotBusinessDistrict(@RequestBody RoomReceive receive) {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
