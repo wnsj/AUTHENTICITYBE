@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.LinkPhoneBean;
 import com.jiubo.buildstore.common.Constant;
@@ -41,8 +42,7 @@ public class LinkPhoneController {
 
 
     @PostMapping("/addLinkPhone")
-    public JSONObject addLinkPhone(LinkPhoneBean linkPhoneBean) {
-
+    public JSONObject addLinkPhone(@RequestBody LinkPhoneBean linkPhoneBean){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
