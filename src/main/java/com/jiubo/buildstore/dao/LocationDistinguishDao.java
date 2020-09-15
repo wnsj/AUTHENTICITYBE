@@ -15,5 +15,5 @@ import java.util.List;
  * @since 2020-04-10
  */
 public interface LocationDistinguishDao extends BaseMapper<LocationDistinguishBean> {
-    public List<LocationDistinguishBean> getAllDistinguish();
+    public List<LocationDistinguishBean> getAllDistinguish(@Param("proId") Integer proId);
 }

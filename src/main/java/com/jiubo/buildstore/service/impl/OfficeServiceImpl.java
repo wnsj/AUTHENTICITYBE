@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,10 +63,45 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
         officeDao.insert(officeBean);
         List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 
-        Map<String, String> headMap = FileUtil.uploadFile(headImg, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.PICTURE);
-        Map<String, String> videoMap = FileUtil.uploadFile(video, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.VIDEO);
+
+        // 头图
+        if (null != headImg) {
+            Map<String, String> headMap = FileUtil.uploadFile(headImg, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+            BuildingImgBean imgBean = new BuildingImgBean();
+            imgBean.setImgName(headMap.get("name"));
+            imgBean.setCreateDate(new Date());
+            imgBean.setItId(ImgTypeConstant.PICTURE);
+            imgBean.setImgPath(headMap.get("path"));
+            imgBean.setInfoId(officeBean.getId());
+            imgBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(imgBean);
+        }
+
+
+        // 视频
+        if (null != video) {
+            Map<String, String> videoMap = FileUtil.uploadFile(video, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.VIDEO);
+            BuildingImgBean videoBean = new BuildingImgBean();
+            videoBean.setImgName(videoMap.get("name"));
+            videoBean.setCreateDate(new Date());
+            videoBean.setItId(ImgTypeConstant.VIDEO);
+            videoBean.setImgPath(videoMap.get("path"));
+            videoBean.setInfoId(officeBean.getId());
+            videoBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(videoBean);
+        }
+
         for (MultipartFile file : picture) {
             Map<String, String> picMap = FileUtil.uploadFile(file, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.PICTURE);
+            BuildingImgBean picBean = new BuildingImgBean();
+            picBean.setImgName(picMap.get("name"));
+            picBean.setCreateDate(new Date());
+            picBean.setItId(ImgTypeConstant.PICTURE);
+            picBean.setImgPath(picMap.get("path"));
+            picBean.setInfoId(officeBean.getId());
+            picBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(picBean);
         }
+        buildingImgDao.insertList(buildingImgBeans);
     }
 }

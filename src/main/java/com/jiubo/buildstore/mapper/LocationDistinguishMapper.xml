@@ -3,6 +3,10 @@
 <mapper namespace="com.jiubo.buildstore.dao.LocationDistinguishDao">
     <select id="getAllDistinguish" resultType="com.jiubo.buildstore.bean.LocationDistinguishBean">
         select * from LOCATION_DISTINGUISH
+        where 1=1
+        <if test="proId != null">
+           and PRO_ID = #{proId}
+        </if>
         order by LD_ID asc
     </select>
 </mapper>

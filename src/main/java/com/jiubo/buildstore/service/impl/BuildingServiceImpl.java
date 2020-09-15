@@ -618,7 +618,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     private Map<Integer, List<LocationDistinguishBean>> getLdMap() {
-        List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish();
+        List<LocationDistinguishBean> allDistinguishList = locationDistinguishDao.getAllDistinguish(null);
         Map<Integer, List<LocationDistinguishBean>> listMap = null;
         if (!CollectionsUtils.isEmpty(allDistinguishList)) {
             listMap = allDistinguishList.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
@@ -1126,7 +1126,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             Map<Integer, List<BuildingTypeBean>> btMap = getBtMap();
 
             // 获取所有区域
-            List<LocationDistinguishBean> allDistinguish = locationDistinguishDao.getAllDistinguish();
+            List<LocationDistinguishBean> allDistinguish = locationDistinguishDao.getAllDistinguish(null);
             Map<Integer, List<LocationDistinguishBean>> ldMap = null;
             if (!CollectionsUtils.isEmpty(allDistinguish)) {
                 ldMap = allDistinguish.stream().collect(Collectors.groupingBy(LocationDistinguishBean::getLdId));
