@@ -3,6 +3,7 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.OfficeBean;
+import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingImgDao;
@@ -13,6 +14,7 @@ import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
         return bean;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void addOffice(OfficeBean officeBean,
                           MultipartFile headImg,
@@ -75,33 +78,77 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
             imgBean.setInfoId(officeBean.getId());
             imgBean.setType(ImgTypeConstant.OFFICE);
             buildingImgBeans.add(imgBean);
+            officeDao.updateById(officeBean.setImgName(headMap.get("path")));
         }
-
 
         // 视频
         if (null != video) {
-            Map<String, String> videoMap = FileUtil.uploadFile(video, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.VIDEO);
-            BuildingImgBean videoBean = new BuildingImgBean();
-            videoBean.setImgName(videoMap.get("name"));
-            videoBean.setCreateDate(new Date());
-            videoBean.setItId(ImgTypeConstant.VIDEO);
-            videoBean.setImgPath(videoMap.get("path"));
-            videoBean.setInfoId(officeBean.getId());
-            videoBean.setType(ImgTypeConstant.OFFICE);
-            buildingImgBeans.add(videoBean);
+            addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
         }
 
-        for (MultipartFile file : picture) {
-            Map<String, String> picMap = FileUtil.uploadFile(file, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.PICTURE);
-            BuildingImgBean picBean = new BuildingImgBean();
-            picBean.setImgName(picMap.get("name"));
-            picBean.setCreateDate(new Date());
-            picBean.setItId(ImgTypeConstant.PICTURE);
-            picBean.setImgPath(picMap.get("path"));
-            picBean.setInfoId(officeBean.getId());
-            picBean.setType(ImgTypeConstant.OFFICE);
-            buildingImgBeans.add(picBean);
+        if (null != picture) {
+            for (MultipartFile file : picture) {
+                addFile(officeBean, file, buildingImgBeans, ImgTypeConstant.PICTURE);
+            }
         }
         buildingImgDao.insertList(buildingImgBeans);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void patchOffice(OfficeBean officeBean,
+                            MultipartFile headImg,
+                            MultipartFile[] picture,
+                            MultipartFile video) throws IOException {
+
+        officeDao.updateById(officeBean);
+        List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
+        if (null != headImg) {
+            deleteImgByCon(officeBean,ImgTypeConstant.HEAD_PICTURE,ImgTypeConstant.OFFICE);
+            Map<String, String> headMap = FileUtil.uploadFile(headImg, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+            BuildingImgBean imgBean = new BuildingImgBean();
+            imgBean.setImgName(headMap.get("name"));
+            imgBean.setCreateDate(new Date());
+            imgBean.setItId(ImgTypeConstant.PICTURE);
+            imgBean.setImgPath(headMap.get("path"));
+            imgBean.setInfoId(officeBean.getId());
+            imgBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(imgBean);
+            officeDao.updateById(officeBean.setImgName(headMap.get("path")));
+        }
+
+        // 视频
+        if (null != video) {
+            addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
+        }
+
+        if (null != picture) {
+            for (MultipartFile file : picture) {
+                addFile(officeBean, file, buildingImgBeans, ImgTypeConstant.PICTURE);
+            }
+        }
+        buildingImgDao.insertList(buildingImgBeans);
+    }
+
+    public void deleteImgByCon(OfficeBean officeBean,Integer itId,Integer type) {
+        QueryWrapper<BuildingImgBean> qwRoom = new QueryWrapper<BuildingImgBean>();
+        qwRoom.select("*");
+        qwRoom.eq("IT_ID", itId);
+        qwRoom.eq("TYPE",type);
+        qwRoom.eq("INFO_ID",officeBean.getId());
+        buildingImgDao.delete(qwRoom);
+    }
+
+
+    private void addFile(OfficeBean officeBean, MultipartFile video, List<BuildingImgBean> buildingImgBeans, Integer video2) throws IOException {
+        Map<String, String> videoMap = FileUtil.uploadFile(video, ImgPathConstant.OFFICE, officeBean.getId(), video2);
+        BuildingImgBean videoBean = new BuildingImgBean();
+        videoBean.setImgName(videoMap.get("name"));
+        videoBean.setCreateDate(new Date());
+        videoBean.setItId(video2);
+        videoBean.setImgPath(videoMap.get("path"));
+        videoBean.setInfoId(officeBean.getId());
+        videoBean.setType(ImgTypeConstant.OFFICE);
+        buildingImgBeans.add(videoBean);
     }
 }
