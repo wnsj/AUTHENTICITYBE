@@ -102,4 +102,27 @@
     <select id="getImgById" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
         select * from building_img where  IMG_ID = #{buildingImgBean.imgId}
     </select>
+    
+     <insert id="insertList" parameterType="java.util.List">
+    	insert into building_img
+        (
+        IMG_NAME,
+        CREATE_DATE,
+        IT_ID,
+        IMG_PATH,
+        TYPE,
+        INFO_ID
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.imgName},
+            #{item.createDate},
+            #{item.itId},
+            #{item.imgPath},
+            #{item.type},
+            #{item.infoId},
+            )
+        </foreach>
+    </insert>
 </mapper>

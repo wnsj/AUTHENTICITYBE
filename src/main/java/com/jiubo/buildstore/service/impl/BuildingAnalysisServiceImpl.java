@@ -332,7 +332,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         if (null != horseTypeImg && horseTypeImg.length > 0) {
             // 更新图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
-            buildingImgBean.setBuildId(buildingAnalysisBean.getBuildId());
+//            buildingImgBean.setBuildId(buildingAnalysisBean.getBuildId());
             buildingImgBean.setBaId(buildingAnalysisBean.getBaId());
             deleteImg(buildingImgBean);
 
@@ -403,7 +403,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
                     buildingImgBean.setImgPath(path);
                     buildingImgBean.setBaId(buildingBean.getBaId());
                     buildingImgBean.setImgName(name);
-                    buildingImgBean.setBuildId(buildingBean.getBuildId());
+//                    buildingImgBean.setBuildId(buildingBean.getBuildId());
                     buildingImgBean.setCreateDate(new Date());
                     buildingImgBean.setItId(typeId);
 

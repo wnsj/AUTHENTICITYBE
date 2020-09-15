@@ -36,6 +36,9 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	@Autowired
 	private BusinessDistrictDao businessDistrictDao;
 
+	@Autowired
+	private BuildingImgDao buildingImgDao;
+
 	@Override
 	public List<BusinessDistrictBean> getBusinessDistrict(Integer ldId) {
 		if (ldId != null) {
@@ -65,6 +68,14 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		if(file != null) {
 			Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.BU_PATH,bean.getId(),2);
 			if(!map.isEmpty()) {
+				BuildingImgBean imgBean = new BuildingImgBean();
+				imgBean.setImgName(map.get("name"));
+				imgBean.setCreateDate(new Date());
+				imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+				imgBean.setImgPath(map.get("path"));
+				imgBean.setInfoId(bean.getId());
+				imgBean.setType(ImgTypeConstant.BUSSINESS);
+				buildingImgDao.insert(imgBean);
 				bean.setBuPath(map.get("path"));
 				businessDistrictDao.updateById(bean);
 			}
@@ -79,6 +90,14 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.BU_PATH,bean.getId(),2);
 		if(!map.isEmpty()) {
 			bean.setBuPath(map.get("path"));
+			BuildingImgBean imgBean = new BuildingImgBean();
+			imgBean.setImgName(map.get("name"));
+			imgBean.setCreateDate(new Date());
+			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+			imgBean.setImgPath(map.get("path"));
+			imgBean.setInfoId(bean.getId());
+			imgBean.setType(ImgTypeConstant.BUSSINESS);
+			buildingImgDao.insert(imgBean);
 		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);

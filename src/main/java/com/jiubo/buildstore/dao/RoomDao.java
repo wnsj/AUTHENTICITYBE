@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.dao;
 
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 import com.jiubo.buildstore.bean.RoomReturn;
@@ -21,5 +22,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface RoomDao extends BaseMapper<RoomBean> {
 		
 	public List<RoomBean> getAllRoomBypage(@Param("receive") RoomReceive receive);
-	
+
 }

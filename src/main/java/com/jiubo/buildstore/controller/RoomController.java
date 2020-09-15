@@ -40,12 +40,12 @@ public class RoomController {
 	@ApiOperation(value = "添加写字楼房源", notes = "添加写字楼房源")
 	@PostMapping("/addRoom")
 	public JSONObject addRoom(String param, MultipartFile[] picture
-			, MultipartFile[] video) throws IOException {
+			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         RoomBean bean = JSONObject.parseObject(param, RoomBean.class);
-        jsonObject.put(Constant.Result.RETDATA,roomService.addRoom(bean,picture,video));
+        jsonObject.put(Constant.Result.RETDATA,roomService.addRoom(bean,picture,video,headPicture));
         return jsonObject;
 	}
 	

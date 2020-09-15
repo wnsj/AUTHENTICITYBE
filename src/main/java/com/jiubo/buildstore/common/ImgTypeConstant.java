@@ -20,4 +20,5 @@ public  class ImgTypeConstant {
     public static final Integer HOUSE = 2;
     public static final Integer BUILD = 3;
     public static final Integer OFFICE = 4;
+    public static final Integer BUSSINESS = 5;
 }

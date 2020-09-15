@@ -839,7 +839,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
         Map<Integer, List<BuildingImgBean>> headImgMap = null;
         if (null != byBuildId && byBuildId.size() > 0) {
-            headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
+//            headImgMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
         }
         return headImgMap;
     }
@@ -893,7 +893,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
         Map<Integer, List<BuildingImgBean>> listMap = null;
         if (!CollectionsUtils.isEmpty(byBuildId)) {
-            listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
+//            listMap = byBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getBuildId));
         }
         for (BuildReturn buildingBean1 : beans) {
             List<String> labelList = new ArrayList<>();
@@ -929,7 +929,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         Map<String, List<ImgTypeBean>> listMap = imgTypeList.stream().collect(Collectors.groupingBy(ImgTypeBean::getItName));
         BuildingImgBean buildingImgBean = new BuildingImgBean();
-        buildingImgBean.setBuildId(buildingBean.getBuildId());
+//        buildingImgBean.setBuildId(buildingBean.getBuildId());
 
         if (null != buildRealImg && buildRealImg.length > 0) {
 //            buildingImgBean.setItId(listMap.get(ImgTypeConstant.buildRealImg).get(0).getItId());

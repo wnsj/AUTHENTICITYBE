@@ -48,11 +48,6 @@ public class BuildingImgBean implements Serializable {
     private Integer itId;
 
     /**
-     * 楼盘id
-     */
-    private Integer buildId;
-
-    /**
      * 图片路径
      */
     private String imgPath;

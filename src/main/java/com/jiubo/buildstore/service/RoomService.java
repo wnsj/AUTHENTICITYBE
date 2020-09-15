@@ -23,6 +23,6 @@ import com.github.pagehelper.PageInfo;
 public interface RoomService extends IService<RoomBean> {
 
 	public Integer addRoom(RoomBean bean, MultipartFile[] picture
-			, MultipartFile[] video) throws IOException;
+			, MultipartFile[] video, MultipartFile headPicture) throws IOException;
 
 }
