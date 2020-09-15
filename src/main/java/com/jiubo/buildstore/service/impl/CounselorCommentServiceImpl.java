@@ -348,7 +348,7 @@ public class CounselorCommentServiceImpl extends ServiceImpl<CounselorCommentDao
                 }
 
                 buildingImgBean.setImgName(name);
-                buildingImgBean.setBuildId(commentBean.getBuildId());
+//                buildingImgBean.setBuildId(commentBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setImgPath(path);
                 buildingImgBean.setItId(8);

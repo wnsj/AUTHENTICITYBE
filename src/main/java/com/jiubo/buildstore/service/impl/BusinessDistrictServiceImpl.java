@@ -1,7 +1,10 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
+import com.jiubo.buildstore.common.ImgTypeConstant;
+import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
 import com.jiubo.buildstore.util.FileUtil;
@@ -35,6 +38,9 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	
 	@Autowired
 	private BusinessDistrictDao businessDistrictDao;
+	
+	@Autowired
+	private BuildingImgDao buildingImgDao;
 
 	@Override
 	public List<BusinessDistrictBean> getBusinessDistrict(Integer ldId) {
@@ -63,8 +69,16 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		bean.setModifyTime(new Date());
 		businessDistrictDao.insert(bean);
 		if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir, ImgPathConstant.BU_PATH,bean.getId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir, ImgPathConstant.BU_PATH,bean.getId(),ImgTypeConstant.HEAD_PICTURE);
 			if(!map.isEmpty()) {
+				BuildingImgBean imgBean = new BuildingImgBean();
+				imgBean.setImgName(map.get("name"));
+				imgBean.setCreateDate(new Date());
+				imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+				imgBean.setImgPath(map.get("path"));
+				imgBean.setInfoId(bean.getId());
+				imgBean.setType(ImgTypeConstant.BUSSINESS);
+				buildingImgDao.insert(imgBean);
 				bean.setBuPath(map.get("path"));
 				businessDistrictDao.updateById(bean);
 			}
@@ -79,6 +93,14 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		Map<String, String> map = FileUtil.uploadFile(file,buildStoreDir,ImgPathConstant.BU_PATH,bean.getId(),2);
 		if(!map.isEmpty()) {
 			bean.setBuPath(map.get("path"));
+			BuildingImgBean imgBean = new BuildingImgBean();
+			imgBean.setImgName(map.get("name"));
+			imgBean.setCreateDate(new Date());
+			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+			imgBean.setImgPath(map.get("path"));
+			imgBean.setInfoId(bean.getId());
+			imgBean.setType(ImgTypeConstant.BUSSINESS);
+			buildingImgDao.insert(imgBean);
 		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);
