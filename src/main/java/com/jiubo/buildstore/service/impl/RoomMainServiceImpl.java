@@ -147,6 +147,13 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				if(bean.getBusinessId() != null) {
 					bean.setBussinessName(businessDistrictDao.selectById(bean.getBusinessId()).getBuName());
 				}
+				// 将标签字符串打成集合
+				if (bean.getLabelList() != null) {
+					String[] strings = bean.getLabelList().split("\\|");
+					ArrayList< String> arrayList = new ArrayList<String>(strings.length);
+					Collections.addAll(arrayList, strings);
+					bean.setLabels(arrayList);
+				}
 			}
 		}
 		PageInfo<RoomMainBean> page = new PageInfo<RoomMainBean>(allRoomBypage);
