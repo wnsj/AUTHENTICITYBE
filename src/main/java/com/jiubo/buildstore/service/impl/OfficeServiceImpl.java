@@ -3,7 +3,6 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.OfficeBean;
-import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingImgDao;
@@ -101,7 +100,6 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
                             MultipartFile[] picture,
                             MultipartFile video) throws IOException {
 
-        officeDao.updateById(officeBean);
         List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
         if (null != headImg) {
             deleteImgByCon(officeBean,ImgTypeConstant.HEAD_PICTURE,ImgTypeConstant.OFFICE);
@@ -114,9 +112,9 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
             imgBean.setInfoId(officeBean.getId());
             imgBean.setType(ImgTypeConstant.OFFICE);
             buildingImgBeans.add(imgBean);
-            officeDao.updateById(officeBean.setImgName(headMap.get("path")));
+            officeBean.setImgName(headMap.get("path"));
         }
-
+        officeDao.updateById(officeBean);
         // 视频
         if (null != video) {
             addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
