@@ -4,13 +4,15 @@
 
     <!--条件查询-->
     <select id="getAllBulidBypage" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        SELECT *
-        from building
+        SELECT distinct A.*
+        from building A
+        LEFT JOIN room_main B ON A.BUILD_ID = B.build_id
+        LEFT JOIN office C ON B.id = C.room_id
         <where>
             1=1
             /*省id*/
             <if test="buildingBean.proIdList != null and buildingBean.proIdList.size() > 0">
-                and PRO_ID in
+                and A.PRO_ID in
                 <foreach collection="buildingBean.proIdList" open="(" close=")" separator="," item="proId">
                     #{proId}
                 </foreach>
@@ -18,7 +20,7 @@
 
             /*区域*/
             <if test="buildingBean.ldIdList != null and buildingBean.ldIdList.size() > 0">
-                and LD_ID in
+                and A.LD_ID in
                 <foreach collection="buildingBean.ldIdList" open="(" close=")" separator="," item="ldId">
                     #{ldId}
                 </foreach>
@@ -28,15 +30,15 @@
                 and
                 <foreach collection="buildingBean.areaList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minArea != null and item.maxArea == null">
-                        MAX_AREA > #{item.minArea}
+                        A.MAX_AREA > #{item.minArea}
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea == null">
-                        #{item.maxArea} > MIN_AREA
+                        #{item.maxArea} > A.MIN_AREA
                     </if>
                     <if test="null != item and item.maxArea != null and item.minArea != null">
-                        MIN_AREA >= #{item.minArea} and #{item.maxArea} >= MIN_AREA
-                        or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
-                        or #{item.minArea} >= MIN_AREA and MAX_AREA >=#{item.maxArea}
+                        A.MIN_AREA >= #{item.minArea} and #{item.maxArea} >= A.MIN_AREA
+                        or A.MAX_AREA >= #{item.minArea} and #{item.maxArea}>=A.MAX_AREA
+                        or #{item.minArea} >= A.MIN_AREA and A.MAX_AREA >=#{item.maxArea}
                     </if>
                 </foreach>
             </if>
@@ -44,15 +46,15 @@
                 and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
-                        MAX_TITLE_PRICE > #{item.minTitlePrice}
+                        A.MAX_TITLE_PRICE > #{item.minTitlePrice}
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
-                        #{item.maxTitlePrice} > MIN_TITLE_PRICE
+                        #{item.maxTitlePrice} > A.MIN_TITLE_PRICE
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
-                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE
-                        or MAX_TITLE_PRICE >=#{item.minTitlePrice} and #{item.maxTitlePrice} >= MAX_TITLE_PRICE
-                        or #{item.minTitlePrice} >= MIN_TITLE_PRICE and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
+                        A.MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= A.MIN_TITLE_PRICE
+                        or A.MAX_TITLE_PRICE >=#{item.minTitlePrice} and #{item.maxTitlePrice} >= A.MAX_TITLE_PRICE
+                        or #{item.minTitlePrice} >= A.MIN_TITLE_PRICE and A.MAX_TITLE_PRICE >= #{item.maxTitlePrice}
                     </if>
                 </foreach>
             </if>
@@ -60,28 +62,31 @@
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minUnitPrice != null and item.minUnitPrice != '' and item.minUnitPrice != 0 and (item.maxUnitPrice == null or item.maxUnitPrice == '' or item.maxUnitPrice == 0)">
-                        MAX_UNIT_PRICE > #{item.minUnitPrice}
+                        A.MAX_UNIT_PRICE > #{item.minUnitPrice}
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.maxUnitPrice != '' and item.maxUnitPrice != 0 and (item.minUnitPrice == null or item.minUnitPrice == '' or item.minUnitPrice == 0)">
-                        #{item.maxUnitPrice} > MIN_UNIT_PRICE
+                        #{item.maxUnitPrice} > A.MIN_UNIT_PRICE
                     </if>
                     <if test="null != item and item.maxUnitPrice != null and item.maxUnitPrice != '' and item.maxUnitPrice != 0 and item.minUnitPrice != null and item.minUnitPrice != '' and item.minUnitPrice != 0">
-                        MIN_UNIT_PRICE >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= MIN_UNIT_PRICE
-                        or MAX_UNIT_PRICE >=#{item.minUnitPrice} and #{item.maxUnitPrice} >= MAX_UNIT_PRICE
-                        or #{item.minUnitPrice} >= MIN_UNIT_PRICE and MAX_UNIT_PRICE >= #{item.maxUnitPrice}
+                        A.MIN_UNIT_PRICE >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= A.MIN_UNIT_PRICE
+                        or A.MAX_UNIT_PRICE >=#{item.minUnitPrice} and #{item.maxUnitPrice} >= A.MAX_UNIT_PRICE
+                        or #{item.minUnitPrice} >= A.MIN_UNIT_PRICE and A.MAX_UNIT_PRICE >= #{item.maxUnitPrice}
                     </if>
                 </foreach>
             </if>
 
             <if test="buildingBean.sellWell != null">
-                and #{buildingBean.sellWell} = SELL_WELL
+                and #{buildingBean.sellWell} = A.SELL_WELL
             </if>
 
             <if test="buildingBean.buildType != null">
-                and #{buildingBean.buildType} = BUILD_TYPE
+                and #{buildingBean.buildType} = A.BUILD_TYPE
             </if>
             <if test="buildingBean.businessId != null">
-                and #{buildingBean.businessId} = BUSINESS_ID
+                and #{buildingBean.businessId} = A.BUSINESS_ID
+            </if>
+            <if test="buildingBean.officeType != null">
+                and #{buildingBean.officeType} = C.office_type
             </if>
         </where>
     </select>

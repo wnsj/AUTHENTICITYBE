@@ -102,4 +102,6 @@ public class BuildReceive extends BuildingBean{
     private List<Integer> metroIdList;
 
     private Integer metroId;
+
+    private Integer officeType;
 }

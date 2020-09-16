@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.*;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -281,6 +282,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                             bean.setPicturePath(strings);
                         }
                     }
+                    if (!StringUtils.isBlank(bean.getHeadPath())) {
+                        bean.setHeadPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(bean.getHeadPath()));
+                    }
                 }
             }
         }
@@ -357,7 +361,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private List<String> getPathList(List<BuildingImgBean> imgBeans) {
         List<String> pathList = new ArrayList<>();
         for (BuildingImgBean buildingImgBean : imgBeans) {
-            String path = ImgPathConstant.INTERFACE_PATH.concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
+            String path = ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
             pathList.add(path);
         }
         return pathList;
@@ -959,6 +963,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             deleteImg(buildingImgBean);
             buildingImgDao.deleteByImgName(buildingImgBean);
             this.saveFile(buildingBean, headImg, "head", listMap.get(ImgTypeConstant.headImg).get(0).getItId());
+        } else {
+            buildingBean.setHeadPath(null);
         }
     }
 
@@ -967,16 +973,16 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
         if (null != allByBid) {
             for (BuildingImgBean bean : allByBid) {
-                delFile(bean.getImgPath());
-                System.out.println(bean.getImgPath());
+                deleteImgFile(bean);
             }
         }
     }
 
 
-    public static void delFile(String filePathAndName) {
+
+    public  void delFile(String filePathAndName) {
         try {
-            String filePath = filePathAndName;
+            String filePath = buildStoreDir + filePathAndName;
             java.io.File myDelFile = new java.io.File(filePath);
             myDelFile.delete();
         } catch (Exception e) {
@@ -1030,13 +1036,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 }
 
                 if (type.equals("head")) {
-                    buildingBean.setHeadPath(ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type + name);
+                    buildingBean.setHeadPath(ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type + "/" + name);
                 }
                 buildingImgBean.setImgName(name);
                 buildingImgBean.setInfoId(buildingBean.getBuildId());
                 buildingImgBean.setCreateDate(new Date());
                 buildingImgBean.setItId(typeId);
-                buildingImgBean.setImgPath(ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type + name);
+                buildingImgBean.setImgPath(ImgPathConstant.BUILD_PATH + buildingBean.getBuildId() + "/" + type + "/" + name);
                 buildingImgBean.setType(ImgTypeConstant.BUILD);
                 buildingImgDao.insert(buildingImgBean);
             }

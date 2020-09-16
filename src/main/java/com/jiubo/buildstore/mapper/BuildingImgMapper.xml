@@ -20,7 +20,7 @@
         <if test="buildingImgBean.itId != null">
             IT_ID = #{buildingImgBean.itId}
         </if>
-        <if test="buildingImgBean.buildId != null">
+        <if test="buildingImgBean.infoId != null">
             INFO_ID = #{buildingImgBean.infoId}
         </if>
         <if test="buildingImgBean.type != null">
@@ -35,7 +35,7 @@
             <if test="buildingImgBean.itId != null">
                 and IT_ID = #{buildingImgBean.itId}
             </if>
-            <if test="buildingImgBean.buildId != null">
+            <if test="buildingImgBean.infoId != null">
                 and INFO_ID = #{buildingImgBean.infoId}
             </if>
             <if test="buildingImgBean.type != null">
@@ -50,7 +50,7 @@
             <if test="buildingImgBean.itId != null">
                 and IT_ID = #{buildingImgBean.itId}
             </if>
-            <if test="buildingImgBean.buildId != null">
+            <if test="buildingImgBean.infoId != null">
                 and INFO_ID = #{buildingImgBean.infoId}
             </if>
             <if test="buildingImgBean.baId != null">
@@ -83,7 +83,7 @@
     <select id="getAllImgByBuildId" resultType="com.jiubo.buildstore.bean.BuildingImgBean">
         select * from building_img
         <where>
-            <if test="buildingImgBean.buildId != null">
+            <if test="buildingImgBean.infoId != null">
                 INFO_ID = #{buildingImgBean.infoId}
             </if>
             <if test="buildingImgBean.type != null">

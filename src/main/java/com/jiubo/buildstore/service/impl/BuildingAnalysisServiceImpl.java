@@ -418,8 +418,19 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
         List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
         if (null != allByBid) {
             for (BuildingImgBean bean : allByBid) {
-                BuildingServiceImpl.delFile(bean.getImgPath());
+                delFile(bean.getImgPath());
             }
+        }
+    }
+
+    public  void delFile(String filePathAndName) {
+        try {
+            String filePath = buildStoreDir + filePathAndName;
+            java.io.File myDelFile = new java.io.File(filePath);
+            myDelFile.delete();
+        } catch (Exception e) {
+            System.out.println("删除文件操作出错");
+            e.printStackTrace();
         }
     }
 }
