@@ -23,4 +23,6 @@ public interface RoomService extends IService<RoomBean> {
 	public Integer addRoom(RoomBean bean, MultipartFile[] picture
 			, MultipartFile[] video, MultipartFile headPicture) throws IOException;
 
+	public Integer updateRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException;
+
 }

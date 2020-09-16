@@ -199,6 +199,11 @@ public class RoomMainBean implements Serializable {
     private String bussinessName;
 
     /**
+     * 标签集合
+     */
+    @TableField(exist = false)
+    private List<String> labels;
+    /**
      *支付方式
      */
     private String payType;

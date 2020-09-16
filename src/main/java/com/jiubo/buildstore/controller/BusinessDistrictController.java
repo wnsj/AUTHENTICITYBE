@@ -51,12 +51,12 @@ public class BusinessDistrictController {
 	private BusinessDistrictService businessDistrictService;
 	
 	@ApiOperation(value = "根据区域查询对应的商圈", notes = "根据区域查询对应的商圈")
-	@GetMapping("/getBusinessDistrict")
-	public JSONObject getBusinessDistrict(Integer ldId) {
+	@PostMapping("/getBusinessDistrict")
+	public JSONObject getBusinessDistrict(@RequestBody BusinessDistrictBean businessDistrictBean) {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,businessDistrictService.getBusinessDistrict(ldId));
+        jsonObject.put(Constant.Result.RETDATA,businessDistrictService.getBusinessDistrict(businessDistrictBean.getLdId()));
         return jsonObject;
 	}
 	

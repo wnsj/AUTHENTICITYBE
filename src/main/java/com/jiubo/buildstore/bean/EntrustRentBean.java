@@ -36,6 +36,12 @@ public class EntrustRentBean implements Serializable {
     @ApiModelProperty(required = false, value = "序列号")
     @TableId(value = "EN_ID", type = IdType.AUTO)
     private Integer enId;
+    
+    /**
+     * 委托人姓名
+     */
+    @ApiModelProperty(required = true, value = "委托人姓名")
+    private String name;
 
     /**
      * 手机号码

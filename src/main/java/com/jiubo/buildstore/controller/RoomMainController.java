@@ -26,71 +26,71 @@ import org.springframework.stereotype.Controller;
 @RestController
 @RequestMapping("/roomMainBean")
 public class RoomMainController {
-	
-	@Autowired
-	private RoomMainService roomMainService;
-	
-	@ApiOperation(value = "多条件查询房源", notes = "多条件查询房源")
-	@PostMapping("/getRoomByConditions")
-	public JSONObject getHotBusinessDistrict(@RequestBody RoomReceive receive) {
-		JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,roomMainService.getRoomByConditions(receive));
-        return jsonObject;
-	}
-	
-	@ApiOperation(value = "查询房源详情", notes = "查询房源详情")
-	@GetMapping("/getRoomDetails")
-	public JSONObject getRoomDetails(Integer roomMainId) {
-		JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA,roomMainService.getRoomDetails(roomMainId));
-        return jsonObject;
-	}
-	
 
-	@ApiOperation(value = "查询共享详情", notes = "查询共享详情")
-	@PostMapping("/getSharedById")
-	public JSONObject getSharedById(@RequestBody RoomMainBean roomMainBean) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-		jsonObject.put(Constant.Result.RETDATA,roomMainService.getSharedById(roomMainBean.getId()));
-		return jsonObject;
-	}
-	
-	@ApiOperation(value = "查询商铺详情", notes = "查询商铺详情")
-	@GetMapping("/getStoneDetail")
-	public JSONObject getStoneDetail(Integer roomMainId) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
-		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-		jsonObject.put(Constant.Result.RETDATA,roomMainService.getStoneDetail(roomMainId));
-		return jsonObject;
-	}
-	
-	@ApiOperation(value = "添加房源主表", notes = "添加房源主表")
-	@PostMapping("/addRoomMain")
-	public JSONObject addRoomMain(@RequestBody String param) {
-		JSONObject jsonObject = new JSONObject();
+    @Autowired
+    private RoomMainService roomMainService;
+
+    @ApiOperation(value = "多条件查询房源", notes = "多条件查询房源")
+    @PostMapping("/getRoomByConditions")
+    public JSONObject getHotBusinessDistrict(@RequestBody RoomReceive receive) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomByConditions(receive));
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "查询房源详情", notes = "查询房源详情")
+    @GetMapping("/getRoomDetails")
+    public JSONObject getRoomDetails(Integer roomMainId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomDetails(roomMainId));
+        return jsonObject;
+    }
+
+
+    @ApiOperation(value = "查询共享详情", notes = "查询共享详情")
+    @PostMapping("/getSharedById")
+    public JSONObject getSharedById(@RequestBody RoomMainBean roomMainBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getSharedById(roomMainBean.getId()));
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "查询商铺详情", notes = "查询商铺详情")
+    @GetMapping("/getStoneDetail")
+    public JSONObject getStoneDetail(Integer roomMainId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getStoneDetail(roomMainId));
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "添加房源主表", notes = "添加房源主表")
+    @PostMapping("/addRoomMain")
+    public JSONObject addRoomMain(@RequestBody String param) {
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
-        jsonObject.put(Constant.Result.RETDATA,roomMainService.addRoomMain(bean));
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.addRoomMain(bean));
         return jsonObject;
-	}
-	
-	@ApiOperation(value = "修改房源主表", notes = "修改房源主表")
-	@PostMapping("/updateRoomMain")
-	public JSONObject updateRoomMain(@RequestBody String param) {
-		JSONObject jsonObject = new JSONObject();
+    }
+
+    @ApiOperation(value = "修改房源主表", notes = "修改房源主表")
+    @PostMapping("/updateRoomMain")
+    public JSONObject updateRoomMain(@RequestBody String param) {
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
-        jsonObject.put(Constant.Result.RETDATA,roomMainService.updateRoomMain(bean));
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.updateRoomMain(bean));
         return jsonObject;
-	}
+    }
 
 }

@@ -17,4 +17,5 @@ import java.io.IOException;
 public interface OfficeService extends IService<OfficeBean> {
     OfficeBean getOfficeByPk(Integer id);
     void addOffice(OfficeBean officeBean, MultipartFile headImg,MultipartFile[] picture,MultipartFile video) throws IOException;
+    void patchOffice(OfficeBean officeBean, MultipartFile headImg,MultipartFile[] picture,MultipartFile video) throws IOException;
 }

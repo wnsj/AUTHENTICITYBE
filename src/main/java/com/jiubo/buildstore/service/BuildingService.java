@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author syl
@@ -25,12 +25,14 @@ public interface BuildingService extends IService<BuildingBean> {
     public Page<BuildReturn> getAllBulidByCondition(BuildReceive buildingBean);
 
     public BuildingBean addBuilding(BuildReceive buildingBean,
-                            MultipartFile[] buildRealImg,
-                            MultipartFile[] video) throws Exception;
+                                    MultipartFile[] headImg,
+                                    MultipartFile[] buildRealImg,
+                                    MultipartFile[] video) throws Exception;
 
     public BuildingBean patchById(BuildReceive buildingBean,
-                            MultipartFile[] buildRealImg,
-                          MultipartFile[] video) throws Exception;
+                                  MultipartFile[] headImg,
+                                  MultipartFile[] buildRealImg,
+                                  MultipartFile[] video) throws Exception;
 
     public List<BuildingBean> getAllBuild();
 
@@ -45,6 +47,7 @@ public interface BuildingService extends IService<BuildingBean> {
 
     /**
      * 推荐楼盘（根据人气热搜排序）
+     *
      * @return
      */
     public List<BuildReturn> getRecommend();
@@ -52,6 +55,7 @@ public interface BuildingService extends IService<BuildingBean> {
 
     /**
      * 模糊查询
+     *
      * @param buildingBean
      * @return
      */
@@ -65,7 +69,6 @@ public interface BuildingService extends IService<BuildingBean> {
     public List<BuildReturn> getSelected();
 
 
-
     /**
      * 猜你喜欢(4个)
      */
@@ -76,6 +79,6 @@ public interface BuildingService extends IService<BuildingBean> {
      */
     public BuildReturn getDetails(BuildingBean buildingBean);
 
-    public List<Map<String, Object>> uploadFile(MultipartFile[] file)throws Exception;
+    public List<Map<String, Object>> uploadFile(MultipartFile[] file) throws Exception;
 
 }

@@ -78,6 +78,7 @@ public class BuildingController {
      */
     @PostMapping("/addBuilding")
     public JSONObject addBuilding(String addParam,
+                                  @RequestParam("headImg") MultipartFile[] headImg,
                                   @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
                                   @RequestParam("video") MultipartFile[] video) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -86,7 +87,7 @@ public class BuildingController {
 
         BuildReceive buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
 
-        BuildingBean bean = buildingService.addBuilding(buildingBean, buildRealImg,video);
+        BuildingBean bean = buildingService.addBuilding(buildingBean,headImg, buildRealImg,video);
         jsonObject.put(Constant.Result.RETDATA, bean);
         return jsonObject;
     }
@@ -105,6 +106,7 @@ public class BuildingController {
      */
     @PostMapping("/patchById")
     public JSONObject patchById(String addParam,
+                                @RequestParam("headImg") MultipartFile[] headImg,
                                 @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
                                 @RequestParam("video") MultipartFile[] video) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -112,7 +114,7 @@ public class BuildingController {
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 
         BuildReceive buildingBean = JSONObject.parseObject(addParam, BuildReceive.class);
-        BuildingBean bean = buildingService.patchById(buildingBean,buildRealImg,video);
+        BuildingBean bean = buildingService.patchById(buildingBean,headImg,buildRealImg,video);
         jsonObject.put(Constant.Result.RETDATA, bean);
         return jsonObject;
     }

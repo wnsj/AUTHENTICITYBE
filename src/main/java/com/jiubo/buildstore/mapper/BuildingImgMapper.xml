@@ -38,9 +38,6 @@
             <if test="buildingImgBean.buildId != null">
                 and INFO_ID = #{buildingImgBean.infoId}
             </if>
-            <if test="buildingImgBean.baId != null">
-                and BA_ID = #{buildingImgBean.baId}
-            </if>
             <if test="buildingImgBean.type != null">
                 and TYPE = #{buildingImgBean.type}
             </if>
