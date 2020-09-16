@@ -93,4 +93,5 @@ public class AccountServiceImpl implements AccountService {
 //        if (null == accountBeanList || accountBeanList.size() == 0 ) throw new MessageException("原密码输入不正确");
         accountDao.patchAccount(accountBean);
     }
+    
 }
