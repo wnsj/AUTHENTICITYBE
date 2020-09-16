@@ -78,5 +78,6 @@ public class BuildingImgBean implements Serializable {
      */
     private Integer infoId;
 
-
+    @TableField(exist = false)
+    private Integer buildId;
 }

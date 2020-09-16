@@ -109,6 +109,7 @@
                 </foreach>
             </if>
         </where>
+        order by create_date DESC
         <if test="receive.areaOrder == 2">
                order by build_area DESC
          </if>

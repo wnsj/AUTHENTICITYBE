@@ -96,6 +96,9 @@ public class EntrustRentBean implements Serializable {
      */
     @ApiModelProperty(required = false, value = "创建时间")
     private Date createTime;
+    
+    @TableField(exist = false)
+    private String createDate;
     /**
      * 商圈名
      */
@@ -106,7 +109,11 @@ public class EntrustRentBean implements Serializable {
      */
     @TableField(exist = false)
     private String ldName;
-
+    /**
+     * 已经联系未联系
+     */
+    @TableField(exist = false)
+    private String contactName;
 
     /**
      * 页码

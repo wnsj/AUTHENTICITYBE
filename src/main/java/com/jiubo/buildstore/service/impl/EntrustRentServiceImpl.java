@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.EntrustRentBean;
 import com.jiubo.buildstore.dao.EntrustRentDao;
 import com.jiubo.buildstore.service.EntrustRentService;
+import com.jiubo.buildstore.util.DateUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.util.Date;
@@ -41,6 +42,15 @@ public class EntrustRentServiceImpl extends ServiceImpl<EntrustRentDao, EntrustR
 		page.setCurrent(StringUtils.isBlank(entrustRentBean.getCurrent()) ? 1L : Long.parseLong(entrustRentBean.getCurrent()));
 		page.setSize(StringUtils.isBlank(entrustRentBean.getPageSize()) ? 10L : Long.parseLong(entrustRentBean.getPageSize()));
 		List<EntrustRentBean> enByPageList = entrustRentDao.getEnByPage(page, entrustRentBean);
+		for (EntrustRentBean item : enByPageList) {
+			String formatDate = DateUtils.formatDate(item.getCreateTime(), "yyyy-MM-dd");
+			item.setCreateDate(formatDate);
+			if(item.getIsContact() == 2) {
+				item.setContactName("已联系");
+			}else {
+				item.setContactName("未联系");
+			}
+		}
 		return page.setRecords(enByPageList);
 	}
 
