@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author swd
- * @since 2020-09-12
+ * @since 2020-09-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,16 +40,6 @@ public class StoreRoomBean implements Serializable {
      * 特点
      */
     private String chaList;
-
-    /**
-     * 类型
-     */
-    private String type;
-
-    /**
-     * 类别
-     */
-    private String category;
 
     /**
      * 短标签
@@ -77,7 +67,7 @@ public class StoreRoomBean implements Serializable {
     private String minLeaseTerm;
 
     /**
-     * 适合经营
+     * 业态
      */
     private String suitableStore;
 
@@ -100,16 +90,6 @@ public class StoreRoomBean implements Serializable {
      * 物业信息
      */
     private String propertyInfo;
-
-    /**
-     * 免租时间
-     */
-    private String freeDate;
-
-    /**
-     * 看铺时间
-     */
-    private String seeDate;
 
     /**
      * 地铁信息

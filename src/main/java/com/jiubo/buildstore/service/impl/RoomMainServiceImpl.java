@@ -315,4 +315,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		result.put("video", videoList);
 		return result;
 	}
+
+	@Override
+	public Integer addRoomMain(RoomMainBean bean) {
+		bean.setCreateDate(new Date());
+		bean.setModifyDate(new Date());
+		roomMainDao.insert(bean);
+		System.out.println("bean.getId"+bean.getId());
+		return bean.getId();
+	}
+
+	@Override
+	public Integer updateRoomMain(RoomMainBean bean) {
+		bean.setModifyDate(new Date());
+		return roomMainDao.updateById(bean);
+	}
 }

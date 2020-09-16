@@ -1,8 +1,12 @@
 package com.jiubo.buildstore.service;
 
-import com.github.pagehelper.PageInfo;
+
 import com.jiubo.buildstore.bean.RoomBean;
-import com.jiubo.buildstore.bean.RoomReceive;
+
+
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,6 +20,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoomService extends IService<RoomBean> {
 
-	public PageInfo<RoomBean> getRoomByConditions(RoomReceive receive);
+	public Integer addRoom(RoomBean bean, MultipartFile[] picture
+			, MultipartFile[] video, MultipartFile headPicture) throws IOException;
 
 }

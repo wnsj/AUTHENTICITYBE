@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.controller;
 
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,16 @@ public class EntrustRentController {
 		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
 		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
 		jsonObject.put(Constant.Result.RETDATA,entrustRentService.getEnByPage(entrustRentBean));
+		return jsonObject;
+	}
+	
+	@ApiOperation(value = "修改委托出租备注信息和是否联系", notes = "修改委托出租备注信息和是否联系")
+	@GetMapping("/updateEntrustRent")
+	public JSONObject updateEntrustRent(Integer enId, Integer isConcat, String remark) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+		jsonObject.put(Constant.Result.RETDATA,entrustRentService.updateEntrustRent(enId,isConcat,remark));
 		return jsonObject;
 	}
 }

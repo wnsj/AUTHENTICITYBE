@@ -60,7 +60,20 @@ public class BuildingDynamicController {
         jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getDynamicByPage(buildingDynamicBean));
         return jsonObject;
     }
-    
+
+    /**
+     * 后台管理分页
+     * @param buildingDynamicBean
+     * @return
+     */
+    @PostMapping("/getDynamicByPageBe")
+    public JSONObject getDynamicByPageBe(@RequestBody BuildingDynamicBean buildingDynamicBean) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getDynamicByPageBe(buildingDynamicBean));
+        return jsonObject;
+    }
     /**
      * 
      * 根据咨询id查询咨询详情及上一条和下一条

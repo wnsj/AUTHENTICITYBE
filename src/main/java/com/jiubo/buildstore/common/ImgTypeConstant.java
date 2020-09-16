@@ -9,13 +9,16 @@ public  class ImgTypeConstant {
 //    public static final String regionImg = "区位";
     public static final String video = "视频";
     public static final String picture = "图片";
+    public static final String headImg = "头图";
     public static final String horseType = "户型分析";
 
 
     public static final Integer PICTURE = 2;
     public static final Integer VIDEO = 3;
+    public static final Integer HEAD_PICTURE = 4;
 
     public static final Integer HOUSE = 2;
     public static final Integer BUILD = 3;
     public static final Integer OFFICE = 4;
+    public static final Integer BUSSINESS = 5;
 }

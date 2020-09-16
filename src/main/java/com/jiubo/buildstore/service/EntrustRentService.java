@@ -21,4 +21,6 @@ public interface EntrustRentService extends IService<EntrustRentBean> {
 
 	Page<EntrustRentBean> getEnByPage(EntrustRentBean entrustRentBean);
 
+	public Integer updateEntrustRent(Integer enId, Integer isConcat, String remark);
+
 }

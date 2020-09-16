@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.EntrustRentBean;
 import com.jiubo.buildstore.dao.EntrustRentDao;
@@ -41,6 +42,19 @@ public class EntrustRentServiceImpl extends ServiceImpl<EntrustRentDao, EntrustR
 		page.setSize(StringUtils.isBlank(entrustRentBean.getPageSize()) ? 10L : Long.parseLong(entrustRentBean.getPageSize()));
 		List<EntrustRentBean> enByPageList = entrustRentDao.getEnByPage(page, entrustRentBean);
 		return page.setRecords(enByPageList);
+	}
+
+	@Override
+	public Integer updateEntrustRent(Integer enId, Integer isContact, String remark) {
+		EntrustRentBean entity = entrustRentDao.selectById(enId);
+		if(!StringUtils.isBlank(remark)) {
+			entity.setRemark(remark);
+		}
+		if(isContact != null) {
+			entity.setIsContact(isContact);
+		}
+		
+		return entrustRentDao.updateById(entity);
 	}
 
 }
