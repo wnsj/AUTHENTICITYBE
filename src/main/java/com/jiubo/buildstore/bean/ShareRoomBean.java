@@ -59,5 +59,5 @@ public class ShareRoomBean implements Serializable {
      * 特点集合
      */
     @TableField(exist = false)
-    private List<String> chList;
+    private List<BaseServiceBean> baseServiceBeans;
 }

@@ -75,6 +75,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	
 	@Autowired
 	private ShareRoomDao shareRoomDao;
+
+	@Autowired
+	private BaseServiceDao baseServiceDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -179,7 +182,15 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					String[] split = chaList.split("\\|");
 					ArrayList< String> arrayList = new ArrayList<String>(split.length);
 					Collections.addAll(arrayList, split);
-					shareRoomBean.setChList(arrayList);
+					List<Integer> idList = new ArrayList<>();
+					for (String s : arrayList) {
+						int anInt = Integer.parseInt(s);
+						idList.add(anInt);
+					}
+					List<BaseServiceBean> serviceBeans = baseServiceDao.selectBatchIds(idList);
+//
+//					shareRoomBean.setChList(arrayList);
+					shareRoomBean.setBaseServiceBeans(serviceBeans);
 				}
 			}
 			// 图片路径
