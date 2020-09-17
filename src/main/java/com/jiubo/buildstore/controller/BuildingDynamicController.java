@@ -94,22 +94,22 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/patchDyById")
-    public JSONObject patchDyById(String param,@RequestParam(value = "picture", required = false) MultipartFile file) throws IOException {
+    public JSONObject patchDyById(String param,@RequestParam("picture") MultipartFile[] picture) throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
-        buildingDynamicService.patchDyById(buildingDynamicBean,file);
+        buildingDynamicService.patchDyById(buildingDynamicBean,picture);
         return jsonObject;
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(String param,@RequestParam(value = "picture", required = false) MultipartFile file) throws IOException {
+    public JSONObject addDynamic(String param,@RequestParam("picture") MultipartFile[] picture) throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
-        buildingDynamicService.addDynamic(buildingDynamicBean,file);
+        buildingDynamicService.addDynamic(buildingDynamicBean,picture);
         return jsonObject;
     }
     @PostMapping("/getNewestDy")

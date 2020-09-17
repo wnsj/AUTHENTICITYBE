@@ -63,6 +63,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                 if (dynamicBean.getCreateDate() != null) {
                     dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(),"yyyy-MM-dd"));
                 }
+                if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
+                    dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
+                }
             }
         }
         PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
@@ -130,9 +133,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     }
 
     @Override
-    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException {
+    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException {
     	if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
 			if(!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 			}
@@ -141,11 +144,11 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     }
 
     @Override
-    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException {
+    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException {
     	buildingDynamicBean.setCreateDate(new Date());
     	buildingDynamicDao.insert(buildingDynamicBean);
     	if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
+			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
 			if(!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 				buildingDynamicDao.updateById(buildingDynamicBean);
