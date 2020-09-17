@@ -29,9 +29,9 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
     public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean);
     public Page<BuildingDynamicBean> getDynamicByPageBe(BuildingDynamicBean buildingDynamicBean);
 
-    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException;
+    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException;
 
-    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException;
+    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException;
     
     public Map<String, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId);
 
