@@ -19,9 +19,6 @@ import com.jiubo.buildstore.common.ImgPathConstant;
 
 public class FileUtil {
 	
-	@Value("${buildStoreDir}")
-    private static String buildStoreDir;
-	
 	public static Map<String, String> uploadFile(MultipartFile file,String picPath,Integer id,Integer type) throws IOException {
 		 //原文件名
         String fileName = file.getOriginalFilename();
@@ -36,7 +33,7 @@ public class FileUtil {
         if (type.equals(ImgTypeConstant.HEAD_PICTURE)) {
             str = "headImg";
         }
-        File dir = new File(buildStoreDir + picPath + id + "/" + str);
+        File dir = new File("D:/buildStoreDir" + picPath + id + "/" + str);
 //        System.out.println("dir:" + dir.getPath());
         if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
@@ -72,7 +69,7 @@ public class FileUtil {
         }
         Map<String, String> map = new HashMap<String, String>();
         map.put("name", name);
-        map.put("path", picPath + id + "/" + str + name);
+        map.put("path", picPath + id + "/" + str + "/" + name);
 		return map;
 	}
 	

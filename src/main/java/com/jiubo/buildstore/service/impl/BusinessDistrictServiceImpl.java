@@ -136,6 +136,9 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 			}else {
 				districtBean.setIsHotName("不热门");
 			}
+			if (!StringUtils.isBlank(districtBean.getBuPath())) {
+				districtBean.setBuPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(districtBean.getBuPath()));
+			}
 			LocationDistinguishBean distinguishBean = locationDistinguishDao.selectById(districtBean.getLdId());
 			districtBean.setLdName(distinguishBean.getLdName());
 		}

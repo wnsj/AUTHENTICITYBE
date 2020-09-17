@@ -99,4 +99,7 @@ public class OfficeBean implements Serializable {
 
     @TableField(exist = false)
     private List<String> picList;
+
+    @TableField(exist = false)
+    private RoomMainBean roomMainBean;
 }

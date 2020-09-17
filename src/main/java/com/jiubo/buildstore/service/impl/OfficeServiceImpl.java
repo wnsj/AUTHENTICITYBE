@@ -3,10 +3,12 @@ package com.jiubo.buildstore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.OfficeBean;
+import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.OfficeDao;
+import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.service.OfficeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiubo.buildstore.util.CollectionsUtils;
@@ -38,10 +40,22 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
     private OfficeDao officeDao;
     @Autowired
     private BuildingImgDao buildingImgDao;
+    @Autowired
+    private RoomMainDao roomMainDao;
     @Override
     public OfficeBean getOfficeByPk(Integer id) {
         OfficeBean bean = officeDao.selectById(id);
         if (null != bean) {
+
+            QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
+            qw.select("*");
+            qw.eq("id", bean.getRoomId());
+            List<RoomMainBean> roomMainBeans = roomMainDao.selectList(qw);
+
+            if (!CollectionsUtils.isEmpty(roomMainBeans)) {
+                bean.setRoomMainBean(roomMainBeans.get(0));
+            }
+
             QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
             qwP.select("*");
             qwP.eq("IT_ID", 2);
