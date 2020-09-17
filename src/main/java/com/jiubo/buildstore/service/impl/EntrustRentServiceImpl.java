@@ -55,10 +55,13 @@ public class EntrustRentServiceImpl extends ServiceImpl<EntrustRentDao, EntrustR
 	}
 
 	@Override
-	public Integer updateEntrustRent(Integer enId, Integer isContact, String remark) {
+	public Integer updateEntrustRent(Integer enId, Integer isContact, String remark, String returnSale) {
 		EntrustRentBean entity = entrustRentDao.selectById(enId);
 		if(!StringUtils.isBlank(remark)) {
 			entity.setRemark(remark);
+		}
+		if(!StringUtils.isBlank(returnSale)) {
+			entity.setReturnSale(returnSale);
 		}
 		if(isContact != null) {
 			entity.setIsContact(isContact);

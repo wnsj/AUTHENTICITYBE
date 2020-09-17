@@ -61,6 +61,16 @@ public class BusinessDistrictController {
         return jsonObject;
 	}
 	
+	@ApiOperation(value = "后台查询商圈", notes = "后台查询商圈")
+	@PostMapping("/getBusinessDistrictPage")
+	public JSONObject getBusinessDistrictPage(@RequestBody BusinessDistrictBean businessDistrictBean) {
+		JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,businessDistrictService.getBusinessDistrictPage(businessDistrictBean));
+        return jsonObject;
+	}
+	
 	@ApiOperation(value = "查询热门商圈", notes = "查询热门商圈")
 	@GetMapping("/getHotBusinessDistrict")
 	public JSONObject getHotBusinessDistrict() {
@@ -73,7 +83,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "添加商圈", notes = "添加商圈")
 	@PostMapping("/addBusinessDistrict")
-	public JSONObject addBusinessDistrict(@RequestBody String param,@RequestParam("file") MultipartFile file) throws IOException {
+	public JSONObject addBusinessDistrict(String param,@RequestParam("file") MultipartFile file) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

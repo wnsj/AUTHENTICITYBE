@@ -2,20 +2,27 @@ package com.jiubo.buildstore.service.impl;
 
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
+import com.jiubo.buildstore.bean.LocationDistinguishBean;
+import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
+import com.jiubo.buildstore.dao.LocationDistinguishDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
+import com.jiubo.buildstore.util.DateUtils;
 import com.jiubo.buildstore.util.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,6 +48,9 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 
 	@Autowired
 	private BuildingImgDao buildingImgDao;
+	
+	@Autowired
+	private LocationDistinguishDao locationDistinguishDao;
 
 	@Override
 	public List<BusinessDistrictBean> getBusinessDistrict(Integer ldId) {
@@ -104,6 +114,33 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);
+	}
+
+	@Override
+	public PageInfo<BusinessDistrictBean> getBusinessDistrictPage(BusinessDistrictBean bean) {
+		Integer pageNum = StringUtils.isBlank(bean.getCurrent()) ? 1 : Integer.valueOf(bean.getCurrent());
+		Integer pageSize = StringUtils.isBlank(bean.getPageSize()) ? 10 : Integer.valueOf(bean.getPageSize());
+		PageHelper.startPage(pageNum,pageSize);
+		QueryWrapper<BusinessDistrictBean> qw = new QueryWrapper<BusinessDistrictBean>();
+		qw.select("*");
+		if(bean.getLdId() != null) {
+			qw.eq("ld_id", bean.getLdId());
+		}
+		List<BusinessDistrictBean> list = businessDistrictDao.selectList(qw);
+		for (int i = 0; i < list.size(); i++) {
+			BusinessDistrictBean districtBean = list.get(i);
+			String formatDate = DateUtils.formatDate(districtBean.getCreateDate(), "yyyy-MM-dd");
+			districtBean.setCreateTime(formatDate);
+			if(districtBean.getIsHot() == 2) {
+				districtBean.setIsHotName("热门");
+			}else {
+				districtBean.setIsHotName("不热门");
+			}
+			LocationDistinguishBean distinguishBean = locationDistinguishDao.selectById(districtBean.getLdId());
+			districtBean.setLdName(distinguishBean.getLdName());
+		}
+		PageInfo<BusinessDistrictBean> page = new PageInfo<BusinessDistrictBean>(list);
+		return page;
 	}
 
 }
