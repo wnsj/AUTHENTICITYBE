@@ -142,7 +142,7 @@
     </select>
 
     <select id="getRoomByBuildIdList" resultType="com.jiubo.buildstore.bean.RoomMainBean">
-        select build_id,build_area,id from room_main where
+        select build_id,build_area,id,room_img from room_main where
         build_id in
         <foreach collection="list" open="(" close=")" separator="," item="item">
             #{item}
