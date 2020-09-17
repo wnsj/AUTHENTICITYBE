@@ -60,4 +60,6 @@ public class ShareRoomBean implements Serializable {
      */
     @TableField(exist = false)
     private List<BaseServiceBean> baseServiceBeans;
+
+
 }

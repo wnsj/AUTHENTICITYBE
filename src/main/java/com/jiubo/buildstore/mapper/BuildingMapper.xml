@@ -8,6 +8,8 @@
         from building A
         LEFT JOIN room_main B ON A.BUILD_ID = B.build_id
         LEFT JOIN office C ON B.id = C.room_id
+        left join location_distinguish D on a.LD_ID = D.LD_ID
+        left join business_district E ON a.BUSINESS_ID = E.id
         <where>
             1=1
             /*省id*/
@@ -74,7 +76,12 @@
                     </if>
                 </foreach>
             </if>
-
+            <if test="null != buildingBean.special and buildingBean.special != ''">
+                and (D.LD_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or A.HT_NAME like CONCAT('%',#{buildingBean.special},'%')
+                or E.bu_name like CONCAT('%',#{buildingBean.special},'%')
+                )
+            </if>
             <if test="buildingBean.sellWell != null">
                 and #{buildingBean.sellWell} = A.SELL_WELL
             </if>
@@ -137,27 +144,14 @@
         FROM
         building a
         left join location_distinguish b on a.LD_ID = b.LD_ID
-        left join building_type c on a.BT_ID = c.BT_ID
-        left join bht_ref d on a.BUILD_ID = d.BUILD_ID
-        left join sale_type e on a.IS_SALE = e.ST_ID
-        left join develoger f on a.DEV_ID = f.DEV_ID
-        left join chara_ref g on a.BUILD_ID = g.BUILD_ID
-        left join region k on a.REGION_ID = k.ID
+        left join business_district c ON a.BUSINESS_ID = c.id
         <where>
             1=1
             <if test="null != buildingBean.special">
                 and (b.LD_NAME like CONCAT('%',#{buildingBean.special},'%')
                 or a.HT_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or a.ALIAS like CONCAT('%',#{buildingBean.special},'%')
-                or c.BT_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or d.BHT_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or e.ST_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or f.DEV_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or f.DEVS_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or g.HOUSE_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or k.REGION_NAME like CONCAT('%',#{buildingBean.special},'%')
-                or a.ALIAS like CONCAT('%',#{buildingBean.special},'%')
-                or a.ADRESS like CONCAT('%',#{buildingBean.special},'%'))
+                or c.bu_name like CONCAT('%',#{buildingBean.special},'%')
+                )
             </if>
         </where>
     </select>
