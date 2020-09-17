@@ -7,11 +7,8 @@ import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.RoomService;
 
 import com.jiubo.buildstore.util.FileUtil;
-<<<<<<< HEAD
-=======
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
->>>>>>> 1c6e461212946d03e26a37bc65b34336523d2f60
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 
