@@ -99,18 +99,21 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 
 	@Override
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
-		FileUtil.delFile(bean.getBuPath());
-		Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.BU_PATH,bean.getId(),2);
-		if(!map.isEmpty()) {
-			bean.setBuPath(map.get("path"));
-			BuildingImgBean imgBean = new BuildingImgBean();
-			imgBean.setImgName(map.get("name"));
-			imgBean.setCreateDate(new Date());
-			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
-			imgBean.setImgPath(map.get("path"));
-			imgBean.setInfoId(bean.getId());
-			imgBean.setType(ImgTypeConstant.BUSSINESS);
-			buildingImgDao.insert(imgBean);
+		if (null != file) {
+			FileUtil.delFile(bean.getBuPath());
+			Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.BU_PATH,bean.getId(),2);
+			if(!map.isEmpty()) {
+				bean.setBuPath(map.get("path"));
+				BuildingImgBean imgBean = new BuildingImgBean();
+				imgBean.setImgName(map.get("name"));
+				imgBean.setCreateDate(new Date());
+				imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+				imgBean.setImgPath(map.get("path"));
+				imgBean.setInfoId(bean.getId());
+				imgBean.setType(ImgTypeConstant.BUSSINESS);
+				buildingImgDao.insert(imgBean);
+			}
+
 		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);
