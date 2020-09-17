@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +73,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "添加商圈", notes = "添加商圈")
 	@PostMapping("/addBusinessDistrict")
-	public JSONObject addBusinessDistrict(@RequestBody String param,MultipartFile file) throws IOException {
+	public JSONObject addBusinessDistrict(@RequestBody String param,@RequestParam("file") MultipartFile file) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -83,7 +84,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "修改商圈", notes = "修改商圈")
 	@PostMapping("/updateBusinessDistrict")
-	public JSONObject addBusinessDistrict(@RequestBody BusinessDistrictBean bean,MultipartFile file) throws IOException {
+	public JSONObject addBusinessDistrict(@RequestBody BusinessDistrictBean bean,@RequestParam("file") MultipartFile file) throws IOException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

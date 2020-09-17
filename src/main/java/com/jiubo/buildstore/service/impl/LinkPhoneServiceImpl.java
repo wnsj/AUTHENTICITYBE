@@ -111,7 +111,7 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
 
     @Override
     public void patchLinkById(LinkPhoneBean linkPhoneBean) {
-        linkPhoneBean.setWriteTime(new Date());
+//        linkPhoneBean.setWriteTime(new Date());
         linkPhoneDao.patchLinkById(linkPhoneBean);
     }
 

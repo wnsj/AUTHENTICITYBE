@@ -3,7 +3,7 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDynamicDao">
     <select id="getDynamicByBid" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
         SELECT a.BD_ID,a.BD_PATH,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID
-         from building_dynamic a
+         from building_dynamic a where BD_ID = #{buildingDynamicBean.bdId}
          order by CREATE_DATE desc
     </select>
 

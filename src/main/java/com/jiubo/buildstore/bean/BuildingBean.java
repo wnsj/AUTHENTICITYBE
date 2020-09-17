@@ -78,6 +78,17 @@ public class BuildingBean implements Serializable {
      * 最小总价
      */
     private BigDecimal minTitlePrice;
+    
+    /**
+     * 最小工位数
+     */
+    private Integer minStationNum;
+
+    /**
+     * 最大工位数
+     */
+    private Integer maxStationNum;
+
 
     /**
      * 楼盘地址
