@@ -102,4 +102,6 @@ public class OfficeBean implements Serializable {
 
     @TableField(exist = false)
     private RoomMainBean roomMainBean;
+
+    private String houseType;
 }

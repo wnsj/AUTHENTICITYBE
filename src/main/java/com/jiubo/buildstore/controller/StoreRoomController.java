@@ -37,7 +37,7 @@ public class StoreRoomController {
 	
 	@ApiOperation(value = "添加商铺房源", notes = "添加商铺房源")
 	@PostMapping("/addStoreRoom")
-	public JSONObject addStoreRoom(@RequestBody String param, MultipartFile[] picture
+	public JSONObject addStoreRoom(String param, MultipartFile[] picture
 			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
 		System.out.println("param");
 		JSONObject jsonObject = new JSONObject();
@@ -50,7 +50,7 @@ public class StoreRoomController {
 	
 	@ApiOperation(value = "更新商铺房源", notes = "更新商铺房源")
 	@PostMapping("/updateStoreRoom")
-	public JSONObject updateStoreRoom(@RequestBody String param, MultipartFile[] picture
+	public JSONObject updateStoreRoom(String param, MultipartFile[] picture
 			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
 		System.out.println("param");
 		JSONObject jsonObject = new JSONObject();

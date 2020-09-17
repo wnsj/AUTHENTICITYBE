@@ -93,6 +93,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     @Autowired
     private RoomMainDao roomMainDao;
 
+    @Autowired
+    private OfficeDao officeDao;
     @Value("${buildStoreDir}")
     private String buildStoreDir;
 
@@ -123,15 +125,21 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 商圈
             Map<Integer, List<BusinessDistrictBean>> buMap = getBuMap();
 
-
             // 区域
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
 
             // 房源面积集合
             List<RoomMainBean> roomByBuildIdList = roomMainDao.getRoomByBuildIdList(list);
+
             Map<Integer, List<RoomMainBean>> areaMap = null;
+            Map<Integer, List<OfficeBean>> offMap = null;
             if (!CollectionsUtils.isEmpty(roomByBuildIdList)) {
                 areaMap = roomByBuildIdList.stream().collect(Collectors.groupingBy(RoomMainBean::getBuildId));
+                List<Integer> roomIdList = roomByBuildIdList.stream().map(RoomMainBean::getId).distinct().collect(toList());
+                List<OfficeBean> offByRoomIdList = officeDao.getOffByRoomIdList(roomIdList);
+                if (!CollectionsUtils.isEmpty(offByRoomIdList)) {
+                    offMap = offByRoomIdList.stream().collect(Collectors.groupingBy(OfficeBean::getRoomId));
+                }
             }
             //图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -190,6 +198,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 List<RoomMainBean> mainBeans = null;
                 if (null != areaMap) {
                     mainBeans = areaMap.get(bean.getBuildId());
+
+                    if (bean.getBuildType() == 2) {
+                        if (!CollectionsUtils.isEmpty(mainBeans)) {
+                            RoomMainBean roomMainBean = mainBeans.get(0);
+                            List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
+                            bean.setOfficeBeanList(officeBeanList);
+                        }
+                    }
                 }
                 bean.setRoomMainBeanList(mainBeans);
             }
