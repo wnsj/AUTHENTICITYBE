@@ -52,4 +52,18 @@ public class OfficeController {
         officeService.addOffice(officeBean,headImg,picture,video);
         return jsonObject;
     }
+
+    @PostMapping("/patchOffice")
+    public JSONObject patchOffice(String addParam,
+                                @RequestParam("headImg") MultipartFile headImg,
+                                @RequestParam("picture") MultipartFile[] picture,
+                                @RequestParam("video") MultipartFile video) throws IOException, MessageException {
+        if (StringUtils.isBlank(addParam)) throw new MessageException("接收参数失败！");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        OfficeBean officeBean = JSONObject.parseObject(addParam, OfficeBean.class);
+        officeService.patchOffice(officeBean,headImg,picture,video);
+        return jsonObject;
+    }
 }
