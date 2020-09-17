@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.pagehelper.PageInfo;
 
 /**
  * <p>
@@ -26,5 +27,7 @@ public interface BusinessDistrictService extends IService<BusinessDistrictBean> 
 	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException;
 
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException;
+
+	public PageInfo<BusinessDistrictBean> getBusinessDistrictPage(BusinessDistrictBean bean);
 
 }

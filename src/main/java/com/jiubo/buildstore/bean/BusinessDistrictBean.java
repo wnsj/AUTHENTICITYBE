@@ -2,6 +2,7 @@ package com.jiubo.buildstore.bean;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -68,5 +69,33 @@ public class BusinessDistrictBean implements Serializable {
      */
     private Date modifyTime;
 
+    /**
+     * 页码
+     */
+    @TableField(exist = false)
+    private String current;
 
+    /**
+     * 每页尺寸
+     */
+    @TableField(exist = false)
+    private String pageSize;
+    
+    /**
+     * 区域名称
+     */
+    @TableField(exist = false)
+    private String ldName;
+    
+    /**
+     * 是否热门
+     */
+    @TableField(exist = false)
+    private String isHotName;
+    
+    /**
+     *创建时间
+     */
+    @TableField(exist = false)
+    private String createTime;
 }
