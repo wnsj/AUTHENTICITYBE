@@ -78,6 +78,11 @@ public class EntrustRentBean implements Serializable {
      */
     @ApiModelProperty(required = true, value = " 写字楼名称")
     private String obName;
+    
+    /**
+     * 回访人姓名
+     */
+    private String returnSale;
 
     /**
      * 2已联系3未联系

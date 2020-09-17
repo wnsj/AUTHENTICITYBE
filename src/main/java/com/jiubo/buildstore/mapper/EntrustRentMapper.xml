@@ -28,6 +28,12 @@
         select T.*,B.bu_name as buName,L.LD_NAME as ldName from entrust_rent T
         LEFT JOIN business_district B ON T.TA_ID = B.id
         LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
+        <if test="entrustRentBean.ldId != null and entrustRentBean.ldId != ''">
+                and T.LD_ID = #{entrustRentBean.ldId}
+        </if>
+        <if test="entrustRentBean.taId != null and entrustRentBean.taId != ''">
+                and T.TA_ID = #{entrustRentBean.taId}
+        </if>
         <include refid="condition"/>
     </select>
 
