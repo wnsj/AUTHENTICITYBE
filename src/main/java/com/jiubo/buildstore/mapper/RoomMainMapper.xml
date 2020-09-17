@@ -7,7 +7,11 @@
         SELECT *
         from room_main
         <where>
-            1=1 and room_type = #{receive.type}
+            1=1
+            /*查询房源根据房源类型*/
+			 <if test="receive.type != null and receive.type != '' and receive.type != 4">
+                and room_type = #{receive.type}
+            </if>
              /*查询首页共享房源*/
 			 <if test="receive.isHome != null and receive.isHome != ''">
                 and is_home = #{receive.isHome}

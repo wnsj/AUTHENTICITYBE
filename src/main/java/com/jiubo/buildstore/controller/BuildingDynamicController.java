@@ -6,10 +6,13 @@ import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.jiubo.buildstore.common.Constant;
 import com.jiubo.buildstore.service.BuildingDynamicService;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -91,22 +94,22 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/patchDyById")
-    public JSONObject patchDyById(@RequestBody String param) {
+    public JSONObject patchDyById(String param,@RequestParam(value = "picture", required = false) MultipartFile file) throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
-        buildingDynamicService.patchDyById(buildingDynamicBean);
+        buildingDynamicService.patchDyById(buildingDynamicBean,file);
         return jsonObject;
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(@RequestBody String param) {
+    public JSONObject addDynamic(String param,@RequestParam(value = "picture", required = false) MultipartFile file) throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
-        buildingDynamicService.addDynamic(buildingDynamicBean);
+        buildingDynamicService.addDynamic(buildingDynamicBean,file);
         return jsonObject;
     }
     @PostMapping("/getNewestDy")

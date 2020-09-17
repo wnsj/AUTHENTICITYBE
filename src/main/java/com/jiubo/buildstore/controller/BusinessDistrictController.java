@@ -84,10 +84,12 @@ public class BusinessDistrictController {
 	@ApiOperation(value = "添加商圈", notes = "添加商圈")
 	@PostMapping("/addBusinessDistrict")
 	public JSONObject addBusinessDistrict(String param,@RequestParam(value = "picture",required = false) MultipartFile file) throws IOException {
+		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BusinessDistrictBean bean = JSONObject.parseObject(param, BusinessDistrictBean.class);
+        System.out.println("bean"+bean);
         jsonObject.put(Constant.Result.RETDATA,businessDistrictService.addBusinessDistrict(bean,file));
         return jsonObject;
 	}

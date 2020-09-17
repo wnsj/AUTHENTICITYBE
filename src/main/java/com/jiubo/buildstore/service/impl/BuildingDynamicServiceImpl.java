@@ -5,18 +5,27 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
-
+import com.jiubo.buildstore.bean.BuildingImgBean;
+import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
+import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingDynamicDao;
 import com.jiubo.buildstore.service.BuildingDynamicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.DateUtils;
+import com.jiubo.buildstore.util.FileUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,17 +43,20 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, BuildingDynamicBean> implements BuildingDynamicService {
-
+	
+	
+	@Value("${buildStoreDir}")
+    private String buildStoreDir;
     @Autowired
     private BuildingDynamicDao buildingDynamicDao;
     @Autowired
     private BuildingDao buildingDao;
     @Override
-    public List<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+    public PageInfo<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
 
-//        Page<BuildingDynamicBean> page = new Page<>();
-//        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
-//        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 3L : Long.parseLong(buildingDynamicBean.getPageSize()));
+        Integer pageNum = StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1 : Integer.valueOf(buildingDynamicBean.getCurrent());
+		Integer pageSize = StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10 : Integer.valueOf(buildingDynamicBean.getPageSize());
+		PageHelper.startPage(pageNum,pageSize);
         List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
         if (null != dynamicByBidList && dynamicByBidList.size()>0) {
             for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
@@ -53,7 +65,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                 }
             }
         }
-        return dynamicByBidList;
+        PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
+        return page;
     }
 
     @Override
@@ -117,14 +130,27 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     }
 
     @Override
-    public void patchDyById(BuildingDynamicBean buildingDynamicBean) {
+    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException {
+    	if(file != null) {
+			Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
+			if(!map.isEmpty()) {
+				buildingDynamicBean.setBdPath(map.get("path"));
+			}
+		}
         buildingDynamicDao.updateById(buildingDynamicBean);
     }
 
     @Override
-    public void addDynamic(BuildingDynamicBean buildingDynamicBean) {
+    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile file) throws IOException {
     	buildingDynamicBean.setCreateDate(new Date());
-        buildingDynamicDao.insert(buildingDynamicBean);
+    	buildingDynamicDao.insert(buildingDynamicBean);
+    	if(file != null) {
+			Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
+			if(!map.isEmpty()) {
+				buildingDynamicBean.setBdPath(map.get("path"));
+				buildingDynamicDao.updateById(buildingDynamicBean);
+			}
+		}
     }
 
 	@Override

@@ -342,6 +342,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		bean.setModifyDate(new Date());
 		roomMainDao.insert(bean);
 		System.out.println("bean.getId"+bean.getId());
+		BuildingBean buildingBean  = buildingDao.selectById(bean.getBuildId());
+		buildingBean.setIsRentNum(buildingBean.getIsRentNum()+1);
+		buildingDao.updateById(buildingBean);
 		return bean.getId();
 	}
 
