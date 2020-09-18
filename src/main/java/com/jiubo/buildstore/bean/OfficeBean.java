@@ -144,6 +144,12 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private BigDecimal unitPrice;
+    
+    /**
+     * 房源名称
+     */
+    @TableField(exist = false)
+    private String roomName;
 
     private String houseType;
 }

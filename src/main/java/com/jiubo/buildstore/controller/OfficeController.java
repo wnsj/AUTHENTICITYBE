@@ -61,6 +61,7 @@ public class OfficeController {
         jsonObject.put(Constant.Result.RETDATA,officeService.getAllOffice(officeBean));
         return jsonObject;
     }
+    
     @PostMapping("/patchOffice")
     public JSONObject patchOffice(String addParam,
                                 @RequestParam(value = "headImg",required = false) MultipartFile headImg,
