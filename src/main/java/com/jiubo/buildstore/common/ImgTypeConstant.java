@@ -17,8 +17,9 @@ public  class ImgTypeConstant {
     public static final Integer VIDEO = 3;
     public static final Integer HEAD_PICTURE = 4;
 
-    public static final Integer HOUSE = 2;
-    public static final Integer BUILD = 3;
-    public static final Integer OFFICE = 4;
-    public static final Integer BUSSINESS = 5;
+    public static final Integer STORE = 2;// 商铺
+    public static final Integer BUILD = 3;// 楼盘
+    public static final Integer OFFICE = 4;// 办公室
+    public static final Integer OFFICE_BUILD = 6; // 写字楼
+    public static final Integer BUSSINESS = 5; // 商圈
 }

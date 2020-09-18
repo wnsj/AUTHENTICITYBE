@@ -67,7 +67,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setItId(ImgTypeConstant.PICTURE);
 					imgBean.setImgPath(map.get("path"));
 					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.HOUSE);
+					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					list.add(imgBean);
 				}
 				buildingImgDao.insertList(list);
@@ -84,7 +84,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setItId(ImgTypeConstant.VIDEO);
 					imgBean.setImgPath(map.get("path"));
 					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.HOUSE);
+					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					list.add(imgBean);
 				}
 				buildingImgDao.insertList(list);
@@ -97,7 +97,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				imgBean.setImgName(map.get("name"));
 				imgBean.setImgPath(map.get("path"));
 				imgBean.setInfoId(mainBean.getId());
-				imgBean.setType(ImgTypeConstant.HOUSE);
+				imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 				if(mainBean.getRoomImg() != null) {
 					FileUtil.delFile(mainBean.getRoomImg());
 				}
@@ -126,7 +126,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setItId(ImgTypeConstant.PICTURE);
 					imgBean.setImgPath(map.get("path"));
 					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.HOUSE);
+					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					list.add(imgBean);
 				}
 				buildingImgDao.insertList(list);
@@ -142,7 +142,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setItId(ImgTypeConstant.VIDEO);
 					imgBean.setImgPath(map.get("path"));
 					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.HOUSE);
+					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					list.add(imgBean);
 				}
 				buildingImgDao.insertList(list);
@@ -153,7 +153,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
 				qw.select("*");
 				qw.eq("IT_ID", ImgTypeConstant.PICTURE);
-				qw.eq("TYPE", ImgTypeConstant.HOUSE);
+				qw.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 				qw.eq("INFO_ID", mainBean.getId());
 				BuildingImgBean imgBean = buildingImgDao.selectOne(qw);
 				if(imgBean != null) {
@@ -168,7 +168,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setItId(ImgTypeConstant.PICTURE);
 					imgBean.setImgPath(map.get("path"));
 					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.HOUSE);
+					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					buildingImgDao.insert(buildingImgBean);
 				}
 				mainBean.setRoomImg(imgBean.getImgPath());

@@ -22,6 +22,8 @@ public interface StoreRoomService extends IService<StoreRoomBean> {
 	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture[]) throws IOException;
 
 	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile headPicture) throws IOException;
+			MultipartFile[] headPicture) throws IOException;
+
+	StoreRoomBean getStoreByRoomId(Integer roomId);
 
 }
