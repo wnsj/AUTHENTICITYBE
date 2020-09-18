@@ -45,6 +45,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
     @Override
     public OfficeBean getOfficeByPk(Integer id) {
         OfficeBean bean = officeDao.selectById(id);
+
         if (null != bean) {
 
             QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
