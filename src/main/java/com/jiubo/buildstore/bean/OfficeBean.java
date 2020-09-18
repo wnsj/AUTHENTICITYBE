@@ -113,7 +113,6 @@ public class OfficeBean implements Serializable {
 
     @TableField(exist = false)
     private RoomMainBean roomMainBean;
-    
     /**
      * 办公室类型
      */
@@ -137,4 +136,6 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private String createTime;
+
+    private String houseType;
 }

@@ -73,4 +73,6 @@ public class BuildReturn extends BuildingBean {
     private List<Integer> ChaIdList;
 
     private List<RoomMainBean> roomMainBeanList;
+
+    List<OfficeBean> officeBeanList;
 }
