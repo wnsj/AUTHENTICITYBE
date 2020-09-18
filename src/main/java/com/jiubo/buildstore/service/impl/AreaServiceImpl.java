@@ -28,8 +28,9 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaBean> implements A
     public List<AreaBean> getAllArea(Integer type) {
     	QueryWrapper<AreaBean> queryWrapper = new QueryWrapper<AreaBean>();
     	queryWrapper.select("*");
-    	queryWrapper.eq("TYPE", type);
-    	
+    	if(type != null) {
+    		queryWrapper.eq("TYPE", type);
+    	}
         return areaDao.selectList(queryWrapper);
     }
 }

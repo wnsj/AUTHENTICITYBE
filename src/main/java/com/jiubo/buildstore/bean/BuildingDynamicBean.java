@@ -82,4 +82,9 @@ public class BuildingDynamicBean implements Serializable {
      */
     @TableField(exist = false)
     private Integer dyCount;
+    /**
+     * 类型名称
+     */
+    @TableField(exist = false)
+    private String typeName;
 }

@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
+import com.jiubo.buildstore.bean.MessageTypeBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingDynamicDao;
+import com.jiubo.buildstore.dao.MessageTypeDao;
 import com.jiubo.buildstore.service.BuildingDynamicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -51,6 +53,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     private BuildingDynamicDao buildingDynamicDao;
     @Autowired
     private BuildingDao buildingDao;
+    @Autowired
+    private MessageTypeDao messageTypeDao;
     @Override
     public PageInfo<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
 
@@ -66,6 +70,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                 if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
                     dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
                 }
+                MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
+                dynamicBean.setTypeName(bean.getMtName());
             }
         }
         PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);

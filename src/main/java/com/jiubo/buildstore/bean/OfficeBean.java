@@ -96,10 +96,45 @@ public class OfficeBean implements Serializable {
      * 修改时间
      */
     private Date modifyDate;
+    
+
+    /**
+     * 当前页
+     */
+    private String current;
+    
+    /**
+     * 此页数量
+     */
+    private String pageSize;
 
     @TableField(exist = false)
     private List<String> picList;
 
     @TableField(exist = false)
     private RoomMainBean roomMainBean;
+    
+    /**
+     * 办公室类型
+     */
+    @TableField(exist = false)
+    private String officeTypeName;
+    
+    /**
+     * 是否靠墙翻译
+     */
+    @TableField(exist = false)
+    private String isWallName;
+    
+    /**
+     * 是否带窗翻译
+     */
+    @TableField(exist = false)
+    private String isWindowName;
+    
+    /**
+     * 创建时间
+     */
+    @TableField(exist = false)
+    private String createTime;
 }

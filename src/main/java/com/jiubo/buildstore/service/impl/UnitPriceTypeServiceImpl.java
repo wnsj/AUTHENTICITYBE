@@ -29,7 +29,9 @@ public class UnitPriceTypeServiceImpl extends ServiceImpl<UnitPriceTypeDao, Unit
     public List<UnitPriceTypeBean> getAllUnitPrice(Integer type) {
     	QueryWrapper<UnitPriceTypeBean> queryWrapper = new QueryWrapper<UnitPriceTypeBean>();
     	queryWrapper.select("*");
-    	queryWrapper.eq("TYPE", type);
+    	if(type != null) {
+    		queryWrapper.eq("TYPE", type);
+    	}
     	
         return unitPriceTypeDao.selectList(queryWrapper);
     }

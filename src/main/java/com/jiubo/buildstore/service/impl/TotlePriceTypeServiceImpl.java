@@ -29,8 +29,10 @@ public class TotlePriceTypeServiceImpl extends ServiceImpl<TotlePriceTypeDao, To
     @Override
     public List<TotlePriceTypeBean> getAllTotalPrice(Integer type) {
     	QueryWrapper<TotlePriceTypeBean> queryWrapper = new QueryWrapper<TotlePriceTypeBean>();
-    	queryWrapper.eq("TYPE", type);
-    	
+    	queryWrapper.select("*");
+    	if(type != null) {
+    		queryWrapper.eq("TYPE", type);
+    	}
         return totlePriceTypeDao.selectList(queryWrapper);
     }
 }
