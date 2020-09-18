@@ -10,6 +10,7 @@ import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.StoreRoomDao;
 import com.jiubo.buildstore.service.StoreRoomService;
+import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,8 +21,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -43,12 +46,19 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 	
 	@Autowired
 	private RoomMainDao roomMainDao;
-	
+
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile headPicture) throws IOException {
+								MultipartFile[] headPicture) throws IOException {
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
 		bean.setCreateDate(new Date());
+		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
+			bean.setSuitableStore(StringUtils.join(bean.getSuitable(),"|"));
+		}
+		if (!CollectionsUtils.isEmpty(bean.getProperInfo())) {
+			bean.setPropertyInfo(StringUtils.join(bean.getProperInfo(),"|"));
+		}
 		storeRoomDao.insert(bean);
 		if(bean.getStoreId() != null) {
 			List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
@@ -65,15 +75,14 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 					imgBean.setType(ImgTypeConstant.HOUSE);
 					list.add(imgBean);
 				}
-				buildingImgDao.insertList(list);
-				list.clear();
+
 			}
 			if(video != null) {
 				for (int i = 0; i < video.length; i++) {
 					MultipartFile file = video[i];
 					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.VIDEO);
 					BuildingImgBean imgBean = new BuildingImgBean();
-					imgBean.setImgName(map.get("name"));
+//					imgBean.setImgName(map.get("name"));
 					imgBean.setCreateDate(new Date());
 					imgBean.setItId(ImgTypeConstant.VIDEO);
 					imgBean.setImgPath(map.get("path"));
@@ -81,13 +90,14 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 					imgBean.setType(ImgTypeConstant.HOUSE);
 					list.add(imgBean);
 				}
-				buildingImgDao.insertList(list);
-				list.clear();
 			}
-			if(headPicture != null) {
-				Map<String, String> map = FileUtil.uploadFile(headPicture, ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.HEAD_PICTURE);
+			if (!CollectionsUtils.isEmpty(list)) {
+				buildingImgDao.insertList(list);
+			}
+			if(headPicture != null && headPicture.length > 0) {
+				Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.HEAD_PICTURE);
 				BuildingImgBean imgBean = new BuildingImgBean();
-				imgBean.setImgName(map.get("name"));
+//				imgBean.setImgName(map.get("name"));
 				imgBean.setCreateDate(new Date());
 				imgBean.setItId(ImgTypeConstant.PICTURE);
 				imgBean.setImgPath(map.get("path"));

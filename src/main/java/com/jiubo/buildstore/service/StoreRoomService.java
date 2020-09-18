@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StoreRoomService extends IService<StoreRoomBean> {
 
-	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException;
+	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture[]) throws IOException;
 
 	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
 			MultipartFile headPicture) throws IOException;

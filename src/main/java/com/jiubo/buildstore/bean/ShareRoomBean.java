@@ -55,6 +55,7 @@ public class ShareRoomBean implements Serializable {
      */
     private Date createDate;
 
+
     /**
      * 特点集合
      */

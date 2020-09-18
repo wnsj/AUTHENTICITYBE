@@ -140,6 +140,7 @@ public class StoreRoomBean implements Serializable {
      */
     private Integer roomId;
 
+
     /**
      * 创建时间
      */
@@ -149,5 +150,6 @@ public class StoreRoomBean implements Serializable {
      */
     @TableField(exist = false)
     private List<Integer> suitable;
-
+    @TableField(exist = false)
+    private List<Integer> properInfo;
 }
