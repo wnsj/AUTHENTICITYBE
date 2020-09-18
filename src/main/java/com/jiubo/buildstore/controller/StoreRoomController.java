@@ -35,7 +35,7 @@ public class StoreRoomController {
 	@ApiOperation(value = "添加商铺房源", notes = "添加商铺房源")
 	@PostMapping("/addStoreRoom")
 	public JSONObject addStoreRoom(String addParam,
-								   @RequestParam("headImg") MultipartFile headImg[],
+								   @RequestParam("headImg") MultipartFile[] headImg,
 								   @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
 								   @RequestParam("video") MultipartFile[] video) throws IOException {
 		JSONObject jsonObject = new JSONObject();
@@ -48,15 +48,26 @@ public class StoreRoomController {
 	
 	@ApiOperation(value = "更新商铺房源", notes = "更新商铺房源")
 	@PostMapping("/updateStoreRoom")
-	public JSONObject updateStoreRoom(String param, MultipartFile[] picture
-			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
-		System.out.println("param");
+	public JSONObject updateStoreRoom(String addParam, @RequestParam("headImg") MultipartFile[] headImg,
+									  @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
+									  @RequestParam("video") MultipartFile[] video) throws IOException {
+
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        StoreRoomBean bean = JSONObject.parseObject(param, StoreRoomBean.class);
-        jsonObject.put(Constant.Result.RETDATA,storeRoomService.updateStoreRoom(bean,picture,video,headPicture));
+        StoreRoomBean bean = JSONObject.parseObject(addParam, StoreRoomBean.class);
+        jsonObject.put(Constant.Result.RETDATA,storeRoomService.updateStoreRoom(bean,buildRealImg,video,headImg));
         return jsonObject;
 	}
-	
+
+	@ApiOperation(value = "根据房源id查详情", notes = "根据房源id查详情")
+	@PostMapping("/getStoreByRoomId")
+	public JSONObject getStoreByRoomId(@RequestBody String param) throws IOException {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+		jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+		StoreRoomBean bean = JSONObject.parseObject(param, StoreRoomBean.class);
+		jsonObject.put(Constant.Result.RETDATA,storeRoomService.getStoreByRoomId(bean.getRoomId()));
+		return jsonObject;
+	}
 }
