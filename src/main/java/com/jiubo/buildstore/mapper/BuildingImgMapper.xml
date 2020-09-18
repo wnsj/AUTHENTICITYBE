@@ -111,14 +111,14 @@
         INFO_ID
         )
         values
-        <foreach collection="list" item="item" index="index" separator=",">
+        <foreach collection="list" separator="," item="item" index="index">
             (
             #{item.imgName},
             #{item.createDate},
             #{item.itId},
             #{item.imgPath},
             #{item.type},
-            #{item.infoId},
+            #{item.infoId}
             )
         </foreach>
     </insert>

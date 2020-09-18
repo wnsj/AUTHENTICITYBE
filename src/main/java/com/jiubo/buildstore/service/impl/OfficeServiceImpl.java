@@ -211,6 +211,103 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			}
 			if (officeBean.getCreateDate() != null) {
 				officeBean.setCreateTime(DateUtils.formatDate(officeBean.getCreateDate(),"yyyy-MM-dd"));
+   
+    @Override
+    public OfficeBean getOfficeByPk(Integer id) {
+        OfficeBean bean = officeDao.selectById(id);
+
+        if (null != bean) {
+
+            QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
+            qw.select("*");
+            qw.eq("id", bean.getRoomId());
+            List<RoomMainBean> roomMainBeans = roomMainDao.selectList(qw);
+
+            if (!CollectionsUtils.isEmpty(roomMainBeans)) {
+                bean.setRoomMainBean(roomMainBeans.get(0));
+            }
+
+            QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
+            qwP.select("*");
+            qwP.eq("IT_ID", 2);
+            qwP.eq("TYPE", 4);
+            qwP.eq("INFO_ID", bean.getId());
+            List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
+            if (!CollectionsUtils.isEmpty(pictureList)) {
+                List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
+                bean.setPicList(list);
+            }
+        }
+        return bean;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void addOffice(OfficeBean officeBean,
+                          MultipartFile headImg,
+                          MultipartFile[] picture,
+                          MultipartFile video) throws IOException {
+        officeDao.insert(officeBean);
+        List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
+
+
+        // 头图
+        if (null != headImg) {
+            Map<String, String> headMap = FileUtil.uploadFile(headImg, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+            BuildingImgBean imgBean = new BuildingImgBean();
+            imgBean.setImgName(headMap.get("name"));
+            imgBean.setCreateDate(new Date());
+            imgBean.setItId(ImgTypeConstant.PICTURE);
+            imgBean.setImgPath(headMap.get("path"));
+            imgBean.setInfoId(officeBean.getId());
+            imgBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(imgBean);
+            officeDao.updateById(officeBean.setImgName(headMap.get("path")));
+        }
+
+        // 视频
+        if (null != video) {
+            addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
+        }
+
+        if (null != picture) {
+            for (MultipartFile file : picture) {
+                addFile(officeBean, file, buildingImgBeans, ImgTypeConstant.PICTURE);
+            }
+        }
+        buildingImgDao.insertList(buildingImgBeans);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void patchOffice(OfficeBean officeBean,
+                            MultipartFile headImg,
+                            MultipartFile[] picture,
+                            MultipartFile video) throws IOException {
+
+        List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
+        if (null != headImg) {
+            deleteImgByCon(officeBean,ImgTypeConstant.HEAD_PICTURE,ImgTypeConstant.OFFICE);
+            Map<String, String> headMap = FileUtil.uploadFile(headImg, ImgPathConstant.OFFICE, officeBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+            BuildingImgBean imgBean = new BuildingImgBean();
+            imgBean.setImgName(headMap.get("name"));
+            imgBean.setCreateDate(new Date());
+            imgBean.setItId(ImgTypeConstant.PICTURE);
+            imgBean.setImgPath(headMap.get("path"));
+            imgBean.setInfoId(officeBean.getId());
+            imgBean.setType(ImgTypeConstant.OFFICE);
+            buildingImgBeans.add(imgBean);
+            officeBean.setImgName(headMap.get("path"));
+        }
+        officeDao.updateById(officeBean);
+        // 视频
+        if (null != video) {
+            addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
+        }
+
+        if (null != picture) {
+            for (MultipartFile file : picture) {
+                addFile(officeBean, file, buildingImgBeans, ImgTypeConstant.PICTURE);
             }
 		}
 		PageInfo<OfficeBean> pageInfo = new PageInfo<OfficeBean>(list);

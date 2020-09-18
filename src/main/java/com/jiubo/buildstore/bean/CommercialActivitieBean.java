@@ -33,7 +33,7 @@ public class CommercialActivitieBean implements Serializable {
     /**
      * 业态名称
      */
-    private String caName;
+    private String cacName;
 
 
 }
