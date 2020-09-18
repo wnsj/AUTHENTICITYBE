@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 	public OfficeBean getOfficeByPk(Integer id) {
 		OfficeBean bean = officeDao.selectById(id);
 		if (null != bean) {
-
+			
 			QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
 			qw.select("*");
 			qw.eq("id", bean.getRoomId());
@@ -72,6 +73,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
 				bean.setPicList(list);
 			}
+			BigDecimal decimal = new BigDecimal(bean.getStationNum().toString());
+			bean.setUnitPrice(bean.getNowPrice().divide(decimal,1,BigDecimal.ROUND_HALF_UP));
 		}
 		return bean;
 	}

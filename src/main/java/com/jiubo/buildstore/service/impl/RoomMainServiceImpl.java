@@ -341,6 +341,12 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		bean.setCreateDate(new Date());
 		bean.setModifyDate(new Date());
 		roomMainDao.insert(bean);
+		ShareRoomBean shareRoomBean = new ShareRoomBean();
+		shareRoomBean.setProduce(bean.getProduce());
+		shareRoomBean.setChaList(bean.getChaList());
+		shareRoomBean.setRoomId(bean.getId());
+		shareRoomBean.setCreateDate(new Date());
+		shareRoomDao.insert(shareRoomBean);
 		System.out.println("bean.getId"+bean.getId());
 		BuildingBean buildingBean  = buildingDao.selectById(bean.getBuildId());
 		buildingBean.setIsRentNum(buildingBean.getIsRentNum()+1);
@@ -352,5 +358,14 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	public Integer updateRoomMain(RoomMainBean bean) {
 		bean.setModifyDate(new Date());
 		return roomMainDao.updateById(bean);
+	}
+
+	@Override
+	public List<RoomMainBean> getRoomOffice(RoomReceive receive) {
+		QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
+		qw.select("id,room");
+		//1,写字楼，2，共享，3商铺
+		qw.eq("room_type", 2);
+		return roomMainDao.selectList(qw);
 	}
 }

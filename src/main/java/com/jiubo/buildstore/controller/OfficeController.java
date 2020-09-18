@@ -41,9 +41,9 @@ public class OfficeController {
 
     @PostMapping("/addOffice")
     public JSONObject addOffice(String addParam,
-                                @RequestParam("headImg") MultipartFile headImg,
-                                @RequestParam("picture") MultipartFile[] picture,
-                                @RequestParam("video") MultipartFile video) throws IOException, MessageException {
+                                @RequestParam(value = "headImg",required = false) MultipartFile headImg,
+                                @RequestParam(value = "picture",required = false) MultipartFile[] picture,
+                                @RequestParam(value = "video",required = false) MultipartFile video) throws IOException, MessageException {
         if (StringUtils.isBlank(addParam)) throw new MessageException("接收参数失败！");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
@@ -63,9 +63,9 @@ public class OfficeController {
     }
     @PostMapping("/patchOffice")
     public JSONObject patchOffice(String addParam,
-                                @RequestParam("headImg") MultipartFile headImg,
-                                @RequestParam("picture") MultipartFile[] picture,
-                                @RequestParam("video") MultipartFile video) throws IOException, MessageException {
+                                @RequestParam(value = "headImg",required = false) MultipartFile headImg,
+                                @RequestParam(value = "picture",required = false) MultipartFile[] picture,
+                                @RequestParam(value = "video",required = false) MultipartFile video) throws IOException, MessageException {
         if (StringUtils.isBlank(addParam)) throw new MessageException("接收参数失败！");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

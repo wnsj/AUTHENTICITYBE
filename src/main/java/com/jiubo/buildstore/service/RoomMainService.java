@@ -5,6 +5,7 @@ import com.jiubo.buildstore.bean.RMChildSharedBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -32,4 +33,6 @@ public interface RoomMainService extends IService<RoomMainBean> {
 	public Integer addRoomMain(RoomMainBean bean);
 
 	public Integer updateRoomMain(RoomMainBean bean);
+
+	public List<RoomMainBean> getRoomOffice(RoomReceive receive);
 }

@@ -212,4 +212,14 @@ public class RoomMainBean implements Serializable {
      * 是否在租
      */
     private Integer isRent;
+    
+    /**
+     * 网点介绍
+     */
+    private String produce;
+    
+    /**
+     *特点list集合
+     */
+    private String chaList;
 }

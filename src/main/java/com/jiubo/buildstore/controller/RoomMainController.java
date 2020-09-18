@@ -39,6 +39,16 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomByConditions(receive));
         return jsonObject;
     }
+    
+    @ApiOperation(value = "共享办公房源", notes = "共享办公房源")
+    @PostMapping("/getRoomOffice")
+    public JSONObject getRoomOffice(@RequestBody RoomReceive receive) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomOffice(receive));
+        return jsonObject;
+    }
 
     @ApiOperation(value = "查询房源详情", notes = "查询房源详情")
     @GetMapping("/getRoomDetails")

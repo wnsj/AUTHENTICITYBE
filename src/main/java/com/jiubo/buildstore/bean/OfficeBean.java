@@ -101,11 +101,13 @@ public class OfficeBean implements Serializable {
     /**
      * 当前页
      */
+    @TableField(exist = false)
     private String current;
     
     /**
      * 此页数量
      */
+    @TableField(exist = false)
     private String pageSize;
 
     @TableField(exist = false)
@@ -136,6 +138,12 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private String createTime;
+    
+    /**
+     * 工位每月
+     */
+    @TableField(exist = false)
+    private BigDecimal unitPrice;
 
     private String houseType;
 }

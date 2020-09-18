@@ -115,16 +115,16 @@
         </where>
         order by create_date DESC
         <if test="receive.areaOrder == 2">
-               ,order by build_area DESC
+               ,build_area DESC
          </if>
         <if test="receive.areaOrder == 3">
-               ,order by build_area ASC
+               ,build_area ASC
          </if>
         <if test="receive.unitPriceOrder == 2">
-               ,order by unit_price DESC
+               ,unit_price DESC
          </if>
         <if test="receive.unitPriceOrder == 3">
-               ,order by unit_price ASC
+               ,unit_price ASC
          </if>
         <if test="receive.totalPriceOrder == 2">
                ,total_price DESC
