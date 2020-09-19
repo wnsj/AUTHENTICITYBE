@@ -122,6 +122,11 @@ public class RoomBean implements Serializable {
      * 楼盘介绍
      */
     private String buildIntroduce;
+    
+    /**
+     * 使用率
+     */
+    private Integer usageRate;
 
     /**
      * 周边配套

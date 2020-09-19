@@ -80,15 +80,14 @@
                 and
                 <foreach collection="receive.totalPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
-                        MAX_TITLE_PRICE > #{item.minTitlePrice}
+                        total_price > #{item.minTitlePrice}
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
-                        #{item.maxTitlePrice} > MIN_TITLE_PRICE
+                        #{item.maxTitlePrice} > total_price
                     </if>
                     <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
-                        MIN_TITLE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= MIN_TITLE_PRICE
-                         or MAX_TITLE_PRICE >=#{item.minTitlePrice} and  #{item.maxTitlePrice} >= MAX_TITLE_PRICE
-                        or #{item.minTitlePrice} >= MIN_TITLE_PRICE  and MAX_TITLE_PRICE >= #{item.maxTitlePrice}
+                        total_price >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= total_price
+                  
                     </if>
                 </foreach>
             </if>

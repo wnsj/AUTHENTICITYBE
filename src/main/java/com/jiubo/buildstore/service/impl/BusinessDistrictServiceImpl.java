@@ -133,10 +133,12 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 			BusinessDistrictBean districtBean = list.get(i);
 			String formatDate = DateUtils.formatDate(districtBean.getCreateDate(), "yyyy-MM-dd");
 			districtBean.setCreateTime(formatDate);
-			if(districtBean.getIsHot() == 2) {
-				districtBean.setIsHotName("热门");
-			}else {
-				districtBean.setIsHotName("不热门");
+			if(districtBean.getIsHot() != null) {
+				if(districtBean.getIsHot() == 2) {
+					districtBean.setIsHotName("热门");
+				}else {
+					districtBean.setIsHotName("不热门");
+				}	
 			}
 			if (!StringUtils.isBlank(districtBean.getBuPath())) {
 				districtBean.setBuPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(districtBean.getBuPath()));

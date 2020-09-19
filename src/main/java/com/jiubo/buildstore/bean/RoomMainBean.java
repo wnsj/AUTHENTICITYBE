@@ -197,12 +197,25 @@ public class RoomMainBean implements Serializable {
      */
     @TableField(exist = false)
     private String bussinessName;
+    
+    /**
+     * 类型名称
+     */
+    @TableField(exist = false)
+    private String typeName;
 
     /**
      * 标签集合
      */
     @TableField(exist = false)
     private List<String> labels;
+    
+    /**
+     * 创建时间翻译
+     */
+    @TableField(exist = false)
+    private String createTime;
+    
     /**
      *支付方式
      */

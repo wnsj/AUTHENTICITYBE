@@ -36,6 +36,11 @@ public class StoreRoomBean implements Serializable {
     private Integer storeId;
 
     /**
+     * 项目名称
+     */
+    private String projectName;
+    
+    /**
      * 网点介绍
      */
     private String produce;
