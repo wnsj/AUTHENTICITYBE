@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -152,5 +153,15 @@ public class RoomReceive implements Serializable{
 	 * 房源类型1,写字楼，2，共享，3商铺
 	 */
 	private Integer type;
+	
+	/**
+	 * 开始时间
+	 */
+	private Date startTime;
+	
+	/**
+	 * 结束时间
+	 */
+	private Date endTime;
 
 }

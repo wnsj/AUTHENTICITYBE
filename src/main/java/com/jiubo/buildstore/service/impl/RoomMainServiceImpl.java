@@ -7,6 +7,7 @@ import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.TotlePriceTypeDao;
 import com.jiubo.buildstore.dao.UnitPriceTypeDao;
 import com.jiubo.buildstore.bean.*;
+import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.util.CollectionsUtils;
@@ -291,17 +292,23 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
 		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
 		qwP.select("*");
-		qwP.eq("IT_ID", 2);
-		qwP.eq("TYPE", 2);
+		qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
+		qwP.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 		qwP.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
 		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
 		qwV.select("*");
-		qwV.eq("IT_ID", 3);
-		qwV.eq("TYPE", 2);
+		qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
+		qwV.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 		qwV.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
-
+		QueryWrapper<BuildingImgBean> qwH = new QueryWrapper<BuildingImgBean>();
+		qwH.select("*");
+		qwH.eq("IT_ID", ImgTypeConstant.HEAD_PICTURE);
+		qwH.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
+		qwH.eq("INFO_ID", roomMainId);
+		List<BuildingImgBean> headList = buildingImgDao.selectList(qwH);
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("roomDetail", roomBean);
 		result.put("roomMainDetail", mainBean);
@@ -309,6 +316,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		result.put("allCounselor", list);
 		result.put("picture", pictureList);
 		result.put("video", videoList);
+		result.put("head", headList);
 		result.put("ldName", locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
 		result.put("buildName", buildingDao.selectById(mainBean.getBuildId()).getHtName());
 		result.put("businessName", businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
@@ -342,14 +350,14 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
 		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
 		qwP.select("*");
-		qwP.eq("IT_ID", 2);
-		qwP.eq("TYPE", 2);
+		qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
+		qwP.eq("TYPE", ImgTypeConstant.STORE);
 		qwP.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
 		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
 		qwV.select("*");
-		qwV.eq("IT_ID", 3);
-		qwV.eq("TYPE", 2);
+		qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
+		qwV.eq("TYPE", ImgTypeConstant.STORE);
 		qwV.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
 

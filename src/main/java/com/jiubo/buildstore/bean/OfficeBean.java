@@ -86,6 +86,11 @@ public class OfficeBean implements Serializable {
      * 是否带窗(1:是;2:否)
      */
     private Integer isWindow;
+    
+    /**
+     * 是否带窗(1:是;2:否)
+     */
+    private Integer couId;
 
     /**
      * 创建时间
@@ -132,6 +137,24 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private String isWindowName;
+    
+    /**
+     * 咨询师实体
+     */
+    @TableField(exist = false)
+    private CounselorBean couBane;
+    
+    /**
+     * 楼盘内房屋最小总价
+     */
+    @TableField(exist = false)
+    private BigDecimal minTotalPrice;
+    
+    /**
+     * 楼盘名称
+     */
+    @TableField(exist = false)
+    private String buildName;
     
     /**
      * 创建时间

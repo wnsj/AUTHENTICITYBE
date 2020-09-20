@@ -34,29 +34,10 @@ public class RoomBean implements Serializable {
     private Integer id;
 
     /**
-     * 房源名字
-     */
-    private String room;
-
-    /**
-     * 房源编号
-     */
-    private Integer roomCode;
-
-    /**
      * roommain表的id
      */
     private Integer roomId;
 
-    /**
-     * 房源概况
-     */
-    private Integer surveyId;
-
-    /**
-     * 楼盘id
-     */
-    private Integer buildId;
 
     /**
      * 最早可租
@@ -72,11 +53,6 @@ public class RoomBean implements Serializable {
      * 所在楼层
      */
     private String floor;
-
-    /**
-     * 建筑面积
-     */
-    private BigDecimal buildArea;
 
     /**
      * 最小工位数

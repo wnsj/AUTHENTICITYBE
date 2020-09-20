@@ -98,6 +98,9 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				imgBean.setImgPath(map.get("path"));
 				imgBean.setInfoId(mainBean.getId());
 				imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
+				imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+				imgBean.setCreateDate(new Date());
+				buildingImgDao.insert(imgBean);
 				if(mainBean.getRoomImg() != null) {
 					FileUtil.delFile(mainBean.getRoomImg());
 				}

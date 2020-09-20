@@ -2,6 +2,8 @@ package com.jiubo.buildstore.controller;
 
 
 import com.jiubo.buildstore.bean.RoomMainBean;
+
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
@@ -12,7 +14,14 @@ import com.jiubo.buildstore.service.RoomService;
 
 import io.swagger.annotations.ApiOperation;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -102,5 +111,5 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA, roomMainService.updateRoomMain(bean));
         return jsonObject;
     }
-
+    
 }

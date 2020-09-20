@@ -111,6 +111,17 @@
                     #{regionId}
                 </foreach>
             </if>
+            
+            <if test="receive.startTime != null and receive.endTime == null">
+                and create_date >= #{receive.startTime}
+            </if>
+            <if test="receive.endTime != null and receive.startTime == null">
+                and #{receive.endTime} > =create_date
+            </if>
+            <if test="receive.endTime != null and receive.startTime != null">
+                and create_date >= #{receive.startTime} and #{receive.endTime} >=create_date
+            </if>
+            
         </where>
         order by create_date DESC
         <if test="receive.areaOrder == 2">

@@ -1,12 +1,16 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingImgBean;
+import com.jiubo.buildstore.bean.CounselorBean;
 import com.jiubo.buildstore.bean.OfficeBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
+import com.jiubo.buildstore.dao.BuildingDao;
 import com.jiubo.buildstore.dao.BuildingImgDao;
+import com.jiubo.buildstore.dao.CounselorDao;
 import com.jiubo.buildstore.dao.OfficeDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.service.OfficeService;
@@ -48,6 +52,10 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 	private BuildingImgDao buildingImgDao;
 	@Autowired
 	private RoomMainDao roomMainDao;
+	@Autowired
+	private CounselorDao counselorDao;
+	@Autowired
+	private BuildingDao buildingDao;
 
 	@Override
 	public OfficeBean getOfficeByPk(Integer id) {
@@ -61,6 +69,19 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 
 			if (!CollectionsUtils.isEmpty(roomMainBeans)) {
 				bean.setRoomMainBean(roomMainBeans.get(0));
+				if(roomMainBeans.get(0).getBuildId() != null) {
+					BuildingBean buildingBean = buildingDao.selectById(roomMainBeans.get(0).getBuildId());
+					if(buildingBean != null) {
+						bean.setBuildName(buildingBean.getHtName());
+						bean.setMinTotalPrice(buildingBean.getMinTitlePrice());
+					}
+				}
+			}
+			if(bean.getCouId() != null) {
+				CounselorBean counselorBean = counselorDao.selectById(bean.getCouId());
+				if(counselorBean != null) {
+					bean.setCouBane(counselorBean);
+				}
 			}
 
 			QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
