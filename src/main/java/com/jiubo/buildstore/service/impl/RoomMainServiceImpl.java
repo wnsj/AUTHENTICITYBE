@@ -87,6 +87,8 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Autowired
 	private CommercialActivitieDao commercialActivitieDao;
 
+	@Autowired
+	private PropertyInfoDao propertyInfoDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -130,7 +132,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					receive.getBuildIdList().addAll(bList);
 				}
 			}
-			
+
 		}
 
 		// 如果商铺业态不为null
@@ -315,7 +317,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		qwH.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 		qwH.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> headList = buildingImgDao.selectList(qwH);
-
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("roomDetail", roomBean);
 		result.put("roomMainDetail", mainBean);
@@ -333,118 +335,108 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public Map<String, Object> getStoneDetail(Integer roomMainId) {
 		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
-		// 查询区域名称
-		if (mainBean.getLdId() != null) {
-			mainBean.setLdName(locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
-		}
-		// 查询楼盘名称
-		if (mainBean.getBuildId() != null) {
-			mainBean.setBuildName(buildingDao.selectById(mainBean.getBuildId()).getHtName());
-		}
-		// 查询商圈名称
-		if (mainBean.getBusinessId() != null) {
-			mainBean.setBussinessName(businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
-		}
-		// 查询类型名称
-		if (mainBean.getBtId() != null) {
-			mainBean.setTypeName(buildingTypeDao.selectById(mainBean.getBtId()).getBtName());
-		}
-		// 查询关键词
-		if (mainBean.getLabelList() != null) {
-			String[] str = mainBean.getLabelList().split("\\|");
-			List<String> list = new ArrayList<String>();
-			for (int i = 0; i < str.length; i++) {
-				list.add(str[i]);
-			}
-			mainBean.setLabels(list);
-		}
-		
-		// 拼接业态
-				if (mainBean.getCaId() != null) {
-					String[] str = mainBean.getCaId().split(",");
-					StringBuilder builder = new StringBuilder();
-					for (int i = 0; i < str.length; i++) {
-						String name = commercialActivitieDao.selectById(Integer.valueOf(str[i])).getCacName();
-						builder.append(name);
-						builder.append("/");
-					}
-					builder.deleteCharAt(builder.length()-1);
-					mainBean.setComString(builder.toString());
-				}
+
 		QueryWrapper<StoreRoomBean> stRoom = new QueryWrapper<StoreRoomBean>();
 		stRoom.select("*");
 		stRoom.eq("room_id", roomMainId);
 		StoreRoomBean storeRoomBean = storeRoomDao.selectOne(stRoom);
-		if (mainBean.getCaId() != null) {
-			String[] s = mainBean.getCaId().split(",");
-			StringBuilder builder = new StringBuilder();
-			for (int i = 0; i < s.length; i++) {
-				String result = commercialActivitieDao.selectById(Integer.valueOf(s[i])).getCacName();
-				builder.append(result);
-				builder.append("/");
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			if (storeRoomBean != null) {
-				storeRoomBean.setSuitableStore(builder.toString());
-			}
+		String info = storeRoomBean.getPropertyInfo();
+		List<PropertyInfoBean> infoBeans = null;
+		if (StringUtils.isNotBlank(info)) {
+			String[] split = info.split("\\|");
+			List<Integer> list = arrToList(split);
+			infoBeans = propertyInfoDao.selectBatchIds(list);
+
 		}
-		CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
-		QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
-		queryWrapper.select("*");
-		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
-		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
-		qwP.select("*");
-		qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
-		qwP.eq("TYPE", ImgTypeConstant.STORE);
-		qwP.eq("INFO_ID", roomMainId);
-		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
-		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
-		qwV.select("*");
-		qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
-		qwV.eq("TYPE", ImgTypeConstant.STORE);
-		qwV.eq("INFO_ID", roomMainId);
-		List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
 
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("stRoomDetail", storeRoomBean);
-		result.put("roomDetail", mainBean);
-		result.put("counselor", counselorBean);
-		result.put("allCounselor", list);
-		result.put("picture", pictureList);
-		result.put("video", videoList);
-		return result;
-	}
 
-	@Override
-	public Integer addRoomMain(RoomMainBean bean) {
-		bean.setCreateDate(new Date());
-		bean.setModifyDate(new Date());
-		roomMainDao.insert(bean);
-		ShareRoomBean shareRoomBean = new ShareRoomBean();
-		shareRoomBean.setProduce(bean.getProduce());
-		shareRoomBean.setChaList(bean.getChaList());
-		shareRoomBean.setRoomId(bean.getId());
-		shareRoomBean.setCreateDate(new Date());
-		shareRoomDao.insert(shareRoomBean);
-		System.out.println("bean.getId" + bean.getId());
-		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
-		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
-		buildingDao.updateById(buildingBean);
-		return bean.getId();
-	}
+		if (mainBean.getCaId() != null) {
+			if (mainBean.getCaId() != null) {
+				String[] s = mainBean.getCaId().split(",");
+				StringBuilder builder = new StringBuilder();
+				for (int i = 0; i < s.length; i++) {
+					String result = commercialActivitieDao.selectById(Integer.valueOf(s[i])).getCacName();
+					builder.append(result);
+					builder.append("/");
+				}
+				builder.deleteCharAt(builder.length() - 1);
+				if (storeRoomBean != null) {
+					storeRoomBean.setSuitableStore(builder.toString());
+				}
+			}
 
-	@Override
-	public Integer updateRoomMain(RoomMainBean bean) {
-		bean.setModifyDate(new Date());
-		return roomMainDao.updateById(bean);
-	}
+			CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
+			QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
+			queryWrapper.select("*");
+			List<CounselorBean> list = counselorDao.selectList(queryWrapper);
 
-	@Override
-	public List<RoomMainBean> getRoomOffice(RoomReceive receive) {
-		QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
-		qw.select("id,room");
-		// 1,写字楼，2，共享，3商铺
-		qw.eq("room_type", 2);
-		return roomMainDao.selectList(qw);
+			QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
+			qwP.select("*");
+			qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
+			qwP.eq("TYPE", ImgTypeConstant.STORE);
+			qwP.eq("INFO_ID", roomMainId);
+			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
+
+			QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
+			qwV.select("*");
+			qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
+			qwV.eq("TYPE", ImgTypeConstant.STORE);
+			qwV.eq("INFO_ID", roomMainId);
+			List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
+
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("stRoomDetail", storeRoomBean);
+			result.put("roomDetail", mainBean);
+			result.put("counselor", counselorBean);
+			result.put("allCounselor", list);
+			result.put("picture", pictureList);
+			result.put("video", videoList);
+			result.put("proInfo", infoBeans);
+			return result;
+		}
+		return null;
 	}
+		private List<Integer> arrToList (String[]split){
+			ArrayList<String> arrayList = new ArrayList<String>(split.length);
+			Collections.addAll(arrayList, split);
+			List<Integer> idList = new ArrayList<>();
+			for (String s : arrayList) {
+				int anInt = Integer.parseInt(s);
+				idList.add(anInt);
+			}
+			return idList;
+		}
+		@Override
+		public Integer addRoomMain (RoomMainBean bean){
+			bean.setCreateDate(new Date());
+			bean.setModifyDate(new Date());
+			roomMainDao.insert(bean);
+			ShareRoomBean shareRoomBean = new ShareRoomBean();
+			shareRoomBean.setProduce(bean.getProduce());
+			shareRoomBean.setChaList(bean.getChaList());
+			shareRoomBean.setRoomId(bean.getId());
+			shareRoomBean.setCreateDate(new Date());
+			shareRoomDao.insert(shareRoomBean);
+			System.out.println("bean.getId" + bean.getId());
+			BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
+			buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
+			buildingDao.updateById(buildingBean);
+			return bean.getId();
+		}
+
+		@Override
+		public Integer updateRoomMain (RoomMainBean bean){
+			bean.setModifyDate(new Date());
+			return roomMainDao.updateById(bean);
+		}
+
+		@Override
+		public List<RoomMainBean> getRoomOffice (RoomReceive receive){
+			QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
+			qw.select("id,room");
+			// 1,写字楼，2，共享，3商铺
+			qw.eq("room_type", 2);
+			return roomMainDao.selectList(qw);
+		}
+
 }
