@@ -18,9 +18,22 @@ public class RMChildSharedBean extends RoomMainBean {
     /**
      * 区域名
      */
-
     private String ldName;
+    /**
+     * 网点实体
+     */
     private ShareRoomBean shareRoomBean;
+    /**
+     * 办公室实体集合
+     */
     private List<OfficeBean> officeBeanList;
+    /**
+     * 图片集合
+     */
     private List<String> pictureList;
+
+    /**
+     * 楼盘名字
+     */
+    private String buildName;
 }

@@ -200,7 +200,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     mainBeans = areaMap.get(bean.getBuildId());
 
                     if (bean.getBuildType() == 2) {
-                        if (!CollectionsUtils.isEmpty(mainBeans)) {
+                        if (!CollectionsUtils.isEmpty(mainBeans) && null != offMap) {
                             RoomMainBean roomMainBean = mainBeans.get(0);
                             List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
                             bean.setOfficeBeanList(officeBeanList);
