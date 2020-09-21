@@ -71,7 +71,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                     dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
                 }
                 MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
-                dynamicBean.setTypeName(bean.getMtName());
+                if (null != bean) {
+                    dynamicBean.setTypeName(bean.getMtName());
+                }
             }
         }
         PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
