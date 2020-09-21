@@ -202,17 +202,25 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 		QueryWrapper<StoreRoomBean> qw = new QueryWrapper<StoreRoomBean>();
 		qw.select("*");
 		qw.eq("room_id", roomId);
+		RoomMainBean mainBean = roomMainDao.selectById(roomId);
 		StoreRoomBean bean = storeRoomDao.selectOne(qw);
+		List<Integer> caIdList = null;
+		Integer stId = null;
+		if (null != mainBean) {
+			if (StringUtils.isNotBlank(mainBean.getCaId())) {
+				String[] split = mainBean.getCaId().split(",");
+				caIdList = arrToList(split);
+				stId = mainBean.getStId();
+			}
+		}
+
 		if (null != bean) {
+			bean.setSuitable(caIdList);
+			bean.setStId(stId);
 			if (StringUtils.isNotBlank(bean.getPropertyInfo())){
 				String[] split = bean.getPropertyInfo().split("\\|");
 				List<Integer> idList = arrToList(split);
 				bean.setProperInfo(idList);
-			}
-			if (StringUtils.isNotBlank(bean.getSuitableStore())) {
-				String[] split = bean.getSuitableStore().split("\\|");
-				List<Integer> idList = arrToList(split);
-				bean.setSuitable(idList);
 			}
 
 			// 图片路径
@@ -241,6 +249,7 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 			}
 
 		}
+
 		return bean;
 	}
 
