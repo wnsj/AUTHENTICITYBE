@@ -195,6 +195,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		BuildingBean buildingBean = buildingDao.selectById(id);
 		if (!CollectionsUtils.isEmpty(sharedByIdList)) {
 			RMChildSharedBean roomMainBean = sharedByIdList.get(0);
+			if (null != buildingBean) {
+				roomMainBean.setBuildName(buildingBean.getHtName());
+			}
+
 			// 办公室信息
 			QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
 			qwP.select("*");
