@@ -214,6 +214,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		if (officeBean.getIsWindow() != null) {
 			queryWrapper.eq("is_window", officeBean.getIsWindow());
 		}
+		queryWrapper.orderByDesc("create_date");
 		List<OfficeBean> list = officeDao.selectList(queryWrapper);
 		for (int i = 0; i < list.size(); i++) {
 			officeBean = list.get(i);
