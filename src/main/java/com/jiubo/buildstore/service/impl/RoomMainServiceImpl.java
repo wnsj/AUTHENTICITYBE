@@ -184,6 +184,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	public RMChildSharedBean getSharedById(Integer id) {
 
 		List<RMChildSharedBean> sharedByIdList = roomMainDao.getSharedById(id);
+		BuildingBean buildingBean = buildingDao.selectById(id);
 		if (!CollectionsUtils.isEmpty(sharedByIdList)) {
 			RMChildSharedBean roomMainBean = sharedByIdList.get(0);
 			// 办公室信息
