@@ -37,186 +37,200 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author syl
  * @since 2020-04-10
  */
 @Service
-public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, BuildingDynamicBean> implements BuildingDynamicService {
-	
-	
+public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, BuildingDynamicBean>
+		implements BuildingDynamicService {
+
 	@Value("${buildStoreDir}")
-    private String buildStoreDir;
-    @Autowired
-    private BuildingDynamicDao buildingDynamicDao;
-    @Autowired
-    private BuildingDao buildingDao;
-    @Autowired
-    private MessageTypeDao messageTypeDao;
-    @Override
-    public PageInfo<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+	private String buildStoreDir;
+	@Autowired
+	private BuildingDynamicDao buildingDynamicDao;
+	@Autowired
+	private BuildingDao buildingDao;
+	@Autowired
+	private MessageTypeDao messageTypeDao;
 
-        Integer pageNum = StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1 : Integer.valueOf(buildingDynamicBean.getCurrent());
-		Integer pageSize = StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10 : Integer.valueOf(buildingDynamicBean.getPageSize());
-		PageHelper.startPage(pageNum,pageSize);
-        List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
-        if (null != dynamicByBidList && dynamicByBidList.size()>0) {
-            for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
-                if (dynamicBean.getCreateDate() != null) {
-                    dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(),"yyyy-MM-dd"));
-                }
-                if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
-                    dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
-                }
-                MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
-                if (null != bean) {
-                    dynamicBean.setTypeName(bean.getMtName());
-                }
-            }
-        }
-        PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
-        return page;
-    }
+	@Override
+	public PageInfo<BuildingDynamicBean> getDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
 
-    @Override
-    public BuildingDynamicBean getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
-        List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
-        BuildingDynamicBean bean = new BuildingDynamicBean();
-        if (!CollectionsUtils.isEmpty(dynamicByBidList)) {
-            List<BuildingDynamicBean> dynamicBeans = dynamicByBidList.stream().sorted(Comparator.comparing(BuildingDynamicBean::getCreateDate).reversed()).limit(1).collect(Collectors.toList());
-            bean = dynamicBeans.get(0);
-            bean.setDyCount(dynamicByBidList.size());
-            for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
-                if (dynamicBean.getCreateDate() != null) {
-                    dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(),"yyyy-MM-dd"));
-                }
-            }
-        } else {
-            bean.setDyCount(0);
-        }
-        return bean;
-    }
+		Integer pageNum = StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1
+				: Integer.valueOf(buildingDynamicBean.getCurrent());
+		Integer pageSize = StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10
+				: Integer.valueOf(buildingDynamicBean.getPageSize());
+		PageHelper.startPage(pageNum, pageSize);
+		List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
+		if (null != dynamicByBidList && dynamicByBidList.size() > 0) {
+			for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
+				if (dynamicBean.getCreateDate() != null) {
+					dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(), "yyyy-MM-dd"));
+				}
+				if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
+					dynamicBean.setBdPath(
+							ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
+				}
+				if (dynamicBean.getBuildId() != null) {
+					MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
+					if (null != bean) {
+						dynamicBean.setTypeName(bean.getMtName());
+					}
+				}
+			}
+		}
+		PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
+		return page;
+	}
 
-    @Override
-    public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean) {
-        Page<BuildingDynamicBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
-        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L : Long.parseLong(buildingDynamicBean.getPageSize()));
-        List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
-        if (null != dynamicBeans && dynamicBeans.size()>0) {
-            for (BuildingDynamicBean dynamicBean : dynamicBeans) {
-                if(dynamicBean.getBuildId() != null){
-                    Date date = dynamicBean.getCreateDate();
-                    if (null != date) {
-                        dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
-                    }
-                }
-            }
-        }
-        return page.setRecords(dynamicBeans);
-    }
+	@Override
+	public BuildingDynamicBean getNewestDynamicByBid(BuildingDynamicBean buildingDynamicBean) {
+		List<BuildingDynamicBean> dynamicByBidList = buildingDynamicDao.getDynamicByBid(buildingDynamicBean);
+		BuildingDynamicBean bean = new BuildingDynamicBean();
+		if (!CollectionsUtils.isEmpty(dynamicByBidList)) {
+			List<BuildingDynamicBean> dynamicBeans = dynamicByBidList.stream()
+					.sorted(Comparator.comparing(BuildingDynamicBean::getCreateDate).reversed()).limit(1)
+					.collect(Collectors.toList());
+			bean = dynamicBeans.get(0);
+			bean.setDyCount(dynamicByBidList.size());
+			for (BuildingDynamicBean dynamicBean : dynamicByBidList) {
+				if (dynamicBean.getCreateDate() != null) {
+					dynamicBean.setCreateTime(DateUtils.formatDate(dynamicBean.getCreateDate(), "yyyy-MM-dd"));
+				}
+			}
+		} else {
+			bean.setDyCount(0);
+		}
+		return bean;
+	}
 
-    @Override
-    public Page<BuildingDynamicBean> getDynamicByPageBe(BuildingDynamicBean buildingDynamicBean) {
-        Page<BuildingDynamicBean> page = new Page<>();
-        page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L : Long.parseLong(buildingDynamicBean.getCurrent()));
-        page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L : Long.parseLong(buildingDynamicBean.getPageSize()));
-        List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
-        if (null != dynamicBeans && dynamicBeans.size()>0) {
-            for (BuildingDynamicBean dynamicBean : dynamicBeans) {
-                if(dynamicBean.getBuildId() != null){
-                    Date date = dynamicBean.getCreateDate();
-                    if (null != date) {
-                        dynamicBean.setCreateTime(DateUtils.formatDate(date,"yyyy-MM-dd"));
-                    }
-                }
-                if (StringUtils.isNotBlank(dynamicBean.getBdPath())){
-                    dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(dynamicBean.getBdPath()));
-                }
-            }
-        }
-        return page.setRecords(dynamicBeans);
-    }
+	@Override
+	public Page<BuildingDynamicBean> getDynamicByPage(BuildingDynamicBean buildingDynamicBean) {
+		Page<BuildingDynamicBean> page = new Page<>();
+		page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L
+				: Long.parseLong(buildingDynamicBean.getCurrent()));
+		page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L
+				: Long.parseLong(buildingDynamicBean.getPageSize()));
+		List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
+		if (null != dynamicBeans && dynamicBeans.size() > 0) {
+			for (BuildingDynamicBean dynamicBean : dynamicBeans) {
+				if (dynamicBean.getBuildId() != null) {
+					Date date = dynamicBean.getCreateDate();
+					if (null != date) {
+						dynamicBean.setCreateTime(DateUtils.formatDate(date, "yyyy-MM-dd"));
+					}
+				}
+			}
+		}
+		return page.setRecords(dynamicBeans);
+	}
 
-    @Override
-    public void patchDyById(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException {
-    	if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
-			if(!map.isEmpty()) {
+	@Override
+	public Page<BuildingDynamicBean> getDynamicByPageBe(BuildingDynamicBean buildingDynamicBean) {
+		Page<BuildingDynamicBean> page = new Page<>();
+		page.setCurrent(StringUtils.isBlank(buildingDynamicBean.getCurrent()) ? 1L
+				: Long.parseLong(buildingDynamicBean.getCurrent()));
+		page.setSize(StringUtils.isBlank(buildingDynamicBean.getPageSize()) ? 10L
+				: Long.parseLong(buildingDynamicBean.getPageSize()));
+		List<BuildingDynamicBean> dynamicBeans = buildingDynamicDao.getDynamicByPage(page, buildingDynamicBean);
+		if (null != dynamicBeans && dynamicBeans.size() > 0) {
+			for (BuildingDynamicBean dynamicBean : dynamicBeans) {
+				if (dynamicBean.getBuildId() != null) {
+					Date date = dynamicBean.getCreateDate();
+					if (null != date) {
+						dynamicBean.setCreateTime(DateUtils.formatDate(date, "yyyy-MM-dd"));
+					}
+				}
+				if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
+					dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(dynamicBean.getBdPath()));
+				}
+			}
+		}
+		return page.setRecords(dynamicBeans);
+	}
+
+	@Override
+	public void patchDyById(BuildingDynamicBean buildingDynamicBean, MultipartFile[] file) throws IOException {
+		if (file != null) {
+			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,
+					buildingDynamicBean.getBdId(), 2);
+			if (!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 			}
 		}
-        buildingDynamicDao.updateById(buildingDynamicBean);
-    }
+		buildingDynamicDao.updateById(buildingDynamicBean);
+	}
 
-    @Override
-    public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException {
-    	buildingDynamicBean.setCreateDate(new Date());
-    	buildingDynamicDao.insert(buildingDynamicBean);
-    	if(file != null) {
-			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
-			if(!map.isEmpty()) {
+	@Override
+	public void addDynamic(BuildingDynamicBean buildingDynamicBean, MultipartFile[] file) throws IOException {
+		buildingDynamicBean.setCreateDate(new Date());
+		buildingDynamicDao.insert(buildingDynamicBean);
+		if (file != null && file.length > 0) {
+			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,
+					buildingDynamicBean.getBdId(), 2);
+			if (!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 				buildingDynamicDao.updateById(buildingDynamicBean);
 			}
 		}
-    }
+	}
 
 	@Override
 	public Map<String, BuildingDynamicBean> getDynamicByDyId(Integer dynamicId) {
 		Map<String, BuildingDynamicBean> result = new HashMap<String, BuildingDynamicBean>();
-		//记录此条咨询数据在list的下标
+		// 记录此条咨询数据在list的下标
 		Integer index = null;
 		QueryWrapper<BuildingDynamicBean> queryWrapper = new QueryWrapper<BuildingDynamicBean>();
 		queryWrapper.select("*");
 		List<BuildingDynamicBean> list = buildingDynamicDao.selectList(queryWrapper);
 		for (int i = 0; i < list.size(); i++) {
 			BuildingDynamicBean bean = list.get(i);
-			if(bean.getBdId() == dynamicId) {
+			if (bean.getBdId() == dynamicId) {
 				index = i;
 				break;
 			}
 		}
-		//now代表当前查询的这条咨询信息up上一条down下一条
+		// now代表当前查询的这条咨询信息up上一条down下一条
 		BuildingDynamicBean bd = buildingDynamicDao.selectById(dynamicId);
 		bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
 		result.put("now", bd);
-		//如果下标等于0说明为第一条数据没有上一条放null
-		if(index == 0) {
+		// 如果下标等于0说明为第一条数据没有上一条放null
+		if (index == 0) {
 			result.put("up", null);
-		}else {
-			bd = list.get(index-1);
+		} else {
+			bd = list.get(index - 1);
 			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
 			result.put("up", bd);
 		}
-		//如果下标等于集合大小减一说明为最后一条数据没有下一条放null
-		if(index == list.size()-1) {
+		// 如果下标等于集合大小减一说明为最后一条数据没有下一条放null
+		if (index == list.size() - 1) {
 			result.put("down", null);
-		}else {
-			bd = list.get(index+1);
+		} else {
+			bd = list.get(index + 1);
 			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
 			result.put("down", bd);
 		}
 		return result;
 	}
 
-    @Override
-    public List<BuildingDynamicBean> getNewestDy() {
-        return buildingDynamicDao.getNewestDy();
-    }
+	@Override
+	public List<BuildingDynamicBean> getNewestDy() {
+		return buildingDynamicDao.getNewestDy();
+	}
 
-    @Override
-    public JSONObject getDynamicByBuildId() {
-        JSONObject jsonObject = new JSONObject();
-        // 行业新闻
-        List<BuildingDynamicBean> dynamicByBuildId = buildingDynamicDao.getDynamicByBuildId(1);
-        // 找房攻略
-        List<BuildingDynamicBean> dynamicByBuildId1 = buildingDynamicDao.getDynamicByBuildId(7);
+	@Override
+	public JSONObject getDynamicByBuildId() {
+		JSONObject jsonObject = new JSONObject();
+		// 行业新闻
+		List<BuildingDynamicBean> dynamicByBuildId = buildingDynamicDao.getDynamicByBuildId(1);
+		// 找房攻略
+		List<BuildingDynamicBean> dynamicByBuildId1 = buildingDynamicDao.getDynamicByBuildId(7);
 
-        jsonObject.put("industry",dynamicByBuildId);
-        jsonObject.put("strategy",dynamicByBuildId1);
-        return jsonObject;
-    }
+		jsonObject.put("industry", dynamicByBuildId);
+		jsonObject.put("strategy", dynamicByBuildId1);
+		return jsonObject;
+	}
 }

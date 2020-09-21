@@ -104,11 +104,13 @@ public class BuildingDynamicController {
     }
 
     @PostMapping("/addDynamic")
-    public JSONObject addDynamic(String param,@RequestParam("picture") MultipartFile[] picture) throws IOException {
+    public JSONObject addDynamic(String param,MultipartFile[] picture) throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        System.out.println("param"+param);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
+        System.out.println("buildingDynamicBean"+buildingDynamicBean.toString());
         buildingDynamicService.addDynamic(buildingDynamicBean,picture);
         return jsonObject;
     }

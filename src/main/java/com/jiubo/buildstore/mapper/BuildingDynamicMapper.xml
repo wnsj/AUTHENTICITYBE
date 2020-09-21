@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDynamicDao">
     <select id="getDynamicByBid" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
-        SELECT a.BD_ID,a.BD_PATH,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID
+        SELECT a.BD_ID,a.BD_PATH,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID,a.BD_LABEL
          from building_dynamic a where 1=1
          <if test="buildingDynamicBean.buildId != null and buildingDynamicBean.buildId != ''">
                 and BUILD_ID = #{buildingDynamicBean.buildId}

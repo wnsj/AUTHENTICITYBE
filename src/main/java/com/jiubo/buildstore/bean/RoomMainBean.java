@@ -39,6 +39,11 @@ public class RoomMainBean implements Serializable {
      * 房源名字
      */
     private String room;
+    
+    /**
+     * 房源编码
+     */
+    private String roomCode;
 
     /**
      * 区域ID
@@ -209,6 +214,12 @@ public class RoomMainBean implements Serializable {
      */
     @TableField(exist = false)
     private List<String> labels;
+    
+    /**
+     * 业态字符串
+     */
+    @TableField(exist = false)
+    private String comString;
     
     /**
      * 创建时间翻译
