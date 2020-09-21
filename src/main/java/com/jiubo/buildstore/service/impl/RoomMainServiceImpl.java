@@ -87,6 +87,8 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Autowired
 	private CommercialActivitieDao commercialActivitieDao;
 
+	@Autowired
+	private PropertyInfoDao propertyInfoDao;
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
@@ -332,6 +334,16 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		stRoom.select("*");
 		stRoom.eq("room_id", roomMainId);
 		StoreRoomBean storeRoomBean = storeRoomDao.selectOne(stRoom);
+		String info = storeRoomBean.getPropertyInfo();
+		List<PropertyInfoBean> infoBeans = null;
+		if (StringUtils.isNotBlank(info)) {
+			String[] split = info.split("\\|");
+			List<Integer> list = arrToList(split);
+			infoBeans = propertyInfoDao.selectBatchIds(list);
+
+		}
+
+
 		if(mainBean.getCaId() != null) {
 			String[] s = mainBean.getCaId().split(",");
 			StringBuilder builder = new StringBuilder();
@@ -345,16 +357,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				storeRoomBean.setSuitableStore(builder.toString());
 			}
 		}
+
 		CounselorBean counselorBean = counselorDao.selectById(mainBean.getCouId());
 		QueryWrapper<CounselorBean> queryWrapper = new QueryWrapper<CounselorBean>();
 		queryWrapper.select("*");
 		List<CounselorBean> list = counselorDao.selectList(queryWrapper);
+
 		QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
 		qwP.select("*");
 		qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
 		qwP.eq("TYPE", ImgTypeConstant.STORE);
 		qwP.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
+
 		QueryWrapper<BuildingImgBean> qwV = new QueryWrapper<BuildingImgBean>();
 		qwV.select("*");
 		qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
@@ -369,9 +384,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		result.put("allCounselor", list);
 		result.put("picture", pictureList);
 		result.put("video", videoList);
+		result.put("proInfo",infoBeans);
 		return result;
 	}
-
+	private List<Integer> arrToList(String[] split) {
+		ArrayList< String> arrayList = new ArrayList<String>(split.length);
+		Collections.addAll(arrayList, split);
+		List<Integer> idList = new ArrayList<>();
+		for (String s : arrayList) {
+			int anInt = Integer.parseInt(s);
+			idList.add(anInt);
+		}
+		return idList;
+	}
 	@Override
 	public Integer addRoomMain(RoomMainBean bean) {
 		bean.setCreateDate(new Date());
