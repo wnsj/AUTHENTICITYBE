@@ -83,7 +83,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 	@Autowired
 	private BuildingTypeDao buildingTypeDao;
-	
+
 	@Autowired
 	private CommercialActivitieDao commercialActivitieDao;
 
@@ -97,34 +97,40 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (!StringUtils.isBlank(receive.getNameLike())) {
 			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
 			wrapperLd.select("*");
-			wrapperLd.like("LD_NAME", receive.getNameLike());
+			wrapperLd.like("LD_NAME", "%"+receive.getNameLike()+"%");
 			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
+			System.out.println("list"+ ld);
 			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
 			if (receive.getLdIdList() == null) {
 				List<Integer> ldIdList = new ArrayList<Integer>();
 				receive.setLdIdList(ldIdList);
 			}
 			receive.getLdIdList().addAll(ldList);
-			QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
-			wrapperBd.select("*");
-			wrapperBd.like("bu_name", receive.getNameLike());
-			List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
-			List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
-			if (receive.getBdIdList() == null) {
-				List<Integer> bdIdList = new ArrayList<Integer>();
-				receive.setBdIdList(bdIdList);
+			if(receive.getLdIdList() != null && receive.getLdIdList().size() > 0) {
+				QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
+				wrapperBd.select("*");
+				wrapperBd.like("bu_name", "%"+receive.getNameLike()+"%");
+				List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
+				List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
+				if (receive.getBdIdList() == null) {
+					List<Integer> bdIdList = new ArrayList<Integer>();
+					receive.setBdIdList(bdIdList);
+				}
+				receive.getBdIdList().addAll(bdList);
+				if(receive.getBdIdList() != null && receive.getBdIdList().size() > 0) {
+					QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
+					wrapperb.select("*");
+					wrapperb.like("HT_NAME", "%"+receive.getNameLike()+"%");
+					List<BuildingBean> b = buildingDao.selectList(wrapperb);
+					List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
+					if (receive.getBuildIdList() == null) {
+						List<Integer> bIdList = new ArrayList<Integer>();
+						receive.setBuildIdList(bIdList);
+					}
+					receive.getBuildIdList().addAll(bList);
+				}
 			}
-			receive.getBdIdList().addAll(bdList);
-			QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
-			wrapperb.select("*");
-			wrapperb.like("HT_NAME", receive.getNameLike());
-			List<BuildingBean> b = buildingDao.selectList(wrapperb);
-			List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
-			if (receive.getBuildIdList() == null) {
-				List<Integer> bIdList = new ArrayList<Integer>();
-				receive.setBuildIdList(bIdList);
-			}
-			receive.getBuildIdList().addAll(bList);
+			
 		}
 
 		// 如果商铺业态不为null
@@ -308,7 +314,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		qwH.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 		qwH.eq("INFO_ID", roomMainId);
 		List<BuildingImgBean> headList = buildingImgDao.selectList(qwH);
-		
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("roomDetail", roomBean);
 		result.put("roomMainDetail", mainBean);
@@ -326,21 +332,58 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public Map<String, Object> getStoneDetail(Integer roomMainId) {
 		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
+		// 查询区域名称
+		if (mainBean.getLdId() != null) {
+			mainBean.setLdName(locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
+		}
+		// 查询楼盘名称
+		if (mainBean.getBuildId() != null) {
+			mainBean.setBuildName(buildingDao.selectById(mainBean.getBuildId()).getHtName());
+		}
+		// 查询商圈名称
+		if (mainBean.getBusinessId() != null) {
+			mainBean.setBussinessName(businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
+		}
+		// 查询类型名称
+		if (mainBean.getBtId() != null) {
+			mainBean.setTypeName(buildingTypeDao.selectById(mainBean.getBtId()).getBtName());
+		}
+		// 查询关键词
+		if (mainBean.getLabelList() != null) {
+			String[] str = mainBean.getLabelList().split("\\|");
+			List<String> list = new ArrayList<String>();
+			for (int i = 0; i < str.length; i++) {
+				list.add(str[i]);
+			}
+			mainBean.setLabels(list);
+		}
 		
+		// 拼接业态
+				if (mainBean.getCaId() != null) {
+					String[] str = mainBean.getCaId().split(",");
+					StringBuilder builder = new StringBuilder();
+					for (int i = 0; i < str.length; i++) {
+						String name = commercialActivitieDao.selectById(Integer.valueOf(str[i])).getCacName();
+						builder.append(name);
+						builder.append("/");
+					}
+					builder.deleteCharAt(builder.length()-1);
+					mainBean.setComString(builder.toString());
+				}
 		QueryWrapper<StoreRoomBean> stRoom = new QueryWrapper<StoreRoomBean>();
 		stRoom.select("*");
 		stRoom.eq("room_id", roomMainId);
 		StoreRoomBean storeRoomBean = storeRoomDao.selectOne(stRoom);
-		if(mainBean.getCaId() != null) {
+		if (mainBean.getCaId() != null) {
 			String[] s = mainBean.getCaId().split(",");
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < s.length; i++) {
-				String result  = commercialActivitieDao.selectById(Integer.valueOf(s[i])).getCacName();
+				String result = commercialActivitieDao.selectById(Integer.valueOf(s[i])).getCacName();
 				builder.append(result);
 				builder.append("/");
 			}
-			builder.deleteCharAt(builder.length()-1);
-			if(storeRoomBean != null) {
+			builder.deleteCharAt(builder.length() - 1);
+			if (storeRoomBean != null) {
 				storeRoomBean.setSuitableStore(builder.toString());
 			}
 		}

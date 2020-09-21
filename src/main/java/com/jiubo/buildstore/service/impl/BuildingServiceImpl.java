@@ -1119,6 +1119,27 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public void deleteImgFile(BuildingImgBean buildingImgBean) {
         //删除文件
         BuildingImgBean img = buildingImgDao.getImgById(buildingImgBean);
+        if(img.getItId() != null) {
+        	if(img.getItId() == ImgTypeConstant.HEAD_PICTURE) {
+        		if(img.getType() == ImgTypeConstant.STORE || img.getType() == 
+        				ImgTypeConstant.OFFICE || img.getType() ==  ImgTypeConstant.OFFICE_BUILD) {
+        			RoomMainBean bean = roomMainDao.selectById(img.getInfoId());
+        			bean.setRoomImg("");
+        			roomMainDao.updateById(bean);
+        		}
+        		if(img.getType() == ImgTypeConstant.BUILD) {
+        			BuildingBean bean = buildingDao.selectById(img.getInfoId());
+        			bean.setHeadPath("");
+        			buildingDao.updateById(bean);
+        		}
+        		
+        		if(img.getType() == ImgTypeConstant.BUSSINESS) {
+        			BusinessDistrictBean bean = businessDistrictDao.selectById(img.getInfoId());
+        			bean.setBuPath("");
+        			businessDistrictDao.updateById(bean);
+        		}
+        	}
+        }
         if (null != img) {
             delFile(img.getImgPath());
         }

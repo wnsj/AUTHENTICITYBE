@@ -70,8 +70,10 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
                 if (StringUtils.isNotBlank(dynamicBean.getBdPath())) {
                     dynamicBean.setBdPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(dynamicBean.getBdPath()));
                 }
-                MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
-                dynamicBean.setTypeName(bean.getMtName());
+                if(dynamicBean.getBuildId() != null) {
+                	MessageTypeBean bean = messageTypeDao.selectById(dynamicBean.getBuildId());
+                    dynamicBean.setTypeName(bean.getMtName());
+                }
             }
         }
         PageInfo<BuildingDynamicBean> page = new PageInfo<BuildingDynamicBean>(dynamicByBidList);
@@ -153,7 +155,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
     public void addDynamic(BuildingDynamicBean buildingDynamicBean,MultipartFile[] file) throws IOException {
     	buildingDynamicBean.setCreateDate(new Date());
     	buildingDynamicDao.insert(buildingDynamicBean);
-    	if(file != null) {
+    	if(file != null && file.length>0) {
 			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,buildingDynamicBean.getBdId(),2);
 			if(!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
