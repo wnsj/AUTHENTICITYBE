@@ -22,6 +22,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -47,7 +48,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 	@Autowired
 	private RoomMainDao roomMainDao;
 
-
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException {
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
@@ -111,7 +112,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 		return 1;
 	}
 
-
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer updateRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video,
 			MultipartFile headPicture) throws IOException {
@@ -152,10 +153,11 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				list.clear();
 			}
 			if(headPicture != null) {
+				//TODO
 				Map<String, String> map = FileUtil.uploadFile(headPicture, ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.HEAD_PICTURE);
 				QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
 				qw.select("*");
-				qw.eq("IT_ID", ImgTypeConstant.PICTURE);
+				qw.eq("IT_ID", ImgTypeConstant.HEAD_PICTURE);
 				qw.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 				qw.eq("INFO_ID", mainBean.getId());
 				BuildingImgBean imgBean = buildingImgDao.selectOne(qw);
@@ -166,15 +168,15 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				}else {
 					BuildingImgBean buildingImgBean = new BuildingImgBean();
 					
-					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setItId(ImgTypeConstant.PICTURE);
-					imgBean.setImgPath(map.get("path"));
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
+					buildingImgBean.setImgName(map.get("name"));
+					buildingImgBean.setCreateDate(new Date());
+					buildingImgBean.setItId(ImgTypeConstant.PICTURE);
+					buildingImgBean.setImgPath(map.get("path"));
+					buildingImgBean.setInfoId(mainBean.getId());
+					buildingImgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					buildingImgDao.insert(buildingImgBean);
 				}
-				mainBean.setRoomImg(imgBean.getImgPath());
+				mainBean.setRoomImg(map.get("path"));
 				roomMainDao.updateById(mainBean);
 			}
 		}
