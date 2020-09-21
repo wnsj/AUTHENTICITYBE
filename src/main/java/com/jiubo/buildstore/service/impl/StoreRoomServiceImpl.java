@@ -58,8 +58,12 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
 		bean.setCreateDate(new Date());
 		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
-			bean.setSuitableStore(StringUtils.join(bean.getSuitable(),"|"));
+			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
 		}
+		if (bean.getStId() != null) {
+			mainBean.setStId(bean.getStId());
+		}
+		roomMainDao.updateById(mainBean);
 		if (!CollectionsUtils.isEmpty(bean.getProperInfo())) {
 			bean.setPropertyInfo(StringUtils.join(bean.getProperInfo(),"|"));
 		}
@@ -120,6 +124,14 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
 			MultipartFile[] headPicture) throws IOException {
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
+			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
+			roomMainDao.updateById(mainBean);
+		}
+		if (bean.getStId() != null) {
+			mainBean.setStId(bean.getStId());
+			roomMainDao.updateById(mainBean);
+		}
 		if(bean.getStoreId() != null) {
 			List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
 			if(picture.length > 0) {

@@ -156,6 +156,8 @@ public class StoreRoomBean implements Serializable {
     @TableField(exist = false)
     private List<Integer> suitable;
     @TableField(exist = false)
+    private Integer stId;
+    @TableField(exist = false)
     private List<Integer> properInfo;
     @TableField(exist = false)
     private List<String> picList;
