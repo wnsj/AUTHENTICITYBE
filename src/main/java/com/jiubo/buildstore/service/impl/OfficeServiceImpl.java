@@ -1,18 +1,10 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.jiubo.buildstore.bean.BuildingBean;
-import com.jiubo.buildstore.bean.BuildingImgBean;
-import com.jiubo.buildstore.bean.CounselorBean;
-import com.jiubo.buildstore.bean.OfficeBean;
-import com.jiubo.buildstore.bean.RoomMainBean;
+import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
-import com.jiubo.buildstore.dao.BuildingDao;
-import com.jiubo.buildstore.dao.BuildingImgDao;
-import com.jiubo.buildstore.dao.CounselorDao;
-import com.jiubo.buildstore.dao.OfficeDao;
-import com.jiubo.buildstore.dao.RoomMainDao;
+import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.OfficeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -57,6 +49,9 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 	private CounselorDao counselorDao;
 	@Autowired
 	private BuildingDao buildingDao;
+
+	@Autowired
+	private BuildingTypeDao buildingTypeDao;
 
 	@Value("${buildStoreDir}")
 	private String buildStoreDir;
@@ -219,6 +214,16 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		}
 		queryWrapper.orderByDesc("create_date");
 		List<OfficeBean> list = officeDao.selectList(queryWrapper);
+
+		// 类型
+		QueryWrapper<BuildingTypeBean> wrBt = new QueryWrapper<BuildingTypeBean>();
+		wrBt.select("*");
+		wrBt.eq("TYPE", 2);
+		List<BuildingTypeBean> btList = buildingTypeDao.selectList(wrBt);
+		Map<Integer, List<BuildingTypeBean>> btMap = null;
+		if (!CollectionsUtils.isEmpty(btList)) {
+			btMap = btList.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
+		}
 		for (int i = 0; i < list.size(); i++) {
 			officeBean = list.get(i);
 			RoomMainBean mainBean = roomMainDao.selectById(officeBean.getRoomId());
@@ -255,12 +260,14 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			}
 
 			officeBean.setRoomName(mainBean.getRoom());
-			if (officeBean.getOfficeType() == 2) {
-				officeBean.setOfficeTypeName("开放工位");
+
+			if (null != btMap) {
+				List<BuildingTypeBean> typeBeans = btMap.get(officeBean.getOfficeType());
+				if (!CollectionsUtils.isEmpty(typeBeans)) {
+					officeBean.setOfficeTypeName(typeBeans.get(0).getBtName());
+				}
 			}
-			if (officeBean.getOfficeType() == 3) {
-				officeBean.setOfficeTypeName("独立办公室");
-			}
+
 			if (officeBean.getIsWall() == 2) {
 				officeBean.setIsWallName("是");
 			}
