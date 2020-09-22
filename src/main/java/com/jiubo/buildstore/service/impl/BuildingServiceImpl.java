@@ -625,20 +625,20 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 商圈
             Map<Integer, List<BusinessDistrictBean>> buMap = getBuMap();
 
-            List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setType(3).setInfoId(build.getBuildId()));
+            List<BuildingImgBean> imgByBuildId = buildingImgDao.getAllImgByBuildId(new BuildingImgBean().setType(ImgTypeConstant.BUILD).setInfoId(build.getBuildId()));
             if (!CollectionsUtils.isEmpty(imgByBuildId)) {
                 Map<Integer, List<BuildingImgBean>> map = imgByBuildId.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
                 // 视频
-                List<BuildingImgBean> imgBeans5 = map.get(3);
+                List<BuildingImgBean> imgBeans5 = map.get(ImgTypeConstant.VIDEO);
                 if (!CollectionsUtils.isEmpty(imgBeans5)) {
                     build.setVideoPath(imgBeans5.get(0).getImgPath());
                 }
-
-//                // 图片
-//                List<BuildingImgBean> beans = map.get(2);
-//                if (!CollectionsUtils.isEmpty(beans)) {
-//                    build.setImgPath(beans.get(0).getImgPath());
-//                }
+                // 图片
+                List<BuildingImgBean> imgBeans = map.get(ImgTypeConstant.PICTURE);
+                if (!CollectionsUtils.isEmpty(imgBeans)) {
+                    List<String> list = imgBeans.stream().map(BuildingImgBean::getImgPath).collect(toList());
+                    build.setPicturePath(list);
+                }
             }
 
             toLdName(listMap, build, null != listMap && build.getLdId() != null);
