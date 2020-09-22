@@ -101,7 +101,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (!StringUtils.isBlank(receive.getNameLike())) {
 			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
 			wrapperLd.select("*");
-			wrapperLd.like("LD_NAME", "%" + receive.getNameLike() + "%");
+			wrapperLd.like("LD_NAME", receive.getNameLike());
 			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
 			System.out.println("list" + ld);
 			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
@@ -110,10 +110,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				receive.setLdIdList(ldIdList);
 			}
 			receive.getLdIdList().addAll(ldList);
-			if (receive.getLdIdList() != null && receive.getLdIdList().size() > 0) {
+			if (receive.getLdIdList() == null || receive.getLdIdList().size() == 0) {
 				QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
 				wrapperBd.select("*");
-				wrapperBd.like("bu_name", "%" + receive.getNameLike() + "%");
+				wrapperBd.like("bu_name", receive.getNameLike());
 				List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
 				List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
 				if (receive.getBdIdList() == null) {
@@ -121,10 +121,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					receive.setBdIdList(bdIdList);
 				}
 				receive.getBdIdList().addAll(bdList);
-				if (receive.getBdIdList() != null && receive.getBdIdList().size() > 0) {
+				if (receive.getBdIdList() == null || receive.getBdIdList().size() == 0) {
 					QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
 					wrapperb.select("*");
-					wrapperb.like("HT_NAME", "%" + receive.getNameLike() + "%");
+					wrapperb.like("HT_NAME", receive.getNameLike());
 					List<BuildingBean> b = buildingDao.selectList(wrapperb);
 					List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
 					if (receive.getBuildIdList() == null) {
@@ -132,6 +132,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 						receive.setBuildIdList(bIdList);
 					}
 					receive.getBuildIdList().addAll(bList);
+					if(receive.getBuildIdList() == null || receive.getBuildIdList().size() == 0) {
+						return null;
+					}
 				}
 			}
 
