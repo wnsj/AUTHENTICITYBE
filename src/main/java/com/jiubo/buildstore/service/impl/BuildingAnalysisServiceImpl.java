@@ -85,7 +85,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
         if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
             // 楼盘
-            List<BuildingBean> allBuild = buildingDao.getAllBuild();
+            List<BuildingBean> allBuild = buildingDao.getAllBuild(null);
             Map<Integer, List<BuildingBean>> buildMap = null;
             if (null != allBuild && allBuild.size() > 0) {
                 buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));
@@ -207,7 +207,7 @@ public class BuildingAnalysisServiceImpl extends ServiceImpl<BuildingAnalysisDao
 
         if (null != buildAnalysisList && buildAnalysisList.size() > 0) {
             // 楼盘
-            List<BuildingBean> allBuild = buildingDao.getAllBuild();
+            List<BuildingBean> allBuild = buildingDao.getAllBuild(null);
             Map<Integer, List<BuildingBean>> buildMap = null;
             if (null != allBuild && allBuild.size() > 0) {
                 buildMap = allBuild.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));

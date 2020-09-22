@@ -49,7 +49,7 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
         List<LinkPhoneBean> linkPhoneBeanList = linkPhoneDao.getPhone(page, linkPhoneBean);
         if (!CollectionsUtils.isEmpty(linkPhoneBeanList)) {
             // 楼盘
-            List<BuildingBean> buildList = buildingDao.getAllBuild();
+            List<BuildingBean> buildList = buildingDao.getAllBuild(null);
             Map<Integer, List<BuildingBean>> buildMap = null;
             if (!CollectionsUtils.isEmpty(buildList)) {
                 buildMap = buildList.stream().collect(Collectors.groupingBy(BuildingBean::getBuildId));

@@ -32,7 +32,7 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
 
     public BuildReturn getAllByHtName(@Param("buildingBean") BuildReceive buildingBean);
 
-    public List<BuildingBean> getAllBuild();
+    List<BuildingBean> getAllBuild(@Param("buildType") Integer buildType);
 
     /**
      * 推荐楼盘（根据人气热搜排序）

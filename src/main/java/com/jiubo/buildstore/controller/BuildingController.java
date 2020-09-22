@@ -125,11 +125,11 @@ public class BuildingController {
      * @return
      */
     @GetMapping("/getAllBuild")
-    public JSONObject getAllBuild() {
+    public JSONObject getAllBuild(Integer buildType) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBuild());
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBuild(buildType));
 
         return jsonObject;
     }

@@ -34,7 +34,7 @@ public interface BuildingService extends IService<BuildingBean> {
                                   MultipartFile[] buildRealImg,
                                   MultipartFile[] video) throws Exception;
 
-    public List<BuildingBean> getAllBuild();
+    public List<BuildingBean> getAllBuild(Integer buildType);
 
 
     public BuildMainBean getAllByBuildName();
