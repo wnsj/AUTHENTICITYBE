@@ -74,13 +74,15 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 						bean.setMinTotalPrice(buildingBean.getMinTitlePrice());
 					}
 				}
-			}
-			if(bean.getCouId() != null) {
-				CounselorBean counselorBean = counselorDao.selectById(bean.getCouId());
-				if(counselorBean != null) {
-					bean.setCouBane(counselorBean);
+
+				if(roomMainBeans.get(0).getCouId() != null) {
+					CounselorBean counselorBean = counselorDao.selectById(bean.getCouId());
+					if(counselorBean != null) {
+						bean.setCouBane(counselorBean);
+					}
 				}
 			}
+
 
 			QueryWrapper<BuildingImgBean> qwP = new QueryWrapper<BuildingImgBean>();
 			qwP.select("*");
@@ -262,6 +264,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			List<BuildingImgBean> listHead = buildingImgDao.selectList(wrapperHead);
 			if(listHead != null && listHead.size()>0) {
 				officeBean.setImgName(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(listHead.get(0).getImgPath()).concat("&imgId=").concat(listHead.get(0).getImgId().toString()));
+			}else{
+				officeBean.setImgName(null);
 			}
 
 
