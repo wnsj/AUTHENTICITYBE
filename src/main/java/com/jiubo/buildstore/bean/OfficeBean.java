@@ -173,6 +173,18 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private String roomName;
+    
+    /**
+     * 视频
+     */
+    @TableField(exist = false)
+    private String videoPath;
+    
+    /**
+     * 图片list
+     */
+    @TableField(exist = false)
+    private List<String> pictureList;
 
     private String houseType;
 }

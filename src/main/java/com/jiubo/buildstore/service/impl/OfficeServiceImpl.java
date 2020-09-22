@@ -219,7 +219,29 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		for (int i = 0; i < list.size(); i++) {
 			officeBean = list.get(i);
 			RoomMainBean mainBean = roomMainDao.selectById(officeBean.getRoomId());
-			System.out.println("mainBean" + mainBean.toString());
+			QueryWrapper<BuildingImgBean> wrapperV = new QueryWrapper<BuildingImgBean>();
+			wrapperV.select("*");
+			wrapperV.eq("IT_ID", ImgTypeConstant.VIDEO);
+			wrapperV.eq("TYPE", ImgTypeConstant.OFFICE);
+			wrapperV.eq("INFO_ID", officeBean.getId());
+			List<BuildingImgBean> listV = buildingImgDao.selectList(wrapperV);
+			if(listV != null && listV.size()>0) {
+				officeBean.setVideoPath(listV.get(0).getImgPath());
+			}
+			QueryWrapper<BuildingImgBean> wrapperPs = new QueryWrapper<BuildingImgBean>();
+			wrapperPs.select("*");
+			wrapperPs.eq("IT_ID", ImgTypeConstant.PICTURE);
+			wrapperPs.eq("TYPE", ImgTypeConstant.OFFICE);
+			wrapperPs.eq("INFO_ID", officeBean.getId());
+			List<BuildingImgBean> listPs = buildingImgDao.selectList(wrapperPs);
+			if(listPs != null && listPs.size()>0) {
+				List<String> strings = new ArrayList<String>();
+				for (int j = 0; j < listPs.size(); j++) {
+					BuildingImgBean imgBean = listPs.get(j);
+					strings.add(imgBean.getImgPath());
+				}
+				officeBean.setPictureList(strings);
+			}
 			officeBean.setRoomName(mainBean.getRoom());
 			if (officeBean.getOfficeType() == 2) {
 				officeBean.setOfficeTypeName("开放工位");
