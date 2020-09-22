@@ -273,6 +273,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 遍历实体 翻译各个类型字段
             for (BuildReturn bean : allBulidBypage) {
 
+                // 咨询师
+                CounselorBean cou = counselorDao.getCouById(bean.getCouId());
+                bean.setCounselorBean(cou);
                 // 类型
                 if (null != btMap && bean.getBuildType() != null) {
                     bean.setBtName(btMap.get(bean.getBuildType()).get(0).getBtName());
