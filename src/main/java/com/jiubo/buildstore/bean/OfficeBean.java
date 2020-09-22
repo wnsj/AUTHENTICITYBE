@@ -179,7 +179,10 @@ public class OfficeBean implements Serializable {
      */
     @TableField(exist = false)
     private String videoPath;
-    
+
+    @TableField(exist = false)
+    private String videoName;
+
     /**
      * 图片list
      */

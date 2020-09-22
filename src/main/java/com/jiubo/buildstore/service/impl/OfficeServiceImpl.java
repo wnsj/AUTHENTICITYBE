@@ -167,7 +167,10 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 				addFile(officeBean, file, buildingImgBeans, ImgTypeConstant.PICTURE);
 			}
 		}
-		buildingImgDao.insertList(buildingImgBeans);
+		if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
+			buildingImgDao.insertList(buildingImgBeans);
+		}
+
 	}
 
 	public void deleteImgByCon(OfficeBean officeBean, Integer itId, Integer type) {
@@ -257,6 +260,17 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			List<BuildingImgBean> listHead = buildingImgDao.selectList(wrapperPs);
 			if(listHead != null && listHead.size()>0) {
 				officeBean.setImgName(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(listHead.get(0).getImgPath()).concat("&imgId=").concat(listHead.get(0).getImgId().toString()));
+			}
+
+
+			QueryWrapper<BuildingImgBean> wrapperVideo = new QueryWrapper<BuildingImgBean>();
+			wrapperVideo.select("*");
+			wrapperVideo.eq("IT_ID", ImgTypeConstant.VIDEO);
+			wrapperVideo.eq("TYPE", ImgTypeConstant.OFFICE);
+			wrapperVideo.eq("INFO_ID", officeBean.getId());
+			List<BuildingImgBean> listVideo = buildingImgDao.selectList(wrapperVideo);
+			if(listVideo != null && listVideo.size()>0) {
+				officeBean.setVideoName(listVideo.get(0).getImgName());
 			}
 
 			officeBean.setRoomName(mainBean.getRoom());
