@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service;
 
 import com.github.pagehelper.PageInfo;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RMChildSharedBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
@@ -30,9 +31,9 @@ public interface RoomMainService extends IService<RoomMainBean> {
 
 	public Map<String, Object> getStoneDetail(Integer roomMainId);
 
-	public Integer addRoomMain(RoomMainBean bean);
+	public Integer addRoomMain(RoomMainBean bean) throws MessageException;
 
-	public Integer updateRoomMain(RoomMainBean bean);
+	public Integer updateRoomMain(RoomMainBean bean) throws MessageException;
 
 	public List<RoomMainBean> getRoomOffice(RoomReceive receive);
 }

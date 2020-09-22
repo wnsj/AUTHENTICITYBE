@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.StoreRoomBean;
 import com.jiubo.buildstore.common.Constant;
@@ -37,7 +38,7 @@ public class StoreRoomController {
 	public JSONObject addStoreRoom(String addParam,
 								   @RequestParam("headImg") MultipartFile[] headImg,
 								   @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
-								   @RequestParam("video") MultipartFile[] video) throws IOException {
+								   @RequestParam("video") MultipartFile[] video) throws IOException, MessageException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -50,7 +51,7 @@ public class StoreRoomController {
 	@PostMapping("/updateStoreRoom")
 	public JSONObject updateStoreRoom(String addParam, @RequestParam("headImg") MultipartFile[] headImg,
 									  @RequestParam("buildRealImg") MultipartFile[] buildRealImg,
-									  @RequestParam("video") MultipartFile[] video) throws IOException {
+									  @RequestParam("video") MultipartFile[] video) throws IOException, MessageException {
 
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.controller;
 
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RoomMainBean;
 
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -92,7 +93,7 @@ public class RoomMainController {
 
     @ApiOperation(value = "添加房源主表", notes = "添加房源主表")
     @PostMapping("/addRoomMain")
-    public JSONObject addRoomMain(@RequestBody String param) {
+    public JSONObject addRoomMain(@RequestBody String param) throws MessageException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
@@ -103,7 +104,7 @@ public class RoomMainController {
 
     @ApiOperation(value = "修改房源主表", notes = "修改房源主表")
     @PostMapping("/updateRoomMain")
-    public JSONObject updateRoomMain(@RequestBody String param) {
+    public JSONObject updateRoomMain(@RequestBody String param) throws MessageException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

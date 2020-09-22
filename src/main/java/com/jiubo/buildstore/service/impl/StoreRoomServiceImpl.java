@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
@@ -54,7 +55,10 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-								MultipartFile[] headPicture) throws IOException {
+								MultipartFile[] headPicture) throws IOException, MessageException {
+		if(bean.getRoomId() == null) {
+			throw new MessageException("房源id不能为空");
+		}
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
 		bean.setCreateDate(new Date());
 		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
@@ -122,7 +126,10 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile[] headPicture) throws IOException {
+			MultipartFile[] headPicture) throws IOException, MessageException {
+		if(bean.getStoreId() == null) {
+			throw new MessageException("商铺id不能为空");
+		}
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
 		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
 			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
