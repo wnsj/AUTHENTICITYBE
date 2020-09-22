@@ -160,6 +160,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			imgBean.setType(ImgTypeConstant.OFFICE);
 			buildingImgBeans.add(imgBean);
 			officeBean.setImgName(headMap.get("path"));
+		} else {
+			officeBean.setImgName(null);
 		}
 		officeDao.updateById(officeBean);
 		// 视频
@@ -262,7 +264,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			wrapperHead.eq("IT_ID", ImgTypeConstant.HEAD_PICTURE);
 			wrapperHead.eq("TYPE", ImgTypeConstant.OFFICE);
 			wrapperHead.eq("INFO_ID", officeBean.getId());
-			List<BuildingImgBean> listHead = buildingImgDao.selectList(wrapperPs);
+			List<BuildingImgBean> listHead = buildingImgDao.selectList(wrapperHead);
 			if(listHead != null && listHead.size()>0) {
 				officeBean.setImgName(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(listHead.get(0).getImgPath()).concat("&imgId=").concat(listHead.get(0).getImgId().toString()));
 			}

@@ -154,7 +154,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 
 	@Override
 	public void patchDyById(BuildingDynamicBean buildingDynamicBean, MultipartFile[] file) throws IOException {
-		if (file != null) {
+		if (file != null && file.length > 0) {
 			Map<String, String> map = FileUtil.uploadFile(file[0], ImgPathConstant.BU_PATH,
 					buildingDynamicBean.getBdId(), 2);
 			if (!map.isEmpty()) {
