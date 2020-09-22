@@ -90,6 +90,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 	@Autowired
 	private PropertyInfoDao propertyInfoDao;
+	
 
 	@Override
 	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive) {
@@ -158,6 +159,34 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 			// 遍历实体 翻译各个类型字段
 			for (RoomMainBean bean : allRoomBypage) {
+				if(bean.getRoomType() == 1) {
+					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
+					wrapper.select("*");
+					wrapper.eq("IT_ID", ImgTypeConstant.VIDEO);
+					wrapper.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
+					wrapper.eq("INFO_ID", bean.getId());
+					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
+					if(imgBeans != null ) {
+						bean.setIsVideo(2);
+					}else {
+						bean.setIsVideo(3);
+					}
+				}
+				
+				if(bean.getRoomType() == 3) {
+					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
+					wrapper.select("*");
+					wrapper.eq("IT_ID", ImgTypeConstant.VIDEO);
+					wrapper.eq("TYPE", ImgTypeConstant.STORE);
+					wrapper.eq("INFO_ID", bean.getId());
+					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
+					if(imgBeans != null ) {
+						bean.setIsVideo(2);
+					}else {
+						bean.setIsVideo(3);
+					}
+				}
+				
 
 				// 查询区域名称
 				System.out.println("bean.getId" + bean.getLdId());

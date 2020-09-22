@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public interface BusinessDistrictService extends IService<BusinessDistrictBean> 
 
 	public List<BusinessDistrictBean> getHotBusinessDistrict();
 
-	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException;
+	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException, MessageException;
 
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException;
 
