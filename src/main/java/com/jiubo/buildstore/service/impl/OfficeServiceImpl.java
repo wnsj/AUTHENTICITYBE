@@ -23,6 +23,7 @@ import com.jiubo.buildstore.util.FileUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +58,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 	@Autowired
 	private BuildingDao buildingDao;
 
+	@Value("${buildStoreDir}")
+	private String buildStoreDir;
 	@Override
 	public OfficeBean getOfficeByPk(Integer id) {
 		OfficeBean bean = officeDao.selectById(id);
@@ -114,7 +117,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			BuildingImgBean imgBean = new BuildingImgBean();
 			imgBean.setImgName(headMap.get("name"));
 			imgBean.setCreateDate(new Date());
-			imgBean.setItId(ImgTypeConstant.PICTURE);
+			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
 			imgBean.setImgPath(headMap.get("path"));
 			imgBean.setInfoId(officeBean.getId());
 			imgBean.setType(ImgTypeConstant.OFFICE);
@@ -151,7 +154,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			BuildingImgBean imgBean = new BuildingImgBean();
 			imgBean.setImgName(headMap.get("name"));
 			imgBean.setCreateDate(new Date());
-			imgBean.setItId(ImgTypeConstant.PICTURE);
+			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
 			imgBean.setImgPath(headMap.get("path"));
 			imgBean.setInfoId(officeBean.getId());
 			imgBean.setType(ImgTypeConstant.OFFICE);
@@ -226,8 +229,10 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			wrapperV.eq("INFO_ID", officeBean.getId());
 			List<BuildingImgBean> listV = buildingImgDao.selectList(wrapperV);
 			if(listV != null && listV.size()>0) {
-				officeBean.setVideoPath(listV.get(0).getImgPath());
+				officeBean.setVideoPath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(listV.get(0).getImgPath()).concat("&imgId=").concat(listV.get(0).getImgId().toString()));
 			}
+
+
 			QueryWrapper<BuildingImgBean> wrapperPs = new QueryWrapper<BuildingImgBean>();
 			wrapperPs.select("*");
 			wrapperPs.eq("IT_ID", ImgTypeConstant.PICTURE);
@@ -235,13 +240,20 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			wrapperPs.eq("INFO_ID", officeBean.getId());
 			List<BuildingImgBean> listPs = buildingImgDao.selectList(wrapperPs);
 			if(listPs != null && listPs.size()>0) {
-				List<String> strings = new ArrayList<String>();
-				for (int j = 0; j < listPs.size(); j++) {
-					BuildingImgBean imgBean = listPs.get(j);
-					strings.add(imgBean.getImgPath());
-				}
+				List<String> strings = getPathList(listPs);
 				officeBean.setPictureList(strings);
 			}
+
+			QueryWrapper<BuildingImgBean> wrapperHead = new QueryWrapper<BuildingImgBean>();
+			wrapperHead.select("*");
+			wrapperHead.eq("IT_ID", ImgTypeConstant.HEAD_PICTURE);
+			wrapperHead.eq("TYPE", ImgTypeConstant.OFFICE);
+			wrapperHead.eq("INFO_ID", officeBean.getId());
+			List<BuildingImgBean> listHead = buildingImgDao.selectList(wrapperPs);
+			if(listHead != null && listHead.size()>0) {
+				officeBean.setImgName(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(listHead.get(0).getImgPath()).concat("&imgId=").concat(listHead.get(0).getImgId().toString()));
+			}
+
 			officeBean.setRoomName(mainBean.getRoom());
 			if (officeBean.getOfficeType() == 2) {
 				officeBean.setOfficeTypeName("开放工位");
@@ -267,5 +279,20 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		}
 		PageInfo<OfficeBean> pageInfo = new PageInfo<OfficeBean>(list);
 		return pageInfo;
+	}
+
+	/**
+	 * 拼接图片路径（后台管理）
+	 *
+	 * @param imgBeans
+	 * @return
+	 */
+	private List<String> getPathList(List<BuildingImgBean> imgBeans) {
+		List<String> pathList = new ArrayList<>();
+		for (BuildingImgBean buildingImgBean : imgBeans) {
+			String path = ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
+			pathList.add(path);
+		}
+		return pathList;
 	}
 }
