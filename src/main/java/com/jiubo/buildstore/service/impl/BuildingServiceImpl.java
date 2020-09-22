@@ -547,8 +547,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     @Override
-    public List<BuildingBean> getAllBuild() {
-        return buildingDao.getAllBuild();
+    public List<BuildingBean> getAllBuild(Integer buildType) {
+        return buildingDao.getAllBuild(buildType);
     }
 
 
