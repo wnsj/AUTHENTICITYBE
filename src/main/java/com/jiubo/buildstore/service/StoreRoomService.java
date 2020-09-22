@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.StoreRoomBean;
 
@@ -19,10 +20,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StoreRoomService extends IService<StoreRoomBean> {
 
-	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture[]) throws IOException;
+	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture[]) throws IOException, MessageException;
 
 	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile[] headPicture) throws IOException;
+			MultipartFile[] headPicture) throws IOException, MessageException;
 
 	StoreRoomBean getStoreByRoomId(Integer roomId);
 

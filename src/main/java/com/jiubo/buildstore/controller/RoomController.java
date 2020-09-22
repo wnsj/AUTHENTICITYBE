@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.RoomBean;
 import com.jiubo.buildstore.bean.RoomMainBean;
 import com.jiubo.buildstore.bean.RoomReceive;
@@ -40,7 +41,7 @@ public class RoomController {
 	@ApiOperation(value = "添加写字楼房源", notes = "添加写字楼房源")
 	@PostMapping("/addRoom")
 	public JSONObject addRoom(String param, MultipartFile[] picture
-			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
+			, MultipartFile[] video, MultipartFile headPicture) throws IOException, MessageException {
 		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
@@ -54,7 +55,7 @@ public class RoomController {
 	@ApiOperation(value = "修改写字楼房源", notes = "修改写字楼房源")
 	@PostMapping("/updateRoom")
 	public JSONObject updateRoom(String param, MultipartFile[] picture
-			, MultipartFile[] video, MultipartFile headPicture) throws IOException {
+			, MultipartFile[] video, MultipartFile headPicture) throws IOException, MessageException {
 		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

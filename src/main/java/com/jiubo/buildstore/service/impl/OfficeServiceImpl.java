@@ -1,6 +1,7 @@
 package com.jiubo.buildstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
@@ -101,7 +102,11 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void addOffice(OfficeBean officeBean, MultipartFile headImg, MultipartFile[] picture, MultipartFile video)
-			throws IOException {
+			throws IOException, MessageException {
+		if(officeBean.getRoomId() == null) {
+			throw new MessageException("房源id不能为空");
+		}
+		
 		officeDao.insert(officeBean);
 		List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 

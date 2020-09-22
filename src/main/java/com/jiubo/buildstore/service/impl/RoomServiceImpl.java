@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.*;
 import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
@@ -50,8 +51,11 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException {
+	public Integer addRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video, MultipartFile headPicture) throws IOException, MessageException {
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+		if(bean.getRoomId() == null) {
+			throw new MessageException("房源id不能为空");
+		}
 		bean.setCreateDate(new Date());
 		bean.setModifyDate(new Date());
 		roomDao.insert(bean);
@@ -115,7 +119,10 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer updateRoom(RoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile headPicture) throws IOException {
+			MultipartFile headPicture) throws IOException, MessageException {
+		if(bean.getId() == null) {
+			throw new MessageException("写字楼id不能为空");
+		}
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
 		bean.setModifyDate(new Date());
 		if(bean.getId() != null) {
