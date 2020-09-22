@@ -87,7 +87,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
                     }
                 }
                 if (null != counselorBean1.getPicturePath()) {
-                    counselorBean1.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(counselorBean1.getPicturePath()));
+                    counselorBean1.setPicturePath(ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(counselorBean1.getPicturePath()));
                 }
 
             }
@@ -196,7 +196,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
                     if (null != is)
                         is.close();
                     counselorBean.setPictureName(name);
-                    counselorBean.setPicturePath(path);
+                    counselorBean.setPicturePath(ImgPathConstant.COMMENT + counselorBean.getCouId() + "/" + name);
                 }
 
             }
