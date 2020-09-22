@@ -140,7 +140,7 @@
                ,total_price DESC
          </if>
         <if test="receive.totalPriceOrder == 3">
-               ,order by total_price ASC
+               ,total_price ASC
          </if>
     </select>
 		
