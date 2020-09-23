@@ -252,4 +252,6 @@ public class RoomMainBean implements Serializable {
      *特点list集合
      */
     private String chaList;
+
+    private Integer flag;
 }

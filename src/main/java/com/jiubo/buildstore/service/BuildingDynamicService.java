@@ -38,4 +38,6 @@ public interface BuildingDynamicService extends IService<BuildingDynamicBean> {
     List<BuildingDynamicBean> getNewestDy();
 
     JSONObject getDynamicByBuildId();
+
+    void deleteDynamicById(BuildingDynamicBean buildingDynamicBean);
 }

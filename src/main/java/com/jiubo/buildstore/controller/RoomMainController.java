@@ -49,6 +49,16 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomByConditions(receive));
         return jsonObject;
     }
+
+    @ApiOperation(value = "多条件查询房源后台管理", notes = "多条件查询房源后台管理")
+    @PostMapping("/getRoomByConditionsBe")
+    public JSONObject getRoomByConditionsBe(@RequestBody RoomReceive receive) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.getRoomByConditionsBe(receive));
+        return jsonObject;
+    }
     
     @ApiOperation(value = "共享办公房源", notes = "共享办公房源")
     @PostMapping("/getRoomOffice")
@@ -112,5 +122,27 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA, roomMainService.updateRoomMain(bean));
         return jsonObject;
     }
-    
+
+    @ApiOperation(value = "根据id删除数据", notes = "根据id删除数据")
+    @PostMapping("/deleteRoomByPk")
+    public JSONObject deleteRoomByPk(@RequestBody String param) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
+        roomMainService.deleteRoomByPk(bean);
+        return jsonObject;
+    }
+
+
+    @ApiOperation(value = "房源上下架", notes = "房源上下架")
+    @PostMapping("/offOrOnTheShelf")
+    public JSONObject offOrOnTheShelf(@RequestBody String param) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        RoomMainBean bean = JSONObject.parseObject(param, RoomMainBean.class);
+        roomMainService.offOrOnTheShelf(bean);
+        return jsonObject;
+    }
 }

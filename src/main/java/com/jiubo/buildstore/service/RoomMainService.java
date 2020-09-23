@@ -22,7 +22,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoomMainService extends IService<RoomMainBean> {
 
-	public PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive);
+	PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive);
+	PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive);
 
 	public Map<String, Object> getRoomDetails(Integer roomMainId);
 
@@ -36,4 +37,8 @@ public interface RoomMainService extends IService<RoomMainBean> {
 	public Integer updateRoomMain(RoomMainBean bean) throws MessageException;
 
 	public List<RoomMainBean> getRoomOffice(RoomReceive receive);
+
+	void deleteRoomByPk(RoomMainBean bean);
+
+	void offOrOnTheShelf(RoomMainBean bean);
 }

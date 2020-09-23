@@ -135,4 +135,14 @@ public class BuildingDynamicController {
         jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getDynamicByBuildId());
         return jsonObject;
     }
+
+    @PostMapping("/deleteDynamicById")
+    public JSONObject deleteDynamicById(@RequestBody String param) throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
+        buildingDynamicService.deleteDynamicById(buildingDynamicBean);
+        return jsonObject;
+    }
 }
