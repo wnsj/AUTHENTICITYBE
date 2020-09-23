@@ -69,7 +69,11 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		QueryWrapper<BusinessDistrictBean> queryWrapper = new QueryWrapper<BusinessDistrictBean>();
 		queryWrapper.select("*");
 		queryWrapper.eq("is_hot", 2);
+		queryWrapper.orderByDesc("create_date");
 		List<BusinessDistrictBean> list = businessDistrictDao.selectList(queryWrapper);
+		if(list.size() >= 4) {
+			list = list.subList(0, 4);
+		}
 		return list;
 	}
 
