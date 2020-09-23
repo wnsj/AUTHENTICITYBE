@@ -1229,4 +1229,28 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
         return null;
     }
+
+	@Override
+	public List<BuildingBean> getHomeShareBuilding() {
+		QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
+		qw.select("*");
+		qw.eq("BUILD_TYPE", 2);
+		qw.orderByDesc("POPULARITY");
+		List<BuildingBean> result = buildingDao.selectList(qw);
+		if(result.size() >= 4) {
+			result = result.subList(0, 4);
+		}
+		for (int i = 0; i < result.size(); i++) {
+			BuildingBean bean = result.get(i);
+			// 查询区域名称
+			if (bean.getLdId() != null) {
+				bean.setLdName(locationDistinguishDao.selectById(bean.getLdId()).getLdName());
+			}
+			// 查询商圈名称
+			if (bean.getBusinessId() != null) {
+				bean.setBusName(businessDistrictDao.selectById(bean.getBusinessId()).getBuName());
+			}
+		}
+		return result;
+	}
 }

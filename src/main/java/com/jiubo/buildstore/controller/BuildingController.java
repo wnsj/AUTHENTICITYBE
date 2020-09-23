@@ -34,6 +34,21 @@ public class BuildingController {
 
     @Autowired
     private BuildingService buildingService;
+    
+    /**
+     * 查询首页共享楼盘
+     *
+     * @param buildingBean
+     * @return
+     */
+    @PostMapping("/getHomeShareBuilding")
+    public JSONObject getHomeShareBuilding() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getHomeShareBuilding());
+        return jsonObject;
+    }
 
     /**
      * 条件筛选查询（分页）

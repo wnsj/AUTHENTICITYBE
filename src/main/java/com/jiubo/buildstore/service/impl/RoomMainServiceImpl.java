@@ -329,6 +329,22 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public Map<String, Object> getRoomDetails(Integer roomMainId) {
 		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
+		// 查询区域名称
+				if (mainBean.getLdId() != null) {
+					mainBean.setLdName(locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
+				}
+				// 查询楼盘名称
+				if (mainBean.getBuildId() != null) {
+					mainBean.setBuildName(buildingDao.selectById(mainBean.getBuildId()).getHtName());
+				}
+				// 查询商圈名称
+				if (mainBean.getBusinessId() != null) {
+					mainBean.setBussinessName(businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
+				}
+				// 查询类型名称
+				if (mainBean.getBtId() != null) {
+					mainBean.setTypeName(buildingTypeDao.selectById(mainBean.getBtId()).getBtName());
+				}
 		QueryWrapper<RoomBean> qwRoom = new QueryWrapper<RoomBean>();
 		qwRoom.select("*");
 		qwRoom.eq("room_id", roomMainId);
@@ -373,7 +389,22 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public Map<String, Object> getStoneDetail(Integer roomMainId) {
 		RoomMainBean mainBean = roomMainDao.selectById(roomMainId);
-
+		// 查询区域名称
+		if (mainBean.getLdId() != null) {
+			mainBean.setLdName(locationDistinguishDao.selectById(mainBean.getLdId()).getLdName());
+		}
+		// 查询楼盘名称
+		if (mainBean.getBuildId() != null) {
+			mainBean.setBuildName(buildingDao.selectById(mainBean.getBuildId()).getHtName());
+		}
+		// 查询商圈名称
+		if (mainBean.getBusinessId() != null) {
+			mainBean.setBussinessName(businessDistrictDao.selectById(mainBean.getBusinessId()).getBuName());
+		}
+		// 查询类型名称
+		if (mainBean.getBtId() != null) {
+			mainBean.setTypeName(buildingTypeDao.selectById(mainBean.getBtId()).getBtName());
+		}
 		QueryWrapper<StoreRoomBean> stRoom = new QueryWrapper<StoreRoomBean>();
 		stRoom.select("*");
 		stRoom.eq("room_id", roomMainId);
@@ -397,6 +428,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					builder.append("/");
 				}
 				builder.deleteCharAt(builder.length() - 1);
+				mainBean.setComString(builder.toString());
 				if (storeRoomBean != null) {
 					storeRoomBean.setSuitableStore(builder.toString());
 				}

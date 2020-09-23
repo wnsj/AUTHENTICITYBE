@@ -81,4 +81,7 @@ public interface BuildingService extends IService<BuildingBean> {
 
     public List<Map<String, Object>> uploadFile(MultipartFile[] file) throws Exception;
 
+
+	public List<BuildingBean> getHomeShareBuilding();
+
 }
