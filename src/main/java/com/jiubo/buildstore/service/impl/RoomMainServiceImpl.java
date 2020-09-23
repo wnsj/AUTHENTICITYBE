@@ -391,9 +391,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			// 图片路径
 			QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
 			qw.select("*");
-			qw.eq("IT_ID", 2);
-			qw.eq("TYPE", 2);
-			qw.eq("INFO_ID", roomMainBean.getId());
+			qw.ne("IT_ID", ImgTypeConstant.VIDEO);
+			qw.eq("TYPE", ImgTypeConstant.BUILD);
+			qw.eq("INFO_ID", id);
 			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qw);
 			if (!CollectionsUtils.isEmpty(pictureList)) {
 				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
