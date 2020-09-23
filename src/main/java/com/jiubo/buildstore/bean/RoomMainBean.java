@@ -228,6 +228,12 @@ public class RoomMainBean implements Serializable {
     private String createTime;
     
     /**
+     * 是否有视频
+     */
+    @TableField(exist = false)
+    private Integer isVideo;
+    
+    /**
      *支付方式
      */
     private String payType;

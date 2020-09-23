@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 import com.jiubo.buildstore.bean.EntrustRentBean;
@@ -83,7 +84,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "添加商圈", notes = "添加商圈")
 	@PostMapping("/addBusinessDistrict")
-	public JSONObject addBusinessDistrict(String param,@RequestParam(value = "picture",required = false) MultipartFile file) throws IOException {
+	public JSONObject addBusinessDistrict(String param,@RequestParam(value = "picture",required = false) MultipartFile file) throws IOException, MessageException {
 		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);

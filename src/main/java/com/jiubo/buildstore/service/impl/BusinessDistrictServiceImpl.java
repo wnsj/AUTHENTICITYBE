@@ -1,5 +1,6 @@
 package com.jiubo.buildstore.service.impl;
 
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingImgBean;
 import com.jiubo.buildstore.bean.BusinessDistrictBean;
 import com.jiubo.buildstore.bean.LocationDistinguishBean;
@@ -73,7 +74,10 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	}
 
 	@Override
-	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException {
+	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException, MessageException {
+		if(StringUtils.isBlank(bean.getBuName())) {
+			throw new MessageException("商圈名字不能为空");
+		}
 		bean.setCreateDate(new Date());
 		bean.setModifyTime(new Date());
 		businessDistrictDao.insert(bean);
