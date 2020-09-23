@@ -251,5 +251,6 @@ public class RoomMainBean implements Serializable {
     /**
      *特点list集合
      */
-    private String chaList;
+    @TableField(exist = false)
+    private List<Integer> chaList;
 }
