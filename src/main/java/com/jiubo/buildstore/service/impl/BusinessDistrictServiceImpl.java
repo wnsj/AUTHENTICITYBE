@@ -112,7 +112,8 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 				imgBean.setType(ImgTypeConstant.BUSSINESS);
 				buildingImgDao.insert(imgBean);
 			}
-
+		} else {
+			bean.setBuPath(null);
 		}
 		bean.setModifyTime(new Date());
 		return businessDistrictDao.updateById(bean);
