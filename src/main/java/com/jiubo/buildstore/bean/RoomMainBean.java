@@ -253,4 +253,8 @@ public class RoomMainBean implements Serializable {
      */
     @TableField(exist = false)
     private List<Integer> chaList;
+
+
+    private Integer flag;
+
 }

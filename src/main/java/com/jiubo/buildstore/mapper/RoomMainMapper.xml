@@ -8,7 +8,7 @@
 		SELECT *
 		from room_main
 		<where>
-			1=1
+			flag=1
 			/*查询房源根据房源类型*/
 			<if
 				test="receive.type != null and receive.type != '' and receive.type != 4">
@@ -176,18 +176,157 @@
 			order by total_price ASC
 		</if>
 	</select>
+	<select id="getAllRoomByPageBe" resultType="com.jiubo.buildstore.bean.RoomMainBean">
+		SELECT *
+		from room_main
+		<where>
+			flag != 3
+			/*查询房源根据房源类型*/
+			<if test="receive.type != null and receive.type != '' and receive.type != 4">
+				and room_type = #{receive.type}
+			</if>
+			/*查询首页共享房源*/
+			<if test="receive.isHome != null and receive.isHome != ''">
+				and is_home = #{receive.isHome}
+			</if>
+			/*是否是热门*/
+			<if test="receive.isHot != null and receive.isHot != ''">
+				and is_hot = #{receive.isHot}
+			</if>
+			/*区域*/
+			<if test="receive.ldIdList != null and receive.ldIdList.size() > 0">
+				and LD_ID in
+				<foreach collection="receive.ldIdList" open="(" close=")" separator="," item="ldId">
+					#{ldId}
+				</foreach>
+			</if>
+			/*商圈*/
+			<if test="receive.bdIdList != null and receive.bdIdList.size() > 0">
+				and business_id in
+				<foreach collection="receive.bdIdList" open="(" close=")" separator="," item="bdId">
+					#{bdId}
+				</foreach>
+			</if>
+			/*楼盘*/
+			<if test="receive.buildIdList != null and receive.buildIdList.size() > 0">
+				and build_id in
+				<foreach collection="receive.buildIdList" open="(" close=")" separator="," item="bId">
+					#{bId}
+				</foreach>
+			</if>
+			/*房源类型*/
+			<if test="receive.btIdList != null and receive.btIdList.size() > 0">
+				and bt_id in
+				<foreach collection="receive.btIdList" open="(" close=")" separator="," item="btId">
+					#{btId}
+				</foreach>
+			</if>
+			/*商铺类别*/
+			<if test="receive.stId != null and receive.stId != ''">
+				and st_id = #{receive.stId}
+			</if>
+			/*商铺业态*/
+			<if test="receive.caIdList != null and receive.caIdList.size() > 0">
+				and
+				<foreach collection="receive.caIdList" open="(" close=")" separator="," item="caId">
+					ca_id like concat("%",#{caId},"%")
+				</foreach>
 
+			</if>
+			<if test="receive.areaList != null and receive.areaList.size() > 0">
+				and
+				<foreach collection="receive.areaList" open="(" close=")" separator="or" item="item">
+					<if test="null != item and item.minArea != null and item.maxArea == null">
+						build_area > #{item.minArea}
+					</if>
+					<if test="null != item and item.maxArea != null and item.minArea == null">
+						#{item.maxArea} > build_area
+					</if>
+					<if test="null != item and item.maxArea != null and item.minArea != null">
+						build_area >= #{item.minArea} and  #{item.maxArea} >= build_area
+						<!-- or MAX_AREA >= #{item.minArea} and #{item.maxArea}>=MAX_AREA
+                        or #{item.minArea} >= MIN_AREA and  MAX_AREA >=#{item.maxArea} -->
+					</if>
+				</foreach>
+			</if>
+			<if test="receive.totalPriceList != null and receive.totalPriceList.size() > 0">
+				and
+				<foreach collection="receive.totalPriceList" open="(" close=")" separator="or" item="item">
+					<if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
+						total_price > #{item.minTitlePrice}
+					</if>
+					<if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
+						#{item.maxTitlePrice} > total_price
+					</if>
+					<if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
+						total_price >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= total_price
+
+					</if>
+				</foreach>
+			</if>
+			<if test="receive.unitPriceList != null and receive.unitPriceList.size() > 0">
+				and
+				<foreach collection="receive.unitPriceList" open="(" close=")" separator="or" item="item">
+					<if test="null != item and item.minUnitPrice != null and item.minUnitPrice != 0 and item.maxUnitPrice == null">
+						unit_price > #{item.minUnitPrice}
+					</if>
+					<if test="null != item and item.maxUnitPrice != null and (item.minUnitPrice == null or item.minUnitPrice == 0)">
+						#{item.maxUnitPrice} > unit_price
+					</if>
+					<if test="null != item and item.maxUnitPrice != null and item.minUnitPrice != null and item.minUnitPrice != 0">
+						unit_price >= #{item.minUnitPrice} and #{item.maxUnitPrice} >= unit_price
+					</if>
+				</foreach>
+			</if>
+			<if test="receive.regionIdList != null and receive.regionIdList.size() > 0">
+				and business_id in
+				<foreach collection="receive.regionIdList" open="(" close=")" separator="," item="regionId">
+					#{regionId}
+				</foreach>
+			</if>
+
+			<if test="receive.startTime != null and receive.endTime == null">
+				and create_date >= #{receive.startTime}
+			</if>
+			<if test="receive.endTime != null and receive.startTime == null">
+				and #{receive.endTime} > =create_date
+			</if>
+			<if test="receive.endTime != null and receive.startTime != null">
+				and create_date >= #{receive.startTime} and #{receive.endTime} >=create_date
+			</if>
+
+		</where>
+		order by create_date DESC
+		<if test="receive.areaOrder == 2">
+			,build_area DESC
+		</if>
+		<if test="receive.areaOrder == 3">
+			,build_area ASC
+		</if>
+		<if test="receive.unitPriceOrder == 2">
+			,unit_price DESC
+		</if>
+		<if test="receive.unitPriceOrder == 3">
+			,unit_price ASC
+		</if>
+		<if test="receive.totalPriceOrder == 2">
+			,total_price DESC
+		</if>
+		<if test="receive.totalPriceOrder == 3">
+			,total_price ASC
+		</if>
+	</select>
 	<select id="getSharedById"
 		resultType="com.jiubo.buildstore.bean.RMChildSharedBean">
 		select T.*,B.bu_name as buName,L.LD_NAME as ldName from room_main T
 		LEFT JOIN business_district B ON T.business_id = B.id
 		LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
-		where T.build_id = #{id}
+		where T.flag = 1 and T.build_id = #{id}
 	</select>
 
 	<select id="getRoomByBuildIdList"
 		resultType="com.jiubo.buildstore.bean.RoomMainBean">
-		select build_id,build_area,id,room_img from room_main where
+		select build_id,build_area,id,room_img from room_main where flag = 1 and
 		build_id in
 		<foreach collection="list" open="(" close=")" separator=","
 			item="item">

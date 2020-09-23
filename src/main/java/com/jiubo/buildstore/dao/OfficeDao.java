@@ -2,6 +2,7 @@ package com.jiubo.buildstore.dao;
 
 import com.jiubo.buildstore.bean.OfficeBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ import java.util.List;
  */
 public interface OfficeDao extends BaseMapper<OfficeBean> {
     List<OfficeBean> getOffByRoomIdList(List<Integer> roomIdList);
+    void patchOffFlagByRoomId(OfficeBean officeBean);
 }

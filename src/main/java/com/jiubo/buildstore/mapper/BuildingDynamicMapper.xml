@@ -3,7 +3,7 @@
 <mapper namespace="com.jiubo.buildstore.dao.BuildingDynamicDao">
     <select id="getDynamicByBid" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
         SELECT a.BD_ID,a.BD_PATH,a.BD_NAME,a.BD_CONTENT,a.CREATE_DATE,a.BUILD_ID,a.BD_LABEL
-         from building_dynamic a where 1=1
+         from building_dynamic a where flag = 1
          <if test="buildingDynamicBean.buildId != null and buildingDynamicBean.buildId != ''">
                 and BUILD_ID = #{buildingDynamicBean.buildId}
             </if>
@@ -13,7 +13,7 @@
     <select id="getDynamicByPage" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
         select * from building_dynamic
         <where>
-            1=1
+            flag=1
             <if test="buildingDynamicBean.buildId != null">
                 and BUILD_ID = #{buildingDynamicBean.buildId}
             </if>
@@ -55,12 +55,16 @@
     </insert>
 
     <select id="getNewestDy" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
-        select * from building_dynamic order By BD_ID DESC limit 3
+        select * from building_dynamic where flag = 1 order By BD_ID DESC limit 3
     </select>
 
     <select id="getDynamicByBuildId" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
         select B.*,M.MT_NAME as mtName from building_dynamic B
          LEFT JOIN message_type M ON B.BUILD_ID = M.MT_ID
-        where  BUILD_ID = #{buildId} order by BD_ID DESC limit 6
+        where flag = 1 and  BUILD_ID = #{buildId} order by BD_ID DESC limit 6
     </select>
+
+    <update id="deleteDynamicById">
+        update building_dynamic set flag = 2 where BD_ID = #{bdId}
+    </update>
 </mapper>

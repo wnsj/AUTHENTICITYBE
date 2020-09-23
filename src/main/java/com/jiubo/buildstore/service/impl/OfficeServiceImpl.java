@@ -212,6 +212,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		PageHelper.startPage(pageNum, pageSize);
 		QueryWrapper<OfficeBean> queryWrapper = new QueryWrapper<OfficeBean>();
 		queryWrapper.select("*");
+		queryWrapper.ne("flag",3);
 		if (officeBean.getRoomId() != null) {
 			queryWrapper.eq("room_id", officeBean.getRoomId());
 		}

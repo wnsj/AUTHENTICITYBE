@@ -190,4 +190,6 @@ public class OfficeBean implements Serializable {
     private List<String> pictureList;
 
     private String houseType;
+
+    private Integer flag;
 }

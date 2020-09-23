@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -238,6 +239,136 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	}
 
 	@Override
+	public PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive) {
+		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
+		Integer pageSize = StringUtils.isBlank(receive.getPageSize()) ? 10 : Integer.valueOf(receive.getPageSize());
+		setCondition(receive);
+
+		// 如果是通过名字搜索的房源根据名字取查对应的区域商圈
+		if (!StringUtils.isBlank(receive.getNameLike())) {
+			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
+			wrapperLd.select("*");
+			wrapperLd.like("LD_NAME", receive.getNameLike());
+			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
+			System.out.println("list" + ld);
+			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
+			if (receive.getLdIdList() == null) {
+				List<Integer> ldIdList = new ArrayList<Integer>();
+				receive.setLdIdList(ldIdList);
+			}
+			receive.getLdIdList().addAll(ldList);
+			if (receive.getLdIdList() == null || receive.getLdIdList().size() == 0) {
+				QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
+				wrapperBd.select("*");
+				wrapperBd.like("bu_name", receive.getNameLike());
+				List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
+				List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
+				if (receive.getBdIdList() == null) {
+					List<Integer> bdIdList = new ArrayList<Integer>();
+					receive.setBdIdList(bdIdList);
+				}
+				receive.getBdIdList().addAll(bdList);
+				if (receive.getBdIdList() == null || receive.getBdIdList().size() == 0) {
+					QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
+					wrapperb.select("*");
+					wrapperb.like("HT_NAME", receive.getNameLike());
+					List<BuildingBean> b = buildingDao.selectList(wrapperb);
+					List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
+					if (receive.getBuildIdList() == null) {
+						List<Integer> bIdList = new ArrayList<Integer>();
+						receive.setBuildIdList(bIdList);
+					}
+					receive.getBuildIdList().addAll(bList);
+					if(receive.getBuildIdList() == null || receive.getBuildIdList().size() == 0) {
+						return null;
+					}
+				}
+			}
+
+		}
+
+		// 如果商铺业态不为null
+		if (!StringUtils.isBlank(receive.getCaId())) {
+			String[] strs = receive.getCaId().split(",");
+			for (int i = 0; i < strs.length; i++) {
+				List<Integer> caIdList = new ArrayList<Integer>();
+				receive.setCaIdList(caIdList);
+				receive.getCaIdList().add(Integer.valueOf(strs[i]));
+			}
+		}
+
+		// 房源数据
+		PageHelper.startPage(pageNum, pageSize);
+		List<RoomMainBean> allRoomBypage = roomMainDao.getAllRoomByPageBe(receive);
+
+		if (!CollectionsUtils.isEmpty(allRoomBypage)) {
+
+			// 遍历实体 翻译各个类型字段
+			for (RoomMainBean bean : allRoomBypage) {
+				if(bean.getRoomType() == 1) {
+					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
+					wrapper.select("*");
+					wrapper.eq("IT_ID", ImgTypeConstant.VIDEO);
+					wrapper.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
+					wrapper.eq("INFO_ID", bean.getId());
+					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
+					if(imgBeans != null ) {
+						bean.setIsVideo(2);
+					}else {
+						bean.setIsVideo(3);
+					}
+				}
+
+				if(bean.getRoomType() == 3) {
+					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
+					wrapper.select("*");
+					wrapper.eq("IT_ID", ImgTypeConstant.VIDEO);
+					wrapper.eq("TYPE", ImgTypeConstant.STORE);
+					wrapper.eq("INFO_ID", bean.getId());
+					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
+					if(imgBeans != null ) {
+						bean.setIsVideo(2);
+					}else {
+						bean.setIsVideo(3);
+					}
+				}
+
+
+				// 查询区域名称
+				System.out.println("bean.getId" + bean.getLdId());
+				if (bean.getLdId() != null) {
+					bean.setLdName(locationDistinguishDao.selectById(bean.getLdId()).getLdName());
+				}
+				// 查询楼盘名称
+				if (bean.getBuildId() != null) {
+					bean.setBuildName(buildingDao.selectById(bean.getBuildId()).getHtName());
+				}
+				// 查询商圈名称
+				if (bean.getBusinessId() != null) {
+					bean.setBussinessName(businessDistrictDao.selectById(bean.getBusinessId()).getBuName());
+				}
+				// 查询类型名称
+				if (bean.getBtId() != null) {
+					bean.setTypeName(buildingTypeDao.selectById(bean.getBtId()).getBtName());
+				}
+				// 时间
+				if (bean.getCreateDate() != null) {
+					bean.setCreateTime(DateUtils.formatDate(bean.getCreateDate(), "yyyy-MM-dd"));
+				}
+				// 将标签字符串打成集合
+				if (bean.getLabelList() != null) {
+					String[] strings = bean.getLabelList().split("\\|");
+					ArrayList<String> arrayList = new ArrayList<String>(strings.length);
+					Collections.addAll(arrayList, strings);
+					bean.setLabels(arrayList);
+				}
+			}
+		}
+		PageInfo<RoomMainBean> page = new PageInfo<RoomMainBean>(allRoomBypage);
+		return page;
+	}
+
+	@Override
 	public RMChildSharedBean getSharedById(Integer id) {
 
 		List<RMChildSharedBean> sharedByIdList = roomMainDao.getSharedById(id);
@@ -275,9 +406,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			// 图片路径
 			QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
 			qw.select("*");
-			qw.eq("IT_ID", 2);
-			qw.eq("TYPE", 2);
-			qw.eq("INFO_ID", roomMainBean.getId());
+			qw.ne("IT_ID", ImgTypeConstant.VIDEO);
+			qw.eq("TYPE", ImgTypeConstant.BUILD);
+			qw.eq("INFO_ID", id);
 			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qw);
 			if (!CollectionsUtils.isEmpty(pictureList)) {
 				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
@@ -582,6 +713,44 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		// 1,写字楼，2，共享，3商铺
 		qw.eq("room_type", 2);
 		return roomMainDao.selectList(qw);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteRoomByPk(RoomMainBean bean) {
+		int i = roomMainDao.deleteById(bean.getId());
+		if (i>0) {
+			if (bean.getRoomType() == 1) {
+				QueryWrapper<RoomBean> qw = new QueryWrapper<RoomBean>();
+				// 1,写字楼，2，共享，3商铺
+				qw.eq("room_id", bean.getId());
+				roomDao.delete(qw);
+			} else if (bean.getRoomType() == 2) {
+				QueryWrapper<OfficeBean> qw = new QueryWrapper<OfficeBean>();
+				// 1,写字楼，2，共享，3商铺
+				qw.eq("room_id", bean.getId());
+				officeDao.delete(qw);
+				QueryWrapper<ShareRoomBean> qws = new QueryWrapper<ShareRoomBean>();
+				// 1,写字楼，2，共享，3商铺
+				qws.eq("room_id", bean.getId());
+				shareRoomDao.delete(qws);
+			} else if (bean.getRoomType() == 3) {
+				QueryWrapper<StoreRoomBean> qw = new QueryWrapper<StoreRoomBean>();
+				// 1,写字楼，2，共享，3商铺
+				qw.eq("room_id", bean.getId());
+				storeRoomDao.delete(qw);
+			}
+		}
+	}
+
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void offOrOnTheShelf(RoomMainBean bean) {
+		roomMainDao.patchRoomFlagById(bean);
+		if (bean.getRoomType() == 2) {
+			officeDao.patchOffFlagByRoomId(new OfficeBean().setRoomId(bean.getId()).setFlag(bean.getFlag()));
+		}
 	}
 
 }

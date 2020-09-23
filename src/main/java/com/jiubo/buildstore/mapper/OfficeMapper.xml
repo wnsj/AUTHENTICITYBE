@@ -3,9 +3,13 @@
 <mapper namespace="com.jiubo.buildstore.dao.OfficeDao">
     <select id="getOffByRoomIdList" resultType="com.jiubo.buildstore.bean.OfficeBean">
         select * from office
-        where room_id in
+        where flag = 1 and room_id in
         <foreach collection="list" open="(" close=")" separator="," item="item">
             #{item}
         </foreach>
     </select>
+
+    <update id="patchOffFlagByRoomId" parameterType="com.jiubo.buildstore.bean.OfficeBean">
+        update office set flag = #{flag} where room_id = #{roomId}
+    </update>
 </mapper>

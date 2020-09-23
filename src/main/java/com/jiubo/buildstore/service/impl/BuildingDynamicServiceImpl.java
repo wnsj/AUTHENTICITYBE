@@ -234,4 +234,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 		jsonObject.put("strategy", dynamicByBuildId1);
 		return jsonObject;
 	}
+
+	@Override
+	public void deleteDynamicById(BuildingDynamicBean buildingDynamicBean) {
+		buildingDynamicDao.deleteDynamicById(buildingDynamicBean.getBdId());
+	}
 }
