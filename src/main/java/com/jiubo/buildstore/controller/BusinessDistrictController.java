@@ -97,7 +97,7 @@ public class BusinessDistrictController {
 	
 	@ApiOperation(value = "修改商圈", notes = "修改商圈")
 	@PostMapping("/updateBusinessDistrict")
-	public JSONObject updateBusinessDistrict(String param,@RequestParam(value = "picture",required = false) MultipartFile file) throws IOException {
+	public JSONObject updateBusinessDistrict(String param,@RequestParam(value = "picture",required = false) MultipartFile file) throws IOException, MessageException {
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);

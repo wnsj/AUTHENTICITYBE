@@ -622,16 +622,17 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 	@Override
 	public Integer addRoomMain(RoomMainBean bean) throws MessageException {
-		if (!StringUtils.isBlank(bean.getRoom())) {
-			QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
-			queryWrapper.select("*");
-			queryWrapper.eq("room", bean.getRoom());
-			queryWrapper.notIn("flag", 3);
-			List<RoomMainBean> list = roomMainDao.selectList(queryWrapper);
-			if (!CollectionsUtils.isEmpty(list)) {
-				throw new MessageException("此房源名字存在");
-			}
-		}
+		
+//		if (!StringUtils.isBlank(bean.getRoom())) {
+//			QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
+//			queryWrapper.select("*");
+//			queryWrapper.eq("room", bean.getRoom());
+//			queryWrapper.notIn("flag", 3);
+//			List<RoomMainBean> list = roomMainDao.selectList(queryWrapper);
+//			if (!CollectionsUtils.isEmpty(list)) {
+//				throw new MessageException("此房源名字存在");
+//			}
+//		}
 		if (!StringUtils.isBlank(bean.getRoomCode())) {
 			QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
 			queryWrapper.select("*");

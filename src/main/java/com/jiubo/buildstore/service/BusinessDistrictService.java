@@ -27,7 +27,7 @@ public interface BusinessDistrictService extends IService<BusinessDistrictBean> 
 
 	public Integer addBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException, MessageException;
 
-	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException;
+	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException, MessageException;
 
 	public PageInfo<BusinessDistrictBean> getBusinessDistrictPage(BusinessDistrictBean bean);
 

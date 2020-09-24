@@ -20,6 +20,7 @@
                 and  CHARA_NAME = #{counselorBean.charaName}
             </if>
         </where>
+        order by CREATE_TIME
     </select>
 
     <select id="getAllCharaName" resultType="com.jiubo.buildstore.bean.CounselorBean">

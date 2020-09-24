@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -41,6 +42,8 @@ public class CounselorBean implements Serializable {
     private String tel;
 
     private String charaName;
+    
+    private Date create_time;
 
   
     @TableField(exist = false)
