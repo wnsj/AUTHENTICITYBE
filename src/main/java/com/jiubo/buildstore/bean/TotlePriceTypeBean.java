@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.Data;
@@ -30,9 +31,9 @@ public class TotlePriceTypeBean implements Serializable {
     @TableId(value = "TP_ID", type = IdType.AUTO)
     private Integer tpId;
 
-    private Integer begPrice;
+    private BigDecimal begPrice;
 
-    private Integer endPrice;
+    private BigDecimal endPrice;
 
     @TableField(exist = false)
     private List<Integer> idList;
