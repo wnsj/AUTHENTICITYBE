@@ -264,6 +264,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 获取图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
             buildingImgBean.setBIdList(list);
+            buildingImgBean.setType(ImgTypeConstant.BUILD);
             List<BuildingImgBean> byBuildId = buildingImgDao.getHeadImgByBuildId(buildingImgBean);
             Map<Integer, List<BuildingImgBean>> imgMap = null;
             if (!CollectionsUtils.isEmpty(byBuildId)) {
@@ -299,6 +300,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                         if (!CollectionsUtils.isEmpty(imgBeans)) {
                             List<String> strings = getPathList(imgBeans);
                             bean.setPicturePath(strings);
+                        }
+
+                        List<BuildingImgBean> videoList = map.get(ImgTypeConstant.VIDEO);
+                        if (!CollectionsUtils.isEmpty(videoList)) {
+                            BuildingImgBean viBean = videoList.stream().max(Comparator.comparing(BuildingImgBean::getImgId)).get();
+                            bean.setVideoName(viBean.getImgName());
                         }
                     }
                     if (!StringUtils.isBlank(bean.getHeadPath())) {

@@ -40,6 +40,7 @@ public class BuildReturn extends BuildingBean {
      */
     private String videoPath;
 
+    private String videoName;
     /**
      * 图片路径
      */
