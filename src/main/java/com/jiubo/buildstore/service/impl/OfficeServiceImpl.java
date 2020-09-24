@@ -108,7 +108,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		if(officeBean.getRoomId() == null) {
 			throw new MessageException("房源id不能为空");
 		}
-		
+		RoomMainBean roomMainBean = roomMainDao.selectById(officeBean.getRoomId());
+		officeBean.setCouId(roomMainBean.getCouId());
 		officeDao.insert(officeBean);
 		List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 
