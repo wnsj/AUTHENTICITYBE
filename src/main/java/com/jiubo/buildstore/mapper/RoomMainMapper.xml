@@ -333,4 +333,8 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<update id="patchRoomFlagById" parameterType="com.jiubo.buildstore.bean.RoomMainBean">
+        update room_main set flag = #{flag} where id = #{id}
+    </update>
 </mapper>
