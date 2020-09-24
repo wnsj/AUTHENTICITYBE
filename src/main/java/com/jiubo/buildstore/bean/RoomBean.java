@@ -102,7 +102,7 @@ public class RoomBean implements Serializable {
     /**
      * 使用率
      */
-    private Integer usageRate;
+    private BigDecimal usageRate;
 
     /**
      * 周边配套
