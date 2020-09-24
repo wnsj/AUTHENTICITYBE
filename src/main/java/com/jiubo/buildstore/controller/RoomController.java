@@ -42,12 +42,10 @@ public class RoomController {
 	@PostMapping("/addRoom")
 	public JSONObject addRoom(String param, MultipartFile[] picture
 			, MultipartFile[] video, MultipartFile headPicture) throws IOException, MessageException {
-		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         RoomBean bean = JSONObject.parseObject(param, RoomBean.class);
-        System.out.println("bean"+bean.toString());
         jsonObject.put(Constant.Result.RETDATA,roomService.addRoom(bean,picture,video,headPicture));
         return jsonObject;
 	}
@@ -56,12 +54,10 @@ public class RoomController {
 	@PostMapping("/updateRoom")
 	public JSONObject updateRoom(String param, MultipartFile[] picture
 			, MultipartFile[] video, MultipartFile headPicture) throws IOException, MessageException {
-		System.out.println("param"+param);
 		JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         RoomBean bean = JSONObject.parseObject(param, RoomBean.class);
-        System.out.println("bean"+bean.toString());
         jsonObject.put(Constant.Result.RETDATA,roomService.updateRoom(bean,picture,video,headPicture));
         return jsonObject;
 	}
