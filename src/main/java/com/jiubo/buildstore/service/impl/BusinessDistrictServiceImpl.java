@@ -11,6 +11,7 @@ import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.BusinessDistrictDao;
 import com.jiubo.buildstore.dao.LocationDistinguishDao;
 import com.jiubo.buildstore.service.BusinessDistrictService;
+import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.DateUtils;
 import com.jiubo.buildstore.util.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -82,6 +83,14 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		if(StringUtils.isBlank(bean.getBuName())) {
 			throw new MessageException("商圈名字不能为空");
 		}
+		QueryWrapper<BusinessDistrictBean> qwBusiness = new QueryWrapper<BusinessDistrictBean>();
+		qwBusiness.select("*");
+		qwBusiness.eq("bu_name", bean.getBuName());
+		qwBusiness.eq("ld_id", bean.getLdId());
+		List<BusinessDistrictBean> listBusiness = businessDistrictDao.selectList(qwBusiness);
+		if(!CollectionsUtils.isEmpty(listBusiness)) {
+			throw new MessageException("商圈名已经存在");
+		}
 		bean.setCreateDate(new Date());
 		bean.setModifyTime(new Date());
 		businessDistrictDao.insert(bean);
@@ -134,6 +143,7 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 		PageHelper.startPage(pageNum,pageSize);
 		QueryWrapper<BusinessDistrictBean> qw = new QueryWrapper<BusinessDistrictBean>();
 		qw.select("*");
+		qw.orderByDesc("create_date");
 		if(bean.getLdId() != null) {
 			qw.eq("ld_id", bean.getLdId());
 		}

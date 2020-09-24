@@ -626,6 +626,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
 			queryWrapper.select("*");
 			queryWrapper.eq("room", bean.getRoom());
+			queryWrapper.notIn("flag", 3);
 			List<RoomMainBean> list = roomMainDao.selectList(queryWrapper);
 			if (!CollectionsUtils.isEmpty(list)) {
 				throw new MessageException("此房源名字存在");
