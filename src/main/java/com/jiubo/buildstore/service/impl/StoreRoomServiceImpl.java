@@ -253,6 +253,11 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 					List<String> pathList = getPathList(buildingImgBeans);
 					bean.setHeadPath(pathList.get(0));
 				}
+				List<BuildingImgBean> videoList = picMap.get(ImgTypeConstant.VIDEO);
+				if (!CollectionsUtils.isEmpty(videoList)) {
+					BuildingImgBean imgBean = videoList.stream().max(Comparator.comparing(BuildingImgBean::getImgId)).get();
+					bean.setVideoName(imgBean.getImgName());
+				}
 			}
 
 		}

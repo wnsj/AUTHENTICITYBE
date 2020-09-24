@@ -112,17 +112,17 @@
 
     <!--首页推荐楼盘||优质楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building where RECOMMEND = 1 order by POPULARITY desc limit 4
+        select * from building where RECOMMEND = 2 order by POPULARITY desc limit 4
     </select>
 
     <!--首页优选-->
     <select id="getOptimization" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building where OPTIMIZATION = 1
+        select * from building where OPTIMIZATION = 2
     </select>
 
     <!--首页品质楼盘-->
     <select id="getQuality" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building where QUALITY = 1 order by SELL_WELL desc limit 3
+        select * from building where QUALITY = 2 order by SELL_WELL desc limit 3
     </select>
 
     <select id="getSellWell" resultType="com.jiubo.buildstore.bean.BuildReturn">

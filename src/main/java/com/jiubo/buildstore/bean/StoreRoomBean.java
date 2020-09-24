@@ -163,4 +163,6 @@ public class StoreRoomBean implements Serializable {
     private List<String> picList;
     @TableField(exist = false)
     private String headPath;
+    @TableField(exist = false)
+    private String videoName;
 }
