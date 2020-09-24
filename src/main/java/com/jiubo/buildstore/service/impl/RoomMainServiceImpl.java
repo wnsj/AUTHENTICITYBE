@@ -104,7 +104,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			wrapperLd.select("*");
 			wrapperLd.like("LD_NAME", receive.getNameLike());
 			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
-			System.out.println("list" + ld);
 			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
 			if (receive.getLdIdList() == null) {
 				List<Integer> ldIdList = new ArrayList<Integer>();
@@ -160,22 +159,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			// 遍历实体 翻译各个类型字段
 			for (RoomMainBean bean : allRoomBypage) {
 				
-				QueryWrapper<ShareRoomBean> wrapperShare = new QueryWrapper<ShareRoomBean>();
-				wrapperShare.select("*");
-				wrapperShare.eq("room_id", bean.getId());
-				List<ShareRoomBean> listShare = shareRoomDao.selectList(wrapperShare);
-				if(!CollectionsUtils.isEmpty(listShare)) {
-					ShareRoomBean shareRoomBean = listShare.get(0);
-					if(!StringUtils.isBlank(shareRoomBean.getChaList())) {
-						String[] strShare = shareRoomBean.getChaList().split("\\|");
-						List<Integer> idShare = new ArrayList<Integer>();
-						for (int i = 0; i < strShare.length; i++) {
-							idShare.add(Integer.valueOf(strShare[i]));
-						}
-						bean.setChaList(idShare);
-					}
-				}
-				
 				if (bean.getRoomType() == 1) {
 					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
 					wrapper.select("*");
@@ -205,7 +188,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				}
 
 				// 查询区域名称
-				System.out.println("bean.getId" + bean.getLdId());
 				if (bean.getLdId() != null) {
 					bean.setLdName(locationDistinguishDao.selectById(bean.getLdId()).getLdName());
 				}
@@ -250,7 +232,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			wrapperLd.select("*");
 			wrapperLd.like("LD_NAME", receive.getNameLike());
 			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
-			System.out.println("list" + ld);
 			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
 			if (receive.getLdIdList() == null) {
 				List<Integer> ldIdList = new ArrayList<Integer>();
@@ -305,6 +286,23 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 			// 遍历实体 翻译各个类型字段
 			for (RoomMainBean bean : allRoomBypage) {
+				
+				QueryWrapper<ShareRoomBean> wrapperShare = new QueryWrapper<ShareRoomBean>();
+				wrapperShare.select("*");
+				wrapperShare.eq("room_id", bean.getId());
+				List<ShareRoomBean> listShare = shareRoomDao.selectList(wrapperShare);
+				if(!CollectionsUtils.isEmpty(listShare)) {
+					ShareRoomBean shareRoomBean = listShare.get(0);
+					if(!StringUtils.isBlank(shareRoomBean.getChaList())) {
+						String[] strShare = shareRoomBean.getChaList().split("\\|");
+						List<Integer> idShare = new ArrayList<Integer>();
+						for (int i = 0; i < strShare.length; i++) {
+							idShare.add(Integer.valueOf(strShare[i]));
+						}
+						bean.setChaList(idShare);
+					}
+				}
+				
 				if(bean.getRoomType() == 1) {
 					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
 					wrapper.select("*");
@@ -335,7 +333,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 
 				// 查询区域名称
-				System.out.println("bean.getId" + bean.getLdId());
 				if (bean.getLdId() != null) {
 					bean.setLdName(locationDistinguishDao.selectById(bean.getLdId()).getLdName());
 				}
@@ -679,7 +676,6 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		shareRoomBean.setRoomId(bean.getId());
 		shareRoomBean.setCreateDate(new Date());
 		shareRoomDao.insert(shareRoomBean);
-		System.out.println("bean.getId" + bean.getId());
 		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
 		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
 		buildingDao.updateById(buildingBean);
