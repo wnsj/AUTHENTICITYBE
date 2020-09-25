@@ -174,7 +174,7 @@ public class BuildingBean implements Serializable {
     /**
      * 楼层
      */
-    private Integer floor;
+    private String floor;
 
     /**
      * 客梯数

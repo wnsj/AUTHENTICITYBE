@@ -557,8 +557,21 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     }
 
     @Override
-    public List<BuildingBean> getAllBuild(Integer buildType) {
-        return buildingDao.getAllBuild(buildType);
+    public List<BuildingBean> getAllBuild(BuildingBean bean) {
+    	QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
+    	qw.select("*");
+    	if(bean.getBuildType() != null) {
+    		qw.eq("BUILD_TYPE", bean.getBuildType());
+    	}
+    	if(bean.getLdId() != null) {
+    		qw.eq("LD_ID", bean.getLdId());
+    		System.out.println("进入进入进入");
+    	}
+    	if(bean.getBusinessId() != null) {
+    		qw.eq("BUSINESS_ID", bean.getBusinessId());
+    	}
+    	List<BuildingBean> result = buildingDao.selectList(qw);
+    	return result;
     }
 
 

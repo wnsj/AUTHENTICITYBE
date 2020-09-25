@@ -680,6 +680,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		shareRoomDao.insert(shareRoomBean);
 		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
 		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
+		bean.setLatitude(buildingBean.getLatitude());
+		bean.setLongitude(buildingBean.getLongitude());
+		roomMainDao.updateById(bean);
 		buildingDao.updateById(buildingBean);
 		return bean.getId();
 	}
@@ -700,6 +703,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				shareRoomDao.updateById(shareRoomBean);
 			}
 		}
+		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
+		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
+		buildingDao.updateById(buildingBean);
 		bean.setModifyDate(new Date());
 		return roomMainDao.updateById(bean);
 	}

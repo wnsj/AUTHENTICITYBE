@@ -139,12 +139,12 @@ public class BuildingController {
      * 获取所有楼盘的名字及id（楼盘下拉）
      * @return
      */
-    @GetMapping("/getAllBuild")
-    public JSONObject getAllBuild(Integer buildType) {
+    @PostMapping("/getAllBuild")
+    public JSONObject getAllBuild(@RequestBody BuildingBean bean) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
-        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBuild(buildType));
+        jsonObject.put(Constant.Result.RETDATA, buildingService.getAllBuild(bean));
 
         return jsonObject;
     }

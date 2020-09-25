@@ -101,14 +101,14 @@
         select * from building where  HT_NAME = #{buildingBean.htName}
     </select>
 
-    <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
+    <!-- <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select BUILD_ID,HT_NAME from building
          where 1=1
          <if test="null != buildType">
             and BUILD_TYPE = #{buildType}
          </if>
          order by CONVERT(TRIM(HT_NAME) USING GBK) asc
-    </select>
+    </select> -->
 
     <!--首页推荐楼盘||优质楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildReturn">
