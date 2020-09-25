@@ -115,14 +115,14 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 
 	@Override
 	public Integer updateBusinessDistrict(BusinessDistrictBean bean, MultipartFile file) throws IOException, MessageException {
-		QueryWrapper<BusinessDistrictBean> qwBusiness = new QueryWrapper<BusinessDistrictBean>();
-		qwBusiness.select("*");
-		qwBusiness.eq("bu_name", bean.getBuName());
-		qwBusiness.eq("ld_id", bean.getLdId());
-		List<BusinessDistrictBean> listBusiness = businessDistrictDao.selectList(qwBusiness);
-		if(!CollectionsUtils.isEmpty(listBusiness)) {
-			throw new MessageException("商圈名已经存在");
-		}
+//		QueryWrapper<BusinessDistrictBean> qwBusiness = new QueryWrapper<BusinessDistrictBean>();
+//		qwBusiness.select("*");
+//		qwBusiness.eq("bu_name", bean.getBuName());
+//		qwBusiness.eq("ld_id", bean.getLdId());
+//		List<BusinessDistrictBean> listBusiness = businessDistrictDao.selectList(qwBusiness);
+//		if(!CollectionsUtils.isEmpty(listBusiness)) {
+//			throw new MessageException("商圈名已经存在");
+//		}
 		if (null != file) {
 			FileUtil.delFile(bean.getBuPath());
 			Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.BU_PATH,bean.getId(),2);
