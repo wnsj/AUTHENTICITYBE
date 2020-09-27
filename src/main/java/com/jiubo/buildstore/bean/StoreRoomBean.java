@@ -30,7 +30,7 @@ public class StoreRoomBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 共享房源详情ID
+     * 商铺详情ID
      */
     @TableId(value = "store_id", type = IdType.AUTO)
     private Integer storeId;
