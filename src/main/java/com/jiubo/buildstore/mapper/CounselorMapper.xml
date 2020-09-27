@@ -11,7 +11,7 @@
         <where>
             1=1
             <if test="counselorBean.couName != null and counselorBean.couName != ''">
-               and COU_NAME = #{counselorBean.couName}
+               and COU_NAME like CONCAT('%',#{counselorBean.couName},'%')
             </if>
             <if test="counselorBean.couId != null">
                 and COU_ID = #{counselorBean.couId}
@@ -20,16 +20,16 @@
                 and  CHARA_NAME = #{counselorBean.charaName}
             </if>
         </where>
-        order by CREATE_TIME
+        order by CREATE_TIME desc
     </select>
 
     <select id="getAllCharaName" resultType="com.jiubo.buildstore.bean.CounselorBean">
         select distinct CHARA_NAME from counselor
     </select>
     <insert id="insertCou"  useGeneratedKeys="true" keyProperty="couId">
-        insert into counselor (COU_NAME,INTRODUCE,GRADUATE,CC_ID,TEL,PICTURE_NAME,PICTURE_PATH,CHARA_NAME) values
+        insert into counselor (COU_NAME,INTRODUCE,GRADUATE,CC_ID,TEL,PICTURE_NAME,PICTURE_PATH,CHARA_NAME,CREATE_TIME) values
          (#{counselorBean.couName},#{counselorBean.introduce},#{counselorBean.graduate},
-         #{counselorBean.ccId},#{counselorBean.tel},#{counselorBean.pictureName},#{counselorBean.picturePath},#{counselorBean.charaName})
+         #{counselorBean.ccId},#{counselorBean.tel},#{counselorBean.pictureName},#{counselorBean.picturePath},#{counselorBean.charaName},#{counselorBean.createTime})
     </insert>
 
     <select id="getCouById" resultType="com.jiubo.buildstore.bean.CounselorBean">

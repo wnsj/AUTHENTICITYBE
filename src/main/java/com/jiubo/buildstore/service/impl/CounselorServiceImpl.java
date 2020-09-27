@@ -97,7 +97,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 
     @Override
     public void insertCou(CounselorBean counselorBean, MultipartFile[] picture) throws Exception {
-    	counselorBean.setCreate_time(new Date());
+    	counselorBean.setCreateTime(new Date());
         counselorDao.insertCou(counselorBean);
         this.saveFile(counselorBean, picture);
         counselorDao.patchCouById(counselorBean);
