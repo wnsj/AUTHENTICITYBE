@@ -161,6 +161,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 			if (!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 			}
+		} else {
+			buildingDynamicBean.setBdPath(null);
 		}
 		buildingDynamicDao.updateById(buildingDynamicBean);
 	}

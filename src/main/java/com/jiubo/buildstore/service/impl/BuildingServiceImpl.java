@@ -204,6 +204,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                             RoomMainBean roomMainBean = mainBeans.get(0);
                             List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
                             bean.setOfficeBeanList(officeBeanList);
+                            if (!CollectionsUtils.isEmpty(officeBeanList)) {
+                                Map<Integer, List<OfficeBean>> otMap = officeBeanList.stream().collect(Collectors.groupingBy(OfficeBean::getOfficeType));
+                                bean.setHouseNum(otMap.size());
+                            }
                         }
                     }
                 }

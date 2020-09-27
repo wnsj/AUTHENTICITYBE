@@ -69,6 +69,11 @@ public class BuildReturn extends BuildingBean {
      */
     private CounselorBean counselorBean;
 
+    /**
+     * 共享办公类型户型个数
+     */
+    private Integer houseNum;
+
     private List<String> charaNameList;
 
     private List<Integer> ChaIdList;
