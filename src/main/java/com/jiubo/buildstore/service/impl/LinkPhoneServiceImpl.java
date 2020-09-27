@@ -84,7 +84,12 @@ public class LinkPhoneServiceImpl extends ServiceImpl<LinkPhoneDao, LinkPhoneBea
                 if (null != phoneSourceMap && null != linkPhoneBean1.getMoId()) {
                     List<PhoneSourceBean> sourceBeans = phoneSourceMap.get(linkPhoneBean1.getMoId());
                     if (!CollectionsUtils.isEmpty(sourceBeans)) {
-                        linkPhoneBean1.setMoLabel(sourceBeans.get(0).getSourceLabel());
+                        if (StringUtils.isNotBlank(linkPhoneBean1.getBuild())) {
+                            linkPhoneBean1.setMoLabel(linkPhoneBean1.getBuild() + sourceBeans.get(0).getSourceLabel());
+                        } else {
+                            linkPhoneBean1.setMoLabel(sourceBeans.get(0).getSourceLabel());
+                        }
+
                     }
                 }
             }
