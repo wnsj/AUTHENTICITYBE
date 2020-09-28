@@ -89,7 +89,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			qwP.select("*");
 			qwP.eq("IT_ID", ImgTypeConstant.PICTURE);
 			qwP.eq("TYPE", ImgTypeConstant.OFFICE);
-			qwP.eq("INFO_ID", bean.getRoomId());
+			qwP.eq("INFO_ID", bean.getId());
 			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qwP);
 			if (!CollectionsUtils.isEmpty(pictureList)) {
 				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
@@ -100,7 +100,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			qwV.select("*");
 			qwV.eq("IT_ID", ImgTypeConstant.VIDEO);
 			qwV.eq("TYPE", ImgTypeConstant.OFFICE);
-			qwV.eq("INFO_ID", bean.getRoomId());
+			qwV.eq("INFO_ID", bean.getId());
 			List<BuildingImgBean> videoList = buildingImgDao.selectList(qwV);
 			if(!CollectionsUtils.isEmpty(videoList)){
 				bean.setVideoPath(videoList.get(0).getImgPath());
@@ -134,7 +134,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			imgBean.setCreateDate(new Date());
 			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
 			imgBean.setImgPath(headMap.get("path"));
-			imgBean.setInfoId(officeBean.getRoomId());
+			imgBean.setInfoId(officeBean.getId());
 			imgBean.setType(ImgTypeConstant.OFFICE);
 			buildingImgBeans.add(imgBean);
 			officeDao.updateById(officeBean.setImgName(headMap.get("path")));
@@ -171,7 +171,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			imgBean.setCreateDate(new Date());
 			imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
 			imgBean.setImgPath(headMap.get("path"));
-			imgBean.setInfoId(officeBean.getRoomId());
+			imgBean.setInfoId(officeBean.getId());
 			imgBean.setType(ImgTypeConstant.OFFICE);
 			buildingImgBeans.add(imgBean);
 			officeBean.setImgName(headMap.get("path"));
@@ -213,7 +213,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		videoBean.setCreateDate(new Date());
 		videoBean.setItId(video2);
 		videoBean.setImgPath(videoMap.get("path"));
-		videoBean.setInfoId(officeBean.getRoomId());
+		videoBean.setInfoId(officeBean.getId());
 		videoBean.setType(ImgTypeConstant.OFFICE);
 		buildingImgBeans.add(videoBean);
 	}
@@ -228,7 +228,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		queryWrapper.select("*");
 		queryWrapper.ne("flag",3);
 		if (officeBean.getRoomId() != null) {
-			queryWrapper.eq("room_id", officeBean.getRoomId());
+			queryWrapper.eq("room_id", officeBean.getId());
 		}
 		if (officeBean.getOfficeType() != null) {
 			queryWrapper.eq("office_type", officeBean.getOfficeType());
@@ -324,8 +324,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 				officeBean.setCreateTime(DateUtils.formatDate(officeBean.getCreateDate(), "yyyy-MM-dd"));
 			}
 		}
-		PageInfo<OfficeBean> pageInfo = new PageInfo<OfficeBean>(list);
-		return pageInfo;
+		return new PageInfo<OfficeBean>(list);
 	}
 
 	/**
