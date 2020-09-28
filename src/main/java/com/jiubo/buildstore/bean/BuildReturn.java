@@ -81,4 +81,9 @@ public class BuildReturn extends BuildingBean {
     private List<RoomMainBean> roomMainBeanList;
 
     List<OfficeBean> officeBeanList;
+
+    /**
+     * 类型集合
+     */
+    private List<Integer> buildTypeList;
 }

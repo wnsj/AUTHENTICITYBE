@@ -86,8 +86,8 @@
                 and #{buildingBean.sellWell} = A.SELL_WELL
             </if>
 
-            <if test="buildingBean.buildType != null">
-                and #{buildingBean.buildType} = A.BUILD_TYPE
+            <if test="buildingBean.buildType != null and buildingBean.buildType != ''">
+                and A.BUILD_TYPE like CONCAT('%',#{buildingBean.buildType},'%')
             </if>
             <if test="buildingBean.businessId != null">
                 and #{buildingBean.businessId} = A.BUSINESS_ID
@@ -105,8 +105,8 @@
     <select id="getAllBuild" resultType="com.jiubo.buildstore.bean.BuildingBean">
         select BUILD_ID,HT_NAME from building
          where 1=1
-         <if test="null != buildType">
-            and BUILD_TYPE = #{buildType}
+         <if test="null != buildType and buildType != ''">
+            and BUILD_TYPE like CONCAT('%',#{buildType},'%')
          </if>
          order by CONVERT(TRIM(HT_NAME) USING GBK) asc
     </select>
@@ -115,7 +115,7 @@
 
     <!--首页推荐楼盘||优质楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building where BUILD_TYPE = 1 and RECOMMEND = 2 order by POPULARITY desc limit 4
+        select * from building where BUILD_TYPE like CONCAT('%',1,'%') and RECOMMEND = 2 order by POPULARITY desc limit 4
     </select>
 
     <!--首页优选-->

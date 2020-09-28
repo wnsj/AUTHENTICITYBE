@@ -104,4 +104,9 @@ public class BuildReceive extends BuildingBean{
     private Integer metroId;
 
     private Integer officeType;
+
+    /**
+     * 类型集合
+     */
+    private List<Integer> buildTypeList;
 }

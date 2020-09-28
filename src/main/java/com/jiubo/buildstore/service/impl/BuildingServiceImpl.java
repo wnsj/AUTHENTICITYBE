@@ -184,12 +184,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 商圈名
                 toBuName(buMap, bean);
                 // 类型
-                if (null != btMap && bean.getBuildType() != null) {
-                    List<BuildingTypeBean> list1 = btMap.get(bean.getBuildType());
-                    if (!CollectionsUtils.isEmpty(list1)) {
-                        bean.setBtName(list1.get(0).getBtName());
-                    }
-                }
+                String buildType = bean.getBuildType();
+                getBtName(btMap, bean, buildType);
 
 
                 // 特色
@@ -199,7 +195,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 if (null != areaMap) {
                     mainBeans = areaMap.get(bean.getBuildId());
 
-                    if (bean.getBuildType() == 2) {
+                    if (StringUtils.isNotBlank(buildType) && buildType.contains("2")) {
                         if (!CollectionsUtils.isEmpty(mainBeans) && null != offMap) {
                             RoomMainBean roomMainBean = mainBeans.get(0);
                             List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
@@ -215,6 +211,22 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             }
         }
         return page.setRecords(allBulidBypage);
+    }
+
+    private void getBtName(Map<Integer, List<BuildingTypeBean>> btMap, BuildReturn bean, String buildType) {
+        if (null != btMap && buildType != null) {
+            String[] split = buildType.split("\\|");
+            List<String> btNameList = new ArrayList<>();
+            for (String s : split) {
+                List<BuildingTypeBean> list1 = btMap.get(Integer.parseInt(s));
+                if (!CollectionsUtils.isEmpty(list1)) {
+                    btNameList.add(list1.get(0).getBtName());
+                }
+            }
+            if (!CollectionsUtils.isEmpty(btNameList)) {
+                bean.setBtName(StringUtils.join(btNameList,"、"));
+            }
+        }
     }
 
     private Map<Integer, List<CharaRefBean>> getChara(List<Integer> list) {
@@ -243,6 +255,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         page.setCurrent(StringUtils.isBlank(buildingBean.getCurrent()) ? 1L : Long.parseLong(buildingBean.getCurrent()));
         page.setSize(StringUtils.isBlank(buildingBean.getPageSize()) ? 10L : Long.parseLong(buildingBean.getPageSize()));
         if (setCondition(buildingBean, page)) return page;
+        List<Integer> typeList = buildingBean.getBuildTypeList();
+        if (!CollectionsUtils.isEmpty(typeList)) {
+            String bt = StringUtils.join(typeList, "|");
+            buildingBean.setBuildType(bt);
+        }
 
         // 楼盘数据
         List<BuildReturn> allBulidBypage = buildingDao.getAllBulidBypage(page, buildingBean);
@@ -282,8 +299,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 CounselorBean cou = counselorDao.getCouById(bean.getCouId());
                 bean.setCounselorBean(cou);
                 // 类型
-                if (null != btMap && bean.getBuildType() != null) {
-                    bean.setBtName(btMap.get(bean.getBuildType()).get(0).getBtName());
+                String buildType = bean.getBuildType();
+                getBtName(btMap, bean, buildType);
+
+                // 类型id
+                if (StringUtils.isNotBlank(buildType)) {
+                    String[] split = buildType.split("\\|");
+                    List<String> arr = new ArrayList<>(split.length);
+                    Collections.addAll(arr,split);
+                    List<Integer> arrIn = new ArrayList<>();
+                    for (String ss : arr) {
+                        arrIn.add(Integer.parseInt(ss));
+                    }
+                    bean.setBuildTypeList(arrIn);
                 }
 
                 // 特色
@@ -458,7 +486,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         if (null == byHtName) {
 
             buildingBean.setCreateTime(new Date());
-
+            addBuildType(buildingBean);
             buildingDao.insert(buildingBean);
             bindCharaRef(buildingBean);
         } else {
@@ -476,6 +504,14 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         }
         buildingDao.updateById(buildingBean);
         return buildingBean;
+    }
+
+    private void addBuildType(BuildReceive buildingBean) {
+        List<Integer> typeList = buildingBean.getBuildTypeList();
+        if (!CollectionsUtils.isEmpty(typeList)) {
+            String bt = StringUtils.join(typeList, "|");
+            buildingBean.setBuildType(bt);
+        }
     }
 
     private void bindMBRef(BuildReceive buildingBean) {
@@ -551,8 +587,12 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
         // 获取图片类型
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
+
         // 更新图片
         updatePicture(buildingBean, imgTypeList,headImg, buildRealImg, video);
+
+        // 楼盘类型处理
+        addBuildType(buildingBean);
 
         // 更新楼盘数据
         buildingDao.updateById(buildingBean);
@@ -564,8 +604,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildingBean> getAllBuild(BuildingBean bean) {
     	QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
     	qw.select("*");
-    	if(bean.getBuildType() != null && bean.getBuildType() != 0) {
-    		qw.eq("BUILD_TYPE", bean.getBuildType());
+    	if(StringUtils.isNotBlank(bean.getBuildType())) {
+    		qw.like("BUILD_TYPE", bean.getBuildType());
     	}
     	if(bean.getLdId() != null && bean.getLdId() != 0) {
     		qw.eq("LD_ID", bean.getLdId());
@@ -573,8 +613,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     	if(bean.getBusinessId() != null && bean.getBusinessId() != 0) {
     		qw.eq("BUSINESS_ID", bean.getBusinessId());
     	}
-    	List<BuildingBean> result = buildingDao.selectList(qw);
-    	return result;
+        return buildingDao.selectList(qw);
     }
 
 
@@ -637,11 +676,8 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             List<BuildingTypeBean> allBuildingType = buildingTypeDao.getAllBuildingType();
             if (!CollectionsUtils.isEmpty(allBuildingType)) {
                 Map<Integer, List<BuildingTypeBean>> map1 = allBuildingType.stream().collect(Collectors.groupingBy(BuildingTypeBean::getBtId));
-                List<BuildingTypeBean> buildingTypeBeans = map1.get(build.getBuildType());
-                if (!CollectionsUtils.isEmpty(buildingTypeBeans)) {
-                    build.setBtName(buildingTypeBeans.get(0).getBtName());
-                }
-
+                String buildType = build.getBuildType();
+                getBtName(map1,build,buildType);
             }
             // 获取所有位置
             Map<Integer, List<LocationDistinguishBean>> listMap = getLdMap();
