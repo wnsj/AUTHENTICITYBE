@@ -6,19 +6,39 @@ import com.jiubo.buildstore.bean.RoomMainBean;
 
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jiubo.buildstore.bean.RoomReceive;
 import com.jiubo.buildstore.common.Constant;
+import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.service.RoomMainService;
 import com.jiubo.buildstore.service.RoomService;
 
 import io.swagger.annotations.ApiOperation;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,5 +175,6 @@ public class RoomMainController {
         jsonObject.put(Constant.Result.RETDATA, roomMainService.findHaveDetail(bean));
         return jsonObject;
     }
+    
 
 }
