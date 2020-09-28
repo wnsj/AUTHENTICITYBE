@@ -663,7 +663,8 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		qw.eq("room_type", 2);
 		List<RoomMainBean> list = roomMainDao.selectList(qw);
 		BuildingBean bd = buildingDao.selectById(bean.getBuildId());
-		if (bean.getRoomType() == 2 && !CollectionsUtils.isEmpty(list) && bd.getBuildType() == 2) {
+		String type = bd.getBuildType();
+		if (bean.getRoomType() == 2 && !CollectionsUtils.isEmpty(list) && StringUtils.isNotBlank(type) && type.contains("2")) {
 			throw new MessageException("共享楼盘只可以填一个共享房源");
 		}
 

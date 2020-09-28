@@ -214,7 +214,7 @@ public class BuildingBean implements Serializable {
     /**
      * 楼盘类型
      */
-    private Integer buildType;
+    private String buildType;
 
     /**
      * 头图路径
