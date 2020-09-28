@@ -145,4 +145,15 @@ public class RoomMainController {
         roomMainService.offOrOnTheShelf(bean);
         return jsonObject;
     }
+    
+    @ApiOperation(value = "查询是否添加详情", notes = "查询是否添加详情")
+    @PostMapping("/findHaveDetail")
+    public JSONObject findHaveDetail(@RequestBody RoomMainBean bean) throws MessageException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA, roomMainService.findHaveDetail(bean));
+        return jsonObject;
+    }
+
 }

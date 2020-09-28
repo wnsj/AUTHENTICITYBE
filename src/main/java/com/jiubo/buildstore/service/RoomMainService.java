@@ -41,4 +41,6 @@ public interface RoomMainService extends IService<RoomMainBean> {
 	void deleteRoomByPk(RoomMainBean bean);
 
 	void offOrOnTheShelf(RoomMainBean bean);
+	
+	public Integer findHaveDetail(RoomMainBean bean) throws MessageException;
 }

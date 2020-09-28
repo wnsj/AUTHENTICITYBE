@@ -758,4 +758,52 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		}
 	}
 
+	@Override
+	public Integer findHaveDetail(RoomMainBean bean) throws MessageException {
+		QueryWrapper<RoomMainBean> wrapper = new QueryWrapper<RoomMainBean>();
+		wrapper.select("*");
+		wrapper.eq("id", bean.getId());
+		wrapper.eq("room_type", bean.getRoomType());
+		List<RoomMainBean> result = roomMainDao.selectList(wrapper);
+		if(CollectionsUtils.isEmpty(result)) {
+			throw new MessageException("不存在此数据");
+		}
+		if(bean.getId()!=null && bean.getRoomType()!=null) {
+			if(bean.getRoomType() == 1) {
+				QueryWrapper<RoomBean> qw = new QueryWrapper<RoomBean>();
+				qw.select("*");
+				qw.eq("room_id", bean.getId());
+				List<RoomBean> list = roomDao.selectList(qw);
+				if(CollectionsUtils.isEmpty(list)) {
+					return 3;
+				}else {
+					return 2;
+				}
+			}
+			if(bean.getRoomType() == 2) {
+				QueryWrapper<OfficeBean> qw = new QueryWrapper<OfficeBean>();
+				qw.select("*");
+				qw.eq("room_id", bean.getId());
+				List<OfficeBean> list = officeDao.selectList(qw);
+				if(CollectionsUtils.isEmpty(list)) {
+					return 3;
+				}else {
+					return 2;
+				}
+			}
+			if(bean.getRoomType() == 3) {
+				QueryWrapper<StoreRoomBean> qw = new QueryWrapper<StoreRoomBean>();
+				qw.select("*");
+				qw.eq("room_id", bean.getId());
+				List<StoreRoomBean> list = storeRoomDao.selectList(qw);
+				if(CollectionsUtils.isEmpty(list)) {
+					return 3;
+				}else {
+					return 2;
+				}
+			}
+		}
+		return null;
+	}
+
 }
