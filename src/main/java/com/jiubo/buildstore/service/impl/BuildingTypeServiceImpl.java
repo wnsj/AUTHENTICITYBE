@@ -29,7 +29,7 @@ public class BuildingTypeServiceImpl extends ServiceImpl<BuildingTypeDao, Buildi
     public List<BuildingTypeBean> getAllBuildingType(Integer type) {
     	QueryWrapper<BuildingTypeBean> queryWrapper = new QueryWrapper<BuildingTypeBean>();
 		queryWrapper.select("*");
-		if(type != null) {
+		if(type != null && type != 0) {
 			queryWrapper.eq("TYPE", type);
 		}
         return buildingTypeDao.selectList(queryWrapper);

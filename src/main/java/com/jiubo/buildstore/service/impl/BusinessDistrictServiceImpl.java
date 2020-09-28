@@ -58,11 +58,10 @@ public class BusinessDistrictServiceImpl extends ServiceImpl<BusinessDistrictDao
 	public List<BusinessDistrictBean> getBusinessDistrict(Integer ldId) {
 			QueryWrapper<BusinessDistrictBean> queryWrapper = new QueryWrapper<BusinessDistrictBean>();
 			queryWrapper.select("*");
-			if(ldId != null) {
+			if(ldId != null && ldId != 0) {
 				queryWrapper.eq("ld_id", ldId);
 			}
-			List<BusinessDistrictBean> list = businessDistrictDao.selectList(queryWrapper);
-			return list;
+		return businessDistrictDao.selectList(queryWrapper);
 	}
 
 	@Override
