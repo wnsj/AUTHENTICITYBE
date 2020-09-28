@@ -221,7 +221,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	}
 
 	@Override
-	public PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive) {
+	public PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive) throws MessageException {
 		Integer pageNum = StringUtils.isBlank(receive.getCurrent()) ? 1 : Integer.valueOf(receive.getCurrent());
 		Integer pageSize = StringUtils.isBlank(receive.getPageSize()) ? 10 : Integer.valueOf(receive.getPageSize());
 		setCondition(receive);
@@ -359,6 +359,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					Collections.addAll(arrayList, strings);
 					bean.setLabels(arrayList);
 				}
+
+				// 是否拥有详情
+				Integer haveDetail = findHaveDetail(bean);
+				bean.setIsHaveDetail(haveDetail);
 			}
 		}
 		PageInfo<RoomMainBean> page = new PageInfo<RoomMainBean>(allRoomBypage);

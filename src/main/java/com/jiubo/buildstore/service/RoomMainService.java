@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface RoomMainService extends IService<RoomMainBean> {
 
 	PageInfo<RoomMainBean> getRoomByConditions(RoomReceive receive);
-	PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive);
+	PageInfo<RoomMainBean> getRoomByConditionsBe(RoomReceive receive) throws MessageException;
 
 	public Map<String, Object> getRoomDetails(Integer roomMainId);
 

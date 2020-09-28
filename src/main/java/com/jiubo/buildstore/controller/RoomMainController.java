@@ -52,7 +52,7 @@ public class RoomMainController {
 
     @ApiOperation(value = "多条件查询房源后台管理", notes = "多条件查询房源后台管理")
     @PostMapping("/getRoomByConditionsBe")
-    public JSONObject getRoomByConditionsBe(@RequestBody RoomReceive receive) {
+    public JSONObject getRoomByConditionsBe(@RequestBody RoomReceive receive) throws MessageException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
