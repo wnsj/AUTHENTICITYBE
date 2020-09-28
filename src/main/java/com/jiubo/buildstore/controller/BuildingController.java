@@ -38,7 +38,7 @@ public class BuildingController {
     /**
      * 查询首页共享楼盘
      *
-     * @param buildingBean
+     * @param
      * @return
      */
     @PostMapping("/getHomeShareBuilding")

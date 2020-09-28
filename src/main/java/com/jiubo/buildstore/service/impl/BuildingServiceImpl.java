@@ -1293,7 +1293,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 	public List<BuildingBean> getHomeShareBuilding() {
 		QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
 		qw.select("*");
-		qw.eq("BUILD_TYPE", 2);
+		qw.eq("BUILD_TYPE", "2");
 		qw.orderByDesc("POPULARITY");
 		List<BuildingBean> result = buildingDao.selectList(qw);
 		if(result.size() >= 4) {

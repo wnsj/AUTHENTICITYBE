@@ -115,7 +115,7 @@
 
     <!--首页推荐楼盘||优质楼盘-->
     <select id="getRecommend" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building where BUILD_TYPE like CONCAT('%',1,'%') and RECOMMEND = 2 order by POPULARITY desc limit 4
+        select * from building where BUILD_TYPE like CONCAT('%','1','%') and RECOMMEND = 2 order by POPULARITY desc limit 4
     </select>
 
     <!--首页优选-->
