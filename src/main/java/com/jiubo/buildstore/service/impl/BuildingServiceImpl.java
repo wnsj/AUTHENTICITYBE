@@ -604,7 +604,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildingBean> getAllBuild(BuildingBean bean) {
     	QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
     	qw.select("*");
-    	if(StringUtils.isNotBlank(bean.getBuildType())) {
+    	if(StringUtils.isNotBlank(bean.getBuildType()) && !bean.getBuildType().equals("0")) {
     		qw.like("BUILD_TYPE", bean.getBuildType());
     	}
     	if(bean.getLdId() != null && bean.getLdId() != 0) {
