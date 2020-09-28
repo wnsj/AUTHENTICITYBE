@@ -166,7 +166,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					wrapper.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
 					wrapper.eq("INFO_ID", bean.getId());
 					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
-					if (imgBeans != null) {
+					if (!CollectionsUtils.isEmpty(imgBeans) && imgBeans.size() > 0) {
 						bean.setIsVideo(2);
 					} else {
 						bean.setIsVideo(3);
@@ -180,7 +180,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 					wrapper.eq("TYPE", ImgTypeConstant.STORE);
 					wrapper.eq("INFO_ID", bean.getId());
 					List<BuildingImgBean> imgBeans = buildingImgDao.selectList(wrapper);
-					if (imgBeans != null) {
+					if (!CollectionsUtils.isEmpty(imgBeans) && imgBeans.size() > 0) {
 						bean.setIsVideo(2);
 					} else {
 						bean.setIsVideo(3);

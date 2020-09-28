@@ -128,7 +128,7 @@
     </select>
 
     <select id="getSellWell" resultType="com.jiubo.buildstore.bean.BuildReturn">
-        select * from building order by SELL_WELL desc limit 3
+        select * from building order by SELL_WELL desc limit 4
     </select>
 
     <select id="getBuildById" resultType="com.jiubo.buildstore.bean.BuildReturn">
