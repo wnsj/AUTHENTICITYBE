@@ -43,7 +43,7 @@ public class CounselorBean implements Serializable {
 
     private String charaName;
     
-    private Date create_time;
+    private Date createTime;
 
   
     @TableField(exist = false)

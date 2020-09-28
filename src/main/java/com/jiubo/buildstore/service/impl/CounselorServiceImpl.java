@@ -97,7 +97,7 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 
     @Override
     public void insertCou(CounselorBean counselorBean, MultipartFile[] picture) throws Exception {
-    	counselorBean.setCreate_time(new Date());
+    	counselorBean.setCreateTime(new Date());
         counselorDao.insertCou(counselorBean);
         this.saveFile(counselorBean, picture);
         counselorDao.patchCouById(counselorBean);
@@ -152,13 +152,13 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
     }
 
     private void saveFile(CounselorBean counselorBean, MultipartFile[] file) throws Exception {
-        if (file != null) {
-
-
+        if (file != null && file.length>0) {
             for (MultipartFile multipartFile : file) {
                 //原文件名
                 String fileName = multipartFile.getOriginalFilename();
                 fileName = fileName.substring(fileName.lastIndexOf("."));
+
+
 
 //                File directory = new File("");// 参数为空
 //                String path = directory.getCanonicalPath();
@@ -168,13 +168,11 @@ public class CounselorServiceImpl extends ServiceImpl<CounselorDao, CounselorBea
 //                System.out.println("dir:" + dir.getPath());
                 if (!dir.exists() && !dir.isDirectory()) dir.mkdirs();
 
-                String name = counselorBean.getCouId() + fileName;
+                String name = UUID.randomUUID().toString().replace("-", "").concat(fileName);
 //                System.out.println("name:" + name);
                 String replace = dir.getPath().replace("\\", "/");
                 String path = replace + "/" + name;
-                System.out.println("path:" + path);
 
-//                System.out.println("路径：" + path);
                 //读写文件
                 if (!multipartFile.isEmpty()) {
                     InputStream is = multipartFile.getInputStream();

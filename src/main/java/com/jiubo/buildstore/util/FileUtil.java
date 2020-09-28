@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.jiubo.buildstore.common.ImgTypeConstant;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,8 @@ public class FileUtil {
 		 //原文件名
         String fileName = file.getOriginalFilename();
         fileName = fileName.substring(fileName.lastIndexOf("."));
+
+
         String str = "";
         if(type.equals(ImgTypeConstant.PICTURE)) {
         	str = "picture";	

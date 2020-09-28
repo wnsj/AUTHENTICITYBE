@@ -161,6 +161,8 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 			if (!map.isEmpty()) {
 				buildingDynamicBean.setBdPath(map.get("path"));
 			}
+		} else {
+			buildingDynamicBean.setBdPath(null);
 		}
 		buildingDynamicDao.updateById(buildingDynamicBean);
 	}
@@ -194,9 +196,18 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 				break;
 			}
 		}
+		// 资讯类型
+		QueryWrapper<MessageTypeBean> meWrapper = new QueryWrapper<MessageTypeBean>();
+		meWrapper.select("*");
+		List<MessageTypeBean> messageTypeBeans = messageTypeDao.selectList(meWrapper);
+		Map<Integer, List<MessageTypeBean>> meMap = null;
+		if (!CollectionsUtils.isEmpty(messageTypeBeans)) {
+			meMap = messageTypeBeans.stream().collect(Collectors.groupingBy(MessageTypeBean::getMtId));
+		}
 		// now代表当前查询的这条咨询信息up上一条down下一条
 		BuildingDynamicBean bd = buildingDynamicDao.selectById(dynamicId);
-		bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
+		addMtName(meMap, bd);
+
 		result.put("now", bd);
 		// 如果下标等于0说明为第一条数据没有上一条放null
 		if (index == 0) {
@@ -205,6 +216,7 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 			bd = list.get(index - 1);
 			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
 			result.put("up", bd);
+			addMtName(meMap, bd);
 		}
 		// 如果下标等于集合大小减一说明为最后一条数据没有下一条放null
 		if (index == list.size() - 1) {
@@ -213,8 +225,19 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 			bd = list.get(index + 1);
 			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
 			result.put("down", bd);
+			addMtName(meMap, bd);
 		}
 		return result;
+	}
+
+	private void addMtName(Map<Integer, List<MessageTypeBean>> meMap, BuildingDynamicBean bd) {
+		if (null != meMap && null != bd) {
+			bd.setCreateTime(DateUtils.formatDateTime(bd.getCreateDate()));
+			List<MessageTypeBean> typeBeans = meMap.get(bd.getBuildId());
+			if (!CollectionsUtils.isEmpty(typeBeans)) {
+				bd.setMtName(typeBeans.get(0).getMtName());
+			}
+		}
 	}
 
 	@Override

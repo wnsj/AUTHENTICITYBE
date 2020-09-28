@@ -204,6 +204,10 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                             RoomMainBean roomMainBean = mainBeans.get(0);
                             List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
                             bean.setOfficeBeanList(officeBeanList);
+                            if (!CollectionsUtils.isEmpty(officeBeanList)) {
+                                Map<Integer, List<OfficeBean>> otMap = officeBeanList.stream().collect(Collectors.groupingBy(OfficeBean::getOfficeType));
+                                bean.setHouseNum(otMap.size());
+                            }
                         }
                     }
                 }
@@ -560,14 +564,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     public List<BuildingBean> getAllBuild(BuildingBean bean) {
     	QueryWrapper<BuildingBean> qw = new QueryWrapper<BuildingBean>();
     	qw.select("*");
-    	if(bean.getBuildType() != null) {
+    	if(bean.getBuildType() != null && bean.getBuildType() != 0) {
     		qw.eq("BUILD_TYPE", bean.getBuildType());
     	}
-    	if(bean.getLdId() != null) {
+    	if(bean.getLdId() != null && bean.getLdId() != 0) {
     		qw.eq("LD_ID", bean.getLdId());
-    		System.out.println("进入进入进入");
     	}
-    	if(bean.getBusinessId() != null) {
+    	if(bean.getBusinessId() != null && bean.getBusinessId() != 0) {
     		qw.eq("BUSINESS_ID", bean.getBusinessId());
     	}
     	List<BuildingBean> result = buildingDao.selectList(qw);

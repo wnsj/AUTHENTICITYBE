@@ -96,6 +96,7 @@
                 and #{buildingBean.officeType} = C.office_type
             </if>
         </where>
+        order by A.BUILD_ID desc
     </select>
     <select id="getAllByHtName" resultType="com.jiubo.buildstore.bean.BuildReturn">
         select * from building where  HT_NAME = #{buildingBean.htName}

@@ -110,6 +110,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		}
 		RoomMainBean roomMainBean = roomMainDao.selectById(officeBean.getRoomId());
 		officeBean.setCouId(roomMainBean.getCouId());
+		officeBean.setCreateDate(new Date());
 		officeDao.insert(officeBean);
 		List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 
@@ -166,6 +167,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		} else {
 			officeBean.setImgName(null);
 		}
+		officeBean.setModifyDate(new Date());
 		officeDao.updateById(officeBean);
 		// 视频
 		if (null != video) {
