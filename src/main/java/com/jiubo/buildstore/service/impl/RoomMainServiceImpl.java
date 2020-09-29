@@ -637,6 +637,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 //				throw new MessageException("此房源名字存在");
 //			}
 //		}
+		
 		if (!StringUtils.isBlank(bean.getRoomCode())) {
 			QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
 			queryWrapper.select("*");
@@ -697,6 +698,27 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (bean.getId() == null) {
 			throw new MessageException("房源id不能为空");
 		}
+		
+		//同步面积信息到店铺表
+		if(bean.getRoomType() == 3) {
+			QueryWrapper<StoreRoomBean> queryWrapper = new QueryWrapper<StoreRoomBean>();
+			queryWrapper.select("*");
+			queryWrapper.eq("room_id", bean.getId());
+			List<StoreRoomBean> list = storeRoomDao.selectList(queryWrapper);
+			if(!CollectionsUtils.isEmpty(list) && list.size() > 0) {
+				StoreRoomBean storeRoomBean = list.get(0);
+				storeRoomBean.setArea(bean.getAreaInfo());
+				storeRoomDao.updateById(storeRoomBean);
+			}
+		}
+		
+		//通过楼盘同步经纬度到主表
+		if(bean.getBuildId() != null) {
+			BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
+			bean.setLatitude(buildingBean.getLongitude());
+			bean.setLongitude(buildingBean.getLongitude());
+		}
+		
 		if(bean.getChaList() != null) {
 			QueryWrapper<ShareRoomBean> qw = new QueryWrapper<ShareRoomBean>();
 			qw.select("*");

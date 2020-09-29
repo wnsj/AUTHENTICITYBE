@@ -60,6 +60,9 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 			throw new MessageException("房源id不能为空");
 		}
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+		if(mainBean.getAreaInfo() != null) {
+			bean.setArea(mainBean.getAreaInfo());
+		}
 		bean.setCreateDate(new Date());
 		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
 			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
@@ -131,6 +134,7 @@ public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBea
 			throw new MessageException("商铺id不能为空");
 		}
 		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+		
 		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
 			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
 			roomMainDao.updateById(mainBean);
