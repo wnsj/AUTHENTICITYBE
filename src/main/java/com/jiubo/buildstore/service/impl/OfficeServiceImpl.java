@@ -228,7 +228,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		queryWrapper.select("*");
 		queryWrapper.ne("flag",3);
 		if (officeBean.getRoomId() != null) {
-			queryWrapper.eq("room_id", officeBean.getId());
+			queryWrapper.eq("room_id", officeBean.getRoomId());
 		}
 		if (officeBean.getOfficeType() != null) {
 			queryWrapper.eq("office_type", officeBean.getOfficeType());
