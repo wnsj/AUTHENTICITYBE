@@ -575,8 +575,34 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //        if (StringUtils.isBlank(buildingBean.getTel())) {
 //            buildingBean.setTel(BuildConstant.MODIFY_TEL);
 //        }
-
-
+    	//更新楼盘对应房源得经纬度
+    	if(buildingBean.getLatitude() != null && buildingBean.getLatitude() != "") {
+    		QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
+    		queryWrapper.select("*");
+    		queryWrapper.eq("build_id", buildingBean.getBuildId());
+    		List<RoomMainBean> list = roomMainDao.selectList(queryWrapper);
+    		if(!CollectionsUtils.isEmpty(list)) {
+    			for (int i = 0; i < list.size(); i++) {
+					RoomMainBean mainBean = list.get(i);
+					mainBean.setLatitude(buildingBean.getLatitude());
+					roomMainDao.updateById(mainBean);
+				}
+    		}
+    	}
+    	
+    	if(buildingBean.getLongitude() != null && buildingBean.getLatitude() != "") {
+    		QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
+    		queryWrapper.select("*");
+    		queryWrapper.eq("build_id", buildingBean.getBuildId());
+    		List<RoomMainBean> list = roomMainDao.selectList(queryWrapper);
+    		if(!CollectionsUtils.isEmpty(list)) {
+    			for (int i = 0; i < list.size(); i++) {
+					RoomMainBean mainBean = list.get(i);
+					mainBean.setLongitude(buildingBean.getLongitude());
+					roomMainDao.updateById(mainBean);
+				}
+    		}
+    	}
 
         // 更新楼盘特色关系
         List<Integer> chaIdList = buildingBean.getChaIdList();
