@@ -183,6 +183,20 @@ public class OfficeBean implements Serializable {
     @TableField(exist = false)
     private String videoName;
 
+
+    /**
+     * 经度
+     */
+    @TableField(exist = false)
+    private String longitude;
+
+
+    /**
+     * 纬度
+     */
+    @TableField(exist = false)
+    private String latitude;
+
     /**
      * 图片list
      */

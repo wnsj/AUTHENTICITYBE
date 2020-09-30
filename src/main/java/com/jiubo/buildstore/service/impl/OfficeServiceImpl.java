@@ -73,7 +73,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
                 if (buildingBean != null) {
                     bean.setBuildName(buildingBean.getHtName());
                     bean.setMinTotalPrice(buildingBean.getMinTitlePrice());
-
+                    bean.setLongitude(buildingBean.getLongitude());
+                    bean.setLatitude(buildingBean.getLatitude());
 
 					if (buildingBean.getCouId() != null) {
 						CounselorBean counselorBean = counselorDao.selectById(bean.getCouId());
