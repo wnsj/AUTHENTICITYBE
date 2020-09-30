@@ -230,7 +230,12 @@ public class BuildingBean implements Serializable {
      * 可租房源数
      */
     private Integer isRentNum;
-    
+
+
+    /**
+     * 共享办公最低价格
+     */
+    private BigDecimal officePrice;
     /**
      * 区域名字
      */

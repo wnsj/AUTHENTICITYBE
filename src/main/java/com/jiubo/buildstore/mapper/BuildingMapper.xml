@@ -44,7 +44,7 @@
                     </if>
                 </foreach>
             </if>
-            <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0">
+            <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0 and buildingBean.buildType != '2'">
                 and
                 <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
                     <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
@@ -60,6 +60,22 @@
                     </if>
                 </foreach>
             </if>
+
+            <if test="buildingBean.totalPriceList != null and buildingBean.totalPriceList.size() > 0 and buildingBean.buildType == '2'">
+                and
+                <foreach collection="buildingBean.totalPriceList" open="(" close=")" separator="or" item="item">
+                    <if test="null != item and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0 and (item.maxTitlePrice == null or item.maxTitlePrice == '' or item.maxTitlePrice == 0)">
+                        A.OFFICE_PRICE > #{item.minTitlePrice}
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and (item.minTitlePrice == null or item.minTitlePrice == '' or item.minTitlePrice == 0)">
+                        #{item.maxTitlePrice} > A.OFFICE_PRICE
+                    </if>
+                    <if test="null != item and item.maxTitlePrice != null and item.maxTitlePrice != '' and item.maxTitlePrice != 0 and item.minTitlePrice != null and item.minTitlePrice != '' and item.minTitlePrice != 0">
+                        A.OFFICE_PRICE >= #{item.minTitlePrice} and #{item.maxTitlePrice} >= A.OFFICE_PRICE
+                    </if>
+                </foreach>
+            </if>
+
             <if test="buildingBean.unitPriceList != null and buildingBean.unitPriceList.size() > 0">
                 and
                 <foreach collection="buildingBean.unitPriceList" open="(" close=")" separator="or" item="item">

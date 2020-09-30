@@ -122,10 +122,14 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
         }
 
 
-        BuildingBean buildingBean = buildingDao.selectById(officeBean.getRoomId());
+        BuildingBean buildingBean = toPatchBuildOffPrice(officeBean);
+
+        buildingDao.updateById(buildingBean);
+
         officeBean.setCouId(buildingBean.getCouId());
         officeBean.setCreateDate(new Date());
         officeDao.insert(officeBean);
+
 
 
         List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
@@ -160,10 +164,27 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 
     }
 
+    private BuildingBean toPatchBuildOffPrice(OfficeBean officeBean) {
+        BuildingBean buildingBean = buildingDao.selectById(officeBean.getRoomId());
+
+        if (buildingBean.getOfficePrice() == null) {
+            buildingBean.setOfficePrice(officeBean.getNowPrice());
+        } else {
+            if (buildingBean.getOfficePrice().compareTo(officeBean.getNowPrice()) > 0) {
+                buildingBean.setOfficePrice(officeBean.getNowPrice());
+            }
+        }
+        return buildingBean;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void patchOffice(OfficeBean officeBean, MultipartFile headImg, MultipartFile[] picture, MultipartFile video)
             throws IOException {
+
+        BuildingBean buildingBean = toPatchBuildOffPrice(officeBean);
+
+        buildingDao.updateById(buildingBean);
 
         List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
         if (null != headImg) {
@@ -197,7 +218,6 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
         if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
             buildingImgDao.insertList(buildingImgBeans);
         }
-
     }
 
     public void deleteImgByCon(OfficeBean officeBean, Integer itId, Integer type) {
