@@ -192,4 +192,24 @@ public class OfficeBean implements Serializable {
     private String houseType;
 
     private Integer flag;
+
+    /**
+     * 是否可注册
+     */
+    private Integer isRegister;
+
+    /**
+     * 免租时间
+     */
+    private String freeRentTime;
+
+    /**
+     * 看房时间
+     */
+    private String watchHouseTime;
+
+    /**
+     * 支付方式
+     */
+    private String payType;
 }
