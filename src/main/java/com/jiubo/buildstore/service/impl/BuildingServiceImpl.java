@@ -133,16 +133,16 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 
             // 房源面积集合
             List<RoomMainBean> roomByBuildIdList = roomMainDao.getRoomByBuildIdList(list);
-
             Map<Integer, List<RoomMainBean>> areaMap = null;
-            Map<Integer, List<OfficeBean>> offMap = null;
             if (!CollectionsUtils.isEmpty(roomByBuildIdList)) {
                 areaMap = roomByBuildIdList.stream().collect(Collectors.groupingBy(RoomMainBean::getBuildId));
-                List<Integer> roomIdList = roomByBuildIdList.stream().map(RoomMainBean::getId).distinct().collect(toList());
-                List<OfficeBean> offByRoomIdList = officeDao.getOffByRoomIdList(roomIdList);
-                if (!CollectionsUtils.isEmpty(offByRoomIdList)) {
-                    offMap = offByRoomIdList.stream().collect(Collectors.groupingBy(OfficeBean::getRoomId));
-                }
+            }
+
+            // 房型
+            Map<Integer, List<OfficeBean>> offMap = null;
+            List<OfficeBean> offByRoomIdList = officeDao.getOffByRoomIdList(list);
+            if (!CollectionsUtils.isEmpty(offByRoomIdList)) {
+                offMap = offByRoomIdList.stream().collect(Collectors.groupingBy(OfficeBean::getRoomId));
             }
             //图片
             BuildingImgBean buildingImgBean = new BuildingImgBean();
@@ -194,23 +194,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                 // 特色
                 toCharaName(charaRefMap, bean);
                 // 面积
-                List<RoomMainBean> mainBeans = null;
                 if (null != areaMap) {
-                    mainBeans = areaMap.get(bean.getBuildId());
+                    bean.setRoomMainBeanList(areaMap.get(bean.getBuildId()));
+                }
 
-                    if (StringUtils.isNotBlank(buildType) && buildType.contains("2")) {
-                        if (!CollectionsUtils.isEmpty(mainBeans) && null != offMap) {
-                            RoomMainBean roomMainBean = mainBeans.get(0);
-                            List<OfficeBean> officeBeanList = offMap.get(roomMainBean.getId());
-                            bean.setOfficeBeanList(officeBeanList);
-                            if (!CollectionsUtils.isEmpty(officeBeanList)) {
-                                Map<Integer, List<OfficeBean>> otMap = officeBeanList.stream().collect(Collectors.groupingBy(OfficeBean::getOfficeType));
-                                bean.setHouseNum(otMap.size());
-                            }
-                        }
+                if (null != offMap) {
+                    List<OfficeBean> officeBeanList = offMap.get(bean.getBuildId());
+                    bean.setOfficeBeanList(officeBeanList);
+                    if (!CollectionsUtils.isEmpty(officeBeanList)) {
+                        Map<String, List<OfficeBean>> map = officeBeanList.stream().collect(Collectors.groupingBy(OfficeBean::getHouseType));
+                        bean.setHouseNum(map.size());
                     }
                 }
-                bean.setRoomMainBeanList(mainBeans);
+
             }
         }
         return page.setRecords(allBulidBypage);

@@ -3,7 +3,7 @@
 <mapper namespace="com.jiubo.buildstore.dao.OfficeDao">
     <select id="getOffByRoomIdList" resultType="com.jiubo.buildstore.bean.OfficeBean">
         select * from office
-        where flag = 1 and room_id in
+        where room_id in
         <foreach collection="list" open="(" close=")" separator="," item="item">
             #{item}
         </foreach>
