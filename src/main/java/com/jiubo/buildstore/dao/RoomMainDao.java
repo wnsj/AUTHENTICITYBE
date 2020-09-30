@@ -24,8 +24,6 @@ public interface RoomMainDao extends BaseMapper<RoomMainBean> {
 
 	List<RoomMainBean> getAllRoomByPageBe(@Param("receive") RoomReceive receive);
 
-	List<RMChildSharedBean> getSharedById(@Param("id") Integer id);
-
 	List<RoomMainBean> getRoomByBuildIdList(List<Integer> buildIdList);
 
 	void patchRoomFlagById(RoomMainBean roomMainBean);

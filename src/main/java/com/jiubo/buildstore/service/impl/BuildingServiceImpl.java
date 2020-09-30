@@ -94,6 +94,9 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
     private RoomMainDao roomMainDao;
 
     @Autowired
+    private ShareRoomDao shareRoomDao;
+
+    @Autowired
     private OfficeDao officeDao;
     @Value("${buildStoreDir}")
     private String buildStoreDir;
@@ -295,6 +298,23 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
             // 遍历实体 翻译各个类型字段
             for (BuildReturn bean : allBulidBypage) {
 
+                QueryWrapper<ShareRoomBean> wrapperShare = new QueryWrapper<ShareRoomBean>();
+                wrapperShare.select("*");
+                wrapperShare.eq("room_id", bean.getBuildId());
+                List<ShareRoomBean> listShare = shareRoomDao.selectList(wrapperShare);
+                if(!CollectionsUtils.isEmpty(listShare)) {
+                    ShareRoomBean shareRoomBean = listShare.get(0);
+                    if(!StringUtils.isBlank(shareRoomBean.getChaList())) {
+                        String[] strShare = shareRoomBean.getChaList().split("\\|");
+                        List<Integer> idShare = new ArrayList<Integer>();
+                        for (int i = 0; i < strShare.length; i++) {
+                            idShare.add(Integer.valueOf(strShare[i]));
+                        }
+                        bean.setChaList(idShare);
+                    }
+                    bean.setProduce(shareRoomBean.getProduce());
+                }
+
                 // 咨询师
                 CounselorBean cou = counselorDao.getCouById(bean.getCouId());
                 bean.setCounselorBean(cou);
@@ -492,6 +512,15 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
         } else {
             throw new MessageException("该楼盘已存在");
         }
+        // 添加楼盘时将网点信息同步
+		ShareRoomBean shareRoomBean = new ShareRoomBean();
+		shareRoomBean.setProduce(buildingBean.getProduce());
+		if(buildingBean.getChaList() != null && buildingBean.getChaList().size() > 0) {
+			shareRoomBean.setChaList(StringUtils.join(buildingBean.getChaList(), "|"));
+		}
+		shareRoomBean.setRoomId(buildingBean.getBuildId());
+		shareRoomBean.setCreateDate(new Date());
+		shareRoomDao.insert(shareRoomBean);
 
         List<ImgTypeBean> imgTypeList = imgTypeDao.getAllImgType();
         buildingBean.setBuildId(buildingBean.getBuildId());
@@ -576,7 +605,7 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 //            buildingBean.setTel(BuildConstant.MODIFY_TEL);
 //        }
     	//更新楼盘对应房源得经纬度
-    	if(buildingBean.getLatitude() != null && buildingBean.getLatitude() != "") {
+    	if(StringUtils.isNotBlank(buildingBean.getLatitude())) {
     		QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
     		queryWrapper.select("*");
     		queryWrapper.eq("build_id", buildingBean.getBuildId());
@@ -589,8 +618,25 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
 				}
     		}
     	}
-    	
-    	if(buildingBean.getLongitude() != null && buildingBean.getLatitude() != "") {
+
+    	// 更新网点信息
+        if((buildingBean.getChaList() != null && buildingBean.getChaList().size() > 0) ||
+                StringUtils.isNotBlank(buildingBean.getProduce())) {
+            QueryWrapper<ShareRoomBean> qw = new QueryWrapper<ShareRoomBean>();
+            qw.select("*");
+            qw.eq("room_id", buildingBean.getBuildId());
+            List<ShareRoomBean> list = shareRoomDao.selectList(qw);
+            if(!CollectionsUtils.isEmpty(list)) {
+                ShareRoomBean shareRoomBean = list.get(0);
+                shareRoomBean.setChaList(StringUtils.join(buildingBean.getChaList(), "|"));
+                if (StringUtils.isNotBlank(buildingBean.getProduce())) {
+                    shareRoomBean.setProduce(buildingBean.getProduce());
+                }
+                shareRoomDao.updateById(shareRoomBean);
+            }
+        }
+
+    	if(StringUtils.isNotBlank(buildingBean.getLongitude())) {
     		QueryWrapper<RoomMainBean> queryWrapper = new QueryWrapper<RoomMainBean>();
     		queryWrapper.select("*");
     		queryWrapper.eq("build_id", buildingBean.getBuildId());

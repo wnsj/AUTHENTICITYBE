@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class RMChildSharedBean extends RoomMainBean {
+public class RMChildSharedBean extends BuildingBean {
     /**
      * 商圈名
      */
@@ -31,9 +31,4 @@ public class RMChildSharedBean extends RoomMainBean {
      * 图片集合
      */
     private List<String> pictureList;
-
-    /**
-     * 楼盘名字
-     */
-    private String buildName;
 }

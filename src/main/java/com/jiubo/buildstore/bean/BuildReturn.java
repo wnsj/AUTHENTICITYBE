@@ -86,4 +86,13 @@ public class BuildReturn extends BuildingBean {
      * 类型集合
      */
     private List<Integer> buildTypeList;
+    /**
+     * 基础服务集合
+     */
+    private List<Integer> chaList;
+
+    /**
+     * 网点介绍
+     */
+    private String produce;
 }

@@ -80,7 +80,7 @@ public class RoomMainController {
         return jsonObject;
     }
     
-    @ApiOperation(value = "共享办公房源", notes = "共享办公房源")
+    @ApiOperation(value = "共享办公房源", notes = "共享办公房源 弃用")
     @PostMapping("/getRoomOffice")
     public JSONObject getRoomOffice(@RequestBody RoomReceive receive) {
         JSONObject jsonObject = new JSONObject();

@@ -109,4 +109,15 @@ public class BuildReceive extends BuildingBean{
      * 类型集合
      */
     private List<Integer> buildTypeList;
+
+
+    /**
+     * 网点介绍
+     */
+    private String produce;
+
+    /**
+     * 网点基础服务
+     */
+    private List<Integer> chaList;
 }

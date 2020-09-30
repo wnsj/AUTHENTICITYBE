@@ -38,7 +38,7 @@ public class OfficeBean implements Serializable {
     private Integer id;
 
     /**
-     * 房源id
+     * 楼盘id
      */
     private Integer roomId;
 
@@ -118,8 +118,8 @@ public class OfficeBean implements Serializable {
     @TableField(exist = false)
     private List<String> picList;
 
-    @TableField(exist = false)
-    private RoomMainBean roomMainBean;
+//    @TableField(exist = false)
+//    private RoomMainBean roomMainBean;
     /**
      * 办公室类型
      */

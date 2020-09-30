@@ -286,23 +286,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 
 			// 遍历实体 翻译各个类型字段
 			for (RoomMainBean bean : allRoomBypage) {
-				
-				QueryWrapper<ShareRoomBean> wrapperShare = new QueryWrapper<ShareRoomBean>();
-				wrapperShare.select("*");
-				wrapperShare.eq("room_id", bean.getId());
-				List<ShareRoomBean> listShare = shareRoomDao.selectList(wrapperShare);
-				if(!CollectionsUtils.isEmpty(listShare)) {
-					ShareRoomBean shareRoomBean = listShare.get(0);
-					if(!StringUtils.isBlank(shareRoomBean.getChaList())) {
-						String[] strShare = shareRoomBean.getChaList().split("\\|");
-						List<Integer> idShare = new ArrayList<Integer>();
-						for (int i = 0; i < strShare.length; i++) {
-							idShare.add(Integer.valueOf(strShare[i]));
-						}
-						bean.setChaList(idShare);
-					}
-				}
-				
+
 				if(bean.getRoomType() == 1) {
 					QueryWrapper<BuildingImgBean> wrapper = new QueryWrapper<BuildingImgBean>();
 					wrapper.select("*");
@@ -372,21 +356,18 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public RMChildSharedBean getSharedById(Integer id) {
 
-		List<RMChildSharedBean> sharedByIdList = roomMainDao.getSharedById(id);
-		BuildingBean buildingBean = buildingDao.selectById(id);
+		List<RMChildSharedBean> sharedByIdList = buildingDao.getSharedById(id);
+//		BuildingBean buildingBean = buildingDao.selectById(id);
 		if (!CollectionsUtils.isEmpty(sharedByIdList)) {
-			RMChildSharedBean roomMainBean = sharedByIdList.get(0);
-			if (null != buildingBean) {
-				roomMainBean.setBuildName(buildingBean.getHtName());
-			}
+			RMChildSharedBean buildingBean = sharedByIdList.get(0);
 
 			// 办公室信息
 			QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
 			qwP.select("*");
-			qwP.eq("room_id", roomMainBean.getId());
+			qwP.eq("room_id", buildingBean.getBuildId());
 			List<OfficeBean> officeBeanList = officeDao.selectList(qwP);
 			// 网点信息
-			ShareRoomBean shareRoomBean = shareRoomDao.getShareRoomByRoomId(roomMainBean.getId());
+			ShareRoomBean shareRoomBean = shareRoomDao.getShareRoomByRoomId(buildingBean.getBuildId());
 			if (null != shareRoomBean) {
 				String chaList = shareRoomBean.getChaList();
 				if (StringUtils.isNotBlank(chaList)) {
@@ -413,12 +394,12 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			List<BuildingImgBean> pictureList = buildingImgDao.selectList(qw);
 			if (!CollectionsUtils.isEmpty(pictureList)) {
 				List<String> list = pictureList.stream().map(BuildingImgBean::getImgPath).collect(Collectors.toList());
-				roomMainBean.setPictureList(list);
+				buildingBean.setPictureList(list);
 			}
-			roomMainBean.setOfficeBeanList(officeBeanList);
+			buildingBean.setOfficeBeanList(officeBeanList);
 			// 网点信息
-			roomMainBean.setShareRoomBean(shareRoomBean);
-			return roomMainBean;
+			buildingBean.setShareRoomBean(shareRoomBean);
+			return buildingBean;
 		}
 		return null;
 	}
@@ -662,28 +643,22 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (bean.getRoomType() == null) {
 			throw new MessageException("房源类型不能为空");
 		}
-		QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
-		qw.select("*");
-		qw.eq("build_id", bean.getBuildId());
-		qw.eq("room_type", 2);
-		List<RoomMainBean> list = roomMainDao.selectList(qw);
-		BuildingBean bd = buildingDao.selectById(bean.getBuildId());
-		String type = bd.getBuildType();
-		if (bean.getRoomType() == 2 && !CollectionsUtils.isEmpty(list) && StringUtils.isNotBlank(type) && type.contains("2")) {
-			throw new MessageException("共享楼盘只可以填一个共享房源");
-		}
+//		QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
+//		qw.select("*");
+//		qw.eq("build_id", bean.getBuildId());
+//		qw.eq("room_type", 2);
+//		List<RoomMainBean> list = roomMainDao.selectList(qw);
+//		BuildingBean bd = buildingDao.selectById(bean.getBuildId());
+//		String type = bd.getBuildType();
+//		if (bean.getRoomType() == 2 && !CollectionsUtils.isEmpty(list) && StringUtils.isNotBlank(type) && type.contains("2")) {
+//			throw new MessageException("共享楼盘只可以填一个共享房源");
+//		}
 
 		bean.setCreateDate(new Date());
 		bean.setModifyDate(new Date());
 		roomMainDao.insert(bean);
-		ShareRoomBean shareRoomBean = new ShareRoomBean();
-		shareRoomBean.setProduce(bean.getProduce());
-		if(bean.getChaList() != null) {
-			shareRoomBean.setChaList(StringUtils.join(bean.getChaList(), "|"));
-		}
-		shareRoomBean.setRoomId(bean.getId());
-		shareRoomBean.setCreateDate(new Date());
-		shareRoomDao.insert(shareRoomBean);
+
+
 		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
 		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
 		bean.setLatitude(buildingBean.getLatitude());
@@ -719,17 +694,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			bean.setLongitude(buildingBean.getLongitude());
 		}
 		
-		if(bean.getChaList() != null) {
-			QueryWrapper<ShareRoomBean> qw = new QueryWrapper<ShareRoomBean>();
-			qw.select("*");
-			qw.eq("room_id", bean.getId());
-			List<ShareRoomBean> list = shareRoomDao.selectList(qw);
-			if(!CollectionsUtils.isEmpty(list)) {
-				ShareRoomBean shareRoomBean = list.get(0);
-				shareRoomBean.setChaList(StringUtils.join(bean.getChaList(), "|"));
-				shareRoomDao.updateById(shareRoomBean);
-			}
-		}
+
 		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
 		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
 		buildingDao.updateById(buildingBean);

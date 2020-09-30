@@ -5,6 +5,7 @@ import com.jiubo.buildstore.bean.BuildReceive;
 import com.jiubo.buildstore.bean.BuildReturn;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jiubo.buildstore.bean.RMChildSharedBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -78,4 +79,5 @@ public interface BuildingDao extends BaseMapper<BuildingBean> {
 
     public List<BuildReturn> getMobileList(@Param("buildingBean") BuildingBean buildingBean);
 
+    List<RMChildSharedBean> getSharedById(@Param("id") Integer id);
 }

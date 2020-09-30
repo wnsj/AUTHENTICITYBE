@@ -177,4 +177,13 @@
         </where>
         order by SORT
     </select>
+
+
+    <select id="getSharedById"
+            resultType="com.jiubo.buildstore.bean.RMChildSharedBean">
+		select T.*,B.bu_name as buName,L.LD_NAME as ldName from building T
+		LEFT JOIN business_district B ON T.BUSINESS_ID = B.id
+		LEFT JOIN location_distinguish L ON T.LD_ID = L.LD_ID
+		where T.BUILD_ID = #{id}
+	</select>
 </mapper>
