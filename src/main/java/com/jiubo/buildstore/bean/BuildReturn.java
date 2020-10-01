@@ -74,6 +74,11 @@ public class BuildReturn extends BuildingBean {
      */
     private Integer houseNum;
 
+    /**
+     * 共享办公可租房源数
+     */
+    private Integer shareIsRentNum;
+
     private List<String> charaNameList;
 
     private List<Integer> ChaIdList;

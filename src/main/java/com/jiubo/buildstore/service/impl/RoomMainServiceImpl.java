@@ -605,6 +605,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		return idList;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer addRoomMain(RoomMainBean bean) throws MessageException {
 		
@@ -653,27 +654,51 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 //		if (bean.getRoomType() == 2 && !CollectionsUtils.isEmpty(list) && StringUtils.isNotBlank(type) && type.contains("2")) {
 //			throw new MessageException("共享楼盘只可以填一个共享房源");
 //		}
+		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
+//		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
+//		buildingDao.updateById(buildingBean);
 
+
+		bean.setLatitude(buildingBean.getLatitude());
+		bean.setLongitude(buildingBean.getLongitude());
 		bean.setCreateDate(new Date());
 		bean.setModifyDate(new Date());
 		roomMainDao.insert(bean);
 
-
-		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
-		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
-		bean.setLatitude(buildingBean.getLatitude());
-		bean.setLongitude(buildingBean.getLongitude());
-		roomMainDao.updateById(bean);
-		buildingDao.updateById(buildingBean);
 		return bean.getId();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Integer updateRoomMain(RoomMainBean bean) throws MessageException {
 		if (bean.getId() == null) {
 			throw new MessageException("房源id不能为空");
 		}
-		
+		if (bean.getBuildId() == null) {
+			throw new MessageException("楼盘id不能为空");
+		}
+		QueryWrapper<RoomMainBean> queryRoom = new QueryWrapper<RoomMainBean>();
+		queryRoom.select("*");
+		queryRoom.eq("id", bean.getId());
+		List<RoomMainBean> roomMainBeanList = roomMainDao.selectList(queryRoom);
+		if (!CollectionsUtils.isEmpty(roomMainBeanList)) {
+			RoomMainBean roomMainBean = roomMainBeanList.get(0);
+			Integer oldBuildId = roomMainBean.getBuildId();
+			Integer nowBuildId = bean.getBuildId();
+			if (!oldBuildId.equals(nowBuildId)) {
+				//通过楼盘同步经纬度到主表
+				BuildingBean nowBean = buildingDao.selectById(nowBuildId);
+				bean.setLatitude(nowBean.getLongitude());
+				bean.setLongitude(nowBean.getLongitude());
+				nowBean.setIsRentNum(nowBean.getIsRentNum() + 1);
+				buildingDao.updateById(nowBean);
+
+				BuildingBean oldBean = buildingDao.selectById(oldBuildId);
+				oldBean.setIsRentNum(oldBean.getIsRentNum() - 1);
+				buildingDao.updateById(oldBean);
+			}
+		}
+
 		//同步面积信息到店铺表
 		if(bean.getRoomType() == 3) {
 			QueryWrapper<StoreRoomBean> queryWrapper = new QueryWrapper<StoreRoomBean>();
@@ -686,18 +711,7 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				storeRoomDao.updateById(storeRoomBean);
 			}
 		}
-		
-		//通过楼盘同步经纬度到主表
-		if(bean.getBuildId() != null) {
-			BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
-			bean.setLatitude(buildingBean.getLongitude());
-			bean.setLongitude(buildingBean.getLongitude());
-		}
-		
 
-		BuildingBean buildingBean = buildingDao.selectById(bean.getBuildId());
-		buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
-		buildingDao.updateById(buildingBean);
 		bean.setModifyDate(new Date());
 		return roomMainDao.updateById(bean);
 	}
@@ -743,6 +757,17 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void offOrOnTheShelf(RoomMainBean bean) {
+		Integer buildId = bean.getBuildId();
+		BuildingBean buildingBean = buildingDao.selectById(buildId);
+
+		if (bean.getFlag() == 1) {
+			buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
+		} else {
+			buildingBean.setIsRentNum(buildingBean.getIsRentNum() - 1);
+		}
+
+		buildingDao.updateById(buildingBean);
+
 		roomMainDao.patchRoomFlagById(bean);
 //		if (bean.getRoomType() == 2) {
 //			officeDao.patchOffFlagByRoomId(new OfficeBean().setRoomId(bean.getId()).setFlag(bean.getFlag()));

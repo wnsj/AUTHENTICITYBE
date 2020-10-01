@@ -208,7 +208,11 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                             Map<String, List<OfficeBean>> map = officeBeans.stream().collect(Collectors.groupingBy(OfficeBean::getHouseType));
                             bean.setHouseNum(map.size());
                         }
+                        bean.setShareIsRentNum(officeBeanList.size());
+                    } else {
+                        bean.setShareIsRentNum(0);
                     }
+
                 }
 
             }
