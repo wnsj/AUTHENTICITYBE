@@ -262,4 +262,9 @@ public class BuildingDynamicServiceImpl extends ServiceImpl<BuildingDynamicDao, 
 	public void deleteDynamicById(BuildingDynamicBean buildingDynamicBean) {
 		buildingDynamicDao.deleteDynamicById(buildingDynamicBean.getBdId());
 	}
+
+	@Override
+	public List<BuildingDynamicBean> getRecommendDy(BuildingDynamicBean buildingDynamicBean) {
+		return buildingDynamicDao.getRecommendDy(buildingDynamicBean.getBuildId(),buildingDynamicBean.getBdId());
+	}
 }

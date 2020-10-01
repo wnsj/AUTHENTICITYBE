@@ -2,6 +2,7 @@ package com.jiubo.buildstore.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.jiubo.buildstore.Exception.MessageException;
 import com.jiubo.buildstore.bean.BuildingBean;
 import com.jiubo.buildstore.bean.BuildingDynamicBean;
 import com.jiubo.buildstore.common.Constant;
@@ -143,6 +144,20 @@ public class BuildingDynamicController {
         jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
         BuildingDynamicBean buildingDynamicBean = JSONObject.parseObject(param, BuildingDynamicBean.class);
         buildingDynamicService.deleteDynamicById(buildingDynamicBean);
+        return jsonObject;
+    }
+
+    /**
+     * 首页资讯
+     * @return
+     */
+    @PostMapping("/getRecommendDy")
+    public JSONObject getRecommendDy(@RequestBody BuildingDynamicBean buildingDynamicBean) throws MessageException {
+        if (buildingDynamicBean.getBuildId() == null || buildingDynamicBean.getBdId() == null) throw new MessageException("参数接收失败！");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Constant.Result.RETCODE, Constant.Result.SUCCESS);
+        jsonObject.put(Constant.Result.RETMSG, Constant.Result.SUCCESS_MSG);
+        jsonObject.put(Constant.Result.RETDATA,buildingDynamicService.getRecommendDy(buildingDynamicBean));
         return jsonObject;
     }
 }

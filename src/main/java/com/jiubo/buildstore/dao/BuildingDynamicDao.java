@@ -26,4 +26,6 @@ public interface BuildingDynamicDao extends BaseMapper<BuildingDynamicBean> {
     List<BuildingDynamicBean> getDynamicByBuildId(@Param("buildId") Integer buildId);
 
     void deleteDynamicById(@Param("bdId") Integer bdId);
+
+    List<BuildingDynamicBean> getRecommendDy(@Param("buildId") Integer buildId,@Param("bdId") Integer bdId);
 }

@@ -67,4 +67,11 @@
     <update id="deleteDynamicById">
         update building_dynamic set flag = 2 where BD_ID = #{bdId}
     </update>
+    
+    <select id="getRecommendDy" resultType="com.jiubo.buildstore.bean.BuildingDynamicBean">
+        select A.*,M.MT_NAME as mtName from building_dynamic A
+         LEFT JOIN message_type M ON A.BUILD_ID = M.MT_ID
+         where A.BUILD_ID = #{buildId} and A.BD_ID != #{bdId}
+         order by BD_ID desc limit 4
+    </select>
 </mapper>
