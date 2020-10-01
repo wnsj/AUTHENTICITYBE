@@ -6,10 +6,10 @@
     </select>
     
     <select id="getTotalPriceByIdList" resultType="com.jiubo.buildstore.bean.TotlePriceTypeBean">
-        select * from UNIT_PRICE_TYPE
+        select * from TOTLE_PRICE_TYPE
         <where>
-            <if test="totlePriceTypeBean.idList != null and totlePriceTypeBean.idList.size >0">
-                UP_ID in
+            <if test="totlePriceTypeBean.idList != null and totlePriceTypeBean.idList.size() >0">
+                TP_ID in
                 <foreach collection="totlePriceTypeBean.idList" open="(" close=")" separator="," item="id">
                     #{id}
                 </foreach>
