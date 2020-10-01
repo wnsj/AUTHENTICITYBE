@@ -744,9 +744,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 	@Override
 	public void offOrOnTheShelf(RoomMainBean bean) {
 		roomMainDao.patchRoomFlagById(bean);
-		if (bean.getRoomType() == 2) {
-			officeDao.patchOffFlagByRoomId(new OfficeBean().setRoomId(bean.getId()).setFlag(bean.getFlag()));
-		}
+//		if (bean.getRoomType() == 2) {
+//			officeDao.patchOffFlagByRoomId(new OfficeBean().setRoomId(bean.getId()).setFlag(bean.getFlag()));
+//		}
 	}
 
 	@Override
