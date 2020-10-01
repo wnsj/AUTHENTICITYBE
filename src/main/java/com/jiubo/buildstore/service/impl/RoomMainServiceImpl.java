@@ -445,11 +445,11 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 			totalPriceList = new ArrayList<>();
 			for (TotlePriceTypeBean totlePriceTypeBean : priceByIdList) {
 				Map<String, Object> map = new HashMap<>();
-				map.put("minUnitPrice", totlePriceTypeBean.getBegPrice());
-				map.put("maxUnitPrice", totlePriceTypeBean.getEndPrice());
+				map.put("minTitlePrice", totlePriceTypeBean.getBegPrice());
+				map.put("maxTitlePrice", totlePriceTypeBean.getEndPrice());
 				totalPriceList.add(map);
 			}
-			roomReceive.setUnitPriceList(totalPriceList);
+			roomReceive.setTotalPriceList(totalPriceList);
 		}
 
 	}
