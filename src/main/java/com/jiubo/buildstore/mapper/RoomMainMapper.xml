@@ -333,7 +333,7 @@
 
 	<select id="getRoomByBuildIdList"
 		resultType="com.jiubo.buildstore.bean.RoomMainBean">
-		select build_id,build_area,id,room_img,unit_price from room_main where flag = 1 and
+		select * from room_main where flag = 1 and
 		build_id in
 		<foreach collection="list" open="(" close=")" separator=","
 			item="item">
