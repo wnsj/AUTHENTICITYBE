@@ -99,46 +99,46 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		setCondition(receive);
 
 		// 如果是通过名字搜索的房源根据名字取查对应的区域商圈
-		if (!StringUtils.isBlank(receive.getNameLike())) {
-			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
-			wrapperLd.select("*");
-			wrapperLd.like("LD_NAME", receive.getNameLike());
-			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
-			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
-			if (receive.getLdIdList() == null) {
-				List<Integer> ldIdList = new ArrayList<Integer>();
-				receive.setLdIdList(ldIdList);
-			}
-			receive.getLdIdList().addAll(ldList);
-			if (receive.getLdIdList() == null || receive.getLdIdList().size() == 0) {
-				QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
-				wrapperBd.select("*");
-				wrapperBd.like("bu_name", receive.getNameLike());
-				List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
-				List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
-				if (receive.getBdIdList() == null) {
-					List<Integer> bdIdList = new ArrayList<Integer>();
-					receive.setBdIdList(bdIdList);
-				}
-				receive.getBdIdList().addAll(bdList);
-				if (receive.getBdIdList() == null || receive.getBdIdList().size() == 0) {
-					QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
-					wrapperb.select("*");
-					wrapperb.like("HT_NAME", receive.getNameLike());
-					List<BuildingBean> b = buildingDao.selectList(wrapperb);
-					List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
-					if (receive.getBuildIdList() == null) {
-						List<Integer> bIdList = new ArrayList<Integer>();
-						receive.setBuildIdList(bIdList);
-					}
-					receive.getBuildIdList().addAll(bList);
-					if (receive.getBuildIdList() == null || receive.getBuildIdList().size() == 0) {
-						return null;
-					}
-				}
-			}
-
-		}
+//		if (!StringUtils.isBlank(receive.getNameLike())) {
+//			QueryWrapper<LocationDistinguishBean> wrapperLd = new QueryWrapper<LocationDistinguishBean>();
+//			wrapperLd.select("*");
+//			wrapperLd.like("LD_NAME", receive.getNameLike());
+//			List<LocationDistinguishBean> ld = locationDistinguishDao.selectList(wrapperLd);
+//			List<Integer> ldList = ld.stream().map(LocationDistinguishBean::getLdId).collect(Collectors.toList());
+//			if (receive.getLdIdList() == null) {
+//				List<Integer> ldIdList = new ArrayList<Integer>();
+//				receive.setLdIdList(ldIdList);
+//			}
+//			receive.getLdIdList().addAll(ldList);
+//			if (receive.getLdIdList() == null || receive.getLdIdList().size() == 0) {
+//				QueryWrapper<BusinessDistrictBean> wrapperBd = new QueryWrapper<BusinessDistrictBean>();
+//				wrapperBd.select("*");
+//				wrapperBd.like("bu_name", receive.getNameLike());
+//				List<BusinessDistrictBean> bd = businessDistrictDao.selectList(wrapperBd);
+//				List<Integer> bdList = bd.stream().map(BusinessDistrictBean::getId).collect(Collectors.toList());
+//				if (receive.getBdIdList() == null) {
+//					List<Integer> bdIdList = new ArrayList<Integer>();
+//					receive.setBdIdList(bdIdList);
+//				}
+//				receive.getBdIdList().addAll(bdList);
+//				if (receive.getBdIdList() == null || receive.getBdIdList().size() == 0) {
+//					QueryWrapper<BuildingBean> wrapperb = new QueryWrapper<BuildingBean>();
+//					wrapperb.select("*");
+//					wrapperb.like("HT_NAME", receive.getNameLike());
+//					List<BuildingBean> b = buildingDao.selectList(wrapperb);
+//					List<Integer> bList = b.stream().map(BuildingBean::getBuildId).collect(Collectors.toList());
+//					if (receive.getBuildIdList() == null) {
+//						List<Integer> bIdList = new ArrayList<Integer>();
+//						receive.setBuildIdList(bIdList);
+//					}
+//					receive.getBuildIdList().addAll(bList);
+//					if (receive.getBuildIdList() == null || receive.getBuildIdList().size() == 0) {
+//						return null;
+//					}
+//				}
+//			}
+//
+//		}
 
 		// 如果商铺业态不为null
 		if (!StringUtils.isBlank(receive.getCaId())) {
