@@ -7,7 +7,7 @@
         SELECT distinct A.*
         from building A
         LEFT JOIN room_main B ON A.BUILD_ID = B.build_id
-        LEFT JOIN office C ON B.id = C.room_id
+        LEFT JOIN office C ON A.BUILD_ID = C.room_id
         left join location_distinguish D on a.LD_ID = D.LD_ID
         left join business_district E ON a.BUSINESS_ID = E.id
         <where>
