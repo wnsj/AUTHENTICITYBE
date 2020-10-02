@@ -204,10 +204,21 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingDao, BuildingBean> 
                     if (!CollectionsUtils.isEmpty(officeBeanList)) {
                         List<OfficeBean> officeBeans = officeBeanList.stream().filter(item -> StringUtils.isNotBlank(item.getHouseType())).collect(toList());
                         bean.setOfficeBeanList(officeBeans);
-                        if (!CollectionsUtils.isEmpty(officeBeans)) {
-                            Map<String, List<OfficeBean>> map = officeBeans.stream().collect(Collectors.groupingBy(OfficeBean::getHouseType));
-                            bean.setHouseNum(map.size());
+
+                        Map<Integer, List<OfficeBean>> offTypeMap = officeBeanList.stream().collect(Collectors.groupingBy(OfficeBean::getOfficeType));
+                        int houseNum = 0;
+                        // 开放办公
+                        List<OfficeBean> openList = offTypeMap.get(4);
+                        if (!CollectionsUtils.isEmpty(openList)) {
+                            houseNum = houseNum + 1;
                         }
+                        // 独立办公室
+                        List<OfficeBean> aloneList = offTypeMap.get(7);
+                        if (!CollectionsUtils.isEmpty(aloneList)) {
+                            List<String> als = aloneList.stream().map(OfficeBean::getHouseType).distinct().collect(toList());
+                            houseNum = als.size() + houseNum;
+                        }
+                        bean.setHouseNum(houseNum);
                         bean.setShareIsRentNum(officeBeanList.size());
                     } else {
                         bean.setShareIsRentNum(0);
