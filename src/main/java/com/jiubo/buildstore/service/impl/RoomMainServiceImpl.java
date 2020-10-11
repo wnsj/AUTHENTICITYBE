@@ -694,8 +694,11 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				buildingDao.updateById(nowBean);
 
 				BuildingBean oldBean = buildingDao.selectById(oldBuildId);
-				oldBean.setIsRentNum(oldBean.getIsRentNum() - 1);
-				buildingDao.updateById(oldBean);
+				if (oldBean.getIsRentNum() > 0) {
+					oldBean.setIsRentNum(oldBean.getIsRentNum() - 1);
+					buildingDao.updateById(oldBean);
+				}
+
 			}
 		}
 
@@ -763,7 +766,9 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (bean.getFlag() == 1) {
 			buildingBean.setIsRentNum(buildingBean.getIsRentNum() + 1);
 		} else {
-			buildingBean.setIsRentNum(buildingBean.getIsRentNum() - 1);
+			if (buildingBean.getIsRentNum() > 0) {
+				buildingBean.setIsRentNum(buildingBean.getIsRentNum() - 1);
+			}
 		}
 
 		buildingDao.updateById(buildingBean);
