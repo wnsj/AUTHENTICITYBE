@@ -644,6 +644,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (bean.getRoomType() == null) {
 			throw new MessageException("房源类型不能为空");
 		}
+		if (null != bean.getLabels() && bean.getLabels().size() > 0) {
+			String join = StringUtils.join(bean.getLabels(), "|");
+			bean.setLabelList(join);
+		}
 //		QueryWrapper<RoomMainBean> qw = new QueryWrapper<RoomMainBean>();
 //		qw.select("*");
 //		qw.eq("build_id", bean.getBuildId());
@@ -713,6 +717,10 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 				storeRoomBean.setArea(bean.getAreaInfo());
 				storeRoomDao.updateById(storeRoomBean);
 			}
+		}
+
+		if (!CollectionsUtils.isEmpty(bean.getLabels())) {
+			bean.setLabelList(StringUtils.join(bean.getLabels(),"|"));
 		}
 
 		bean.setModifyDate(new Date());

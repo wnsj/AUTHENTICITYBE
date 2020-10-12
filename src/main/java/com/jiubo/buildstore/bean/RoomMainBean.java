@@ -258,5 +258,9 @@ public class RoomMainBean implements Serializable {
     private Integer isHaveDetail;
 
     private Integer flag;
+    /**
+     * 是否可分割（2:可分割；3：不可分割）
+     */
+    private Integer isDivision;
 
 }
