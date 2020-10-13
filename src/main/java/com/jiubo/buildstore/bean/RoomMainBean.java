@@ -262,5 +262,28 @@ public class RoomMainBean implements Serializable {
      * 是否可分割（2:可分割；3：不可分割）
      */
     private Integer isDivision;
+    
+    /**
+     * 座（下拉框：号楼、栋、座、幢）
+     */
+    private String seat;
+    
+    
+    /**
+     * 单元（下拉框：单元、门）
+     */
+    private String unit;
+    
+    
+    /**
+     *楼层
+     */
+    private String floor;
+    
+    
+    /**
+     * 门牌号
+     */
+    private String houseNumber;
 
 }
