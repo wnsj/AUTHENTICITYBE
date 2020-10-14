@@ -6,7 +6,7 @@ import com.jiubo.buildstore.common.ImgPathConstant;
 import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.*;
 import com.jiubo.buildstore.service.RoomService;
-
+import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.FileUtil;
 
 
@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -140,23 +141,41 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
 					list.add(imgBean);
 				}
-				buildingImgDao.insertList(list);
+				if(!CollectionsUtils.isEmpty(list)) {
+					buildingImgDao.insertList(list);
+				}
 				list.clear();
 			}
 			if(video.length > 0) {
 				for (int i = 0; i < video.length; i++) {
 					MultipartFile file = video[i];
+					QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
+					qw.select("*");
+					qw.eq("IT_ID", ImgTypeConstant.VIDEO);
+					qw.eq("TYPE", ImgTypeConstant.OFFICE_BUILD);
+					qw.eq("INFO_ID", mainBean.getId());
+					BuildingImgBean imgBean = buildingImgDao.selectOne(qw);
 					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.VIDEO);
-					BuildingImgBean imgBean = new BuildingImgBean();
-					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setItId(ImgTypeConstant.VIDEO);
-					imgBean.setImgPath(map.get("path"));
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.OFFICE_BUILD);
-					list.add(imgBean);
+					
+					if(imgBean != null) {
+						FileUtil.delFile(buildStoreDir+imgBean.getImgPath());
+						imgBean.setImgName(map.get("name"));
+						imgBean.setImgPath(map.get("path"));
+						buildingImgDao.updateById(imgBean);
+					}else {
+						BuildingImgBean buildingImgBean = new BuildingImgBean();
+						buildingImgBean.setImgName(map.get("name"));
+						buildingImgBean.setCreateDate(new Date());
+						buildingImgBean.setItId(ImgTypeConstant.VIDEO);
+						buildingImgBean.setImgPath(map.get("path"));
+						buildingImgBean.setInfoId(mainBean.getId());
+						buildingImgBean.setType(ImgTypeConstant.OFFICE_BUILD);
+						list.add(buildingImgBean);
+					}
 				}
-				buildingImgDao.insertList(list);
+				if(!CollectionsUtils.isEmpty(list)) {
+					buildingImgDao.insertList(list);
+				}
 				list.clear();
 			}
 			if(headPicture != null) {
@@ -169,6 +188,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomDao, RoomBean> implements R
 				qw.eq("INFO_ID", mainBean.getId());
 				BuildingImgBean imgBean = buildingImgDao.selectOne(qw);
 				if(imgBean != null) {
+					FileUtil.delFile(buildStoreDir+imgBean.getImgPath());
 					imgBean.setImgName(map.get("name"));
 					imgBean.setImgPath(map.get("path"));
 					buildingImgDao.updateById(imgBean);
