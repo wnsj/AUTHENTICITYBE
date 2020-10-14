@@ -10,6 +10,7 @@ import com.jiubo.buildstore.common.ImgTypeConstant;
 import com.jiubo.buildstore.dao.BuildingImgDao;
 import com.jiubo.buildstore.dao.RoomMainDao;
 import com.jiubo.buildstore.dao.StoreRoomDao;
+import com.jiubo.buildstore.service.BuildingService;
 import com.jiubo.buildstore.service.StoreRoomService;
 import com.jiubo.buildstore.util.CollectionsUtils;
 import com.jiubo.buildstore.util.FileUtil;
@@ -39,279 +40,304 @@ import static com.jiubo.buildstore.service.impl.CounselorServiceImpl.delFile;
  */
 @Service
 public class StoreRoomServiceImpl extends ServiceImpl<StoreRoomDao, StoreRoomBean> implements StoreRoomService {
-	
-	@Autowired
-	private StoreRoomDao storeRoomDao;
-	
-	@Autowired
-	private BuildingImgDao buildingImgDao;
-	
-	@Autowired
-	private RoomMainDao roomMainDao;
 
-	@Value("${buildStoreDir}")
-	private String buildStoreDir;
+    @Autowired
+    private StoreRoomDao storeRoomDao;
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-								MultipartFile[] headPicture) throws IOException, MessageException {
-		if(bean.getRoomId() == null) {
-			throw new MessageException("房源id不能为空");
-		}
-		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
-		if(mainBean.getAreaInfo() != null) {
-			bean.setArea(mainBean.getAreaInfo());
-		}
-		bean.setCreateDate(new Date());
-		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
-			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
-		}
-		if (bean.getStId() != null) {
-			mainBean.setStId(bean.getStId());
-		}
-		roomMainDao.updateById(mainBean);
-		if (!CollectionsUtils.isEmpty(bean.getProperInfo())) {
-			bean.setPropertyInfo(StringUtils.join(bean.getProperInfo(),"|"));
-		}
-		storeRoomDao.insert(bean);
-		if(bean.getStoreId() != null) {
-			List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
-			if(picture != null) {
-				for (int i = 0; i < picture.length; i++) {
-					MultipartFile file = picture[i];
-					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.PICTURE);
-					BuildingImgBean imgBean = new BuildingImgBean();
+    @Autowired
+    private BuildingImgDao buildingImgDao;
+
+    @Autowired
+    private RoomMainDao roomMainDao;
+
+    @Autowired
+    private BuildingService buildingService;
+    @Value("${buildStoreDir}")
+    private String buildStoreDir;
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Integer addStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
+                                MultipartFile[] headPicture) throws IOException, MessageException {
+        if (bean.getRoomId() == null) {
+            throw new MessageException("房源id不能为空");
+        }
+        RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+        if (mainBean.getAreaInfo() != null) {
+            bean.setArea(mainBean.getAreaInfo());
+        }
+        bean.setCreateDate(new Date());
+        if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
+            mainBean.setCaId(StringUtils.join(bean.getSuitable(), ","));
+        }
+        if (bean.getStId() != null) {
+            mainBean.setStId(bean.getStId());
+        }
+        roomMainDao.updateById(mainBean);
+        if (!CollectionsUtils.isEmpty(bean.getProperInfo())) {
+            bean.setPropertyInfo(StringUtils.join(bean.getProperInfo(), "|"));
+        }
+        storeRoomDao.insert(bean);
+        if (bean.getStoreId() != null) {
+            List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
+            if (picture != null) {
+                for (int i = 0; i < picture.length; i++) {
+                    MultipartFile file = picture[i];
+                    Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.PICTURE);
+                    BuildingImgBean imgBean = new BuildingImgBean();
+                    imgBean.setImgName(map.get("name"));
+                    imgBean.setCreateDate(new Date());
+                    imgBean.setItId(ImgTypeConstant.PICTURE);
+                    imgBean.setImgPath(map.get("path"));
+                    imgBean.setInfoId(mainBean.getId());
+                    imgBean.setType(ImgTypeConstant.STORE);
+                    list.add(imgBean);
+                }
+
+            }
+            if (video != null) {
+                for (int i = 0; i < video.length; i++) {
+                    MultipartFile file = video[i];
+                    Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.VIDEO);
+                    BuildingImgBean imgBean = new BuildingImgBean();
 					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setItId(ImgTypeConstant.PICTURE);
-					imgBean.setImgPath(map.get("path"));
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.STORE);
-					list.add(imgBean);
+                    imgBean.setCreateDate(new Date());
+                    imgBean.setItId(ImgTypeConstant.VIDEO);
+                    imgBean.setImgPath(map.get("path"));
+                    imgBean.setInfoId(mainBean.getId());
+                    imgBean.setType(ImgTypeConstant.STORE);
+                    list.add(imgBean);
+                }
+            }
+            if (headPicture != null && headPicture.length > 0) {
+                Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+                BuildingImgBean imgBean = new BuildingImgBean();
+                imgBean.setImgName(map.get("name"));
+                imgBean.setCreateDate(new Date());
+                imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+                imgBean.setImgPath(map.get("path"));
+                imgBean.setInfoId(mainBean.getId());
+                imgBean.setType(ImgTypeConstant.STORE);
+                list.add(imgBean);
+                mainBean.setRoomImg(imgBean.getImgPath());
+                roomMainDao.updateById(mainBean);
+            }
+            if (!CollectionsUtils.isEmpty(list)) {
+                buildingImgDao.insertList(list);
+            }
+        }
+        return 1;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
+                                   MultipartFile[] headPicture) throws IOException, MessageException {
+        if (bean.getStoreId() == null) {
+            throw new MessageException("商铺id不能为空");
+        }
+        RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
+
+        if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
+            mainBean.setCaId(StringUtils.join(bean.getSuitable(), ","));
+            roomMainDao.updateById(mainBean);
+        }
+        if (bean.getStId() != null) {
+            mainBean.setStId(bean.getStId());
+            roomMainDao.updateById(mainBean);
+        }
+
+        if (bean.getStoreId() != null) {
+            List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
+            if (picture.length > 0) {
+                for (int i = 0; i < picture.length; i++) {
+                    MultipartFile file = picture[i];
+                    Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.PICTURE);
+                    BuildingImgBean imgBean = new BuildingImgBean();
+                    imgBean.setImgName(map.get("name"));
+                    imgBean.setCreateDate(new Date());
+                    imgBean.setItId(ImgTypeConstant.PICTURE);
+                    imgBean.setImgPath(map.get("path"));
+                    imgBean.setInfoId(mainBean.getId());
+                    imgBean.setType(ImgTypeConstant.STORE);
+                    list.add(imgBean);
+                }
+            }
+            if (null != video && video.length > 0) {
+//				for (int i = 0; i < video.length; i++) {
+                MultipartFile file = video[0];
+                Map<String, String> map = FileUtil.uploadFile(file, ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.VIDEO);
+                BuildingImgBean imgBean = new BuildingImgBean();
+                imgBean.setItId(ImgTypeConstant.VIDEO);
+                imgBean.setInfoId(mainBean.getId());
+                imgBean.setType(ImgTypeConstant.STORE);
+                imgBean.setImgName(map.get("name"));
+                imgBean.setCreateDate(new Date());
+                imgBean.setImgPath(map.get("path"));
+                list.add(imgBean);
+
+                // 删除原有视频
+				QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
+				qw.select("*");
+				qw.eq("IT_ID", ImgTypeConstant.VIDEO);
+				qw.eq("TYPE", ImgTypeConstant.STORE);
+				qw.eq("INFO_ID", mainBean.getId());
+				List<BuildingImgBean> buildingImgBeans = buildingImgDao.selectList(qw);
+				if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
+					for (BuildingImgBean buildingImgBean : buildingImgBeans) {
+						buildingImgDao.deleteImgById(buildingImgBean);
+						FileUtil.delFile(buildStoreDir + buildingImgBean.getImgPath());
+					}
 				}
 
-			}
-			if(video != null) {
-				for (int i = 0; i < video.length; i++) {
-					MultipartFile file = video[i];
-					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.VIDEO);
-					BuildingImgBean imgBean = new BuildingImgBean();
-//					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setItId(ImgTypeConstant.VIDEO);
-					imgBean.setImgPath(map.get("path"));
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.STORE);
-					list.add(imgBean);
-				}
-			}
-			if(headPicture != null && headPicture.length > 0) {
-				Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.HEAD_PICTURE);
-				BuildingImgBean imgBean = new BuildingImgBean();
-				imgBean.setImgName(map.get("name"));
-				imgBean.setCreateDate(new Date());
-				imgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
-				imgBean.setImgPath(map.get("path"));
-				imgBean.setInfoId(mainBean.getId());
-				imgBean.setType(ImgTypeConstant.STORE);
-				list.add(imgBean);
-				mainBean.setRoomImg(imgBean.getImgPath());
-				roomMainDao.updateById(mainBean);
-			}
-			if (!CollectionsUtils.isEmpty(list)) {
-				buildingImgDao.insertList(list);
-			}
-		}
-		return 1;
-	}
+//				}
+            }
+            if (headPicture != null && headPicture.length > 0) {
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public Integer updateStoreRoom(StoreRoomBean bean, MultipartFile[] picture, MultipartFile[] video,
-			MultipartFile[] headPicture) throws IOException, MessageException {
-		if(bean.getStoreId() == null) {
-			throw new MessageException("商铺id不能为空");
-		}
-		RoomMainBean mainBean = roomMainDao.selectById(bean.getRoomId());
-		
-		if (!CollectionsUtils.isEmpty(bean.getSuitable())) {
-			mainBean.setCaId(StringUtils.join(bean.getSuitable(),","));
-			roomMainDao.updateById(mainBean);
-		}
-		if (bean.getStId() != null) {
-			mainBean.setStId(bean.getStId());
-			roomMainDao.updateById(mainBean);
-		}
-		if(bean.getStoreId() != null) {
-			List<BuildingImgBean> list = new ArrayList<BuildingImgBean>();
-			if(picture.length > 0) {
-				for (int i = 0; i < picture.length; i++) {
-					MultipartFile file = picture[i];
-					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.PICTURE);
-					BuildingImgBean imgBean = new BuildingImgBean();
-					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setItId(ImgTypeConstant.PICTURE);
-					imgBean.setImgPath(map.get("path"));
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.STORE);
-					list.add(imgBean);
-				}
-			}
-			if(video.length > 0) {
-				for (int i = 0; i < video.length; i++) {
-					MultipartFile file = video[i];
-					Map<String, String> map = FileUtil.uploadFile(file,ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.VIDEO);
-					BuildingImgBean imgBean = new BuildingImgBean();
-					imgBean.setItId(ImgTypeConstant.VIDEO);
-					imgBean.setInfoId(mainBean.getId());
-					imgBean.setType(ImgTypeConstant.STORE);
-					imgBean.setImgName(map.get("name"));
-					imgBean.setCreateDate(new Date());
-					imgBean.setImgPath(map.get("path"));
-					list.add(imgBean);
-				}
-			}
-			if(headPicture != null && headPicture.length > 0) {
-				Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH,mainBean.getId(),ImgTypeConstant.HEAD_PICTURE);
 				QueryWrapper<BuildingImgBean> qw = new QueryWrapper<BuildingImgBean>();
 				qw.select("*");
 				qw.eq("IT_ID", ImgTypeConstant.HEAD_PICTURE);
 				qw.eq("TYPE", ImgTypeConstant.STORE);
 				qw.eq("INFO_ID", mainBean.getId());
 				BuildingImgBean imgBean = buildingImgDao.selectOne(qw);
-				if(imgBean != null) {
-					imgBean.setImgName(map.get("name"));
-					imgBean.setImgPath(map.get("path"));
-					buildingImgDao.updateById(imgBean);
-					mainBean.setRoomImg(imgBean.getImgPath());
-				} else {
-					BuildingImgBean buildingImgBean = new BuildingImgBean();
 
-					buildingImgBean.setImgName(map.get("name"));
-					buildingImgBean.setCreateDate(new Date());
-					buildingImgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
-					buildingImgBean.setImgPath(map.get("path"));
-					buildingImgBean.setInfoId(mainBean.getId());
-					buildingImgBean.setType(ImgTypeConstant.STORE);
-					mainBean.setRoomImg(buildingImgBean.getImgPath());
-					list.add(buildingImgBean);
-				}
-				roomMainDao.updateById(mainBean);
-			}
 
-			if (!CollectionsUtils.isEmpty(list)) {
-				buildingImgDao.insertList(list);
-			}
-		}
-		return storeRoomDao.updateById(bean);
-	}
 
-	@Override
-	public StoreRoomBean getStoreByRoomId(Integer roomId) {
-		QueryWrapper<StoreRoomBean> qw = new QueryWrapper<StoreRoomBean>();
-		qw.select("*");
-		qw.eq("room_id", roomId);
-		RoomMainBean mainBean = roomMainDao.selectById(roomId);
-		StoreRoomBean bean = storeRoomDao.selectOne(qw);
-		List<Integer> caIdList = null;
-		Integer stId = null;
-		if (null != mainBean) {
-			if (StringUtils.isNotBlank(mainBean.getCaId())) {
-				String[] split = mainBean.getCaId().split(",");
-				caIdList = arrToList(split);
-				stId = mainBean.getStId();
-			}
-		}
+                if (imgBean != null) {
+					FileUtil.delFile(buildStoreDir + imgBean.getImgPath());
+					Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+                    imgBean.setImgName(map.get("name"));
+                    imgBean.setImgPath(map.get("path"));
+                    buildingImgDao.updateById(imgBean);
+                    mainBean.setRoomImg(imgBean.getImgPath());
+                } else {
+					Map<String, String> map = FileUtil.uploadFile(headPicture[0], ImgPathConstant.HOUSE_PATH, mainBean.getId(), ImgTypeConstant.HEAD_PICTURE);
+                    BuildingImgBean buildingImgBean = new BuildingImgBean();
 
-		if (null != bean) {
-			bean.setSuitable(caIdList);
-			bean.setStId(stId);
-			if (StringUtils.isNotBlank(bean.getPropertyInfo())){
-				String[] split = bean.getPropertyInfo().split("\\|");
-				List<Integer> idList = arrToList(split);
-				bean.setProperInfo(idList);
-			}
+                    buildingImgBean.setImgName(map.get("name"));
+                    buildingImgBean.setCreateDate(new Date());
+                    buildingImgBean.setItId(ImgTypeConstant.HEAD_PICTURE);
+                    buildingImgBean.setImgPath(map.get("path"));
+                    buildingImgBean.setInfoId(mainBean.getId());
+                    buildingImgBean.setType(ImgTypeConstant.STORE);
+                    mainBean.setRoomImg(buildingImgBean.getImgPath());
+                    list.add(buildingImgBean);
+                }
+                roomMainDao.updateById(mainBean);
+            }
 
-			// 图片路径
-			QueryWrapper<BuildingImgBean> que = new QueryWrapper<BuildingImgBean>();
-			que.select("*");
-			que.eq("TYPE", ImgTypeConstant.STORE);
-			que.eq("INFO_ID", roomId);
-			List<BuildingImgBean> pictureList = buildingImgDao.selectList(que);
+            if (!CollectionsUtils.isEmpty(list)) {
+                buildingImgDao.insertList(list);
+            }
+        }
+        return storeRoomDao.updateById(bean);
+    }
 
-			Map<Integer, List<BuildingImgBean>> picMap = null;
-			if (!CollectionsUtils.isEmpty(pictureList)) {
-				picMap = pictureList.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
-			}
+    @Override
+    public StoreRoomBean getStoreByRoomId(Integer roomId) {
+        QueryWrapper<StoreRoomBean> qw = new QueryWrapper<StoreRoomBean>();
+        qw.select("*");
+        qw.eq("room_id", roomId);
+        RoomMainBean mainBean = roomMainDao.selectById(roomId);
+        StoreRoomBean bean = storeRoomDao.selectOne(qw);
+        List<Integer> caIdList = null;
+        Integer stId = null;
+        if (null != mainBean) {
+            if (StringUtils.isNotBlank(mainBean.getCaId())) {
+                String[] split = mainBean.getCaId().split(",");
+                caIdList = arrToList(split);
+                stId = mainBean.getStId();
+            }
+        }
 
-			if (null != picMap) {
-				List<BuildingImgBean> imgBeans = picMap.get(ImgTypeConstant.PICTURE);
-				if (!CollectionsUtils.isEmpty(imgBeans)) {
-					List<String> pathList = getPathList(imgBeans);
-					bean.setPicList(pathList);
-				}
-				List<BuildingImgBean> buildingImgBeans = picMap.get(ImgTypeConstant.HEAD_PICTURE);
-				if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
-					List<String> pathList = getPathList(buildingImgBeans);
-					bean.setHeadPath(pathList.get(0));
-				}
-				List<BuildingImgBean> videoList = picMap.get(ImgTypeConstant.VIDEO);
-				if (!CollectionsUtils.isEmpty(videoList)) {
-					BuildingImgBean imgBean = videoList.stream().max(Comparator.comparing(BuildingImgBean::getImgId)).get();
-					bean.setVideoName(imgBean.getImgName());
-				}
-			}
+        if (null != bean) {
+            bean.setSuitable(caIdList);
+            bean.setStId(stId);
+            if (StringUtils.isNotBlank(bean.getPropertyInfo())) {
+                String[] split = bean.getPropertyInfo().split("\\|");
+                List<Integer> idList = arrToList(split);
+                bean.setProperInfo(idList);
+            }
 
-		}
+            // 图片路径
+            QueryWrapper<BuildingImgBean> que = new QueryWrapper<BuildingImgBean>();
+            que.select("*");
+            que.eq("TYPE", ImgTypeConstant.STORE);
+            que.eq("INFO_ID", roomId);
+            List<BuildingImgBean> pictureList = buildingImgDao.selectList(que);
 
-		return bean;
-	}
+            Map<Integer, List<BuildingImgBean>> picMap = null;
+            if (!CollectionsUtils.isEmpty(pictureList)) {
+                picMap = pictureList.stream().collect(Collectors.groupingBy(BuildingImgBean::getItId));
+            }
 
-	/**
-	 * 拼接图片路径（后台管理）
-	 *
-	 * @param imgBeans
-	 * @return
-	 */
-	private List<String> getPathList(List<BuildingImgBean> imgBeans) {
-		List<String> pathList = new ArrayList<>();
-		for (BuildingImgBean buildingImgBean : imgBeans) {
-			String path = ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
-			pathList.add(path);
-		}
-		return pathList;
-	}
+            if (null != picMap) {
+                List<BuildingImgBean> imgBeans = picMap.get(ImgTypeConstant.PICTURE);
+                if (!CollectionsUtils.isEmpty(imgBeans)) {
+                    List<String> pathList = getPathList(imgBeans);
+                    bean.setPicList(pathList);
+                }
+                List<BuildingImgBean> buildingImgBeans = picMap.get(ImgTypeConstant.HEAD_PICTURE);
+                if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
+                    List<String> pathList = getPathList(buildingImgBeans);
+                    bean.setHeadPath(pathList.get(0));
+                }
+                List<BuildingImgBean> videoList = picMap.get(ImgTypeConstant.VIDEO);
+                if (!CollectionsUtils.isEmpty(videoList)) {
+                    BuildingImgBean imgBean = videoList.stream().max(Comparator.comparing(BuildingImgBean::getImgId)).get();
+                    bean.setVideoName(imgBean.getImgName());
+                }
+            }
 
-	private List<Integer> arrToList(String[] split) {
-		ArrayList< String> arrayList = new ArrayList<String>(split.length);
-		Collections.addAll(arrayList, split);
-		List<Integer> idList = new ArrayList<>();
-		for (String s : arrayList) {
-			int anInt = Integer.parseInt(s);
-			idList.add(anInt);
-		}
-		return idList;
-	}
-	private void deleteImg(BuildingImgBean buildingImgBean) {
-		// 删除图片 以及图片表中的数据
-		List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
-		if (null != allByBid) {
-			for (BuildingImgBean bean : allByBid) {
-				deleteImgFile(bean);
-			}
-		}
-	}
+        }
 
-	public void deleteImgFile(BuildingImgBean buildingImgBean) {
-		//删除文件
-		BuildingImgBean img = buildingImgDao.getImgById(buildingImgBean);
-		if (null != img) {
-			delFile(img.getImgPath());
-		}
+        return bean;
+    }
 
-		// 删除表中数据
-		buildingImgDao.deleteImgById(buildingImgBean);
-	}
+    /**
+     * 拼接图片路径（后台管理）
+     *
+     * @param imgBeans
+     * @return
+     */
+    private List<String> getPathList(List<BuildingImgBean> imgBeans) {
+        List<String> pathList = new ArrayList<>();
+        for (BuildingImgBean buildingImgBean : imgBeans) {
+            String path = ImgPathConstant.INTERFACE_PATH.concat(buildStoreDir).concat(buildingImgBean.getImgPath()).concat("&imgId=").concat(buildingImgBean.getImgId().toString());
+            pathList.add(path);
+        }
+        return pathList;
+    }
+
+    private List<Integer> arrToList(String[] split) {
+        ArrayList<String> arrayList = new ArrayList<String>(split.length);
+        Collections.addAll(arrayList, split);
+        List<Integer> idList = new ArrayList<>();
+        for (String s : arrayList) {
+            int anInt = Integer.parseInt(s);
+            idList.add(anInt);
+        }
+        return idList;
+    }
+
+    private void deleteImg(BuildingImgBean buildingImgBean) {
+        // 删除图片 以及图片表中的数据
+        List<BuildingImgBean> allByBid = buildingImgDao.getAllByBid(buildingImgBean);
+        if (null != allByBid) {
+            for (BuildingImgBean bean : allByBid) {
+                deleteImgFile(bean);
+            }
+        }
+    }
+
+    public void deleteImgFile(BuildingImgBean buildingImgBean) {
+        //删除文件
+        BuildingImgBean img = buildingImgDao.getImgById(buildingImgBean);
+        if (null != img) {
+            delFile(img.getImgPath());
+        }
+
+        // 删除表中数据
+        buildingImgDao.deleteImgById(buildingImgBean);
+    }
 }
