@@ -197,6 +197,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 				FileUtil.delFile(buildStoreDir+imgBean.getImgPath());
 				imgBean.setImgName(headMap.get("name"));
 				imgBean.setImgPath(headMap.get("path"));
+				officeBean.setImgName(headMap.get("path"));
 				buildingImgDao.updateById(imgBean);
 			}else {
 				BuildingImgBean buildingImgBean = new BuildingImgBean();
