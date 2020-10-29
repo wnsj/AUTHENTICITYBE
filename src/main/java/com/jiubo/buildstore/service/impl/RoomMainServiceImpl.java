@@ -635,6 +635,19 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		if (bean.getBuildId() == null) {
 			throw new MessageException("楼盘不能为空");
 		}
+		QueryWrapper<RoomMainBean> qwR = new QueryWrapper<RoomMainBean>();
+		qwR.select("*");
+		qwR.eq("build_id", bean.getBuildId());
+		qwR.eq("seat", bean.getSeat());
+		if(bean.getUnit() != null) {
+			qwR.eq("unit", bean.getUnit());
+		}
+		qwR.eq("floor", bean.getFloor());
+		qwR.eq("house_number", bean.getHouseNumber());
+		List<RoomMainBean> list = roomMainDao.selectList(qwR);
+		if(!CollectionsUtils.isEmpty(list)) {
+			throw new MessageException("房间重复，请确认座单元等信息");
+		}
 		if (bean.getBusinessId() == null) {
 			throw new MessageException("商圈不能为空");
 		}
@@ -680,6 +693,20 @@ public class RoomMainServiceImpl extends ServiceImpl<RoomMainDao, RoomMainBean> 
 		}
 		if (bean.getBuildId() == null) {
 			throw new MessageException("楼盘id不能为空");
+		}
+		QueryWrapper<RoomMainBean> qwR = new QueryWrapper<RoomMainBean>();
+		qwR.select("*");
+		qwR.eq("build_id", bean.getBuildId());
+		qwR.eq("seat", bean.getSeat());
+		if(bean.getUnit() != null) {
+			qwR.eq("unit", bean.getUnit());
+		}
+		qwR.notIn("id", bean.getId());
+		qwR.eq("floor", bean.getFloor());
+		qwR.eq("house_number", bean.getHouseNumber());
+		List<RoomMainBean> listR = roomMainDao.selectList(qwR);
+		if(!CollectionsUtils.isEmpty(listR)) {
+			throw new MessageException("房间重复，请确认座单元等信息");
 		}
 		QueryWrapper<RoomMainBean> queryRoom = new QueryWrapper<RoomMainBean>();
 		queryRoom.select("*");
