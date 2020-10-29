@@ -23,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -120,13 +117,13 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 			throw new MessageException("房源id不能为空");
 		}
 
-		BuildingBean buildingBean = toPatchBuildOffPrice(officeBean);
-
-		buildingDao.updateById(buildingBean);
+		BuildingBean buildingBean = buildingDao.selectById(officeBean.getRoomId());
 
 		officeBean.setCouId(buildingBean.getCouId());
 		officeBean.setCreateDate(new Date());
 		officeDao.insert(officeBean);
+
+		toPatchBuildOffPrice(officeBean, buildingBean);
 
 		List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 		// 头图
@@ -160,27 +157,25 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 
 	}
 
-	private BuildingBean toPatchBuildOffPrice(OfficeBean officeBean) {
-		BuildingBean buildingBean = buildingDao.selectById(officeBean.getRoomId());
+	private void toPatchBuildOffPrice(OfficeBean officeBean, BuildingBean buildingBean) {
+		QueryWrapper<OfficeBean> qwP = new QueryWrapper<OfficeBean>();
+		qwP.select("*");
+		qwP.eq("room_id", officeBean.getRoomId());
+		List<OfficeBean> officeBeanList = officeDao.selectList(qwP);
 
-		if (buildingBean.getOfficePrice() == null) {
-			buildingBean.setOfficePrice(officeBean.getNowPrice());
-		} else {
-			if (buildingBean.getOfficePrice().compareTo(officeBean.getNowPrice()) > 0) {
-				buildingBean.setOfficePrice(officeBean.getNowPrice());
-			}
+		if (!CollectionsUtils.isEmpty(officeBeanList)) {
+			OfficeBean bean = officeBeanList.stream().min(Comparator.comparing(OfficeBean::getNowPrice)).get();
+			buildingBean.setOfficePrice(bean.getNowPrice());
+			buildingDao.updateById(buildingBean);
 		}
-		return buildingBean;
 	}
+
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void patchOffice(OfficeBean officeBean, MultipartFile headImg, MultipartFile[] picture, MultipartFile video)
 			throws IOException {
-
-		BuildingBean buildingBean = toPatchBuildOffPrice(officeBean);
-
-		buildingDao.updateById(buildingBean);
+		BuildingBean buildingBean = buildingDao.selectById(officeBean.getRoomId());
 
 		List<BuildingImgBean> buildingImgBeans = new ArrayList<>();
 		if (null != headImg) {
@@ -215,6 +210,8 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		}
 		officeBean.setModifyDate(new Date());
 		officeDao.updateById(officeBean);
+
+		toPatchBuildOffPrice(officeBean,buildingBean);
 		// 视频
 		if (null != video) {
 			addFile(officeBean, video, buildingImgBeans, ImgTypeConstant.VIDEO);
@@ -228,6 +225,7 @@ public class OfficeServiceImpl extends ServiceImpl<OfficeDao, OfficeBean> implem
 		if (!CollectionsUtils.isEmpty(buildingImgBeans)) {
 			buildingImgDao.insertList(buildingImgBeans);
 		}
+
 	}
 
 	public void deleteImgByCon(OfficeBean officeBean, Integer itId, Integer type) {
